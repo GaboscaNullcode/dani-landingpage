@@ -10,7 +10,7 @@ const navItems = [
   { text: 'Home', href: '/' },
   { text: 'Sobre Mi', href: '/sobre-mi' },
   { text: 'Servicios', href: '#servicios' },
-  { text: 'Recursos Gratuitos', href: '/recursos' },
+  { text: 'Blog', href: '/blog' },
   { text: 'Tienda', href: '/tienda' },
 ];
 
