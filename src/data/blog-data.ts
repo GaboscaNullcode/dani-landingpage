@@ -20,6 +20,7 @@ export interface Article {
   publishedAt: string;
   readTime: number;
   isPopular: boolean;
+  content?: string; // HTML content for the article
 }
 
 export const categories: Category[] = [
@@ -82,6 +83,58 @@ export const articles: Article[] = [
     publishedAt: '2025-01-08',
     readTime: 5,
     isPopular: true,
+    content: `
+<p>Sé lo que se siente. Estás en un momento donde necesitas ingresos, donde cada día que pasa sin cerrar un cliente se siente como un fracaso. Abres Upwork, Fiverr, o cualquier otra plataforma, y empiezas a aplicar a todo lo que vagamente coincide con tus habilidades.</p>
+
+<p>El problema es que <strong>las plataformas no están diseñadas para funcionar así</strong>.</p>
+
+<h2>El error más común: tratar las plataformas como bolsas de trabajo</h2>
+
+<p>Cuando estás desesperado, es fácil caer en la trampa de pensar que más aplicaciones = más oportunidades. Pero la matemática no funciona así en el mundo del freelancing remoto.</p>
+
+<p>Las plataformas tienen algoritmos que detectan patrones. Cuando aplicas a 50 trabajos en un día con propuestas genéricas, el sistema lo nota. Los clientes también lo notan cuando reciben tu propuesta copiada y pegada.</p>
+
+<blockquote>
+<p>"El trabajo remoto no es un sprint, es un maratón. Y los maratones no se ganan corriendo los primeros kilómetros como si fuera una carrera de 100 metros."</p>
+</blockquote>
+
+<h2>Lo que realmente funciona</h2>
+
+<p>En mis 6 años trabajando de forma remota, he visto un patrón claro en las personas que logran construir carreras sostenibles:</p>
+
+<ul>
+<li><strong>Calidad sobre cantidad</strong>: 5 propuestas bien pensadas superan a 50 genéricas</li>
+<li><strong>Especialización</strong>: Los clientes buscan expertos, no generalistas desesperados</li>
+<li><strong>Paciencia estratégica</strong>: Los primeros 3-6 meses son de construcción, no de cosecha</li>
+<li><strong>Perfil optimizado</strong>: Tu perfil trabaja por ti 24/7, invierte tiempo en él</li>
+</ul>
+
+<h2>El cambio de mentalidad que lo cambia todo</h2>
+
+<p>Cuando dejas de ver las plataformas como una solución urgente y empiezas a verlas como una inversión a largo plazo, todo cambia. Ya no estás aplicando desde la desesperación, sino desde la estrategia.</p>
+
+<p>Este cambio no es fácil, especialmente cuando las cuentas presionan. Pero es la diferencia entre construir algo sostenible y quedarte atrapado en un ciclo de frustración.</p>
+
+<h3>Tres preguntas que deberías hacerte antes de aplicar</h3>
+
+<ol>
+<li>¿Este trabajo está alineado con lo que quiero construir a largo plazo?</li>
+<li>¿Puedo ofrecer un valor único que me diferencie de otros aplicantes?</li>
+<li>¿Mi propuesta demuestra que entendí las necesidades específicas del cliente?</li>
+</ol>
+
+<p>Si la respuesta a cualquiera de estas es "no", probablemente es mejor invertir ese tiempo en fortalecer tu perfil o buscar una oportunidad más alineada.</p>
+
+<h2>El camino sostenible</h2>
+
+<p>No voy a decirte que es fácil. No lo es. Pero puedo decirte que es posible construir una carrera remota que te dé libertad, buenos ingresos, y satisfacción profesional.</p>
+
+<p>Solo necesitas cambiar el enfoque: <em>de la urgencia a la estrategia</em>.</p>
+
+<p>En próximos artículos voy a compartir técnicas específicas para optimizar tu perfil, escribir propuestas que conviertan, y construir una reputación sólida desde cero. Pero todo empieza con este cambio de mentalidad.</p>
+
+<p>¿Estás listo para dejar de correr y empezar a construir?</p>
+`,
   },
   {
     id: '2',
@@ -241,3 +294,11 @@ export const formatDate = (dateString: string): string => {
     year: 'numeric',
   });
 };
+
+export const getArticleBySlug = (slug: string) =>
+  articles.find((a) => a.slug === slug);
+
+export const getRelatedArticles = (categoryId: string, currentId: string, limit = 3) =>
+  articles.filter((a) => a.categoryId === categoryId && a.id !== currentId).slice(0, limit);
+
+export const getAllSlugs = () => articles.map((a) => a.slug);

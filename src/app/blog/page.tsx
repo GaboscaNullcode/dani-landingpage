@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import BlogHero from '@/components/blog/BlogHero';
-import BlogCategories from '@/components/blog/BlogCategories';
 import PopularArticles from '@/components/blog/PopularArticles';
 import LatestArticles from '@/components/blog/LatestArticles';
 
@@ -32,7 +31,6 @@ export default function BlogPage() {
       <Navigation />
       <main>
         <BlogHero />
-        <BlogCategories />
         <PopularArticles />
         <LatestArticles />
       </main>

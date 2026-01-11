@@ -18,7 +18,10 @@ export default function LatestArticles() {
       ref={ref}
       className="relative overflow-hidden"
       style={{
-        padding: 'var(--section-padding) 2rem',
+        paddingTop: '3rem',
+        paddingBottom: 'var(--section-padding)',
+        paddingLeft: '2rem',
+        paddingRight: '2rem',
         background: 'linear-gradient(180deg, #ffffff 0%, #fef7f0 30%, #fce7f3 100%)',
       }}
     >

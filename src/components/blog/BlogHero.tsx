@@ -7,8 +7,8 @@ export default function BlogHero() {
     <section
       className="relative overflow-hidden"
       style={{
-        paddingTop: 'calc(80px + 6rem)',
-        paddingBottom: '5rem',
+        paddingTop: 'calc(80px + 5rem)',
+        paddingBottom: '3rem',
         background: 'linear-gradient(135deg, #fef7f0 0%, #ffecd2 50%, #fce7f3 100%)',
       }}
     >

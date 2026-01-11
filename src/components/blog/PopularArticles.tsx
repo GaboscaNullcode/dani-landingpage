@@ -16,7 +16,7 @@ export default function PopularArticles() {
     <section
       ref={ref}
       className="relative overflow-hidden bg-white"
-      style={{ padding: 'var(--section-padding) 2rem' }}
+      style={{ padding: '4rem 2rem 2rem' }}
     >
       {/* Decorative Floating Blobs */}
       <div className="pointer-events-none absolute inset-0">
@@ -83,7 +83,7 @@ export default function PopularArticles() {
           initial={{ opacity: 0, scaleX: 0 }}
           animate={isInView ? { opacity: 1, scaleX: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="my-16 h-px bg-gray-200"
+          className="mt-12 h-px bg-gray-200"
           style={{ transformOrigin: 'left' }}
         />
       </div>

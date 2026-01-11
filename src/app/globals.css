@@ -663,3 +663,176 @@ body.menu-open {
   font-size: 0.75rem;
   flex-shrink: 0;
 }
+
+/* ===== PROSE STYLES FOR BLOG CONTENT ===== */
+.prose-custom {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--gray-dark);
+}
+
+.prose-custom p {
+  margin-bottom: 1.5em;
+}
+
+.prose-custom h2 {
+  font-family: var(--font-headline);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--black-deep);
+  margin-top: 2.5em;
+  margin-bottom: 0.8em;
+  line-height: 1.3;
+}
+
+.prose-custom h3 {
+  font-family: var(--font-headline);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--black-deep);
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+  line-height: 1.4;
+}
+
+.prose-custom h4 {
+  font-family: var(--font-headline);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--black-deep);
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose-custom strong {
+  font-weight: 700;
+  color: var(--black-deep);
+}
+
+.prose-custom em {
+  font-style: italic;
+  color: var(--coral);
+}
+
+.prose-custom a {
+  color: var(--coral);
+  text-decoration: underline;
+  text-decoration-color: var(--coral-light);
+  text-underline-offset: 3px;
+  transition: all 0.2s ease;
+}
+
+.prose-custom a:hover {
+  color: var(--pink);
+  text-decoration-color: var(--pink);
+}
+
+.prose-custom ul,
+.prose-custom ol {
+  margin-top: 1.25em;
+  margin-bottom: 1.5em;
+  padding-left: 1.5em;
+}
+
+.prose-custom li {
+  margin-bottom: 0.5em;
+  padding-left: 0.5em;
+}
+
+.prose-custom ul li {
+  list-style-type: none;
+  position: relative;
+}
+
+.prose-custom ul li::before {
+  content: '';
+  position: absolute;
+  left: -1.25em;
+  top: 0.6em;
+  width: 8px;
+  height: 8px;
+  background: var(--gradient-coral-pink);
+  border-radius: 50%;
+}
+
+.prose-custom ol {
+  counter-reset: custom-counter;
+}
+
+.prose-custom ol li {
+  list-style-type: none;
+  counter-increment: custom-counter;
+  position: relative;
+}
+
+.prose-custom ol li::before {
+  content: counter(custom-counter) '.';
+  position: absolute;
+  left: -1.75em;
+  font-family: var(--font-headline);
+  font-weight: 700;
+  color: var(--coral);
+}
+
+.prose-custom blockquote {
+  position: relative;
+  margin: 2em 0;
+  padding: 1.5em 2em;
+  background: linear-gradient(135deg, #fef7f0 0%, #fce7f3 100%);
+  border-radius: 16px;
+  border-left: 4px solid var(--coral);
+}
+
+.prose-custom blockquote p {
+  font-family: var(--font-headline);
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--gray-carbon);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.prose-custom hr {
+  margin: 3em 0;
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--coral-light), transparent);
+}
+
+.prose-custom img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+  margin: 2em 0;
+}
+
+.prose-custom code {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9em;
+  padding: 0.2em 0.4em;
+  background: var(--cream);
+  border-radius: 6px;
+  color: var(--pink);
+}
+
+.prose-custom pre {
+  margin: 2em 0;
+  padding: 1.5em;
+  background: var(--black-deep);
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.prose-custom pre code {
+  background: none;
+  padding: 0;
+  color: var(--gray-light);
+}
+
+/* First paragraph emphasis */
+.prose-custom > p:first-child {
+  font-size: 1.25rem;
+  color: var(--gray-carbon);
+  line-height: 1.7;
+}
