@@ -16,6 +16,7 @@
   /* Neutral Colors */
   --white: #ffffff;
   --black-deep: #1a1a2e;
+  --teal-dark: #1a3a3a;
   --gray-dark: #2d3748;
   --gray-carbon: #4a5568;
   --gray-medium: #718096;
@@ -81,6 +82,7 @@
   --color-cream: var(--cream);
   --color-peach: var(--peach);
   --color-black-deep: var(--black-deep);
+  --color-teal-dark: var(--teal-dark);
   --color-gray-dark: var(--gray-dark);
   --color-gray-carbon: var(--gray-carbon);
   --color-gray-medium: var(--gray-medium);
