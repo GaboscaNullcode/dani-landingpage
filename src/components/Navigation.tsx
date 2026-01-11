@@ -44,17 +44,21 @@ export default function Navigation() {
   };
 
   return (
-    <motion.nav
+    <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.175, 0.885, 0.32, 1.275] }}
-      className={`fixed left-0 right-0 top-0 z-[1000] transition-all duration-500 ${
-        isScrolled
-          ? 'bg-white/95 px-6 py-3 shadow-[0_4px_30px_rgba(0,0,0,0.08)] backdrop-blur-md'
-          : 'bg-transparent px-6 py-5'
+      className={`fixed left-0 right-0 top-0 z-[1000] px-4 transition-all duration-500 ${
+        isScrolled ? 'py-3' : 'py-5'
       }`}
     >
-      <div className="container-custom flex items-center justify-between">
+      <motion.nav
+        className={`mx-auto flex items-center justify-between transition-all duration-500 ${
+          isScrolled
+            ? 'max-w-4xl rounded-full bg-white/80 px-6 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl'
+            : 'container-custom bg-transparent px-6 py-0'
+        }`}
+      >
         {/* Logo */}
         <Link href="/" className="relative z-[1002]">
           <motion.div
@@ -67,8 +71,8 @@ export default function Navigation() {
               alt="Remote con Dani"
               width={160}
               height={44}
-              className={`h-11 w-auto transition-all duration-500 ${
-                isScrolled || isMobileMenuOpen ? 'brightness-0' : 'brightness-0'
+              className={`w-auto brightness-0 transition-all duration-500 ${
+                isScrolled ? 'h-8' : 'h-11'
               }`}
               priority
             />
@@ -76,7 +80,7 @@ export default function Navigation() {
         </Link>
 
         {/* Desktop Menu */}
-        <ul className="hidden items-center gap-8 md:flex">
+        <ul className={`hidden items-center md:flex transition-all duration-500 ${isScrolled ? 'gap-5' : 'gap-8'}`}>
           {navItems.map((item, index) => (
             <motion.li
               key={item.text}
@@ -86,10 +90,8 @@ export default function Navigation() {
             >
               <Link
                 href={item.href}
-                className={`nav-link-underline group relative font-[var(--font-dm-sans)] text-sm font-semibold tracking-wide transition-colors ${
-                  isScrolled
-                    ? 'text-gray-dark hover:text-coral'
-                    : 'text-gray-dark hover:text-coral'
+                className={`nav-link-underline group relative font-[var(--font-dm-sans)] font-semibold tracking-wide transition-all duration-500 text-gray-dark hover:text-coral ${
+                  isScrolled ? 'text-xs' : 'text-sm'
                 }`}
               >
                 {item.text}
@@ -103,7 +105,9 @@ export default function Navigation() {
           >
             <Link
               href="/empezar"
-              className="btn-shimmer group relative inline-flex items-center gap-2 rounded-full px-6 py-3 font-[var(--font-headline)] text-sm font-bold text-white transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(255,107,107,0.4)]"
+              className={`btn-shimmer group relative inline-flex items-center gap-2 rounded-full font-[var(--font-headline)] font-bold text-white transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(255,107,107,0.4)] ${
+                isScrolled ? 'px-4 py-2 text-xs' : 'px-6 py-3 text-sm'
+              }`}
               style={{
                 background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
               }}
@@ -113,7 +117,7 @@ export default function Navigation() {
                 animate={{ rotate: [0, 15, 0] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                <Sparkles className="h-4 w-4" />
+                <Sparkles className={isScrolled ? 'h-3 w-3' : 'h-4 w-4'} />
               </motion.div>
             </Link>
           </motion.li>
@@ -225,7 +229,7 @@ export default function Navigation() {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-    </motion.nav>
+      </motion.nav>
+    </motion.header>
   );
 }
