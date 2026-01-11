@@ -411,7 +411,7 @@ export default function SobreMiHistorySection() {
         <div ref={timelineRef} className="relative mx-auto max-w-3xl">
           {/* Background line (gray) - only visible when timeline is in view */}
           <motion.div
-            className="absolute bottom-0 left-8 top-0 w-1 rounded-full bg-white/10 md:left-1/2 md:-translate-x-1/2"
+            className="absolute bottom-0 left-[calc(1rem+22px)] top-0 w-1 rounded-full bg-white/10 md:left-1/2 md:-translate-x-1/2"
             initial={{ opacity: 0 }}
             animate={isTimelineInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.5 }}
@@ -419,7 +419,7 @@ export default function SobreMiHistorySection() {
 
           {/* Animated solid coral line that fills on scroll */}
           <motion.div
-            className="absolute left-8 top-0 w-1 origin-top rounded-full bg-coral md:left-1/2 md:-translate-x-1/2"
+            className="absolute left-[calc(1rem+22px)] top-0 w-1 origin-top rounded-full bg-coral md:left-1/2 md:-translate-x-1/2"
             initial={{ opacity: 0 }}
             animate={isTimelineInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.3 }}

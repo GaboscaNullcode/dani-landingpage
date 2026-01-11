@@ -127,7 +127,7 @@ export default function SobreMiMissionSection() {
               type: 'spring',
               stiffness: 100,
             }}
-            className="relative mx-auto max-w-[450px] lg:mx-0"
+            className="relative mx-auto w-full max-w-[450px] lg:mx-0"
           >
             {/* Decorative blob behind image */}
             <motion.div
@@ -160,7 +160,7 @@ export default function SobreMiMissionSection() {
 
             {/* Floating quote card */}
             <motion.div
-              className="absolute -left-6 -bottom-6 z-20 max-w-[280px] rounded-2xl bg-white p-5 shadow-xl"
+              className="absolute -bottom-6 left-2 z-20 max-w-[280px] rounded-2xl bg-white p-5 shadow-xl md:-left-6"
               animate={{
                 y: [-5, 5, -5],
               }}
@@ -179,7 +179,7 @@ export default function SobreMiMissionSection() {
 
             {/* Decorative element */}
             <motion.div
-              className="absolute -right-4 top-16 z-20 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-mint to-lavender shadow-lg"
+              className="absolute right-2 top-16 z-20 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-mint to-lavender shadow-lg md:-right-4"
               animate={{
                 y: [0, -10, 0],
                 rotate: [0, 10, 0],

@@ -154,7 +154,7 @@ export default function SobreMiHeroSection() {
               type: 'spring',
               stiffness: 80,
             }}
-            className="relative order-1 mx-auto max-w-[500px] lg:order-2 lg:mx-0"
+            className="relative order-1 mx-auto w-full max-w-[500px] lg:order-2 lg:mx-0"
           >
             {/* Decorative blob behind image */}
             <motion.div
@@ -188,7 +188,7 @@ export default function SobreMiHeroSection() {
 
             {/* Floating stats card */}
             <motion.div
-              className="absolute -left-6 bottom-16 z-20 rounded-2xl bg-white p-5 shadow-xl"
+              className="absolute bottom-16 left-2 z-20 rounded-2xl bg-white p-5 shadow-xl md:-left-6"
               animate={{
                 y: [-8, 8, -8],
                 rotate: [-3, 3, -3],
@@ -211,7 +211,7 @@ export default function SobreMiHeroSection() {
 
             {/* Floating badge top right */}
             <motion.div
-              className="absolute -right-4 top-12 z-20 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-lavender to-mint shadow-lg"
+              className="absolute right-2 top-12 z-20 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-lavender to-mint shadow-lg md:-right-4"
               animate={{
                 y: [0, -12, 0],
                 rotate: [0, 10, 0],

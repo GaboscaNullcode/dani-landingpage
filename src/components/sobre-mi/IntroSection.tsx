@@ -46,7 +46,7 @@ export default function IntroSection() {
               type: 'spring',
               stiffness: 100,
             }}
-            className="relative mx-auto max-w-[420px] lg:mx-0"
+            className="relative mx-auto w-full max-w-[420px] lg:mx-0"
           >
             {/* Decorative blob behind image */}
             <motion.div
@@ -78,7 +78,7 @@ export default function IntroSection() {
 
             {/* Decorative star */}
             <motion.div
-              className="absolute -right-4 top-8 z-20 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-coral to-pink shadow-lg"
+              className="absolute right-2 top-8 z-20 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-coral to-pink shadow-lg md:-right-4"
               animate={{
                 y: [0, -8, 0],
                 rotate: [0, 15, 0],

@@ -123,37 +123,39 @@ export default function Navigation() {
           </motion.li>
         </ul>
 
-        {/* Hamburger Button */}
-        <button
-          className="relative z-[1002] flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-xl bg-white/80 shadow-md backdrop-blur-sm md:hidden"
-          onClick={toggleMobileMenu}
-          aria-label="Toggle menu"
-          aria-expanded={isMobileMenuOpen}
-        >
-          <motion.span
-            animate={{
-              rotate: isMobileMenuOpen ? 45 : 0,
-              y: isMobileMenuOpen ? 8 : 0,
-            }}
-            className="block h-0.5 w-5 rounded-full bg-gray-dark"
-          />
-          <motion.span
-            animate={{
-              opacity: isMobileMenuOpen ? 0 : 1,
-              scale: isMobileMenuOpen ? 0 : 1,
-            }}
-            className="block h-0.5 w-5 rounded-full bg-gray-dark"
-          />
-          <motion.span
-            animate={{
-              rotate: isMobileMenuOpen ? -45 : 0,
-              y: isMobileMenuOpen ? -8 : 0,
-            }}
-            className="block h-0.5 w-5 rounded-full bg-gray-dark"
-          />
-        </button>
-
       </motion.nav>
+
+      {/* Hamburger Button - Outside nav to avoid container restrictions */}
+      <button
+        className={`absolute right-4 z-[1002] flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-xl bg-white shadow-md md:hidden ${
+          isScrolled ? 'top-1/2 -translate-y-1/2' : 'top-1/2 -translate-y-1/2'
+        }`}
+        onClick={toggleMobileMenu}
+        aria-label="Toggle menu"
+        aria-expanded={isMobileMenuOpen}
+      >
+        <motion.span
+          animate={{
+            rotate: isMobileMenuOpen ? 45 : 0,
+            y: isMobileMenuOpen ? 8 : 0,
+          }}
+          className="block h-0.5 w-5 rounded-full bg-gray-dark"
+        />
+        <motion.span
+          animate={{
+            opacity: isMobileMenuOpen ? 0 : 1,
+            scale: isMobileMenuOpen ? 0 : 1,
+          }}
+          className="block h-0.5 w-5 rounded-full bg-gray-dark"
+        />
+        <motion.span
+          animate={{
+            rotate: isMobileMenuOpen ? -45 : 0,
+            y: isMobileMenuOpen ? -8 : 0,
+          }}
+          className="block h-0.5 w-5 rounded-full bg-gray-dark"
+        />
+      </button>
 
       {/* Mobile Menu Overlay - Outside nav to avoid container restrictions */}
       <AnimatePresence>
@@ -169,27 +171,6 @@ export default function Navigation() {
                 'linear-gradient(135deg, #fef7f0 0%, #ffecd2 50%, #fce7f3 100%)',
             }}
           >
-            {/* Close button */}
-            <button
-              onClick={closeMobileMenu}
-              className="absolute right-4 top-5 z-10 flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 shadow-md backdrop-blur-sm"
-              aria-label="Cerrar menú"
-            >
-              <svg
-                className="h-5 w-5 text-gray-dark"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-
             {/* Decorative blobs in mobile menu */}
             <motion.div
               className="blob absolute -right-20 -top-20 h-[300px] w-[300px] opacity-30"
