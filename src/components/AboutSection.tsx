@@ -63,7 +63,7 @@ export default function AboutSection() {
               type: 'spring',
               stiffness: 100,
             }}
-            className="relative mx-auto max-w-[420px] lg:mx-0"
+            className="relative mx-auto max-w-[420px] overflow-visible lg:mx-0"
           >
             {/* Decorative blob behind image */}
             <motion.div
@@ -93,9 +93,9 @@ export default function AboutSection() {
               />
             </div>
 
-            {/* Floating stat card */}
+            {/* Floating stat card - hidden on mobile */}
             <motion.div
-              className="absolute -right-4 bottom-8 z-20 rounded-2xl bg-white p-5 shadow-xl"
+              className="absolute -right-4 bottom-8 z-20 hidden rounded-2xl bg-white p-5 shadow-xl sm:block"
               animate={{
                 y: [-5, 5, -5],
                 rotate: [-2, 2, -2],
@@ -116,9 +116,9 @@ export default function AboutSection() {
               </div>
             </motion.div>
 
-            {/* Small decorative element */}
+            {/* Small decorative element - hidden on mobile */}
             <motion.div
-              className="absolute -left-4 top-12 z-20 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-lavender to-mint shadow-lg"
+              className="absolute -left-4 top-12 z-20 hidden h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-lavender to-mint shadow-lg sm:flex"
               animate={{
                 y: [0, -10, 0],
                 rotate: [0, 10, 0],

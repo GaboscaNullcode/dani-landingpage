@@ -153,83 +153,105 @@ export default function Navigation() {
           />
         </button>
 
-        {/* Mobile Menu Overlay */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
+      </motion.nav>
+
+      {/* Mobile Menu Overlay - Outside nav to avoid container restrictions */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[1001] overflow-hidden md:hidden"
+            style={{
+              background:
+                'linear-gradient(135deg, #fef7f0 0%, #ffecd2 50%, #fce7f3 100%)',
+            }}
+          >
+            {/* Close button */}
+            <button
+              onClick={closeMobileMenu}
+              className="absolute right-4 top-5 z-10 flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 shadow-md backdrop-blur-sm"
+              aria-label="Cerrar menú"
+            >
+              <svg
+                className="h-5 w-5 text-gray-dark"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+
+            {/* Decorative blobs in mobile menu */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-[1001] md:hidden"
+              className="blob absolute -right-20 -top-20 h-[300px] w-[300px] opacity-30"
               style={{
                 background:
-                  'linear-gradient(135deg, #fef7f0 0%, #ffecd2 50%, #fce7f3 100%)',
+                  'linear-gradient(135deg, rgba(255, 107, 107, 0.4) 0%, rgba(224, 86, 160, 0.3) 100%)',
               }}
-            >
-              {/* Decorative blobs in mobile menu */}
-              <motion.div
-                className="blob absolute -right-20 -top-20 h-[300px] w-[300px] opacity-30"
-                style={{
-                  background:
-                    'linear-gradient(135deg, rgba(255, 107, 107, 0.4) 0%, rgba(224, 86, 160, 0.3) 100%)',
-                }}
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-              />
-              <motion.div
-                className="blob absolute -bottom-20 -left-20 h-[250px] w-[250px] opacity-25"
-                style={{
-                  background:
-                    'linear-gradient(135deg, rgba(167, 139, 250, 0.4) 0%, rgba(110, 231, 183, 0.3) 100%)',
-                }}
-                animate={{ rotate: [360, 0] }}
-                transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-              />
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+            />
+            <motion.div
+              className="blob absolute -bottom-20 -left-20 h-[250px] w-[250px] opacity-25"
+              style={{
+                background:
+                  'linear-gradient(135deg, rgba(167, 139, 250, 0.4) 0%, rgba(110, 231, 183, 0.3) 100%)',
+              }}
+              animate={{ rotate: [360, 0] }}
+              transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+            />
 
-              <ul className="flex h-full flex-col items-center justify-center gap-6">
-                {navItems.map((item, index) => (
-                  <motion.li
-                    key={item.text}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 30 }}
-                    transition={{ duration: 0.4, delay: index * 0.1 }}
-                  >
-                    <Link
-                      href={item.href}
-                      onClick={closeMobileMenu}
-                      className="font-[var(--font-headline)] text-3xl font-bold text-gray-dark transition-colors hover:text-coral"
-                    >
-                      {item.text}
-                    </Link>
-                  </motion.li>
-                ))}
+            <ul className="flex h-full flex-col items-center justify-center gap-6">
+              {navItems.map((item, index) => (
                 <motion.li
+                  key={item.text}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 30 }}
-                  transition={{ duration: 0.4, delay: navItems.length * 0.1 }}
-                  className="mt-4"
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
                 >
                   <Link
-                    href="/empezar"
+                    href={item.href}
                     onClick={closeMobileMenu}
-                    className="btn-shimmer inline-flex items-center gap-3 rounded-full px-10 py-5 font-[var(--font-headline)] text-xl font-bold text-white shadow-[0_15px_50px_rgba(255,107,107,0.4)]"
-                    style={{
-                      background:
-                        'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
-                    }}
+                    className="font-[var(--font-headline)] text-3xl font-bold text-gray-dark transition-colors hover:text-coral"
                   >
-                    <span>Empezar</span>
-                    <Sparkles className="h-5 w-5" />
+                    {item.text}
                   </Link>
                 </motion.li>
-              </ul>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.nav>
+              ))}
+              <motion.li
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 30 }}
+                transition={{ duration: 0.4, delay: navItems.length * 0.1 }}
+                className="mt-4"
+              >
+                <Link
+                  href="/empezar"
+                  onClick={closeMobileMenu}
+                  className="btn-shimmer inline-flex items-center gap-3 rounded-full px-10 py-5 font-[var(--font-headline)] text-xl font-bold text-white shadow-[0_15px_50px_rgba(255,107,107,0.4)]"
+                  style={{
+                    background:
+                      'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                  }}
+                >
+                  <span>Empezar</span>
+                  <Sparkles className="h-5 w-5" />
+                </Link>
+              </motion.li>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 }

@@ -169,7 +169,7 @@ export default function HeroSection() {
             className="text-hero-title mb-8 font-[var(--font-headline)] font-bold text-black-deep"
           >
             Trabaja desde casa y redescubre tu{' '}
-            <span className="relative text-pink">
+            <span className="relative inline-block text-pink md:inline">
               <RotatingText
                 texts={rotatingWords}
                 mainClassName="inline-flex"
@@ -394,12 +394,12 @@ export default function HeroSection() {
         </motion.div>
       </div>
 
-      {/* Animated scroll indicator */}
+      {/* Animated scroll indicator - hidden on very small screens */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 sm:block"
       >
         <motion.div
           animate={{ y: [0, 12, 0] }}
