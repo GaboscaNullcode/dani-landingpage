@@ -17,7 +17,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Jane Doe - Trabaja desde casa y redescubre tu libertad',
+  title: 'Remote con Dani - Trabaja desde casa y redescubre tu libertad',
   description:
     'Acompanamiento en tu transicion al trabajo remoto con empatia y transparencia. Aprende a conseguir empleo remoto y construir una carrera digital.',
   keywords: [
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'es_ES',
-    title: 'Jane Doe - Trabaja desde casa y redescubre tu libertad',
+    title: 'Remote con Dani - Trabaja desde casa y redescubre tu libertad',
     description:
       'Acompanamiento en tu transicion al trabajo remoto con empatia y transparencia.',
   },
