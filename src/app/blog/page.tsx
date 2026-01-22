@@ -29,7 +29,7 @@ export default function BlogPage() {
   return (
     <>
       <Navigation />
-      <main>
+      <main id="main-content">
         <BlogHero />
         <PopularArticles />
         <LatestArticles />

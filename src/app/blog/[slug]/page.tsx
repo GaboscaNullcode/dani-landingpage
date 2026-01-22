@@ -29,21 +29,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!article) {
     return {
-      title: 'Artículo no encontrado | Dani Remota',
+      title: 'Artículo no encontrado | Remote con Dani',
     };
   }
 
   const category = getCategoryById(article.categoryId);
+  const canonicalUrl = `https://remotecondani.com/blog/${slug}`;
 
   return {
-    title: `${article.title} | Dani Remota`,
+    title: `${article.title} | Remote con Dani`,
     description: article.description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: article.title,
       description: article.description,
       type: 'article',
+      url: canonicalUrl,
+      siteName: 'Remote con Dani',
       publishedTime: article.publishedAt,
-      authors: ['Dani'],
+      authors: ['Dani Zilbert'],
       images: [
         {
           url: article.thumbnail,
@@ -60,6 +66,38 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: article.description,
       images: [article.thumbnail],
     },
+  };
+}
+
+// Generate JSON-LD structured data
+function generateArticleJsonLd(article: NonNullable<ReturnType<typeof getArticleBySlug>>, category: NonNullable<ReturnType<typeof getCategoryById>>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: article.title,
+    description: article.description,
+    image: article.thumbnail,
+    datePublished: article.publishedAt,
+    dateModified: article.publishedAt,
+    author: {
+      '@type': 'Person',
+      name: 'Dani Zilbert',
+      url: 'https://remotecondani.com/sobre-mi',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Remote con Dani',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://remotecondani.com/images/logos/logo-blanco-small.png',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://remotecondani.com/blog/${article.slug}`,
+    },
+    articleSection: category.name,
+    wordCount: article.content ? article.content.split(/\s+/).length : 500,
   };
 }
 
@@ -106,10 +144,16 @@ export default async function BlogPostPage({ params }: PageProps) {
 <p>Te invito a suscribirte al newsletter para recibir este contenido cuando esté listo, junto con otros recursos exclusivos para tu camino remoto.</p>
 `;
 
+  const jsonLd = generateArticleJsonLd(article, category);
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navigation />
-      <main>
+      <main id="main-content">
         <PostHeader article={article} category={category} />
         <PostContent content={article.content || defaultContent} />
         {relatedArticles.length > 0 && (

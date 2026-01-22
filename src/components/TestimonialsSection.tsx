@@ -79,7 +79,7 @@ export default function TestimonialsSection() {
       style={{ padding: 'var(--section-padding) 2rem' }}
     >
       {/* Background decorative elements */}
-      <div className="pointer-events-none absolute inset-0">
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         <motion.div
           className="blob absolute -left-32 top-1/4 h-[350px] w-[350px] opacity-15"
           style={{

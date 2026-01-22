@@ -17,22 +17,51 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Remote con Dani - Trabaja desde casa y redescubre tu libertad',
+  metadataBase: new URL('https://remotecondani.com'),
+  title: {
+    default: 'Remote con Dani - Trabaja desde casa y redescubre tu libertad',
+    template: '%s | Remote con Dani',
+  },
   description:
-    'Acompanamiento en tu transicion al trabajo remoto con empatia y transparencia. Aprende a conseguir empleo remoto y construir una carrera digital.',
+    'Acompañamiento en tu transición al trabajo remoto con empatía y transparencia. Aprende a conseguir empleo remoto y construir una carrera digital.',
   keywords: [
     'trabajo remoto',
     'coach trabajo remoto',
     'empleo remoto',
     'freelance',
     'trabajar desde casa',
+    'asistente virtual',
+    'trabajo desde casa',
   ],
+  authors: [{ name: 'Dani', url: 'https://remotecondani.com' }],
+  creator: 'Remote con Dani',
   openGraph: {
     type: 'website',
     locale: 'es_ES',
+    url: 'https://remotecondani.com',
+    siteName: 'Remote con Dani',
     title: 'Remote con Dani - Trabaja desde casa y redescubre tu libertad',
     description:
-      'Acompanamiento en tu transicion al trabajo remoto con empatia y transparencia.',
+      'Acompañamiento en tu transición al trabajo remoto con empatía y transparencia.',
+    images: [
+      {
+        url: '/images/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Remote con Dani - Coach de Trabajo Remoto',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Remote con Dani - Trabaja desde casa y redescubre tu libertad',
+    description:
+      'Acompañamiento en tu transición al trabajo remoto con empatía y transparencia.',
+    images: ['/images/og-image.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -46,6 +75,13 @@ export default function RootLayout({
       <body
         className={`${fraunces.variable} ${dmSans.variable} antialiased`}
       >
+        {/* Skip link para accesibilidad */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[9999] focus:rounded-lg focus:bg-coral focus:px-4 focus:py-2 focus:text-white focus:outline-none"
+        >
+          Saltar al contenido principal
+        </a>
         {children}
       </body>
     </html>

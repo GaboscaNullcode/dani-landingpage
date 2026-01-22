@@ -18,7 +18,7 @@ const avatarImages = [
 
 // Floating decorative shapes
 const FloatingShapes = () => (
-  <div className="pointer-events-none absolute inset-0 overflow-hidden">
+  <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
     {/* Large coral blob - top right */}
     <motion.div
       className="blob absolute -right-20 -top-20 h-[500px] w-[500px] opacity-30"

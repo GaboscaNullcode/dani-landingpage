@@ -18,7 +18,7 @@ export default function AboutSection() {
       style={{ padding: 'var(--section-padding) 2rem' }}
     >
       {/* Background decorative elements */}
-      <div className="pointer-events-none absolute inset-0">
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         <motion.div
           className="blob absolute -left-40 top-1/4 h-[400px] w-[400px] opacity-20"
           style={{

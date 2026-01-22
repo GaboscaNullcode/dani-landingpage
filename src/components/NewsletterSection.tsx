@@ -49,7 +49,7 @@ export default function NewsletterSection() {
       }}
     >
       {/* Sophisticated background elements */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         {/* Large gradient orb - top left */}
         <motion.div
           className="absolute -left-32 -top-32 h-[500px] w-[500px] rounded-full opacity-40"
@@ -296,6 +296,9 @@ export default function NewsletterSection() {
               <form onSubmit={handleSubmit} className="relative space-y-5">
                 {/* Name field */}
                 <div className="relative">
+                  <label htmlFor="newsletter-name" className="sr-only">
+                    Tu nombre
+                  </label>
                   <motion.div
                     animate={{
                       scale: focusedField === 'name' ? 1.02 : 1,
@@ -311,7 +314,7 @@ export default function NewsletterSection() {
                             : '0 2px 8px rgba(0,0,0,0.04)',
                       }}
                     >
-                      <div className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2">
+                      <div className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2" aria-hidden="true">
                         <User
                           className={`h-5 w-5 transition-colors duration-300 ${
                             focusedField === 'name' ? 'text-coral' : 'text-gray-medium'
@@ -319,6 +322,7 @@ export default function NewsletterSection() {
                         />
                       </div>
                       <input
+                        id="newsletter-name"
                         type="text"
                         placeholder="Tu nombre"
                         value={name}
@@ -333,6 +337,7 @@ export default function NewsletterSection() {
                               : '#ffffff',
                         }}
                         required
+                        autoComplete="name"
                       />
                     </div>
                   </motion.div>
@@ -340,6 +345,9 @@ export default function NewsletterSection() {
 
                 {/* Email field */}
                 <div className="relative">
+                  <label htmlFor="newsletter-email" className="sr-only">
+                    Tu correo electrónico
+                  </label>
                   <motion.div
                     animate={{
                       scale: focusedField === 'email' ? 1.02 : 1,
@@ -355,7 +363,7 @@ export default function NewsletterSection() {
                             : '0 2px 8px rgba(0,0,0,0.04)',
                       }}
                     >
-                      <div className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2">
+                      <div className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2" aria-hidden="true">
                         <Mail
                           className={`h-5 w-5 transition-colors duration-300 ${
                             focusedField === 'email' ? 'text-coral' : 'text-gray-medium'
@@ -363,6 +371,7 @@ export default function NewsletterSection() {
                         />
                       </div>
                       <input
+                        id="newsletter-email"
                         type="email"
                         placeholder="Tu mejor correo"
                         value={email}
@@ -377,6 +386,7 @@ export default function NewsletterSection() {
                               : '#ffffff',
                         }}
                         required
+                        autoComplete="email"
                       />
                     </div>
                   </motion.div>

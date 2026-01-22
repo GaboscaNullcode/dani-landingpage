@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <>
       <Navigation />
-      <main>
+      <main id="main-content">
         <HeroSection />
         <AboutSection />
         <ServicesSection />

@@ -836,3 +836,43 @@ body.menu-open {
   color: var(--gray-carbon);
   line-height: 1.7;
 }
+
+/* ===== CONTENT VISIBILITY OPTIMIZATION ===== */
+/* Optimiza el rendimiento de renderizado para listas largas */
+.article-card,
+.product-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 400px;
+}
+
+/* ===== REDUCED MOTION ===== */
+/* Respeta preferencias de accesibilidad para usuarios que prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .blob {
+    animation: none !important;
+  }
+
+  .animate-float,
+  .animate-float-slow,
+  .animate-blob,
+  .animate-spin-slow,
+  .animate-wiggle,
+  .animate-bounce-soft,
+  .animate-pulse-soft,
+  .animate-gradient {
+    animation: none !important;
+  }
+
+  .btn-shimmer::after {
+    animation: none !important;
+  }
+}

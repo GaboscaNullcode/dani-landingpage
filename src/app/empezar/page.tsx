@@ -1,7 +1,21 @@
 import { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import Navigation from '@/components/Navigation';
-import QuizSection from '@/components/QuizSection';
 import Footer from '@/components/Footer';
+
+// Dynamic import para QuizSection - componente pesado (828+ líneas)
+const QuizSection = dynamic(() => import('@/components/QuizSection'), {
+  loading: () => (
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#fef7f0] to-[#fce7f3]">
+      <div className="text-center">
+        <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-coral border-t-transparent" />
+        <p className="font-[var(--font-dm-sans)] text-gray-carbon">
+          Cargando quiz...
+        </p>
+      </div>
+    </div>
+  ),
+});
 
 export const metadata: Metadata = {
   title: '¿Por dónde empiezo? | Remote con Dani - Quiz de Trabajo Remoto',
@@ -27,7 +41,7 @@ export default function EmpezarPage() {
   return (
     <>
       <Navigation />
-      <main>
+      <main id="main-content">
         <QuizSection />
       </main>
       <Footer />

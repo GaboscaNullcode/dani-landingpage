@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'motion/react';
@@ -12,7 +13,7 @@ interface ArticleCardProps {
   variant?: 'default' | 'featured';
 }
 
-export default function ArticleCard({
+function ArticleCard({
   article,
   index = 0,
   variant = 'default',
@@ -73,7 +74,7 @@ export default function ArticleCard({
 
   // Default variant - clean minimal card
   return (
-    <Link href={`/blog/${article.slug}`} className="group block">
+    <Link href={`/blog/${article.slug}`} className="article-card group block">
       <motion.article
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -122,3 +123,5 @@ export default function ArticleCard({
     </Link>
   );
 }
+
+export default memo(ArticleCard);
