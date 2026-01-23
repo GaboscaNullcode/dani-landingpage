@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, useInView } from 'motion/react';
 import {
@@ -17,6 +17,19 @@ import {
   GraduationCap,
   MessageCircle,
   Gift,
+  Check,
+  Star,
+  ChevronDown,
+  HelpCircle,
+  Layers,
+  Search,
+  Zap,
+  Briefcase,
+  TrendingUp,
+  DollarSign,
+  Gem,
+  Crown,
+  type LucideIcon,
 } from 'lucide-react';
 
 // Types
@@ -25,11 +38,13 @@ interface QuizOption {
   label: string;
   points: number;
   flag?: string;
+  icon: LucideIcon;
 }
 
 interface QuizQuestion {
   id: string;
   question: string;
+  subtitle: string;
   options: QuizOption[];
 }
 
@@ -41,6 +56,7 @@ interface ProductRecommendation {
   priority: 'primary' | 'secondary';
   icon: typeof BookOpen;
   gradient: string;
+  tag?: string;
 }
 
 interface LevelResult {
@@ -48,76 +64,47 @@ interface LevelResult {
   title: string;
   subtitle: string;
   description: string;
-  icon: typeof Compass;
+  icon: LucideIcon;
   gradient: string;
   shadowColor: string;
+  accentColor: string;
   recommendations: ProductRecommendation[];
   avRecommendation?: ProductRecommendation;
 }
 
-// Quiz Data
+// Quiz Data con iconos para feedback visual
 const questions: QuizQuestion[] = [
   {
     id: 'question_1',
     question: '¿Qué tanto conoces sobre el trabajo remoto?',
+    subtitle: 'Cuéntame tu experiencia actual',
     options: [
-      { id: 'q1_a', label: 'Apenas estoy explorando, no sé mucho', points: 0 },
-      {
-        id: 'q1_b',
-        label: 'Conozco lo básico pero no sé por dónde empezar',
-        points: 1,
-      },
-      {
-        id: 'q1_c',
-        label: 'Ya investigué bastante, quiero tomar acción',
-        points: 2,
-      },
-      {
-        id: 'q1_d',
-        label: 'Tengo experiencia pero necesito orientación personalizada',
-        points: 3,
-      },
+      { id: 'q1_a', label: 'Apenas estoy explorando, no sé mucho', points: 0, icon: Sprout },
+      { id: 'q1_b', label: 'Conozco lo básico pero no sé por dónde empezar', points: 1, icon: Search },
+      { id: 'q1_c', label: 'Ya investigué bastante, quiero tomar acción', points: 2, icon: Zap },
+      { id: 'q1_d', label: 'Tengo experiencia pero necesito orientación', points: 3, icon: Target },
     ],
   },
   {
     id: 'question_2',
     question: '¿Qué te gustaría lograr?',
+    subtitle: 'Define tu objetivo principal',
     options: [
-      {
-        id: 'q2_a',
-        label: 'Entender si el trabajo remoto es para mí',
-        points: 0,
-      },
-      {
-        id: 'q2_b',
-        label: 'Aprender sobre ser Asistente Virtual',
-        points: 1,
-        flag: 'interes_av',
-      },
-      { id: 'q2_c', label: 'Conseguir mi primer trabajo remoto', points: 2 },
-      { id: 'q2_d', label: 'Ordenar mi perfil y estrategia actual', points: 3 },
+      { id: 'q2_a', label: 'Entender si el trabajo remoto es para mí', points: 0, icon: HelpCircle },
+      { id: 'q2_b', label: 'Aprender sobre ser Asistente Virtual', points: 1, flag: 'interes_av', icon: Briefcase },
+      { id: 'q2_c', label: 'Conseguir mi primer trabajo remoto', points: 2, icon: Rocket },
+      { id: 'q2_d', label: 'Ordenar mi perfil y estrategia actual', points: 3, icon: TrendingUp },
     ],
   },
   {
     id: 'question_3',
-    question: '¿Cuánto estás dispuesto/a a invertir en tu formación?',
+    question: '¿Cuánto estás dispuesto/a a invertir?',
+    subtitle: 'En tu formación profesional',
     options: [
-      {
-        id: 'q3_a',
-        label: 'Prefiero empezar con recursos gratuitos',
-        points: 0,
-      },
-      { id: 'q3_b', label: 'Puedo invertir poco ($7-$27)', points: 1 },
-      {
-        id: 'q3_c',
-        label: 'Estoy listo/a para invertir en algo completo ($47+)',
-        points: 2,
-      },
-      {
-        id: 'q3_d',
-        label: 'Busco acompañamiento personalizado (asesoría)',
-        points: 3,
-      },
+      { id: 'q3_a', label: 'Prefiero empezar con recursos gratuitos', points: 0, icon: Gift },
+      { id: 'q3_b', label: 'Puedo invertir poco ($7-$27)', points: 1, icon: DollarSign },
+      { id: 'q3_c', label: 'Estoy listo/a para algo completo ($47+)', points: 2, icon: Gem },
+      { id: 'q3_d', label: 'Busco acompañamiento personalizado', points: 3, icon: Crown },
     ],
   },
 ];
@@ -126,25 +113,26 @@ const questions: QuizQuestion[] = [
 const levelResults: Record<string, LevelResult> = {
   nivel_0: {
     id: 'nivel_0',
-    title: 'Eres un Explorador',
-    subtitle: 'Nivel 0',
-    description:
-      'Estás en la etapa de descubrimiento. Es el momento perfecto para explorar sin presión y entender si el trabajo remoto es para ti.',
+    title: 'Explorador/a',
+    subtitle: 'Nivel Descubrimiento',
+    description: 'Estás en la etapa perfecta para explorar sin presión. El trabajo remoto es un mundo lleno de posibilidades y tú estás a punto de descubrirlas.',
     icon: Compass,
     gradient: 'linear-gradient(135deg, #fef7f0 0%, #ffecd2 100%)',
-    shadowColor: 'rgba(255, 240, 230, 0.5)',
+    shadowColor: 'rgba(255, 240, 230, 0.6)',
+    accentColor: '#fcd34d',
     recommendations: [
       {
         name: 'Newsletter Semanal',
         price: 'Gratis',
-        description: 'Contenido semanal con tips y recursos para empezar',
+        description: 'Recibe tips y recursos cada semana directo en tu correo',
         href: '/newsletter',
         priority: 'primary',
         icon: Mail,
         gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+        tag: 'Recomendado',
       },
       {
-        name: 'Guía Gratuita',
+        name: 'Guía de Inicio',
         price: 'Gratis',
         description: 'Tu primer mapa mental del trabajo remoto',
         href: '/recursos',
@@ -155,7 +143,7 @@ const levelResults: Record<string, LevelResult> = {
       {
         name: 'Masterclass Gratuita',
         price: 'Gratis',
-        description: 'Para decidir si el mundo remoto es para ti',
+        description: 'Descubre si el mundo remoto es para ti',
         href: '/recursos',
         priority: 'secondary',
         icon: GraduationCap,
@@ -165,27 +153,28 @@ const levelResults: Record<string, LevelResult> = {
   },
   nivel_1: {
     id: 'nivel_1',
-    title: 'Eres Iniciante',
-    subtitle: 'Nivel 1',
-    description:
-      'Ya tienes interés pero necesitas claridad. Los recursos de entrada te ayudarán a definir tu camino sin abrumarte.',
+    title: 'Iniciante',
+    subtitle: 'Nivel Preparación',
+    description: 'Ya tienes interés claro y eso es genial. Ahora necesitas las herramientas correctas para dar tus primeros pasos con confianza.',
     icon: Sprout,
     gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
-    shadowColor: 'rgba(224, 86, 160, 0.3)',
+    shadowColor: 'rgba(224, 86, 160, 0.4)',
+    accentColor: '#e056a0',
     recommendations: [
       {
         name: 'eBook: Guía Práctica para Iniciar',
         price: '$27 USD',
-        description: 'Todo lo esencial para dar tus primeros pasos',
+        description: 'Todo lo esencial para dar tus primeros pasos con confianza',
         href: '/tienda',
         priority: 'primary',
         icon: BookOpen,
         gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+        tag: 'Más vendido',
       },
       {
         name: 'eBook: Define tu Camino Remoto',
         price: '$7 USD',
-        description: 'Clarifica tus objetivos y define tu ruta',
+        description: 'Clarifica tus objetivos y define tu ruta ideal',
         href: '/tienda',
         priority: 'secondary',
         icon: BookOpen,
@@ -195,58 +184,60 @@ const levelResults: Record<string, LevelResult> = {
     avRecommendation: {
       name: 'Masterclass Asistente Virtual',
       price: '$22 USD',
-      description: 'Especialmente para ti que quieres ser AV',
+      description: 'Curso especializado para convertirte en AV profesional',
       href: '/masterclass-av',
       priority: 'primary',
       icon: GraduationCap,
       gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
+      tag: 'Para ti',
     },
   },
   nivel_2: {
     id: 'nivel_2',
-    title: 'Estás En Acción',
-    subtitle: 'Nivel 2',
-    description:
-      'Ya decidiste dar el paso. Necesitas una guía estructurada que te lleve de la mano desde el inicio hasta conseguir tu primer cliente.',
+    title: 'En Acción',
+    subtitle: 'Nivel Lanzamiento',
+    description: '¡Ya decidiste dar el paso! Necesitas una guía estructurada que te lleve de la mano hasta conseguir tu primer cliente o empleo remoto.',
     icon: Rocket,
     gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
-    shadowColor: 'rgba(255, 107, 107, 0.3)',
+    shadowColor: 'rgba(255, 107, 107, 0.4)',
+    accentColor: '#ff6b6b',
     recommendations: [
       {
-        name: 'Curso Práctico: Paso a Paso + 6 Bonos',
+        name: 'Curso Completo: Paso a Paso + 6 Bonos',
         price: '$47 USD',
-        description:
-          'Guía completa con todo lo que necesitas para iniciar tu carrera remota',
+        description: 'La guía definitiva con todo incluido para lanzar tu carrera remota',
         href: '/ebook-trabajo-remoto',
         priority: 'primary',
         icon: BookOpen,
         gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+        tag: 'Mejor valor',
       },
     ],
   },
   nivel_3: {
     id: 'nivel_3',
-    title: 'Buscas Personalización',
-    subtitle: 'Nivel 3',
-    description:
-      'Tienes preguntas específicas y no quieres perder tiempo. Una asesoría personalizada acelerará tus resultados.',
+    title: 'Estratega',
+    subtitle: 'Nivel Personalizado',
+    description: 'Tienes preguntas específicas y valoras tu tiempo. Una asesoría 1:1 acelerará tus resultados y resolverá tus dudas particulares.',
     icon: Target,
     gradient: 'linear-gradient(135deg, #374c4f 0%, #4a5c5f 100%)',
-    shadowColor: 'rgba(55, 76, 79, 0.3)',
+    shadowColor: 'rgba(55, 76, 79, 0.4)',
+    accentColor: '#6ee7b7',
     recommendations: [
       {
-        name: 'Asesoría Intensiva: Crea tu Camino Remoto',
+        name: 'Asesoría Intensiva: Crea tu Camino',
         price: '$155 USD',
-        description: '4 horas de acompañamiento + acceso a comunidad',
+        description: '4 horas de acompañamiento 1:1 + acceso a comunidad VIP',
         href: '/asesorias',
         priority: 'primary',
         icon: MessageCircle,
         gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+        tag: 'Premium',
       },
       {
-        name: 'Asesoría: Iniciando tu Camino Remoto',
+        name: 'Asesoría Express',
         price: '$66 USD',
-        description: '1.5 horas de sesión personalizada + seguimiento',
+        description: '1.5 horas de sesión personalizada + seguimiento por email',
         href: '/asesorias',
         priority: 'secondary',
         icon: MessageCircle,
@@ -256,6 +247,9 @@ const levelResults: Record<string, LevelResult> = {
   },
 };
 
+// Orden de niveles para la vista por niveles
+const levelOrder = ['nivel_0', 'nivel_1', 'nivel_2', 'nivel_3'];
+
 // Helper function to determine level
 function getLevel(score: number): string {
   if (score <= 2) return 'nivel_0';
@@ -264,30 +258,156 @@ function getLevel(score: number): string {
   return 'nivel_3';
 }
 
+// Level Accordion Component
+function LevelAccordion({
+  level,
+  isExpanded,
+  onToggle,
+  index
+}: {
+  level: LevelResult;
+  isExpanded: boolean;
+  onToggle: () => void;
+  index: number;
+}) {
+  const Icon = level.icon;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+      className="overflow-hidden rounded-[24px] bg-white shadow-lg shadow-pink/5"
+    >
+      {/* Accordion Header */}
+      <motion.button
+        onClick={onToggle}
+        className="group flex w-full items-center gap-4 p-5 text-left transition-colors hover:bg-cream/50 sm:p-6"
+        whileTap={{ scale: 0.995 }}
+      >
+        {/* Level Icon */}
+        <div
+          className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl text-white shadow-lg sm:h-16 sm:w-16"
+          style={{ background: level.gradient }}
+        >
+          <Icon className="h-7 w-7 sm:h-8 sm:w-8" />
+        </div>
+
+        {/* Level Info */}
+        <div className="flex-1">
+          <h3 className="mb-1 font-[var(--font-headline)] text-xl font-bold text-black-deep sm:text-2xl">
+            {level.title}
+          </h3>
+          <p className="font-[var(--font-dm-sans)] text-sm text-gray-medium">
+            {level.subtitle}
+          </p>
+        </div>
+
+        {/* Expand Icon */}
+        <motion.div
+          animate={{ rotate: isExpanded ? 180 : 0 }}
+          transition={{ duration: 0.3 }}
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-cream text-gray-carbon transition-colors group-hover:bg-coral/10 group-hover:text-coral"
+        >
+          <ChevronDown className="h-5 w-5" />
+        </motion.div>
+      </motion.button>
+
+      {/* Accordion Content */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            <div className="border-t border-gray-light/50 px-5 pb-6 pt-5 sm:px-6">
+              {/* Description */}
+              <p className="mb-6 font-[var(--font-dm-sans)] text-gray-carbon">
+                {level.description}
+              </p>
+
+              {/* Recommendations */}
+              <div className="space-y-3">
+                <h4 className="font-[var(--font-dm-sans)] text-sm font-semibold uppercase tracking-wider text-gray-medium">
+                  Recursos recomendados
+                </h4>
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {level.recommendations.map((rec) => (
+                    <Link
+                      key={rec.name}
+                      href={rec.href}
+                      className="group/card relative overflow-hidden rounded-xl bg-cream/60 p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-lg"
+                    >
+                      {rec.tag && (
+                        <span
+                          className="absolute right-2 top-2 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase text-white"
+                          style={{ background: rec.gradient }}
+                        >
+                          {rec.tag}
+                        </span>
+                      )}
+                      <div
+                        className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl"
+                        style={{ background: rec.gradient }}
+                      >
+                        <rec.icon className="h-5 w-5 text-white" />
+                      </div>
+                      <h5 className="mb-1 font-[var(--font-headline)] text-sm font-bold text-black-deep">
+                        {rec.name}
+                      </h5>
+                      <p className="mb-2 text-xs text-gray-carbon line-clamp-2">
+                        {rec.description}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span
+                          className="font-[var(--font-headline)] text-lg font-black"
+                          style={{ color: rec.price === 'Gratis' ? '#6ee7b7' : '#ff6b6b' }}
+                        >
+                          {rec.price}
+                        </span>
+                        <ArrowRight className="h-4 w-4 text-gray-medium transition-transform group-hover/card:translate-x-1 group-hover/card:text-coral" />
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
 export default function QuizSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
 
+  // View mode state
+  const [viewMode, setViewMode] = useState<'quiz' | 'levels'>('quiz');
+
   // Quiz state
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<(string | null)[]>([
-    null,
-    null,
-    null,
-  ]);
+  const [selectedAnswers, setSelectedAnswers] = useState<(string | null)[]>([null, null, null]);
   const [showResult, setShowResult] = useState(false);
   const [interesAV, setInteresAV] = useState(false);
   const [direction, setDirection] = useState<'next' | 'prev'>('next');
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Levels view state
+  const [expandedLevel, setExpandedLevel] = useState<string | null>('nivel_0');
 
   // Calculate score
-  const calculateScore = (): number => {
+  const calculateScore = useCallback((): number => {
     return selectedAnswers.reduce((total, answerId, questionIndex) => {
       if (!answerId) return total;
       const question = questions[questionIndex];
       const option = question.options.find((opt) => opt.id === answerId);
       return total + (option?.points || 0);
     }, 0);
-  };
+  }, [selectedAnswers]);
 
   // Handle option selection
   const handleOptionSelect = (optionId: string, flag?: string) => {
@@ -300,28 +420,43 @@ export default function QuizSection() {
     }
   };
 
-  // Navigation handlers
+  // Navigation handlers with improved transitions
   const handleNext = () => {
+    if (isTransitioning) return;
+
     if (currentQuestion < questions.length - 1) {
+      setIsTransitioning(true);
       setDirection('next');
-      setCurrentQuestion(currentQuestion + 1);
+      setTimeout(() => {
+        setCurrentQuestion(currentQuestion + 1);
+        setIsTransitioning(false);
+      }, 150);
     } else {
-      // Show results
-      setShowResult(true);
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setShowResult(true);
+        setIsTransitioning(false);
+        // Scroll al inicio de la página cuando se muestran los resultados
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 300);
     }
   };
 
   const handlePrev = () => {
-    if (currentQuestion > 0) {
-      setDirection('prev');
+    if (isTransitioning || currentQuestion === 0) return;
+
+    setIsTransitioning(true);
+    setDirection('prev');
+    setTimeout(() => {
       setCurrentQuestion(currentQuestion - 1);
-    }
+      setIsTransitioning(false);
+    }, 150);
   };
 
   const handleRestart = () => {
+    setShowResult(false);
     setCurrentQuestion(0);
     setSelectedAnswers([null, null, null]);
-    setShowResult(false);
     setInteresAV(false);
     setDirection('next');
   };
@@ -333,64 +468,144 @@ export default function QuizSection() {
   const currentSelectedOption = selectedAnswers[currentQuestion];
 
   // Animation variants
-  const slideVariants = {
+  const cardVariants = {
     enter: (direction: 'next' | 'prev') => ({
-      x: direction === 'next' ? 100 : -100,
+      x: direction === 'next' ? 300 : -300,
       opacity: 0,
+      scale: 0.9,
+      rotateY: direction === 'next' ? 15 : -15,
     }),
     center: {
       x: 0,
       opacity: 1,
+      scale: 1,
+      rotateY: 0,
     },
     exit: (direction: 'next' | 'prev') => ({
-      x: direction === 'next' ? -100 : 100,
+      x: direction === 'next' ? -300 : 300,
       opacity: 0,
+      scale: 0.9,
+      rotateY: direction === 'next' ? -15 : 15,
+    }),
+  };
+
+  const optionVariants = {
+    hidden: { opacity: 0, x: -30, scale: 0.95 },
+    visible: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      scale: 1,
+      transition: {
+        delay: i * 0.08,
+        duration: 0.4,
+        ease: 'easeOut' as const,
+      },
     }),
   };
 
   return (
     <section ref={ref} className="relative min-h-screen overflow-hidden">
-      {/* Background gradient */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            'linear-gradient(135deg, #fef7f0 0%, #ffecd2 50%, #fce7f3 100%)',
-        }}
-      />
+      {/* Animated background - siempre usa fondo claro para mejor contraste */}
+      <div className="absolute inset-0">
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(135deg, #fef7f0 0%, #ffecd2 40%, #fce7f3 70%, #f5f3ff 100%)',
+          }}
+        />
 
-      {/* Decorative blobs */}
-      <div className="pointer-events-none absolute inset-0">
+        {/* Animated mesh gradient overlay */}
+        <div className="absolute inset-0 opacity-50">
+          <motion.div
+            className="absolute h-[800px] w-[800px] rounded-full blur-3xl"
+            style={{
+              background: 'radial-gradient(circle, rgba(255,107,107,0.3) 0%, transparent 70%)',
+              top: '-20%',
+              right: '-10%',
+            }}
+            animate={{
+              x: [0, 50, 0],
+              y: [0, 30, 0],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute h-[600px] w-[600px] rounded-full blur-3xl"
+            style={{
+              background: 'radial-gradient(circle, rgba(167,139,250,0.3) 0%, transparent 70%)',
+              bottom: '-10%',
+              left: '-5%',
+            }}
+            animate={{
+              x: [0, -30, 0],
+              y: [0, -40, 0],
+              scale: [1, 1.15, 1],
+            }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute h-[400px] w-[400px] rounded-full blur-3xl"
+            style={{
+              background: 'radial-gradient(circle, rgba(110,231,183,0.25) 0%, transparent 70%)',
+              top: '30%',
+              left: '30%',
+            }}
+            animate={{
+              x: [0, 40, 0],
+              y: [0, -30, 0],
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </div>
+      </div>
+
+      {/* Floating decorative elements */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {/* Geometric shapes */}
         <motion.div
-          className="blob absolute -right-32 -top-32 h-[500px] w-[500px] opacity-30"
-          style={{
-            background:
-              'linear-gradient(135deg, rgba(255, 107, 107, 0.4) 0%, rgba(224, 86, 160, 0.3) 100%)',
-          }}
-          animate={{ rotate: [0, 360] }}
-          transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+          className="absolute right-[10%] top-[15%] h-4 w-4 rotate-45 bg-coral/30"
+          animate={{ rotate: [45, 90, 45], y: [0, -10, 0] }}
+          transition={{ duration: 8, repeat: Infinity }}
         />
         <motion.div
-          className="blob absolute -bottom-40 -left-40 h-[600px] w-[600px] opacity-20"
-          style={{
-            background:
-              'linear-gradient(135deg, rgba(167, 139, 250, 0.4) 0%, rgba(110, 231, 183, 0.3) 100%)',
-          }}
-          animate={{ rotate: [360, 0] }}
-          transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
+          className="absolute left-[15%] top-[25%] h-3 w-3 rounded-full bg-lavender/40"
+          animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.7, 0.4] }}
+          transition={{ duration: 4, repeat: Infinity }}
         />
         <motion.div
-          className="blob absolute right-1/4 top-1/3 h-[300px] w-[300px] opacity-15"
-          style={{
-            background:
-              'linear-gradient(135deg, rgba(252, 211, 77, 0.4) 0%, rgba(255, 107, 107, 0.3) 100%)',
-          }}
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360],
-          }}
-          transition={{ duration: 30, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute bottom-[20%] right-[20%] h-5 w-5 rounded-full border-2 border-mint/50"
+          animate={{ rotate: [0, 360], scale: [1, 1.2, 1] }}
+          transition={{ duration: 10, repeat: Infinity }}
         />
+        <motion.div
+          className="absolute bottom-[30%] left-[10%] h-6 w-6 rounded-lg border-2 border-pink/30"
+          animate={{ rotate: [0, -180, 0], y: [0, 15, 0] }}
+          transition={{ duration: 12, repeat: Infinity }}
+        />
+
+        {/* Sparkle elements */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute"
+            style={{
+              left: `${15 + i * 15}%`,
+              top: `${20 + (i % 3) * 25}%`,
+            }}
+            animate={{
+              opacity: [0.2, 0.6, 0.2],
+              scale: [0.8, 1.2, 0.8],
+            }}
+            transition={{
+              duration: 3 + i * 0.5,
+              repeat: Infinity,
+              delay: i * 0.3,
+            }}
+          >
+            <Sparkles className="h-4 w-4 text-sunshine/60" />
+          </motion.div>
+        ))}
       </div>
 
       {/* Content */}
@@ -398,158 +613,302 @@ export default function QuizSection() {
         className="container-custom relative z-10"
         style={{
           padding: 'var(--section-padding) 2rem',
-          paddingTop: 'clamp(10rem, 18vw, 14rem)'
+          paddingTop: 'clamp(10rem, 18vw, 14rem)',
         }}
       >
+        {/* Header - Always visible */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="mb-8 text-center"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.6 }}
+            className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-2.5 shadow-lg shadow-pink/10 backdrop-blur-md"
+          >
+            <motion.div
+              animate={{ rotate: [0, 15, -15, 0] }}
+              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+            >
+              <Sparkles className="h-5 w-5 text-coral" />
+            </motion.div>
+            <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
+              Tu Camino Personalizado
+            </span>
+          </motion.div>
+
+          <h1 className="text-hero-title font-[var(--font-headline)] font-bold text-black-deep">
+            ¿Por dónde{' '}
+            <span className="gradient-text-playful">empiezo?</span>
+          </h1>
+          <p className="mx-auto mt-4 max-w-xl text-lg text-gray-carbon">
+            Descubre el camino ideal para iniciar tu carrera remota
+          </p>
+        </motion.div>
+
+        {/* View Mode Toggle - Only show when not in results */}
+        {!showResult && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mx-auto mb-10 max-w-md"
+          >
+            <div className="relative flex rounded-2xl bg-white/80 p-1.5 shadow-lg shadow-pink/10 backdrop-blur-sm">
+              {/* Animated background pill */}
+              <motion.div
+                className="absolute inset-y-1.5 rounded-xl bg-gradient-to-r from-coral to-pink shadow-md"
+                initial={false}
+                animate={{
+                  left: viewMode === 'quiz' ? '6px' : '50%',
+                  right: viewMode === 'quiz' ? '50%' : '6px',
+                }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              />
+
+              {/* Quiz Tab */}
+              <button
+                onClick={() => setViewMode('quiz')}
+                className={`relative z-10 flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 font-[var(--font-dm-sans)] text-sm font-semibold transition-colors ${
+                  viewMode === 'quiz' ? 'text-white' : 'text-gray-carbon hover:text-gray-dark'
+                }`}
+              >
+                <HelpCircle className="h-4 w-4" />
+                <span>Hacer Quiz</span>
+              </button>
+
+              {/* Levels Tab */}
+              <button
+                onClick={() => setViewMode('levels')}
+                className={`relative z-10 flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 font-[var(--font-dm-sans)] text-sm font-semibold transition-colors ${
+                  viewMode === 'levels' ? 'text-white' : 'text-gray-carbon hover:text-gray-dark'
+                }`}
+              >
+                <Layers className="h-4 w-4" />
+                <span>Ver por Niveles</span>
+              </button>
+            </div>
+          </motion.div>
+        )}
+
         <AnimatePresence mode="wait">
-          {!showResult ? (
+          {/* QUIZ VIEW */}
+          {viewMode === 'quiz' && !showResult && (
             <motion.div
               key="quiz"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4 }}
+              className="mx-auto max-w-2xl"
             >
-              {/* Hero Section */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.8 }}
-                className="mb-12 text-center"
-              >
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ duration: 0.6 }}
-                  className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/80 px-5 py-2 shadow-md backdrop-blur-sm"
-                >
-                  <Sparkles className="h-5 w-5 text-coral" />
-                  <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
-                    Tu Camino Personalizado
-                  </span>
-                </motion.div>
-
-                <h1 className="text-hero-title font-[var(--font-headline)] font-bold text-black-deep">
-                  ¿Por dónde{' '}
-                  <span className="gradient-text-playful">empiezo?</span>
-                </h1>
-                <p className="mx-auto mt-4 max-w-xl text-lg text-gray-carbon">
-                  Responde 3 preguntas y te mostraré el camino ideal para ti
-                </p>
-              </motion.div>
-
-              {/* Progress Bar */}
+              {/* Visual Step Indicator */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="mb-8 flex justify-center gap-3"
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="mb-8"
               >
-                {[0, 1, 2].map((step) => (
-                  <motion.div
-                    key={step}
-                    className="h-2 w-16 overflow-hidden rounded-full sm:w-20"
-                    style={{
-                      background:
-                        step <= currentQuestion
-                          ? 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)'
-                          : 'rgba(255, 255, 255, 0.5)',
-                    }}
-                    initial={false}
-                    animate={{
-                      scale: step === currentQuestion ? 1.1 : 1,
-                    }}
-                    transition={{ duration: 0.3 }}
-                  />
-                ))}
+                <div className="flex items-center justify-center gap-2">
+                  {questions.map((_, index) => (
+                    <div key={index} className="flex items-center">
+                      <motion.div
+                        className={`flex h-10 w-10 items-center justify-center rounded-full font-[var(--font-headline)] font-bold transition-all duration-500 ${
+                          index < currentQuestion
+                            ? 'bg-gradient-to-br from-coral to-pink text-white shadow-lg shadow-coral/30'
+                            : index === currentQuestion
+                              ? 'bg-white text-coral shadow-xl shadow-pink/20 ring-4 ring-coral/20'
+                              : 'bg-white/60 text-gray-medium'
+                        }`}
+                        animate={index === currentQuestion ? {
+                          scale: [1, 1.08, 1],
+                        } : {}}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        {index < currentQuestion ? (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: 'spring', stiffness: 500 }}
+                          >
+                            <Check className="h-5 w-5" />
+                          </motion.div>
+                        ) : (
+                          index + 1
+                        )}
+                      </motion.div>
+                      {index < questions.length - 1 && (
+                        <div className="mx-1 h-1 w-8 overflow-hidden rounded-full bg-white/60 sm:w-12">
+                          <motion.div
+                            className="h-full rounded-full bg-gradient-to-r from-coral to-pink"
+                            initial={{ width: '0%' }}
+                            animate={{
+                              width: index < currentQuestion ? '100%' : '0%'
+                            }}
+                            transition={{ duration: 0.5 }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </motion.div>
 
               {/* Question Card */}
-              <div className="mx-auto max-w-2xl">
+              <div className="perspective-1000">
                 <AnimatePresence mode="wait" custom={direction}>
                   <motion.div
                     key={currentQuestion}
                     custom={direction}
-                    variants={slideVariants}
+                    variants={cardVariants}
                     initial="enter"
                     animate="center"
                     exit="exit"
-                    transition={{ duration: 0.4, ease: 'easeInOut' }}
-                    className="relative rounded-[28px] bg-white p-6 shadow-[0_15px_60px_rgba(0,0,0,0.1)] sm:p-10"
+                    transition={{
+                      duration: 0.5,
+                      ease: [0.25, 0.46, 0.45, 0.94],
+                    }}
+                    className="relative overflow-hidden rounded-[32px] bg-white/95 p-6 shadow-2xl shadow-pink/10 backdrop-blur-xl sm:p-10"
+                    style={{
+                      transformStyle: 'preserve-3d',
+                    }}
                   >
-                    {/* Question Number */}
-                    <span
-                      className="absolute -top-4 left-6 font-[var(--font-headline)] text-7xl font-black sm:-top-6 sm:left-8 sm:text-8xl"
-                      style={{
-                        color: 'rgba(255, 107, 107, 0.15)',
-                      }}
-                    >
-                      {currentQuestion + 1}
-                    </span>
+                    {/* Decorative corner gradient */}
+                    <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-gradient-to-br from-coral/20 to-pink/10 blur-2xl" />
+                    <div className="absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-gradient-to-tr from-lavender/20 to-mint/10 blur-2xl" />
+
+                    {/* Question Number & Subtitle */}
+                    <div className="relative mb-6 flex items-start justify-between">
+                      <div>
+                        <motion.span
+                          key={`num-${currentQuestion}`}
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="mb-1 block font-[var(--font-dm-sans)] text-sm font-semibold uppercase tracking-wider text-coral"
+                        >
+                          Pregunta {currentQuestion + 1} de {questions.length}
+                        </motion.span>
+                        <span className="font-[var(--font-dm-sans)] text-xs text-gray-medium">
+                          {questions[currentQuestion].subtitle}
+                        </span>
+                      </div>
+                      <motion.span
+                        className="font-[var(--font-headline)] text-6xl font-black text-coral/10 sm:text-7xl"
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ type: 'spring', stiffness: 200 }}
+                      >
+                        {currentQuestion + 1}
+                      </motion.span>
+                    </div>
 
                     {/* Question Text */}
-                    <h2 className="relative mb-8 font-[var(--font-headline)] text-xl font-bold text-black-deep sm:text-2xl">
+                    <motion.h2
+                      key={`q-${currentQuestion}`}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 }}
+                      className="relative mb-8 font-[var(--font-headline)] text-2xl font-bold text-black-deep sm:text-3xl"
+                    >
                       {questions[currentQuestion].question}
-                    </h2>
+                    </motion.h2>
 
                     {/* Options */}
-                    <div className="space-y-4">
-                      {questions[currentQuestion].options.map(
-                        (option, index) => {
-                          const isSelected =
-                            currentSelectedOption === option.id;
-                          return (
-                            <motion.label
-                              key={option.id}
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ duration: 0.3, delay: index * 0.1 }}
-                              className={`group flex cursor-pointer items-center gap-4 rounded-2xl p-4 transition-all duration-300 sm:p-5 ${
+                    <div className="space-y-3">
+                      {questions[currentQuestion].options.map((option, index) => {
+                        const isSelected = currentSelectedOption === option.id;
+                        return (
+                          <motion.label
+                            key={option.id}
+                            custom={index}
+                            variants={optionVariants}
+                            initial="hidden"
+                            animate="visible"
+                            className={`group relative flex cursor-pointer items-center gap-4 overflow-hidden rounded-2xl p-4 transition-all duration-300 sm:p-5 ${
+                              isSelected
+                                ? 'bg-gradient-to-r from-coral to-pink text-white shadow-lg shadow-coral/30'
+                                : 'bg-cream/80 hover:bg-gradient-to-r hover:from-gray-dark hover:to-gray-carbon hover:text-white hover:shadow-lg'
+                            }`}
+                            whileHover={{ x: isSelected ? 0 : 6, scale: 1.01 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            {/* Selection indicator */}
+                            <input
+                              type="radio"
+                              name={`question_${currentQuestion}`}
+                              value={option.id}
+                              checked={isSelected}
+                              onChange={() => handleOptionSelect(option.id, option.flag)}
+                              className="sr-only"
+                            />
+
+                            {/* Icon */}
+                            <motion.div
+                              className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl transition-colors ${
                                 isSelected
-                                  ? 'bg-gradient-to-r from-coral to-pink text-white shadow-[0_10px_30px_rgba(255,107,107,0.3)]'
-                                  : 'bg-cream hover:bg-gray-dark hover:text-white'
+                                  ? 'bg-white/20'
+                                  : 'bg-coral/10 group-hover:bg-white/20'
                               }`}
-                              whileHover={{ x: isSelected ? 0 : 8 }}
-                              whileTap={{ scale: 0.98 }}
+                              animate={isSelected ? {
+                                scale: [1, 1.1, 1],
+                              } : {}}
+                              transition={{ duration: 0.5 }}
                             >
-                              <input
-                                type="radio"
-                                name={`question_${currentQuestion}`}
-                                value={option.id}
-                                checked={isSelected}
-                                onChange={() =>
-                                  handleOptionSelect(option.id, option.flag)
-                                }
-                                className="sr-only"
-                              />
-                              <span
-                                className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all duration-300 ${
-                                  isSelected
-                                    ? 'border-white bg-white'
-                                    : 'border-gray-dark group-hover:border-white'
-                                }`}
-                              >
+                              <option.icon className={`h-5 w-5 ${isSelected ? 'text-white' : 'text-coral group-hover:text-white'}`} />
+                            </motion.div>
+
+                            {/* Radio circle */}
+                            <span
+                              className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all duration-300 ${
+                                isSelected
+                                  ? 'border-white bg-white'
+                                  : 'border-gray-dark/30 group-hover:border-white/50'
+                              }`}
+                            >
+                              <AnimatePresence>
                                 {isSelected && (
                                   <motion.span
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
+                                    exit={{ scale: 0 }}
+                                    transition={{ type: 'spring', stiffness: 500, damping: 25 }}
                                     className="h-3 w-3 rounded-full bg-coral"
                                   />
                                 )}
-                              </span>
-                              <span className="font-[var(--font-dm-sans)] text-sm font-medium sm:text-base">
-                                {option.label}
-                              </span>
-                            </motion.label>
-                          );
-                        }
-                      )}
+                              </AnimatePresence>
+                            </span>
+
+                            {/* Label */}
+                            <span className="flex-1 font-[var(--font-dm-sans)] text-sm font-medium sm:text-base">
+                              {option.label}
+                            </span>
+
+                            {/* Selected checkmark */}
+                            <AnimatePresence>
+                              {isSelected && (
+                                <motion.div
+                                  initial={{ scale: 0, opacity: 0 }}
+                                  animate={{ scale: 1, opacity: 1 }}
+                                  exit={{ scale: 0, opacity: 0 }}
+                                  className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20"
+                                >
+                                  <Check className="h-4 w-4" />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </motion.label>
+                        );
+                      })}
                     </div>
 
                     {/* Navigation Buttons */}
                     <div className="mt-8 flex items-center justify-between">
                       <motion.button
                         onClick={handlePrev}
+                        disabled={currentQuestion === 0}
                         className={`flex items-center gap-2 rounded-full px-5 py-3 font-[var(--font-dm-sans)] font-semibold transition-all duration-300 ${
                           currentQuestion === 0
                             ? 'invisible'
@@ -564,9 +923,9 @@ export default function QuizSection() {
 
                       <motion.button
                         onClick={handleNext}
-                        disabled={!currentSelectedOption}
-                        className={`btn-shimmer flex items-center gap-2 rounded-full px-6 py-3 font-[var(--font-headline)] font-bold text-white transition-all duration-300 sm:px-8 ${
-                          currentSelectedOption
+                        disabled={!currentSelectedOption || isTransitioning}
+                        className={`btn-shimmer group relative flex items-center gap-2 overflow-hidden rounded-full px-6 py-3 font-[var(--font-headline)] font-bold text-white transition-all duration-300 sm:px-8 ${
+                          currentSelectedOption && !isTransitioning
                             ? 'hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(255,107,107,0.4)]'
                             : 'cursor-not-allowed opacity-50'
                         }`}
@@ -575,224 +934,344 @@ export default function QuizSection() {
                             ? 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)'
                             : '#ccc',
                         }}
-                        whileHover={currentSelectedOption ? { scale: 1.02 } : {}}
-                        whileTap={currentSelectedOption ? { scale: 0.98 } : {}}
+                        whileHover={currentSelectedOption && !isTransitioning ? { scale: 1.02 } : {}}
+                        whileTap={currentSelectedOption && !isTransitioning ? { scale: 0.98 } : {}}
                       >
                         <span>
                           {currentQuestion === questions.length - 1
-                            ? 'Ver Resultado'
+                            ? '¡Ver mi resultado!'
                             : 'Siguiente'}
                         </span>
-                        <ArrowRight className="h-4 w-4" />
+                        <motion.div
+                          animate={currentSelectedOption ? { x: [0, 4, 0] } : {}}
+                          transition={{ duration: 1.5, repeat: Infinity }}
+                        >
+                          <ArrowRight className="h-4 w-4" />
+                        </motion.div>
                       </motion.button>
                     </div>
                   </motion.div>
                 </AnimatePresence>
               </div>
+
+              {/* Trust indicators */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+                className="mt-8 flex items-center justify-center gap-6 text-center text-sm text-gray-medium"
+              >
+                <span className="flex items-center gap-1.5">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-mint/20">
+                    <Check className="h-3 w-3 text-mint" />
+                  </span>
+                  100% Gratis
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-lavender/20">
+                    <Check className="h-3 w-3 text-lavender" />
+                  </span>
+                  Sin registro
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-coral/20">
+                    <Check className="h-3 w-3 text-coral" />
+                  </span>
+                  30 segundos
+                </span>
+              </motion.div>
             </motion.div>
-          ) : (
-            // Results Section
+          )}
+
+          {/* LEVELS VIEW */}
+          {viewMode === 'levels' && !showResult && (
+            <motion.div
+              key="levels"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4 }}
+              className="mx-auto max-w-4xl"
+            >
+              {/* Intro text */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="mb-8 text-center font-[var(--font-dm-sans)] text-gray-carbon"
+              >
+                Explora cada nivel y encuentra el que mejor se adapte a tu situación actual
+              </motion.p>
+
+              {/* Level Accordions */}
+              <div className="space-y-4">
+                {levelOrder.map((levelKey, index) => (
+                  <LevelAccordion
+                    key={levelKey}
+                    level={levelResults[levelKey]}
+                    isExpanded={expandedLevel === levelKey}
+                    onToggle={() => setExpandedLevel(expandedLevel === levelKey ? null : levelKey)}
+                    index={index}
+                  />
+                ))}
+              </div>
+
+              {/* CTA to take quiz */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="mt-10 text-center"
+              >
+                <p className="mb-4 font-[var(--font-dm-sans)] text-gray-carbon">
+                  ¿No estás seguro/a de cuál es tu nivel?
+                </p>
+                <button
+                  onClick={() => setViewMode('quiz')}
+                  className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-coral to-pink px-8 py-4 font-[var(--font-headline)] font-bold text-white shadow-lg shadow-coral/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                >
+                  <HelpCircle className="h-5 w-5" />
+                  <span>Hacer el Quiz</span>
+                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+
+          {/* RESULTS VIEW */}
+          {showResult && (
             <motion.div
               key="results"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.6 }}
               className="mx-auto max-w-4xl"
             >
               {/* Result Header */}
-              <div className="mb-12 text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="mb-12 text-center"
+              >
+                {/* Celebration icon with bounce */}
                 <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
                   transition={{
                     type: 'spring',
                     stiffness: 200,
-                    delay: 0.2,
+                    damping: 15,
+                    delay: 0.3,
                   }}
-                  className="mx-auto mb-6 flex h-28 w-28 items-center justify-center rounded-full shadow-xl sm:h-32 sm:w-32"
+                  className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-3xl text-white shadow-2xl sm:h-32 sm:w-32"
                   style={{
                     background: result.gradient,
                     boxShadow: `0 20px 50px ${result.shadowColor}`,
                   }}
                 >
-                  <result.icon
-                    className={`h-14 w-14 sm:h-16 sm:w-16 ${levelId === 'nivel_3' ? 'text-white' : 'text-gray-dark'}`}
-                  />
+                  <result.icon className="h-12 w-12 sm:h-16 sm:w-16" />
                 </motion.div>
 
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                  className="mb-2 inline-block rounded-full bg-white/80 px-4 py-1 font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark shadow-md backdrop-blur-sm"
+                {/* Level badge */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5 }}
+                  className="mb-4 inline-flex items-center gap-2 rounded-full px-5 py-2 text-white shadow-lg"
+                  style={{
+                    background: result.gradient,
+                    boxShadow: `0 10px 40px ${result.shadowColor}`,
+                  }}
                 >
-                  {result.subtitle}
-                </motion.span>
+                  <result.icon className="h-5 w-5" />
+                  <span className="font-[var(--font-dm-sans)] text-sm font-bold uppercase tracking-wider">
+                    {result.subtitle}
+                  </span>
+                </motion.div>
 
+                {/* Title */}
                 <motion.h2
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="text-section-title font-[var(--font-headline)] font-bold text-black-deep"
+                  transition={{ delay: 0.6 }}
+                  className="mb-4 font-[var(--font-headline)] text-4xl font-bold text-black-deep sm:text-5xl"
                 >
-                  {result.title}
+                  ¡Eres{' '}
+                  <span className="gradient-text-playful">{result.title}</span>!
                 </motion.h2>
 
+                {/* Description */}
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  className="mx-auto mt-4 max-w-xl text-lg text-gray-carbon"
+                  transition={{ delay: 0.7 }}
+                  className="mx-auto max-w-2xl text-lg text-gray-carbon sm:text-xl"
                 >
                   {result.description}
                 </motion.p>
-              </div>
+              </motion.div>
 
               {/* Recommendations */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="mb-8"
+                transition={{ delay: 0.8 }}
+                className="mb-10"
               >
-                <h3 className="mb-6 text-center font-[var(--font-headline)] text-xl font-bold text-black-deep">
-                  Te recomiendo:
+                <h3 className="mb-8 flex items-center justify-center gap-2 text-center font-[var(--font-headline)] text-2xl font-bold text-black-deep">
+                  <span>Tu camino recomendado</span>
+                  <Sparkles className="h-6 w-6 text-coral" />
                 </h3>
 
                 <div
                   className={`grid gap-6 ${
-                    result.recommendations.length === 1
-                      ? 'md:grid-cols-1'
-                      : result.recommendations.length === 2
+                    (interesAV && result.avRecommendation ? 1 : 0) + result.recommendations.length === 1
+                      ? 'md:grid-cols-1 md:max-w-md md:mx-auto'
+                      : (interesAV && result.avRecommendation ? 1 : 0) + result.recommendations.length === 2
                         ? 'md:grid-cols-2'
                         : 'md:grid-cols-2 lg:grid-cols-3'
                   }`}
                 >
-                  {/* Show AV recommendation first if flag is set and level is 1 */}
+                  {/* AV recommendation first if applicable */}
                   {interesAV && result.avRecommendation && (
                     <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.7 }}
-                      whileHover={{ y: -8 }}
-                      className="group relative overflow-hidden rounded-[24px] p-6 text-white shadow-xl"
+                      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ delay: 0.9 }}
+                      whileHover={{ y: -8, scale: 1.02 }}
+                      className="group relative overflow-hidden rounded-[28px] p-6 text-white shadow-2xl sm:p-8"
                       style={{
                         background: result.avRecommendation.gradient,
+                        boxShadow: `0 25px 50px -12px ${result.shadowColor}`,
                       }}
                     >
-                      <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10" />
+                      {/* Decorative elements */}
+                      <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
+                      <div className="absolute -bottom-4 -left-4 h-24 w-24 rounded-full bg-white/5" />
+
+                      {/* Tag */}
+                      {result.avRecommendation.tag && (
+                        <motion.span
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 1.1 }}
+                          className="absolute right-4 top-4 rounded-full bg-white/20 px-3 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur-sm"
+                        >
+                          {result.avRecommendation.tag}
+                        </motion.span>
+                      )}
+
                       <div className="relative">
-                        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20">
-                          <result.avRecommendation.icon className="h-7 w-7" />
+                        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm">
+                          <result.avRecommendation.icon className="h-8 w-8" />
                         </div>
-                        <h4 className="mb-2 font-[var(--font-headline)] text-lg font-bold">
+                        <h4 className="mb-3 font-[var(--font-headline)] text-xl font-bold sm:text-2xl">
                           {result.avRecommendation.name}
                         </h4>
-                        <p className="mb-4 text-sm text-white/90">
+                        <p className="mb-5 text-sm text-white/90 sm:text-base">
                           {result.avRecommendation.description}
                         </p>
-                        <div className="mb-4 font-[var(--font-headline)] text-2xl font-black">
+                        <div className="mb-5 font-[var(--font-headline)] text-3xl font-black">
                           {result.avRecommendation.price}
                         </div>
                         <Link
                           href={result.avRecommendation.href}
-                          className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-[var(--font-dm-sans)] font-bold text-gray-dark transition-all duration-300 hover:shadow-lg"
+                          className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-[var(--font-dm-sans)] font-bold text-gray-dark shadow-lg transition-all duration-300 hover:shadow-xl group-hover:translate-x-1"
                         >
-                          <span>Ver Más</span>
-                          <ArrowRight className="h-4 w-4" />
+                          <span>Quiero esto</span>
+                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </Link>
                       </div>
                     </motion.div>
                   )}
 
-                  {result.recommendations.map((rec, index) => (
-                    <motion.div
-                      key={rec.name}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.7 + index * 0.1 }}
-                      whileHover={{ y: -8 }}
-                      className={`group relative overflow-hidden rounded-[24px] p-6 shadow-xl ${
-                        rec.priority === 'primary' && !interesAV
-                          ? 'text-white'
-                          : 'bg-white'
-                      }`}
-                      style={
-                        rec.priority === 'primary' && !interesAV
-                          ? { background: rec.gradient }
-                          : {}
-                      }
-                    >
-                      {rec.priority === 'primary' && !interesAV && (
-                        <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10" />
-                      )}
-                      <div className="relative">
-                        <div
-                          className={`mb-4 flex h-14 w-14 items-center justify-center rounded-2xl ${
-                            rec.priority === 'primary' && !interesAV
-                              ? 'bg-white/20'
-                              : ''
-                          }`}
-                          style={
-                            rec.priority !== 'primary' || interesAV
-                              ? { background: rec.gradient }
-                              : {}
-                          }
-                        >
-                          <rec.icon
-                            className={`h-7 w-7 ${
-                              rec.priority === 'primary' && !interesAV
-                                ? 'text-white'
-                                : 'text-white'
+                  {/* Regular recommendations */}
+                  {result.recommendations.map((rec, index) => {
+                    const isPrimary = rec.priority === 'primary' && !interesAV;
+                    const delayIndex = interesAV && result.avRecommendation ? index + 1 : index;
+
+                    return (
+                      <motion.div
+                        key={rec.name}
+                        initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ delay: 0.9 + delayIndex * 0.1 }}
+                        whileHover={{ y: -8, scale: 1.02 }}
+                        className={`group relative overflow-hidden rounded-[28px] p-6 shadow-xl transition-shadow duration-300 hover:shadow-2xl sm:p-8 ${
+                          isPrimary ? 'text-white' : 'bg-white'
+                        }`}
+                        style={isPrimary ? {
+                          background: rec.gradient,
+                          boxShadow: `0 25px 50px -12px ${result.shadowColor}`,
+                        } : {}}
+                      >
+                        {/* Decorative elements */}
+                        {isPrimary && (
+                          <>
+                            <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
+                            <div className="absolute -bottom-4 -left-4 h-24 w-24 rounded-full bg-white/5" />
+                          </>
+                        )}
+
+                        {/* Tag */}
+                        {rec.tag && (
+                          <motion.span
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 1.1 + delayIndex * 0.1 }}
+                            className={`absolute right-4 top-4 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider ${
+                              isPrimary ? 'bg-white/20 backdrop-blur-sm' : 'bg-gradient-to-r from-coral to-pink text-white'
                             }`}
-                          />
+                          >
+                            {rec.tag}
+                          </motion.span>
+                        )}
+
+                        <div className="relative">
+                          <div
+                            className={`mb-4 flex h-16 w-16 items-center justify-center rounded-2xl ${
+                              isPrimary ? 'bg-white/20 backdrop-blur-sm' : ''
+                            }`}
+                            style={!isPrimary ? { background: rec.gradient } : {}}
+                          >
+                            <rec.icon className={`h-8 w-8 ${isPrimary ? 'text-white' : 'text-white'}`} />
+                          </div>
+                          <h4
+                            className={`mb-3 font-[var(--font-headline)] text-xl font-bold sm:text-2xl ${
+                              isPrimary ? '' : 'text-black-deep'
+                            }`}
+                          >
+                            {rec.name}
+                          </h4>
+                          <p
+                            className={`mb-5 text-sm sm:text-base ${
+                              isPrimary ? 'text-white/90' : 'text-gray-carbon'
+                            }`}
+                          >
+                            {rec.description}
+                          </p>
+                          <div
+                            className={`mb-5 font-[var(--font-headline)] text-3xl font-black ${
+                              isPrimary ? '' : 'text-coral'
+                            }`}
+                          >
+                            {rec.price}
+                          </div>
+                          <Link
+                            href={rec.href}
+                            className={`inline-flex items-center gap-2 rounded-full px-6 py-3 font-[var(--font-dm-sans)] font-bold shadow-lg transition-all duration-300 hover:shadow-xl group-hover:translate-x-1 ${
+                              isPrimary ? 'bg-white text-gray-dark' : 'text-white'
+                            }`}
+                            style={!isPrimary ? { background: rec.gradient } : {}}
+                          >
+                            <span>Quiero esto</span>
+                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                          </Link>
                         </div>
-                        <h4
-                          className={`mb-2 font-[var(--font-headline)] text-lg font-bold ${
-                            rec.priority === 'primary' && !interesAV
-                              ? ''
-                              : 'text-black-deep'
-                          }`}
-                        >
-                          {rec.name}
-                        </h4>
-                        <p
-                          className={`mb-4 text-sm ${
-                            rec.priority === 'primary' && !interesAV
-                              ? 'text-white/90'
-                              : 'text-gray-carbon'
-                          }`}
-                        >
-                          {rec.description}
-                        </p>
-                        <div
-                          className={`mb-4 font-[var(--font-headline)] text-2xl font-black ${
-                            rec.priority === 'primary' && !interesAV
-                              ? ''
-                              : 'text-coral'
-                          }`}
-                        >
-                          {rec.price}
-                        </div>
-                        <Link
-                          href={rec.href}
-                          className={`inline-flex items-center gap-2 rounded-full px-6 py-3 font-[var(--font-dm-sans)] font-bold transition-all duration-300 hover:shadow-lg ${
-                            rec.priority === 'primary' && !interesAV
-                              ? 'bg-white text-gray-dark'
-                              : 'text-white'
-                          }`}
-                          style={
-                            rec.priority !== 'primary' || interesAV
-                              ? { background: rec.gradient }
-                              : {}
-                          }
-                        >
-                          <span>Ver Más</span>
-                          <ArrowRight className="h-4 w-4" />
-                        </Link>
-                      </div>
-                    </motion.div>
-                  ))}
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </motion.div>
 
@@ -800,24 +1279,41 @@ export default function QuizSection() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 1 }}
-                className="flex flex-col items-center gap-4 text-center"
+                transition={{ delay: 1.2 }}
+                className="flex flex-col items-center gap-5 text-center"
               >
                 <Link
                   href="/tienda"
-                  className="inline-flex items-center gap-2 rounded-full border-2 border-gray-dark px-8 py-4 font-[var(--font-headline)] font-bold text-gray-dark transition-all duration-300 hover:-translate-y-1 hover:border-coral hover:bg-coral hover:text-white hover:shadow-[0_15px_40px_rgba(255,107,107,0.3)]"
+                  className="group inline-flex items-center gap-2 rounded-full border-2 border-gray-dark px-8 py-4 font-[var(--font-headline)] font-bold text-gray-dark transition-all duration-300 hover:-translate-y-1 hover:border-coral hover:bg-coral hover:text-white hover:shadow-[0_15px_40px_rgba(255,107,107,0.3)]"
                 >
-                  <span>Ver todos los productos</span>
-                  <ArrowRight className="h-5 w-5" />
+                  <span>Explorar todos los productos</span>
+                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Link>
 
                 <button
                   onClick={handleRestart}
-                  className="mt-4 inline-flex items-center gap-2 font-[var(--font-dm-sans)] text-gray-medium transition-colors hover:text-coral"
+                  className="group mt-2 inline-flex items-center gap-2 font-[var(--font-dm-sans)] text-gray-medium transition-colors hover:text-coral"
                 >
-                  <RotateCcw className="h-4 w-4" />
+                  <RotateCcw className="h-4 w-4 transition-transform group-hover:-rotate-180" />
                   <span>Volver a hacer el quiz</span>
                 </button>
+              </motion.div>
+
+              {/* Social proof */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.4 }}
+                className="mt-12 rounded-2xl bg-white/60 p-6 text-center backdrop-blur-sm"
+              >
+                <div className="flex items-center justify-center gap-1 text-sunshine">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 fill-current" />
+                  ))}
+                </div>
+                <p className="mt-3 font-[var(--font-dm-sans)] text-gray-carbon">
+                  <span className="font-bold text-black-deep">+500 personas</span> ya descubrieron su camino remoto con Dani
+                </p>
               </motion.div>
             </motion.div>
           )}
