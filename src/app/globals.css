@@ -240,6 +240,15 @@ body.menu-open {
   }
 }
 
+@keyframes carousel-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 @keyframes scale-bounce {
   0% {
     transform: scale(0.9);
@@ -305,6 +314,14 @@ body.menu-open {
 
 .animate-scale-bounce {
   animation: scale-bounce 0.6s ease forwards;
+}
+
+.animate-carousel {
+  animation: carousel-scroll 60s linear infinite;
+}
+
+.animate-carousel:hover {
+  animation-play-state: paused;
 }
 
 /* Animation Delays */
@@ -868,7 +885,8 @@ body.menu-open {
   .animate-wiggle,
   .animate-bounce-soft,
   .animate-pulse-soft,
-  .animate-gradient {
+  .animate-gradient,
+  .animate-carousel {
     animation: none !important;
   }
 
