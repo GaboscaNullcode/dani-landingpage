@@ -39,7 +39,7 @@ export default function AsesoriaHero() {
             className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 shadow-md backdrop-blur-sm"
           >
             <Video className="h-4 w-4 text-coral" />
-            <span className="text-sm font-semibold text-gray-dark">Sesiones 1:1 Personalizadas</span>
+            <span className="text-sm font-semibold text-gray-dark">Tu situación merece atención personalizada</span>
           </motion.div>
 
           {/* Title */}
@@ -49,8 +49,8 @@ export default function AsesoriaHero() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="text-hero-title mb-6 font-[var(--font-headline)] font-bold text-gray-dark"
           >
-            Asesorías{' '}
-            <span className="gradient-text">Personalizadas</span>
+            Deja de dar vueltas.{' '}
+            <span className="gradient-text">Hablemos.</span>
           </motion.h1>
 
           {/* Subtitle */}
@@ -60,8 +60,8 @@ export default function AsesoriaHero() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-body-large mx-auto mb-10 max-w-2xl text-gray-carbon"
           >
-            Acompañamiento individual para ayudarte a dar el salto al trabajo remoto con claridad,
-            estrategia y la confianza que necesitas para triunfar.
+            Una sesión conmigo puede ahorrarte meses de prueba y error.
+            Te doy claridad, un plan concreto y la confianza para dar el siguiente paso.
           </motion.p>
 
           {/* Features */}

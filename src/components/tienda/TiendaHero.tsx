@@ -117,7 +117,7 @@ export default function TiendaHero() {
               <Sparkles className="h-4 w-4 text-coral" />
             </motion.div>
             <span className="font-[var(--font-dm-sans)] text-sm font-semibold uppercase tracking-wider text-gray-carbon">
-              Recursos para tu éxito
+              Todo lo que necesitas para empezar
             </span>
           </motion.div>
 
@@ -128,9 +128,9 @@ export default function TiendaHero() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="mb-6 font-[var(--font-headline)] text-[clamp(2.5rem,7vw,4.5rem)] font-bold leading-[1.1] text-black-deep"
           >
-            Tu camino{' '}
+            Deja de improvisar.{' '}
             <span className="relative inline-block">
-              <span className="gradient-text">comienza aquí</span>
+              <span className="gradient-text">Elige tu recurso</span>
               <motion.span
                 className="absolute -bottom-2 left-0 h-[4px] w-full rounded-full"
                 style={{ background: 'linear-gradient(90deg, #ff6b6b, #e056a0)' }}
@@ -149,8 +149,8 @@ export default function TiendaHero() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mx-auto max-w-xl text-lg leading-relaxed text-gray-carbon md:text-xl"
           >
-            Cursos, guías y herramientas diseñadas para ayudarte a construir tu carrera remota
-            con confianza y claridad.
+            Guías, cursos y herramientas que te dan claridad y te ahorran
+            meses de prueba y error.
           </motion.p>
 
           {/* Stats */}
@@ -161,9 +161,9 @@ export default function TiendaHero() {
             className="mt-10 flex flex-wrap items-center justify-center gap-8 md:gap-12"
           >
             {[
-              { number: '500+', label: 'Estudiantes' },
-              { number: '6', label: 'Productos' },
-              { number: '100%', label: 'Online' },
+              { number: '500+', label: 'Personas ya lo lograron' },
+              { number: '6', label: 'Recursos probados' },
+              { number: '24/7', label: 'Acceso inmediato' },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}

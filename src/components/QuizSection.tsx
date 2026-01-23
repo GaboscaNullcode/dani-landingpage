@@ -76,35 +76,35 @@ interface LevelResult {
 const questions: QuizQuestion[] = [
   {
     id: 'question_1',
-    question: '¿Qué tanto conoces sobre el trabajo remoto?',
-    subtitle: 'Cuéntame tu experiencia actual',
+    question: '¿Qué es lo que más te frena ahora mismo?',
+    subtitle: 'Sé honesta contigo misma',
     options: [
-      { id: 'q1_a', label: 'Apenas estoy explorando, no sé mucho', points: 0, icon: Sprout },
-      { id: 'q1_b', label: 'Conozco lo básico pero no sé por dónde empezar', points: 1, icon: Search },
-      { id: 'q1_c', label: 'Ya investigué bastante, quiero tomar acción', points: 2, icon: Zap },
-      { id: 'q1_d', label: 'Tengo experiencia pero necesito orientación', points: 3, icon: Target },
+      { id: 'q1_a', label: 'No sé si realmente puedo hacerlo', points: 0, icon: Sprout },
+      { id: 'q1_b', label: 'No sé por dónde empezar ni qué hacer primero', points: 1, icon: Search },
+      { id: 'q1_c', label: 'Ya sé qué hacer, pero no tomo acción', points: 2, icon: Zap },
+      { id: 'q1_d', label: 'Necesito que alguien revise mi estrategia', points: 3, icon: Target },
     ],
   },
   {
     id: 'question_2',
-    question: '¿Qué te gustaría lograr?',
-    subtitle: 'Define tu objetivo principal',
+    question: '¿Qué necesitas lograr primero?',
+    subtitle: 'Tu prioridad número uno',
     options: [
-      { id: 'q2_a', label: 'Entender si el trabajo remoto es para mí', points: 0, icon: HelpCircle },
-      { id: 'q2_b', label: 'Aprender sobre ser Asistente Virtual', points: 1, flag: 'interes_av', icon: Briefcase },
-      { id: 'q2_c', label: 'Conseguir mi primer trabajo remoto', points: 2, icon: Rocket },
-      { id: 'q2_d', label: 'Ordenar mi perfil y estrategia actual', points: 3, icon: TrendingUp },
+      { id: 'q2_a', label: 'Saber si el trabajo remoto es para mí', points: 0, icon: HelpCircle },
+      { id: 'q2_b', label: 'Aprender a ser Asistente Virtual', points: 1, flag: 'interes_av', icon: Briefcase },
+      { id: 'q2_c', label: 'Conseguir mi primer cliente o empleo', points: 2, icon: Rocket },
+      { id: 'q2_d', label: 'Mejorar mis resultados actuales', points: 3, icon: TrendingUp },
     ],
   },
   {
     id: 'question_3',
-    question: '¿Cuánto estás dispuesto/a a invertir?',
-    subtitle: 'En tu formación profesional',
+    question: '¿Cómo prefieres aprender?',
+    subtitle: 'No hay respuesta incorrecta',
     options: [
-      { id: 'q3_a', label: 'Prefiero empezar con recursos gratuitos', points: 0, icon: Gift },
-      { id: 'q3_b', label: 'Puedo invertir poco ($7-$27)', points: 1, icon: DollarSign },
-      { id: 'q3_c', label: 'Estoy listo/a para algo completo ($47+)', points: 2, icon: Gem },
-      { id: 'q3_d', label: 'Busco acompañamiento personalizado', points: 3, icon: Crown },
+      { id: 'q3_a', label: 'A mi ritmo con recursos gratuitos', points: 0, icon: Gift },
+      { id: 'q3_b', label: 'Con una guía paso a paso ($7-$27)', points: 1, icon: DollarSign },
+      { id: 'q3_c', label: 'Con un curso completo y estructurado', points: 2, icon: Gem },
+      { id: 'q3_d', label: 'Con acompañamiento 1:1 personalizado', points: 3, icon: Crown },
     ],
   },
 ];
@@ -115,7 +115,7 @@ const levelResults: Record<string, LevelResult> = {
     id: 'nivel_0',
     title: 'Explorador/a',
     subtitle: 'Nivel Descubrimiento',
-    description: 'Estás en la etapa perfecta para explorar sin presión. El trabajo remoto es un mundo lleno de posibilidades y tú estás a punto de descubrirlas.',
+    description: 'Es normal sentir dudas al principio. Lo importante es que ya estás aquí buscando respuestas. Empieza con calma, sin presión, y descubre si esto es para ti.',
     icon: Compass,
     gradient: 'linear-gradient(135deg, #fef7f0 0%, #ffecd2 100%)',
     shadowColor: 'rgba(255, 240, 230, 0.6)',
@@ -155,7 +155,7 @@ const levelResults: Record<string, LevelResult> = {
     id: 'nivel_1',
     title: 'Iniciante',
     subtitle: 'Nivel Preparación',
-    description: 'Ya tienes interés claro y eso es genial. Ahora necesitas las herramientas correctas para dar tus primeros pasos con confianza.',
+    description: 'El miedo a no saber es el más fácil de vencer: se cura con información correcta. Necesitas una guía clara que elimine la confusión.',
     icon: Sprout,
     gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
     shadowColor: 'rgba(224, 86, 160, 0.4)',
@@ -196,7 +196,7 @@ const levelResults: Record<string, LevelResult> = {
     id: 'nivel_2',
     title: 'En Acción',
     subtitle: 'Nivel Lanzamiento',
-    description: '¡Ya decidiste dar el paso! Necesitas una guía estructurada que te lleve de la mano hasta conseguir tu primer cliente o empleo remoto.',
+    description: 'Ya sabes que quieres esto. Ahora necesitas dejar de investigar y empezar a ejecutar con un sistema probado que te lleve a resultados.',
     icon: Rocket,
     gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
     shadowColor: 'rgba(255, 107, 107, 0.4)',
@@ -218,26 +218,26 @@ const levelResults: Record<string, LevelResult> = {
     id: 'nivel_3',
     title: 'Estratega',
     subtitle: 'Nivel Personalizado',
-    description: 'Tienes preguntas específicas y valoras tu tiempo. Una asesoría 1:1 acelerará tus resultados y resolverá tus dudas particulares.',
+    description: 'Tu situación es única y merece atención personalizada. Una sesión 1:1 conmigo puede ahorrarte meses de prueba y error.',
     icon: Target,
     gradient: 'linear-gradient(135deg, #374c4f 0%, #4a5c5f 100%)',
     shadowColor: 'rgba(55, 76, 79, 0.4)',
     accentColor: '#6ee7b7',
     recommendations: [
       {
-        name: 'Asesoría Intensiva: Crea tu Camino',
+        name: 'Programa Intensivo 1:1',
         price: '$155 USD',
-        description: '4 horas de acompañamiento 1:1 + acceso a comunidad VIP',
+        description: '4 horas donde construimos juntas tu estrategia completa para conseguir tu primer cliente',
         href: '/asesorias',
         priority: 'primary',
         icon: MessageCircle,
         gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
-        tag: 'Premium',
+        tag: 'Mejor inversión',
       },
       {
-        name: 'Asesoría Express',
+        name: 'Sesión de Claridad',
         price: '$66 USD',
-        description: '1.5 horas de sesión personalizada + seguimiento por email',
+        description: '1.5 horas para salir de la confusión con un plan claro y respuestas concretas',
         href: '/asesorias',
         priority: 'secondary',
         icon: MessageCircle,
@@ -636,16 +636,16 @@ export default function QuizSection() {
               <Sparkles className="h-5 w-5 text-coral" />
             </motion.div>
             <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
-              Tu Camino Personalizado
+              Quiz de 30 segundos
             </span>
           </motion.div>
 
           <h1 className="text-hero-title font-[var(--font-headline)] font-bold text-black-deep">
-            ¿Por dónde{' '}
-            <span className="gradient-text-playful">empiezo?</span>
+            ¿Cómo supero el{' '}
+            <span className="gradient-text-playful">miedo inicial?</span>
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-lg text-gray-carbon">
-            Descubre el camino ideal para iniciar tu carrera remota
+            Responde 3 preguntas y te digo exactamente qué necesitas según tu situación
           </p>
         </motion.div>
 

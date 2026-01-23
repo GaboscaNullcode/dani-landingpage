@@ -131,8 +131,8 @@ export default function Footer() {
               Sobre Remote con Dani
             </h3>
             <p className="text-sm leading-relaxed text-white/60">
-              Te acompaño en tu transición al trabajo remoto con empatía,
-              transparencia y las herramientas que necesitas para triunfar.
+              Ayudo a personas que quieren dar el salto al trabajo remoto
+              pero no saben por dónde empezar ni si realmente pueden lograrlo.
             </p>
           </div>
 
@@ -193,7 +193,7 @@ export default function Footer() {
             transition={{ duration: 2, repeat: Infinity }}
           >
             Hecho con{' '}
-            <Heart className="h-4 w-4 fill-coral text-coral" /> para emprendedoras
+            <Heart className="h-4 w-4 fill-coral text-coral" /> para quienes se atreven
           </motion.p>
         </div>
       </div>

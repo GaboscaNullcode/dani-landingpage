@@ -13,23 +13,23 @@ import {
 const experienceData = [
   {
     icon: Calendar,
-    title: 'Soporte Administrativo & Ejecutivo',
+    title: 'Soporte Administrativo',
   },
   {
     icon: Briefcase,
-    title: 'Social Media & Branding',
+    title: 'Redes Sociales',
   },
   {
     icon: Layers,
-    title: 'Gestion de Proyectos',
+    title: 'Gestión de Proyectos',
   },
   {
     icon: Users,
-    title: 'Atencion al Cliente & Educacion',
+    title: 'Atención al Cliente',
   },
   {
     icon: MessageCircle,
-    title: 'Interpretacion',
+    title: 'Interpretación',
   },
 ];
 
@@ -53,7 +53,7 @@ export default function ExperienceSection() {
           className="mb-16 text-center"
         >
           <h2 className="text-section-title font-[var(--font-headline)] font-black text-black-deep">
-            Experiencia <span className="text-coral">Profesional</span>
+            Áreas donde puedo <span className="text-coral">guiarte</span>
           </h2>
         </motion.div>
 

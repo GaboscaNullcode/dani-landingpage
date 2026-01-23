@@ -24,7 +24,7 @@ export const featuredProducts: Product[] = [
     name: 'Curso Práctico: Paso a Paso + 6 Bonos',
     slug: 'curso-paso-a-paso',
     description:
-      'El curso más completo para iniciar tu carrera como asistente virtual. Incluye 6 bonos exclusivos que acelerarán tu éxito.',
+      'El sistema paso a paso que usan +500 personas para lanzar su carrera remota sin perder meses en prueba y error.',
     price: 47.0,
     originalPrice: 97.0,
     currency: 'USD',
@@ -49,7 +49,7 @@ export const featuredProducts: Product[] = [
     name: 'eBook: Guía Práctica Para Iniciar',
     slug: 'ebook-guia-practica',
     description:
-      'Todo lo que necesitas saber para dar tus primeros pasos en el mundo del trabajo remoto. Una guía completa y práctica.',
+      'La guía que elimina la confusión del principio. Sabrás exactamente qué hacer, en qué orden, y por qué.',
     price: 27.0,
     currency: 'USD',
     image: '/images/tienda/producto-guia-asistente-virtual.jpg',
@@ -71,7 +71,7 @@ export const featuredProducts: Product[] = [
     name: 'Masterclass Asistente Virtual',
     slug: 'masterclass-av',
     description:
-      'Aprende las habilidades más demandadas del mercado y posiciónate como una asistente virtual profesional.',
+      'Las habilidades exactas que te convierten en una Asistente Virtual que los clientes buscan y contratan.',
     price: 22.0,
     currency: 'USD',
     image: '/images/tienda/producto-masterclass-av.jpg',
@@ -93,7 +93,7 @@ export const featuredProducts: Product[] = [
     name: 'eBook: Optimización Profesional',
     slug: 'ebook-optimizacion',
     description:
-      'Lleva tu perfil al siguiente nivel. Estrategias avanzadas para destacar en plataformas de trabajo remoto.',
+      'Por qué algunos perfiles consiguen clientes y otros no. Las diferencias que nadie te explica.',
     price: 17.0,
     currency: 'USD',
     image: '/images/tienda/producto-optimizacion-profesional.jpg',
@@ -118,7 +118,7 @@ export const additionalProducts: Product[] = [
     name: 'eBook: Define tu Camino Remoto',
     slug: 'ebook-define-camino',
     description:
-      'Descubre qué tipo de trabajo remoto es ideal para ti según tu personalidad y habilidades.',
+      'Deja de preguntarte si puedes hacerlo. Este test te revela el camino remoto que mejor encaja contigo.',
     price: 7.0,
     currency: 'USD',
     image: '/images/tienda/producto-define-camino-remoto.jpg',
@@ -134,7 +134,7 @@ export const additionalProducts: Product[] = [
     name: 'eBook: Primeros Pasos como A.V',
     slug: 'ebook-primeros-pasos',
     description:
-      'La guía esencial para quienes están considerando iniciar como asistente virtual.',
+      'Los primeros pasos que debes dar si quieres ser AV, explicados para que no cometas los errores típicos.',
     price: 7.0,
     currency: 'USD',
     image: '/images/tienda/producto-ejercicios-practicos.jpg',
@@ -154,7 +154,7 @@ export const freeResources: Product[] = [
     name: 'Guía Gratuita: Tu Primer Mapa',
     slug: 'guia-gratuita',
     description:
-      'Tu primer mapa mental del trabajo remoto. Entiende el panorama completo antes de dar el primer paso.',
+      'Antes de invertir tiempo o dinero, entiende el panorama completo del trabajo remoto en 15 minutos.',
     price: 0,
     currency: 'USD',
     image: '/images/tienda/producto-guia-global.jpg',
@@ -175,7 +175,7 @@ export const freeResources: Product[] = [
     name: 'Masterclass Gratuita',
     slug: 'masterclass-gratuita',
     description:
-      'Para decidir si el mundo remoto es para ti. Una sesión introductoria sin compromiso.',
+      '45 minutos que pueden cambiar tu perspectiva sobre lo que es posible para ti. Sin ventas, solo valor.',
     price: 0,
     currency: 'USD',
     image: '/images/tienda/producto-masterclass-upwork.jpg',
@@ -192,7 +192,7 @@ export const freeResources: Product[] = [
     name: 'Comunidad Remote con Dani',
     slug: 'comunidad',
     description:
-      'Espacio para entender si el trabajo remoto es para ti. Conecta con personas en tu mismo camino.',
+      'No estás sola en esto. Conecta con personas que están en tu mismo camino y aprende de sus experiencias.',
     price: 3.99,
     currency: 'USD',
     image: '/images/tienda/producto-comunidad-privada.jpg',

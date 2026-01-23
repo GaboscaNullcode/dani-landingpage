@@ -4,9 +4,9 @@ import { useRef } from 'react';
 import { motion, useInView } from 'motion/react';
 
 const missionPoints = [
-  'Sin necesidad de titulo universitario para empezar tu carrera remota',
-  'Sin contactos previos en la industria digital o tecnologica',
-  'Solo con determinacion y las herramientas correctas',
+  'No necesitas un título universitario ni certificaciones costosas',
+  'No necesitas conocer a nadie en la industria tech o digital',
+  'Solo necesitas un plan claro y alguien que te guíe paso a paso',
 ];
 
 export default function MissionSection() {
@@ -29,7 +29,7 @@ export default function MissionSection() {
           className="mb-12"
         >
           <h2 className="text-section-title font-[var(--font-headline)] font-black text-black-deep">
-            Trabajo remoto para <span className="text-pink">todos</span>
+            Lo que nadie te dice sobre <span className="text-pink">empezar</span>
           </h2>
         </motion.div>
 

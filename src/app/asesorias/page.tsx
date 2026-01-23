@@ -4,9 +4,9 @@ import Footer from '@/components/Footer';
 import { AsesoriaHero, PlanesSection, ContenidoSection } from '@/components/asesorias';
 
 export const metadata: Metadata = {
-  title: 'Asesorías Personalizadas - Remote con Dani',
+  title: 'Asesorías 1:1 - Deja de dar vueltas | Remote con Dani',
   description:
-    'Asesorías 1:1 para ayudarte a dar el salto al trabajo remoto. Planes desde $66 USD con seguimiento personalizado.',
+    'Una sesión conmigo puede ahorrarte meses de prueba y error. Claridad, un plan concreto y la confianza para dar el siguiente paso.',
   keywords: [
     'asesoría trabajo remoto',
     'coaching trabajo remoto',
@@ -15,9 +15,9 @@ export const metadata: Metadata = {
     'coach carrera remota',
   ],
   openGraph: {
-    title: 'Asesorías Personalizadas - Remote con Dani',
+    title: 'Asesorías 1:1 - Deja de dar vueltas | Remote con Dani',
     description:
-      'Acompañamiento individual para construir tu carrera remota con claridad y estrategia.',
+      'Una sesión conmigo puede ahorrarte meses de prueba y error. Saldrás con un plan claro.',
     type: 'website',
     locale: 'es_ES',
   },

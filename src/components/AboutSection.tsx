@@ -154,7 +154,7 @@ export default function AboutSection() {
                 <Hand className="h-5 w-5 text-lavender" />
               </motion.div>
               <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-lavender">
-                Hola, mucho gusto!
+                También tuve miedo al principio
               </span>
             </motion.div>
 
@@ -166,20 +166,20 @@ export default function AboutSection() {
             {/* Description */}
             <div className="space-y-5 text-gray-carbon">
               <p className="text-lg leading-relaxed">
-                Y estoy emocionada de compartir contigo mis conocimientos para
-                que, como yo, puedas dar el salto al trabajo remoto.
+                Hace 6 años estaba exactamente donde tú estás ahora: queriendo
+                cambiar mi vida pero sin saber si realmente podía lograrlo.
               </p>
               <p className="text-lg leading-relaxed">
-                Con más de{' '}
-                <span className="font-semibold text-coral">6 años de experiencia</span>{' '}
-                en el mundo digital, he creado estas asesorías para ayudarte a
-                descubrir todo lo que el trabajo remoto puede ofrecerte.
+                Empecé ganando{' '}
+                <span className="font-semibold text-coral">$3.25 la hora</span>{' '}
+                como intérprete. Hoy trabajo con clientes de todo el mundo
+                y ayudo a otras personas a hacer lo mismo.
               </p>
               <p className="text-lg leading-relaxed">
-                Mi misión es mostrarte que, con las habilidades que ya tienes,
-                puedes construir una{' '}
-                <span className="font-semibold text-pink">carrera profesional</span>{' '}
-                desde cualquier lugar del mundo.
+                No necesitas un título especial ni contactos en la industria.
+                Solo necesitas{' '}
+                <span className="font-semibold text-pink">la guía correcta</span>{' '}
+                y alguien que ya haya recorrido el camino.
               </p>
 
               {/* Highlight box */}
@@ -189,8 +189,8 @@ export default function AboutSection() {
                 transition={{ type: 'spring', stiffness: 300 }}
               >
                 <p className="font-[var(--font-headline)] text-lg font-semibold text-gray-dark">
-                  &ldquo;Este es tu momento para comenzar algo nuevo y emocionante.
-                  ¡Estoy aquí para apoyarte en cada paso!&rdquo;
+                  &ldquo;El miedo no desaparece, pero cuando tienes claridad sobre
+                  qué hacer, se vuelve más pequeño que tus ganas.&rdquo;
                 </p>
               </motion.div>
             </div>
@@ -210,7 +210,7 @@ export default function AboutSection() {
                     'linear-gradient(135deg, #a78bfa 0%, #e056a0 100%)',
                 }}
               >
-                <span>Conoce más sobre mi</span>
+                <span>Mi historia completa</span>
                 <motion.div
                   animate={{ x: [0, 5, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity }}

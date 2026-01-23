@@ -6,7 +6,7 @@ import { motion } from 'motion/react';
 import { Hand, Laptop, Sparkles, ArrowRight, ChevronDown } from 'lucide-react';
 import RotatingText from './RotatingText';
 
-const rotatingWords = ['libertad', 'autonomía', 'pasión', 'independencia'];
+const rotatingWords = ['libertad', 'tranquilidad', 'propósito', 'independencia'];
 
 // Unsplash avatar URLs for social proof
 const avatarImages = [
@@ -157,7 +157,7 @@ export default function HeroSection() {
               <Hand className="h-5 w-5 text-coral" />
             </motion.div>
             <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
-              Tu coach de trabajo remoto
+              Tu guía hacia el trabajo remoto
             </span>
           </motion.div>
 
@@ -168,7 +168,7 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 0.2, ease: [0.175, 0.885, 0.32, 1.275] }}
             className="text-hero-title mb-8 font-[var(--font-headline)] font-bold text-black-deep"
           >
-            Trabaja desde casa y redescubre tu{' '}
+            Deja el miedo atrás y conquista tu{' '}
             <span className="relative inline-block text-pink md:inline">
               <RotatingText
                 texts={rotatingWords}
@@ -224,12 +224,11 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-body-large mb-10 max-w-xl text-gray-carbon lg:mx-0"
           >
-            Te acompaño con empatía y transparencia en tu transición al trabajo
-            remoto. Aprende desde cero cómo conseguir empleo remoto, ser
-            asistente virtual y construir una vida con{' '}
-            <span className="font-semibold text-pink">propósito</span>,{' '}
-            <span className="font-semibold text-coral">flexibilidad</span> y{' '}
-            <span className="font-semibold text-lavender">confianza</span>.
+            Sé que el primer paso da miedo. Por eso te acompaño de la mano
+            para que construyas tu carrera remota con{' '}
+            <span className="font-semibold text-pink">claridad</span>,{' '}
+            <span className="font-semibold text-coral">confianza</span> y{' '}
+            <span className="font-semibold text-lavender">un plan real</span>.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -241,13 +240,13 @@ export default function HeroSection() {
           >
             {/* Primary CTA */}
             <Link
-              href="/tienda"
+              href="/asesorias"
               className="btn-shimmer group relative inline-flex items-center gap-3 rounded-full px-8 py-4 font-[var(--font-headline)] text-base font-bold text-white shadow-[0_10px_40px_rgba(255,107,107,0.3)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(224,86,160,0.4)]"
               style={{
                 background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
               }}
             >
-              <span>Mis Cursos & Masterclass</span>
+              <span>Agenda tu Asesoría</span>
               <motion.div
                 animate={{ x: [0, 5, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
@@ -261,7 +260,7 @@ export default function HeroSection() {
               href="/empezar"
               className="group relative inline-flex items-center gap-2 rounded-full border-2 border-black-deep bg-white px-8 py-4 font-[var(--font-headline)] text-base font-bold text-black-deep transition-all duration-500 hover:-translate-y-1 hover:border-coral hover:bg-coral hover:text-white hover:shadow-[0_15px_40px_rgba(255,107,107,0.3)]"
             >
-              <span>Empieza conmigo</span>
+              <span>Ver recursos gratis</span>
               <Sparkles className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
             </Link>
           </motion.div>
@@ -291,7 +290,7 @@ export default function HeroSection() {
               ))}
             </div>
             <div className="text-sm text-gray-carbon">
-              <span className="font-bold text-black-deep">+500</span> estudiantes ya transformaron su carrera
+              <span className="font-bold text-black-deep">+500 personas</span> ya dieron el salto con mi ayuda
             </div>
           </motion.div>
         </div>
@@ -356,9 +355,9 @@ export default function HeroSection() {
                   <Laptop className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <div className="text-xs text-gray-medium">Trabaja desde</div>
+                  <div className="text-xs text-gray-medium">Sin jefes tóxicos</div>
                   <div className="font-[var(--font-headline)] font-bold text-black-deep">
-                    Cualquier lugar
+                    Tú decides cuándo
                   </div>
                 </div>
               </div>

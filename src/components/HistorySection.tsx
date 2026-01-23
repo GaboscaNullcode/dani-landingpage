@@ -6,23 +6,23 @@ import { motion, useInView } from 'motion/react';
 const timelineData = [
   {
     year: '2017',
-    role: 'Interprete',
-    detail: 'Comenzando a $3.25/hora',
+    role: 'Intérprete',
+    detail: 'Con miedo y ganando $3.25/hora',
   },
   {
     year: '2019',
     role: 'Freelancer',
-    detail: 'Expandiendo habilidades',
+    detail: 'Aprendiendo a venderme',
   },
   {
     year: '2021',
     role: 'Asistente Virtual',
-    detail: 'Crecimiento profesional',
+    detail: 'Clientes que me buscan a mí',
   },
   {
     year: 'HOY',
-    role: 'Coach',
-    detail: 'Ayudando a otros',
+    role: 'Tu Guía',
+    detail: 'Acortándote el camino',
   },
 ];
 
@@ -66,10 +66,10 @@ export default function HistorySection() {
           className="mb-16 text-center"
         >
           <h2 className="text-section-title mb-4 font-[var(--font-headline)] font-black">
-            De <span className="text-coral">$3.25/hora</span> a Coach
+            De <span className="text-coral">$3.25/hora</span> a libertad total
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-white/70">
-            Mi camino en el mundo digital a traves de multiples plataformas
+            Si yo pude hacerlo empezando de cero, tú también puedes
           </p>
         </motion.div>
 

@@ -17,32 +17,32 @@ import {
 
 const ctaButtons = [
   {
-    text: 'Masterclass',
-    icon: GraduationCap,
-    href: '/masterclass',
+    text: 'Agendar mi Asesoría 1:1',
+    icon: MessageCircle,
+    href: '/asesorias',
     gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
     shadow: 'rgba(255, 107, 107, 0.3)',
   },
   {
-    text: 'Descargar Ebook',
-    icon: BookOpen,
-    href: '/ebook',
+    text: 'Ver Masterclass',
+    icon: GraduationCap,
+    href: '/tienda',
     gradient: 'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
     shadow: 'rgba(167, 139, 250, 0.3)',
   },
   {
-    text: 'Agendar Asesoría',
-    icon: MessageCircle,
-    href: '/asesoria',
+    text: 'Recursos Gratis',
+    icon: BookOpen,
+    href: '/empezar',
     gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
     shadow: 'rgba(224, 86, 160, 0.3)',
   },
 ];
 
 const trustBadges = [
-  { icon: CheckCircle, text: 'Sin riesgo' },
-  { icon: MessageCircle, text: 'Soporte incluido' },
-  { icon: Heart, text: '+500 clientas felices' },
+  { icon: CheckCircle, text: 'Garantía de satisfacción' },
+  { icon: MessageCircle, text: 'Seguimiento post-sesión' },
+  { icon: Heart, text: '+500 personas ya lo lograron' },
 ];
 
 export default function CTASection() {
@@ -117,7 +117,7 @@ export default function CTASection() {
         >
           <Lightbulb className="h-5 w-5 text-coral" />
           <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-coral">
-            Tu momento es ahora
+            El miedo no va a desaparecer solo
           </span>
         </motion.div>
 
@@ -128,10 +128,10 @@ export default function CTASection() {
           transition={{ duration: 0.8 }}
           className="mb-6 font-[var(--font-headline)] text-3xl font-bold text-black-deep md:text-4xl lg:text-5xl"
         >
-          ¿Estás lista para{' '}
-          <span className="gradient-text">confiar en ti</span> y diseñar una
-          vida más{' '}
-          <span className="gradient-text-playful">libre y empoderada</span>?
+          ¿Cuánto más vas a esperar para{' '}
+          <span className="gradient-text">dar el primer paso</span> hacia la
+          vida{' '}
+          <span className="gradient-text-playful">que mereces</span>?
         </motion.h2>
 
         {/* Subtitle */}
@@ -141,8 +141,8 @@ export default function CTASection() {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="mx-auto mb-12 max-w-2xl text-lg text-gray-carbon"
         >
-          Estoy aquí para guiarte con transparencia y convicción.{' '}
-          <span className="font-semibold text-pink">Tú también puedes lograrlo.</span>
+          Una sesión conmigo puede ahorrarte meses de prueba y error.{' '}
+          <span className="font-semibold text-pink">Hablemos de tu situación.</span>
         </motion.p>
 
         {/* CTA Buttons */}

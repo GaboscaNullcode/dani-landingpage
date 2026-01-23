@@ -9,9 +9,9 @@ import {
 } from '@/components/tienda';
 
 export const metadata: Metadata = {
-  title: 'Tienda - Remote con Dani | Cursos y Recursos para Trabajo Remoto',
+  title: 'Recursos Probados para Trabajo Remoto | Remote con Dani',
   description:
-    'Descubre cursos, eBooks y recursos diseñados para ayudarte a construir tu carrera remota. Desde guías gratuitas hasta programas completos.',
+    'Guías, cursos y herramientas que te dan claridad y te ahorran meses de prueba y error. +500 personas ya dieron el salto.',
   keywords: [
     'cursos trabajo remoto',
     'ebook asistente virtual',
