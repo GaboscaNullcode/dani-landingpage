@@ -7,3 +7,5 @@ export { default as MissionSection } from './MissionSection';
 export { default as CTASection } from './CTASection';
 export { default as Footer } from './Footer';
 export { default as QuizSection } from './QuizSection';
+export { default as WhatsAppButton } from './WhatsAppButton';
+export { default as MasterclassPopup } from './MasterclassPopup';

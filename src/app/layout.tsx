@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Fraunces, DM_Sans } from 'next/font/google';
 import './globals.css';
+import WhatsAppButton from '@/components/WhatsAppButton';
+import MasterclassPopup from '@/components/MasterclassPopup';
 
 const fraunces = Fraunces({
   variable: '--font-fraunces',
@@ -83,6 +85,8 @@ export default function RootLayout({
           Saltar al contenido principal
         </a>
         {children}
+        <WhatsAppButton />
+        <MasterclassPopup />
       </body>
     </html>
   );

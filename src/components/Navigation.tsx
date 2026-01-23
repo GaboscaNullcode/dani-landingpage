@@ -8,10 +8,10 @@ import { Sparkles } from 'lucide-react';
 
 const navItems = [
   { text: 'Home', href: '/' },
-  { text: 'Sobre Mi', href: '/sobre-mi' },
-  { text: 'Servicios', href: '#servicios' },
   { text: 'Blog', href: '/blog' },
   { text: 'Tienda', href: '/tienda' },
+  { text: 'Asesorías', href: '/asesorias' },
+  { text: 'Info', href: '/info' },
 ];
 
 export default function Navigation() {
