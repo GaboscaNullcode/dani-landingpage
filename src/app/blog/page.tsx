@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import BlogHero from '@/components/blog/BlogHero';
 import PopularArticles from '@/components/blog/PopularArticles';
 import LatestArticles from '@/components/blog/LatestArticles';
+import { getLatestArticles, getFeaturedArticle } from '@/lib/blog-service';
 
 export const metadata: Metadata = {
   title: 'Blog - Remote con Dani | Consejos para Trabajo Remoto',
@@ -25,14 +26,27 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BlogPage() {
+// Revalidate every 60 seconds
+export const revalidate = 60;
+
+export default async function BlogPage() {
+  const [featuredArticle, latestArticles] = await Promise.all([
+    getFeaturedArticle(),
+    getLatestArticles(7),
+  ]);
+
+  // Skip the first article in latest if it's the same as featured
+  const filteredLatestArticles = latestArticles.filter(
+    (article) => article.id !== featuredArticle?.id
+  ).slice(0, 6);
+
   return (
     <>
       <Navigation />
       <main id="main-content">
         <BlogHero />
-        <PopularArticles />
-        <LatestArticles />
+        <PopularArticles featuredArticle={featuredArticle} />
+        <LatestArticles articles={filteredLatestArticles} />
       </main>
       <Footer />
     </>

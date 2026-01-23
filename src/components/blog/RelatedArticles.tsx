@@ -4,15 +4,14 @@ import { useRef } from 'react';
 import Link from 'next/link';
 import { motion, useInView } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
-import { Article } from '@/data/blog-data';
+import type { BlogArticle } from '@/types/blog';
 import ArticleCard from './ArticleCard';
 
 interface RelatedArticlesProps {
-  articles: Article[];
-  categoryName: string;
+  articles: BlogArticle[];
 }
 
-export default function RelatedArticles({ articles, categoryName }: RelatedArticlesProps) {
+export default function RelatedArticles({ articles }: RelatedArticlesProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
 
@@ -78,7 +77,7 @@ export default function RelatedArticles({ articles, categoryName }: RelatedArtic
               Sigue leyendo
             </p>
             <h2 className="font-[var(--font-headline)] text-2xl font-bold text-black-deep md:text-3xl">
-              Más de {categoryName}
+              Artículos relacionados
             </h2>
           </div>
 

@@ -4,14 +4,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'motion/react';
 import { ChevronRight, Clock, Calendar } from 'lucide-react';
-import { Article, Category, formatDate } from '@/data/blog-data';
+import type { BlogArticle } from '@/types/blog';
+import { formatDate } from '@/lib/blog-service';
 
 interface PostHeaderProps {
-  article: Article;
-  category: Category;
+  article: BlogArticle;
 }
 
-export default function PostHeader({ article, category }: PostHeaderProps) {
+export default function PostHeader({ article }: PostHeaderProps) {
   return (
     <header
       className="relative overflow-hidden"
@@ -87,13 +87,9 @@ export default function PostHeader({ article, category }: PostHeaderProps) {
             Blog
           </Link>
           <ChevronRight className="h-4 w-4 text-gray-300" />
-          <Link
-            href={`/blog/categoria/${category.slug}`}
-            className="font-[var(--font-dm-sans)] transition-colors hover:text-coral"
-            style={{ color: category.accentColor }}
-          >
-            {category.name.split('&')[0].trim()}
-          </Link>
+          <span className="font-[var(--font-dm-sans)] text-coral">
+            Artículo
+          </span>
         </motion.nav>
 
         {/* Category Badge */}
@@ -104,10 +100,9 @@ export default function PostHeader({ article, category }: PostHeaderProps) {
           className="mb-4"
         >
           <span
-            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-[var(--font-dm-sans)] text-xs font-medium uppercase tracking-wider text-white"
-            style={{ backgroundColor: category.accentColor }}
+            className="inline-flex items-center gap-2 rounded-full bg-coral px-4 py-1.5 font-[var(--font-dm-sans)] text-xs font-medium uppercase tracking-wider text-white"
           >
-            {category.name.split('&')[0].trim()}
+            Blog
           </span>
         </motion.div>
 

@@ -5,10 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
-import { Article, getCategoryById, formatDate } from '@/data/blog-data';
+import type { BlogArticle } from '@/types/blog';
+import { formatDate } from '@/lib/blog-service';
 
 interface ArticleCardProps {
-  article: Article;
+  article: BlogArticle;
   index?: number;
   variant?: 'default' | 'featured';
 }
@@ -18,8 +19,6 @@ function ArticleCard({
   index = 0,
   variant = 'default',
 }: ArticleCardProps) {
-  const category = getCategoryById(article.categoryId);
-
   if (variant === 'featured') {
     return (
       <Link href={`/blog/${article.slug}`} className="group block">
@@ -45,10 +44,10 @@ function ArticleCard({
             <div className="mb-3 flex items-center gap-3">
               <span
                 className="h-1.5 w-1.5 rounded-full"
-                style={{ backgroundColor: category?.accentColor }}
+                style={{ backgroundColor: '#ff6b6b' }}
               />
               <span className="text-sm font-medium text-gray-medium">
-                {category?.name.split('&')[0].trim()}
+                Blog
               </span>
               <span className="text-gray-300">·</span>
               <span className="text-sm text-gray-medium">{formatDate(article.publishedAt)}</span>
@@ -95,10 +94,10 @@ function ArticleCard({
         <div className="mb-3 flex items-center gap-3">
           <span
             className="h-1.5 w-1.5 rounded-full"
-            style={{ backgroundColor: category?.accentColor }}
+            style={{ backgroundColor: '#ff6b6b' }}
           />
           <span className="text-xs font-medium uppercase tracking-wide text-gray-medium">
-            {category?.name.split('&')[0].trim()}
+            Blog
           </span>
         </div>
 

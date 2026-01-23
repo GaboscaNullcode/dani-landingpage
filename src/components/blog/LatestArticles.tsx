@@ -4,14 +4,20 @@ import { useRef } from 'react';
 import Link from 'next/link';
 import { motion, useInView } from 'motion/react';
 import { ArrowRight, Heart } from 'lucide-react';
-import { getLatestArticles } from '@/data/blog-data';
 import ArticleCard from './ArticleCard';
+import type { BlogArticle } from '@/types/blog';
 
-export default function LatestArticles() {
+interface LatestArticlesProps {
+  articles: BlogArticle[];
+}
+
+export default function LatestArticles({ articles }: LatestArticlesProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
-  // Skip the first article since it's shown as featured
-  const latestArticles = getLatestArticles().slice(1, 7);
+
+  if (articles.length === 0) {
+    return null;
+  }
 
   return (
     <section
@@ -116,7 +122,7 @@ export default function LatestArticles() {
 
         {/* Articles Grid */}
         <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
-          {latestArticles.map((article, index) => (
+          {articles.map((article, index) => (
             <ArticleCard key={article.id} article={article} index={index} />
           ))}
         </div>

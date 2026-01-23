@@ -3,14 +3,20 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'motion/react';
 import { Sparkles } from 'lucide-react';
-import { getPopularArticles } from '@/data/blog-data';
 import ArticleCard from './ArticleCard';
+import type { BlogArticle } from '@/types/blog';
 
-export default function PopularArticles() {
+interface PopularArticlesProps {
+  featuredArticle: BlogArticle | null;
+}
+
+export default function PopularArticles({ featuredArticle }: PopularArticlesProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
-  const popularArticles = getPopularArticles();
-  const featuredArticle = popularArticles[0];
+
+  if (!featuredArticle) {
+    return null;
+  }
 
   return (
     <section
@@ -74,9 +80,7 @@ export default function PopularArticles() {
         </motion.div>
 
         {/* Featured Article */}
-        {featuredArticle && (
-          <ArticleCard article={featuredArticle} variant="featured" />
-        )}
+        <ArticleCard article={featuredArticle} variant="featured" />
 
         {/* Divider */}
         <motion.div

@@ -7,25 +7,27 @@ import PostContent from '@/components/blog/PostContent';
 import RelatedArticles from '@/components/blog/RelatedArticles';
 import {
   getArticleBySlug,
-  getCategoryById,
   getRelatedArticles,
   getAllSlugs,
-} from '@/data/blog-data';
+} from '@/lib/blog-service';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+// Revalidate every 60 seconds
+export const revalidate = 60;
+
 // Generate static params for all blog posts
 export async function generateStaticParams() {
-  const slugs = getAllSlugs();
+  const slugs = await getAllSlugs();
   return slugs.map((slug) => ({ slug }));
 }
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticleBySlug(slug);
+  const article = await getArticleBySlug(slug);
 
   if (!article) {
     return {
@@ -33,7 +35,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const category = getCategoryById(article.categoryId);
   const canonicalUrl = `https://remotecondani.com/blog/${slug}`;
 
   return {
@@ -58,7 +59,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           alt: article.title,
         },
       ],
-      tags: category ? [category.name] : [],
     },
     twitter: {
       card: 'summary_large_image',
@@ -70,7 +70,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 // Generate JSON-LD structured data
-function generateArticleJsonLd(article: NonNullable<ReturnType<typeof getArticleBySlug>>, category: NonNullable<ReturnType<typeof getCategoryById>>) {
+function generateArticleJsonLd(article: NonNullable<Awaited<ReturnType<typeof getArticleBySlug>>>) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -78,7 +78,7 @@ function generateArticleJsonLd(article: NonNullable<ReturnType<typeof getArticle
     description: article.description,
     image: article.thumbnail,
     datePublished: article.publishedAt,
-    dateModified: article.publishedAt,
+    dateModified: article.updatedAt,
     author: {
       '@type': 'Person',
       name: 'Dani Zilbert',
@@ -96,26 +96,19 @@ function generateArticleJsonLd(article: NonNullable<ReturnType<typeof getArticle
       '@type': 'WebPage',
       '@id': `https://remotecondani.com/blog/${article.slug}`,
     },
-    articleSection: category.name,
     wordCount: article.content ? article.content.split(/\s+/).length : 500,
   };
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
-  const article = getArticleBySlug(slug);
+  const article = await getArticleBySlug(slug);
 
   if (!article) {
     notFound();
   }
 
-  const category = getCategoryById(article.categoryId);
-
-  if (!category) {
-    notFound();
-  }
-
-  const relatedArticles = getRelatedArticles(article.categoryId, article.id, 3);
+  const relatedArticles = await getRelatedArticles(article.id, 3);
 
   // Default content if no content is provided
   const defaultContent = `
@@ -144,7 +137,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 <p>Te invito a suscribirte al newsletter para recibir este contenido cuando esté listo, junto con otros recursos exclusivos para tu camino remoto.</p>
 `;
 
-  const jsonLd = generateArticleJsonLd(article, category);
+  const jsonLd = generateArticleJsonLd(article);
 
   return (
     <>
@@ -154,13 +147,10 @@ export default async function BlogPostPage({ params }: PageProps) {
       />
       <Navigation />
       <main id="main-content">
-        <PostHeader article={article} category={category} />
+        <PostHeader article={article} />
         <PostContent content={article.content || defaultContent} />
         {relatedArticles.length > 0 && (
-          <RelatedArticles
-            articles={relatedArticles}
-            categoryName={category.name.split('&')[0].trim()}
-          />
+          <RelatedArticles articles={relatedArticles} />
         )}
       </main>
       <Footer />

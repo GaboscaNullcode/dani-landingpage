@@ -8,6 +8,16 @@ const nextConfig: NextConfig = {
         hostname: 'images.unsplash.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'pocketbase-production-a78a.up.railway.app',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'securenlandco.b-cdn.net',
+        pathname: '/**',
+      },
     ],
   },
   experimental: {
