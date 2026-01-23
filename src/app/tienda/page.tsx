@@ -3,9 +3,9 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import {
   TiendaHero,
-  ProductosDestacados,
-  ProductosAdicionales,
-  RecursosGratuitos,
+  SeccionRecursosGratuitos,
+  SeccionProductos,
+  SeccionServicios,
 } from '@/components/tienda';
 
 export const metadata: Metadata = {
@@ -35,9 +35,9 @@ export default function TiendaPage() {
       <Navigation />
       <main id="main-content">
         <TiendaHero />
-        <ProductosDestacados />
-        <ProductosAdicionales />
-        <RecursosGratuitos />
+        <SeccionRecursosGratuitos />
+        <SeccionProductos />
+        <SeccionServicios />
       </main>
       <Footer />
     </>
