@@ -2,10 +2,16 @@
 
 import { Gift, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
-import { freeResources } from '@/data/tienda-data';
+import type { Product } from '@/types/tienda';
 import { SectionHeader, FreeResourceCard } from './TiendaSections';
 
-export default function SeccionRecursosGratuitos() {
+interface SeccionRecursosGratuitosProps {
+  freeResources: Product[];
+}
+
+export default function SeccionRecursosGratuitos({
+  freeResources,
+}: SeccionRecursosGratuitosProps) {
   // Filtrar solo los recursos gratuitos (excluir comunidad)
   const gratuitosOnly = freeResources.filter((r) => r.isFree);
 

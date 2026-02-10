@@ -10,3 +10,4 @@ export { default as SeccionRecursosGratuitos } from './SeccionRecursosGratuitos'
 export { default as SeccionProductos } from './SeccionProductos';
 export { default as SeccionServicios } from './SeccionServicios';
 export * from './TiendaSections';
+export { default as CheckoutButton } from './CheckoutButton';

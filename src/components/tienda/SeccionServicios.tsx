@@ -3,12 +3,15 @@
 import { Users, Heart, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
-import { freeResources } from '@/data/tienda-data';
+import type { Product } from '@/types/tienda';
 import { SectionHeader, ServiceCard } from './TiendaSections';
 
-export default function SeccionServicios() {
-  // La comunidad
-  const comunidad = freeResources.find((r) => r.category === 'comunidad');
+interface SeccionServiciosProps {
+  communityProducts: Product[];
+}
+
+export default function SeccionServicios({ communityProducts }: SeccionServiciosProps) {
+  const comunidad = communityProducts[0];
 
   if (!comunidad) return null;
 

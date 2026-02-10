@@ -13,7 +13,8 @@ import {
   Play,
   Crown,
 } from 'lucide-react';
-import { Product, formatPrice } from '@/data/tienda-data';
+import type { Product } from '@/types/tienda';
+import { formatPrice } from '@/types/tienda';
 
 // ============================================
 // COMPACT PRODUCT CARD (Horizontal Layout)
@@ -93,7 +94,7 @@ function CompactProductCard({ product, index = 0, accentColor = 'coral' }: Compa
             {formatPrice(product.price)}
           </span>
           <Link
-            href={product.ctaLink}
+            href={`/tienda/${product.slug}`}
             className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-semibold text-white transition-all duration-200 ${styles.button}`}
           >
             {product.ctaText}
@@ -185,7 +186,7 @@ function FeaturedProductCard({ product }: FeaturedCardProps) {
             </div>
 
             <Link
-              href={product.ctaLink}
+              href={`/tienda/${product.slug}`}
               className="btn-shimmer inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-coral to-pink px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(255,107,107,0.35)]"
             >
               {product.ctaText}
@@ -311,13 +312,12 @@ function ServiceCard({ product }: ServiceCardProps) {
             <div className="flex flex-col items-center gap-4 sm:flex-row">
               <div className="flex items-baseline gap-1">
                 <span className="font-[var(--font-headline)] text-3xl font-bold text-lavender">
-                  {formatPrice(product.price)}
+                  {formatPrice(product.price, 'USD', product.isSubscription ? product.interval : undefined)}
                 </span>
-                <span className="text-gray-carbon">/mes</span>
               </div>
 
               <Link
-                href={product.ctaLink}
+                href={`/tienda/${product.slug}`}
                 className="btn-shimmer inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-lavender to-pink px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(167,139,250,0.35)]"
               >
                 {product.ctaText}

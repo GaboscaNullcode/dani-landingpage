@@ -7,6 +7,14 @@ import {
   SeccionProductos,
   SeccionServicios,
 } from '@/components/tienda';
+import {
+  getFeaturedProducts,
+  getAdditionalProducts,
+  getFreeResources,
+  getCommunityProducts,
+} from '@/lib/tienda-service';
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: 'Recursos Probados para Trabajo Remoto | Remote con Dani',
@@ -29,15 +37,26 @@ export const metadata: Metadata = {
   },
 };
 
-export default function TiendaPage() {
+export default async function TiendaPage() {
+  const [featuredProducts, additionalProducts, freeResources, communityProducts] =
+    await Promise.all([
+      getFeaturedProducts(),
+      getAdditionalProducts(),
+      getFreeResources(),
+      getCommunityProducts(),
+    ]);
+
   return (
     <>
       <Navigation />
       <main id="main-content">
         <TiendaHero />
-        <SeccionRecursosGratuitos />
-        <SeccionProductos />
-        <SeccionServicios />
+        <SeccionRecursosGratuitos freeResources={freeResources} />
+        <SeccionProductos
+          featuredProducts={featuredProducts}
+          additionalProducts={additionalProducts}
+        />
+        <SeccionServicios communityProducts={communityProducts} />
       </main>
       <Footer />
     </>

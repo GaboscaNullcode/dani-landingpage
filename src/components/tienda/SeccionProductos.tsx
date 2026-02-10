@@ -2,10 +2,18 @@
 
 import { ShoppingBag, BookOpen } from 'lucide-react';
 import { motion } from 'motion/react';
-import { featuredProducts, additionalProducts } from '@/data/tienda-data';
+import type { Product } from '@/types/tienda';
 import { SectionHeader, FeaturedProductCard, CompactProductCard } from './TiendaSections';
 
-export default function SeccionProductos() {
+interface SeccionProductosProps {
+  featuredProducts: Product[];
+  additionalProducts: Product[];
+}
+
+export default function SeccionProductos({
+  featuredProducts,
+  additionalProducts,
+}: SeccionProductosProps) {
   // El curso principal (más vendido)
   const cursoDestacado = featuredProducts.find((p) => p.category === 'curso');
 

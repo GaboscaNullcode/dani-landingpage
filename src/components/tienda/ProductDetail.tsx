@@ -15,7 +15,9 @@ import {
   Sparkles,
   Gift,
 } from 'lucide-react';
-import { Product, formatPrice } from '@/data/tienda-data';
+import type { Product } from '@/types/tienda';
+import { formatPrice } from '@/types/tienda';
+import CheckoutButton from './CheckoutButton';
 
 interface ProductDetailProps {
   product: Product;
@@ -180,16 +182,29 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               )}
 
               {/* CTA Button */}
-              <a
-                href={product.ctaLink}
-                className="btn-shimmer mb-6 inline-flex w-full items-center justify-center gap-2 rounded-full py-4 font-[var(--font-headline)] text-lg font-bold text-white transition-all hover:-translate-y-1 md:w-auto md:px-10"
-                style={{
-                  background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
-                  boxShadow: '0 10px 40px rgba(255, 107, 107, 0.3)',
-                }}
-              >
-                {product.ctaText}
-              </a>
+              {product.stripePriceId ? (
+                <CheckoutButton
+                  priceId={product.stripePriceId}
+                  className="btn-shimmer mb-6 inline-flex w-full items-center justify-center gap-2 rounded-full py-4 font-[var(--font-headline)] text-lg font-bold text-white transition-all hover:-translate-y-1 md:w-auto md:px-10"
+                  style={{
+                    background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                    boxShadow: '0 10px 40px rgba(255, 107, 107, 0.3)',
+                  }}
+                >
+                  {product.ctaText}
+                </CheckoutButton>
+              ) : (
+                <a
+                  href={product.ctaLink}
+                  className="btn-shimmer mb-6 inline-flex w-full items-center justify-center gap-2 rounded-full py-4 font-[var(--font-headline)] text-lg font-bold text-white transition-all hover:-translate-y-1 md:w-auto md:px-10"
+                  style={{
+                    background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                    boxShadow: '0 10px 40px rgba(255, 107, 107, 0.3)',
+                  }}
+                >
+                  {product.ctaText}
+                </a>
+              )}
 
               {/* Trust badges */}
               <div className="flex flex-wrap items-center gap-6 text-sm text-gray-medium">
@@ -289,12 +304,21 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             <p className="mx-auto mb-8 max-w-xl text-lg text-white/90">
               Da el primer paso hacia tu carrera remota hoy.
             </p>
-            <a
-              href={product.ctaLink}
-              className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-[var(--font-headline)] font-bold text-coral shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl"
-            >
-              {product.ctaText}
-            </a>
+            {product.stripePriceId ? (
+              <CheckoutButton
+                priceId={product.stripePriceId}
+                className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-[var(--font-headline)] font-bold text-coral shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl"
+              >
+                {product.ctaText}
+              </CheckoutButton>
+            ) : (
+              <a
+                href={product.ctaLink}
+                className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-[var(--font-headline)] font-bold text-coral shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl"
+              >
+                {product.ctaText}
+              </a>
+            )}
           </motion.div>
         </div>
 
