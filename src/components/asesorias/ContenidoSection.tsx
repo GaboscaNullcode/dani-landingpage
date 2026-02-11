@@ -75,7 +75,7 @@ export default function ContenidoSection() {
                   <div
                     className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
                     style={{
-                      background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                      background: 'var(--gradient-coral-pink)',
                     }}
                   >
                     <IconComponent className="h-6 w-6 text-white" />
@@ -142,7 +142,7 @@ export default function ContenidoSection() {
       <section
         className="relative overflow-hidden py-20"
         style={{
-          background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+          background: 'var(--gradient-coral-pink)',
         }}
       >
         <div className="container-custom relative z-10 text-center">

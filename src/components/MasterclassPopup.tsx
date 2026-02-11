@@ -67,7 +67,7 @@ export default function MasterclassPopup() {
             <div
               className="absolute inset-0 opacity-5"
               style={{
-                background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                background: 'var(--gradient-coral-pink)',
               }}
             />
 
@@ -86,7 +86,7 @@ export default function MasterclassPopup() {
               <div
                 className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl"
                 style={{
-                  background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                  background: 'var(--gradient-coral-pink)',
                 }}
               >
                 <Play className="h-6 w-6 fill-white text-white" />
@@ -112,7 +112,7 @@ export default function MasterclassPopup() {
                   onClick={handleDismiss}
                   className="btn-shimmer inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold text-white transition-all hover:-translate-y-0.5"
                   style={{
-                    background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                    background: 'var(--gradient-coral-pink)',
                   }}
                 >
                   <span>Ver Masterclass</span>
@@ -125,7 +125,7 @@ export default function MasterclassPopup() {
             <div
               className="blob absolute -bottom-10 -right-10 h-24 w-24 opacity-10"
               style={{
-                background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                background: 'var(--gradient-coral-pink)',
               }}
             />
           </div>

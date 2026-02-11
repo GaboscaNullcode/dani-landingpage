@@ -18,7 +18,7 @@ const socialLinks = [
     name: 'Instagram',
     href: 'https://instagram.com/remote.con.dani',
     icon: Instagram,
-    gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+    gradient: 'var(--gradient-coral-pink)',
   },
   {
     name: 'TikTok',

@@ -188,7 +188,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   productId={product.id}
                   className="btn-shimmer mb-6 inline-flex w-full items-center justify-center gap-2 rounded-full py-4 font-[var(--font-headline)] text-lg font-bold text-white transition-all hover:-translate-y-1 md:w-auto md:px-10"
                   style={{
-                    background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                    background: 'var(--gradient-coral-pink)',
                     boxShadow: '0 10px 40px rgba(255, 107, 107, 0.3)',
                   }}
                 >
@@ -199,7 +199,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   href={product.ctaLink}
                   className="btn-shimmer mb-6 inline-flex w-full items-center justify-center gap-2 rounded-full py-4 font-[var(--font-headline)] text-lg font-bold text-white transition-all hover:-translate-y-1 md:w-auto md:px-10"
                   style={{
-                    background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                    background: 'var(--gradient-coral-pink)',
                     boxShadow: '0 10px 40px rgba(255, 107, 107, 0.3)',
                   }}
                 >
@@ -289,7 +289,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       <section
         className="relative overflow-hidden py-20"
         style={{
-          background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+          background: 'var(--gradient-coral-pink)',
         }}
       >
         <div className="container-custom relative z-10 text-center">

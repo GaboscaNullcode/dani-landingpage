@@ -248,7 +248,7 @@ export default function HeroSection() {
               href="/asesorias"
               className="btn-shimmer group relative inline-flex items-center gap-3 rounded-full px-8 py-4 font-[var(--font-headline)] text-base font-bold text-white shadow-[0_10px_40px_rgba(255,107,107,0.3)] transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(224,86,160,0.4)]"
               style={{
-                background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                background: 'var(--gradient-coral-pink)',
               }}
             >
               <span>Agenda tu Asesoría</span>

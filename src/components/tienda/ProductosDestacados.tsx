@@ -36,7 +36,7 @@ export default function ProductosDestacados() {
         <motion.div
           className="blob absolute -left-16 bottom-32 h-40 w-40 opacity-10 md:h-56 md:w-56"
           style={{
-            background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+            background: 'var(--gradient-coral-pink)',
           }}
           animate={{
             scale: [1, 1.15, 1],

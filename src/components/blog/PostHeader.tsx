@@ -38,7 +38,7 @@ export default function PostHeader({ article }: PostHeaderProps) {
         <motion.div
           className="blob absolute -right-16 top-[30%] h-40 w-40 opacity-30 md:h-56 md:w-56"
           style={{
-            background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+            background: 'var(--gradient-coral-pink)',
           }}
           animate={{
             scale: [1, 1.08, 1],

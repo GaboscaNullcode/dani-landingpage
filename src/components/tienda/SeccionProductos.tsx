@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { ShoppingBag, BookOpen } from 'lucide-react';
 import { motion } from 'motion/react';
 import type { Product } from '@/types/tienda';
@@ -10,7 +11,7 @@ interface SeccionProductosProps {
   additionalProducts: Product[];
 }
 
-export default function SeccionProductos({
+export default memo(function SeccionProductos({
   featuredProducts,
   additionalProducts,
 }: SeccionProductosProps) {
@@ -76,4 +77,4 @@ export default function SeccionProductos({
       </div>
     </section>
   );
-}
+});

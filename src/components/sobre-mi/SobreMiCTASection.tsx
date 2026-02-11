@@ -136,7 +136,7 @@ export default function SobreMiCTASection() {
             href="/empezar"
             className="btn-shimmer group relative inline-flex w-full items-center justify-center gap-3 overflow-hidden rounded-full px-8 py-4 font-[var(--font-headline)] font-bold text-white transition-all duration-500 hover:-translate-y-1 sm:w-auto"
             style={{
-              background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+              background: 'var(--gradient-coral-pink)',
               boxShadow: '0 15px 40px rgba(255, 107, 107, 0.3)',
             }}
           >

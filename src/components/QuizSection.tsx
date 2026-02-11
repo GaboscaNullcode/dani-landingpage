@@ -128,7 +128,7 @@ const levelResults: Record<string, LevelResult> = {
         href: '/newsletter',
         priority: 'primary',
         icon: Mail,
-        gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+        gradient: 'var(--gradient-coral-pink)',
         tag: 'Recomendado',
       },
       {
@@ -168,7 +168,7 @@ const levelResults: Record<string, LevelResult> = {
         href: '/tienda',
         priority: 'primary',
         icon: BookOpen,
-        gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+        gradient: 'var(--gradient-coral-pink)',
         tag: 'Más vendido',
       },
       {
@@ -198,7 +198,7 @@ const levelResults: Record<string, LevelResult> = {
     subtitle: 'Nivel Lanzamiento',
     description: 'Ya sabes que quieres esto. Ahora necesitas dejar de investigar y empezar a ejecutar con un sistema probado que te lleve a resultados.',
     icon: Rocket,
-    gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+    gradient: 'var(--gradient-coral-pink)',
     shadowColor: 'rgba(255, 107, 107, 0.4)',
     accentColor: '#ff6b6b',
     recommendations: [
@@ -209,7 +209,7 @@ const levelResults: Record<string, LevelResult> = {
         href: '/ebook-trabajo-remoto',
         priority: 'primary',
         icon: BookOpen,
-        gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+        gradient: 'var(--gradient-coral-pink)',
         tag: 'Mejor valor',
       },
     ],
@@ -231,7 +231,7 @@ const levelResults: Record<string, LevelResult> = {
         href: '/asesorias',
         priority: 'primary',
         icon: MessageCircle,
-        gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+        gradient: 'var(--gradient-coral-pink)',
         tag: 'Mejor inversión',
       },
       {
@@ -931,7 +931,7 @@ export default function QuizSection() {
                         }`}
                         style={{
                           background: currentSelectedOption
-                            ? 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)'
+                            ? 'var(--gradient-coral-pink)'
                             : '#ccc',
                         }}
                         whileHover={currentSelectedOption && !isTransitioning ? { scale: 1.02 } : {}}

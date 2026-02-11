@@ -67,7 +67,7 @@ function TimeBlock({
         }`}
         style={
           !compact
-            ? { background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)' }
+            ? { background: 'var(--gradient-coral-pink)' }
             : undefined
         }
       >

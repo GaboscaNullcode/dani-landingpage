@@ -101,7 +101,7 @@ export default function AsesoriaHero() {
               href="#planes"
               className="btn-shimmer inline-flex items-center gap-2 rounded-full px-8 py-4 font-[var(--font-headline)] text-sm font-bold uppercase tracking-wider text-white transition-all hover:-translate-y-1"
               style={{
-                background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                background: 'var(--gradient-coral-pink)',
                 boxShadow: '0 10px 40px rgba(255, 107, 107, 0.3)',
               }}
             >

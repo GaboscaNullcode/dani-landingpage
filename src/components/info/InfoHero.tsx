@@ -38,7 +38,7 @@ export default function InfoHero() {
             transition={{ duration: 0.5, type: 'spring' }}
             className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl"
             style={{
-              background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+              background: 'var(--gradient-coral-pink)',
             }}
           >
             <Info className="h-8 w-8 text-white" />

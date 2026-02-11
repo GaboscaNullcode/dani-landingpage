@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, memo } from 'react';
 import { motion, useInView } from 'motion/react';
 import { Sparkles } from 'lucide-react';
 import ArticleCard from './ArticleCard';
@@ -10,7 +10,7 @@ interface PopularArticlesProps {
   featuredArticle: BlogArticle | null;
 }
 
-export default function PopularArticles({ featuredArticle }: PopularArticlesProps) {
+export default memo(function PopularArticles({ featuredArticle }: PopularArticlesProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
 
@@ -93,4 +93,4 @@ export default function PopularArticles({ featuredArticle }: PopularArticlesProp
       </div>
     </section>
   );
-}
+});

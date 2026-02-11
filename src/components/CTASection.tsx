@@ -20,7 +20,7 @@ const ctaButtons = [
     text: 'Agendar mi Asesoría 1:1',
     icon: MessageCircle,
     href: '/asesorias',
-    gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+    gradient: 'var(--gradient-coral-pink)',
     shadow: 'rgba(255, 107, 107, 0.3)',
   },
   {

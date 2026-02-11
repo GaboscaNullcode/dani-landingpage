@@ -121,7 +121,7 @@ export default function NewsletterHero() {
                         <div
                           className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
                           style={{
-                            background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                            background: 'var(--gradient-coral-pink)',
                           }}
                         >
                           <Mail className="h-8 w-8 text-white" />
@@ -170,7 +170,7 @@ export default function NewsletterHero() {
                           disabled={isSubmitting}
                           className="btn-shimmer flex w-full items-center justify-center gap-2 rounded-xl py-4 font-[var(--font-headline)] font-bold text-white transition-all hover:-translate-y-1 disabled:opacity-70"
                           style={{
-                            background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                            background: 'var(--gradient-coral-pink)',
                           }}
                         >
                           {isSubmitting ? (
@@ -275,7 +275,7 @@ export default function NewsletterHero() {
                   <div
                     className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
                     style={{
-                      background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                      background: 'var(--gradient-coral-pink)',
                     }}
                   >
                     <Icon className="h-6 w-6 text-white" />

@@ -112,7 +112,7 @@ export default function PlanesSection() {
                 }`}
                 style={
                   !plan.isPopular
-                    ? { background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)' }
+                    ? { background: 'var(--gradient-coral-pink)' }
                     : undefined
                 }
               >
@@ -124,7 +124,7 @@ export default function PlanesSection() {
                 <div
                   className="blob absolute -bottom-20 -right-20 h-40 w-40 opacity-20"
                   style={{
-                    background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                    background: 'var(--gradient-coral-pink)',
                   }}
                 />
               )}

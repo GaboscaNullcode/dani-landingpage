@@ -142,7 +142,7 @@ export default function NewsletterSection() {
               <span
                 className="flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-white shadow-lg"
                 style={{
-                  background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                  background: 'var(--gradient-coral-pink)',
                   boxShadow: '0 8px 32px rgba(255,107,107,0.35)',
                 }}
               >
@@ -268,7 +268,7 @@ export default function NewsletterSection() {
                 <motion.div
                   className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
                   style={{
-                    background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                    background: 'var(--gradient-coral-pink)',
                     boxShadow: '0 12px 32px rgba(255, 107, 107, 0.4)',
                   }}
                   whileHover={{ scale: 1.05, rotate: 5 }}

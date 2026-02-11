@@ -18,7 +18,7 @@ const services = [
     title: 'Masterclass',
     subtitle: 'Asistente Virtual',
     icon: GraduationCap,
-    gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+    gradient: 'var(--gradient-coral-pink)',
     shadowColor: 'rgba(255, 107, 107, 0.3)',
     hoverShadow: 'rgba(255, 107, 107, 0.5)',
     accentColor: '#ff6b6b',

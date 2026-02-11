@@ -96,6 +96,10 @@ export async function POST(request: NextRequest) {
         }
       } catch (error) {
         console.error('Error processing checkout fulfillment:', error);
+        return NextResponse.json(
+          { error: 'Error processing checkout fulfillment' },
+          { status: 500 },
+        );
       }
       break;
     }
@@ -105,6 +109,10 @@ export async function POST(request: NextRequest) {
         await cancelCompraBySubscription(subscription.id);
       } catch (error) {
         console.error('Error cancelling subscription:', error);
+        return NextResponse.json(
+          { error: 'Error cancelling subscription' },
+          { status: 500 },
+        );
       }
       break;
     }

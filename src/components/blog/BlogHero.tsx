@@ -29,7 +29,7 @@ export default function BlogHero() {
         <motion.div
           className="blob absolute -left-10 top-[40%] h-32 w-32 opacity-60 md:h-48 md:w-48"
           style={{
-            background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+            background: 'var(--gradient-coral-pink)',
           }}
           animate={{
             scale: [1, 1.1, 1],

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { Sparkles, User } from 'lucide-react';
 
@@ -14,7 +15,8 @@ const navItems = [
   { text: 'Info', href: '/info' },
 ];
 
-export default function Navigation() {
+export default memo(function Navigation() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -90,9 +92,10 @@ export default function Navigation() {
             >
               <Link
                 href={item.href}
-                className={`nav-link-underline group relative font-[var(--font-dm-sans)] font-semibold tracking-wide transition-all duration-500 text-gray-dark hover:text-coral ${
+                aria-current={pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)) ? 'page' : undefined}
+                className={`nav-link-underline group relative font-[var(--font-dm-sans)] font-semibold tracking-wide transition-colors duration-500 hover:text-coral ${
                   isScrolled ? 'text-xs' : 'text-sm'
-                }`}
+                } ${pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)) ? 'text-coral' : 'text-gray-dark'}`}
               >
                 {item.text}
               </Link>
@@ -124,7 +127,7 @@ export default function Navigation() {
                 isScrolled ? 'px-4 py-2 text-xs' : 'px-6 py-3 text-sm'
               }`}
               style={{
-                background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                background: 'var(--gradient-coral-pink)',
               }}
             >
               <span>Empezar</span>
@@ -218,7 +221,10 @@ export default function Navigation() {
                   <Link
                     href={item.href}
                     onClick={closeMobileMenu}
-                    className="font-[var(--font-headline)] text-3xl font-bold text-gray-dark transition-colors hover:text-coral"
+                    aria-current={pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)) ? 'page' : undefined}
+                    className={`font-[var(--font-headline)] text-3xl font-bold transition-colors hover:text-coral ${
+                      pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)) ? 'text-coral' : 'text-gray-dark'
+                    }`}
                   >
                     {item.text}
                   </Link>
@@ -252,7 +258,7 @@ export default function Navigation() {
                   className="btn-shimmer inline-flex items-center gap-3 rounded-full px-10 py-5 font-[var(--font-headline)] text-xl font-bold text-white shadow-[0_15px_50px_rgba(255,107,107,0.4)]"
                   style={{
                     background:
-                      'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
+                      'var(--gradient-coral-pink)',
                   }}
                 >
                   <span>Empezar</span>
@@ -265,4 +271,4 @@ export default function Navigation() {
       </AnimatePresence>
     </motion.header>
   );
-}
+});
