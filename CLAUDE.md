@@ -2,57 +2,28 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Comandos de Desarrollo
+> Ver el CLAUDE.md raíz (`../CLAUDE.md`) para la documentación completa del proyecto. Este archivo es un resumen para cuando se trabaja directamente desde esta carpeta.
+
+## Comandos
 
 ```bash
-# Instalar dependencias
-pnpm install
-
-# Servidor de desarrollo
-pnpm dev
-
-# Build de producción
-pnpm build
-
-# Iniciar servidor de producción
-pnpm start
-
-# Linting
-pnpm lint
+pnpm install        # Instalar dependencias
+pnpm dev            # Servidor de desarrollo
+pnpm build          # Build de producción
+pnpm lint           # Linting
 ```
 
-## Stack Tecnológico
+## Stack
 
-- **Framework**: Next.js 16 con App Router
-- **React**: 19.x
-- **Estilos**: Tailwind CSS 4 (usando `@tailwindcss/postcss`)
-- **Animaciones**: Motion (Framer Motion)
-- **Iconos**: Lucide React
-- **Lenguaje**: TypeScript (modo estricto)
-- **Package Manager**: pnpm
+Next.js 16 (App Router) + React 19 + Tailwind CSS 4 + TypeScript estricto + PocketBase + Stripe + Brevo. Package manager: pnpm.
 
-## Arquitectura
+## Notas clave
 
-El proyecto usa la estructura de App Router de Next.js:
-
-- `src/app/` - Rutas y páginas de la aplicación
-  - `layout.tsx` - Layout raíz con configuración de fuentes (Geist Sans y Geist Mono)
-  - `page.tsx` - Página principal
-  - `globals.css` - Estilos globales y configuración de temas Tailwind
-
-## Configuración de Estilos
-
-### Tailwind CSS 4
-- Usa la nueva sintaxis `@import "tailwindcss"` en lugar de directivas
-- Variables CSS personalizadas definidas en `globals.css` para temas claro/oscuro
-- Configuración inline con `@theme` para colores y fuentes
-
-### Prettier
-- Configurado con `prettier-plugin-tailwindcss` para ordenar automáticamente clases de Tailwind
-- Single quotes, trailing commas en ES5
-
-## Path Aliases
-
-```typescript
-@/* -> ./src/*
-```
+- Animaciones: importar desde `motion/react` (no `framer-motion`)
+- Tailwind 4: usa `@import "tailwindcss"` y `@theme inline` en `globals.css`
+- Colores custom: `bg-coral`, `text-pink`, `bg-lavender`, etc. (definidos via CSS vars + `@theme inline`)
+- Fuentes: `font-headline` (Fraunces) y `font-sans` (DM Sans)
+- Datos dinámicos: servicios en `src/lib/` consumen PocketBase directamente desde Server Components
+- Tipos duales: `*Record` (PocketBase) y modelo limpio (frontend) en `src/types/`
+- Componentes por sección: subcarpetas en `components/` con barrel `index.ts`
+- Path alias: `@/*` → `./src/*`
