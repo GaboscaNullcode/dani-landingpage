@@ -5,6 +5,7 @@ import { ArrowRight, Loader2 } from 'lucide-react';
 
 interface CheckoutButtonProps {
   priceId: string;
+  productId: string;
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -12,6 +13,7 @@ interface CheckoutButtonProps {
 
 export default function CheckoutButton({
   priceId,
+  productId,
   children,
   className = '',
   style,
@@ -24,7 +26,7 @@ export default function CheckoutButton({
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priceId }),
+        body: JSON.stringify({ priceId, productId }),
       });
 
       const data = await response.json();

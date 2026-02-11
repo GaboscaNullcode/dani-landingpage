@@ -25,6 +25,8 @@ function transformProductRecord(record: ProductoRecord): Product {
     ctaText: record.cta_texto,
     ctaLink: record.cta_link,
     stripePriceId: record.stripe_price_id || undefined,
+    downloadUrl: record.download_url || undefined,
+    whatsappLink: record.whatsapp_link || undefined,
     order: record.orden || 0,
   };
 }

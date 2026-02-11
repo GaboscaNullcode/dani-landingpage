@@ -2,14 +2,44 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { CheckCircle, ShoppingBag, ArrowLeft } from 'lucide-react';
+import { CheckCircle, ArrowLeft, Mail, User } from 'lucide-react';
+import { stripe } from '@/lib/stripe';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Compra Exitosa | Remote con Dani',
   description: 'Tu compra ha sido procesada exitosamente.',
 };
 
-export default function ExitoPage() {
+export default async function ExitoPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ session_id?: string }>;
+}) {
+  const { session_id } = await searchParams;
+
+  let productName: string | null = null;
+  let customerEmail: string | null = null;
+
+  if (session_id) {
+    try {
+      const session = await stripe.checkout.sessions.retrieve(session_id, {
+        expand: ['line_items.data.price.product'],
+      });
+
+      customerEmail =
+        session.customer_details?.email ?? session.customer_email ?? null;
+
+      const firstItem = session.line_items?.data?.[0];
+      if (firstItem?.price?.product && typeof firstItem.price.product === 'object') {
+        productName = (firstItem.price.product as { name?: string }).name ?? null;
+      }
+    } catch {
+      // Si la sesion no se puede recuperar, mostrar version generica
+    }
+  }
+
   return (
     <>
       <Navigation />
@@ -26,9 +56,27 @@ export default function ExitoPage() {
             ¡Compra Exitosa!
           </h1>
 
-          <p className="mb-8 text-lg text-gray-carbon">
-            Gracias por tu compra. Recibirás un correo electrónico con los
-            detalles y el acceso a tu producto.
+          {productName && (
+            <p className="mb-2 text-xl font-semibold text-gray-dark">
+              {productName}
+            </p>
+          )}
+
+          {customerEmail && (
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm text-gray-carbon shadow-sm">
+              <Mail className="h-4 w-4 text-coral" />
+              <span>{customerEmail}</span>
+            </div>
+          )}
+
+          <p className="mb-4 text-lg text-gray-carbon">
+            Gracias por tu compra. Hemos enviado un email a tu correo con las
+            instrucciones de acceso.
+          </p>
+
+          <p className="mb-8 text-sm text-gray-medium">
+            Revisa tu bandeja de entrada (y la carpeta de spam) para encontrar
+            los detalles de tu producto.
           </p>
 
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -41,11 +89,11 @@ export default function ExitoPage() {
             </Link>
 
             <Link
-              href="/"
+              href="/mi-cuenta/login"
               className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-coral to-pink px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
             >
-              <ShoppingBag className="h-4 w-4" />
-              Ir al Inicio
+              <User className="h-4 w-4" />
+              Ir a Mi Cuenta
             </Link>
           </div>
         </div>

@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
+import { findOrCreateUser } from '@/lib/auth-service';
+import { createCompra, cancelCompraBySubscription } from '@/lib/compras-service';
+import {
+  sendPurchaseEmail,
+  sendWelcomeEmail,
+  sendCommunityEmail,
+} from '@/lib/brevo';
+import { getPocketBase } from '@/lib/pocketbase';
 import type Stripe from 'stripe';
+import type { ProductoRecord } from '@/types/tienda';
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
@@ -30,33 +39,73 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const domain = process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost:3000';
+
   switch (event.type) {
     case 'checkout.session.completed': {
       const session = event.data.object as Stripe.Checkout.Session;
-      console.log('Checkout completed:', {
-        sessionId: session.id,
-        customerEmail: session.customer_details?.email,
-        mode: session.mode,
-        paymentStatus: session.payment_status,
-      });
-      break;
-    }
-    case 'customer.subscription.created':
-    case 'customer.subscription.updated': {
-      const subscription = event.data.object as Stripe.Subscription;
-      console.log(`Subscription ${event.type}:`, {
-        subscriptionId: subscription.id,
-        status: subscription.status,
-        customerId: subscription.customer,
-      });
+      const email = session.customer_details?.email;
+      const name = session.customer_details?.name || email?.split('@')[0] || 'Usuario';
+      const productId = session.metadata?.productId;
+
+      if (!email || !productId) {
+        console.error('Missing email or productId in checkout session');
+        break;
+      }
+
+      try {
+        const { user, isNew, tempPassword } = await findOrCreateUser(email, name);
+
+        if (isNew && tempPassword) {
+          await sendWelcomeEmail(email, name, tempPassword);
+        }
+
+        const subscriptionId =
+          session.mode === 'subscription'
+            ? (session.subscription as string)
+            : undefined;
+
+        await createCompra(user.id, productId, session.id, subscriptionId);
+
+        const pb = getPocketBase();
+        const producto = await pb
+          .collection('productos')
+          .getOne<ProductoRecord>(productId);
+
+        const accessUrl = `${domain}/mi-cuenta`;
+
+        if (
+          producto.categoria === 'comunidad' &&
+          producto.whatsapp_link
+        ) {
+          await sendCommunityEmail(
+            email,
+            name,
+            producto.nombre,
+            producto.whatsapp_link,
+            accessUrl,
+          );
+        } else {
+          await sendPurchaseEmail(
+            email,
+            name,
+            producto.nombre,
+            accessUrl,
+            !!subscriptionId,
+          );
+        }
+      } catch (error) {
+        console.error('Error processing checkout fulfillment:', error);
+      }
       break;
     }
     case 'customer.subscription.deleted': {
       const subscription = event.data.object as Stripe.Subscription;
-      console.log('Subscription cancelled:', {
-        subscriptionId: subscription.id,
-        customerId: subscription.customer,
-      });
+      try {
+        await cancelCompraBySubscription(subscription.id);
+      } catch (error) {
+        console.error('Error cancelling subscription:', error);
+      }
       break;
     }
     default:

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, User } from 'lucide-react';
 
 const navItems = [
   { text: 'Home', href: '/' },
@@ -102,6 +102,21 @@ export default function Navigation() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4, delay: 0.5 }}
+          >
+            <Link
+              href="/mi-cuenta"
+              className={`flex items-center justify-center rounded-full border-2 border-gray-light text-gray-dark transition-all duration-300 hover:border-coral hover:text-coral ${
+                isScrolled ? 'h-8 w-8' : 'h-9 w-9'
+              }`}
+              aria-label="Mi Cuenta"
+            >
+              <User className={isScrolled ? 'h-3.5 w-3.5' : 'h-4 w-4'} />
+            </Link>
+          </motion.li>
+          <motion.li
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, delay: 0.6 }}
           >
             <Link
               href="/empezar"
@@ -214,6 +229,21 @@ export default function Navigation() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 30 }}
                 transition={{ duration: 0.4, delay: navItems.length * 0.1 }}
+              >
+                <Link
+                  href="/mi-cuenta"
+                  onClick={closeMobileMenu}
+                  className="inline-flex items-center gap-3 font-[var(--font-headline)] text-3xl font-bold text-gray-dark transition-colors hover:text-coral"
+                >
+                  <User className="h-7 w-7" />
+                  Mi Cuenta
+                </Link>
+              </motion.li>
+              <motion.li
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 30 }}
+                transition={{ duration: 0.4, delay: (navItems.length + 1) * 0.1 }}
                 className="mt-4"
               >
                 <Link

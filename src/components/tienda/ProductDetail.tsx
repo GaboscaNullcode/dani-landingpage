@@ -185,6 +185,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               {product.stripePriceId ? (
                 <CheckoutButton
                   priceId={product.stripePriceId}
+                  productId={product.id}
                   className="btn-shimmer mb-6 inline-flex w-full items-center justify-center gap-2 rounded-full py-4 font-[var(--font-headline)] text-lg font-bold text-white transition-all hover:-translate-y-1 md:w-auto md:px-10"
                   style={{
                     background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
@@ -307,6 +308,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             {product.stripePriceId ? (
               <CheckoutButton
                 priceId={product.stripePriceId}
+                productId={product.id}
                 className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-[var(--font-headline)] font-bold text-coral shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl"
               >
                 {product.ctaText}

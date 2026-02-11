@@ -18,6 +18,8 @@ export interface ProductoRecord extends RecordModel {
   cta_texto: string;
   cta_link: string;
   stripe_price_id: string;
+  download_url: string;
+  whatsapp_link: string;
   orden: number;
   created: string;
   updated: string;
@@ -43,6 +45,8 @@ export interface Product {
   ctaText: string;
   ctaLink: string;
   stripePriceId?: string;
+  downloadUrl?: string;
+  whatsappLink?: string;
   order: number;
 }
 
