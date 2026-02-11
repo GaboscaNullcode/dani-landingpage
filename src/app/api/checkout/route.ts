@@ -3,7 +3,8 @@ import { stripe } from '@/lib/stripe';
 
 export async function POST(request: NextRequest) {
   try {
-    const { priceId, productId } = await request.json();
+    const { priceId, productId, customerEmail, customerName } =
+      await request.json();
 
     if (!priceId || typeof priceId !== 'string') {
       return NextResponse.json(
@@ -23,8 +24,10 @@ export async function POST(request: NextRequest) {
       success_url: `${domain}/tienda/exito?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${domain}/tienda`,
       ...(isSubscription ? {} : { customer_creation: 'always' }),
+      ...(customerEmail ? { customer_email: customerEmail } : {}),
       metadata: {
         productId: productId || '',
+        customerName: customerName || '',
       },
     });
 

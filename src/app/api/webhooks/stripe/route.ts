@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     case 'checkout.session.completed': {
       const session = event.data.object as Stripe.Checkout.Session;
       const email = session.customer_details?.email;
-      const name = session.customer_details?.name || email?.split('@')[0] || 'Usuario';
+      const name = session.customer_details?.name || session.metadata?.customerName || email?.split('@')[0] || 'Usuario';
       const productId = session.metadata?.productId;
 
       if (!email || !productId) {
