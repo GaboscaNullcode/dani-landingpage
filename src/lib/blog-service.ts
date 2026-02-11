@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { getPocketBase } from './pocketbase';
 import type { BlogRecord, BlogArticle } from '@/types/blog';
 import {
@@ -26,7 +27,7 @@ function transformBlogRecord(record: BlogRecord): BlogArticle {
 }
 
 // Fetch all blog articles
-export async function getAllArticles(): Promise<BlogArticle[]> {
+export const getAllArticles = cache(async (): Promise<BlogArticle[]> => {
   try {
     const pb = getPocketBase();
     const records = await pb.collection('blogs').getFullList<BlogRecord>({
@@ -37,10 +38,10 @@ export async function getAllArticles(): Promise<BlogArticle[]> {
     console.error('Error fetching articles:', error);
     return [];
   }
-}
+});
 
 // Fetch latest articles with optional limit
-export async function getLatestArticles(limit?: number): Promise<BlogArticle[]> {
+export const getLatestArticles = cache(async (limit?: number): Promise<BlogArticle[]> => {
   try {
     const pb = getPocketBase();
     const records = await pb.collection('blogs').getList<BlogRecord>(1, limit || 50, {
@@ -51,10 +52,10 @@ export async function getLatestArticles(limit?: number): Promise<BlogArticle[]> 
     console.error('Error fetching latest articles:', error);
     return [];
   }
-}
+});
 
 // Fetch a single article by slug
-export async function getArticleBySlug(slug: string): Promise<BlogArticle | null> {
+export const getArticleBySlug = cache(async (slug: string): Promise<BlogArticle | null> => {
   try {
     const pb = getPocketBase();
     const records = await pb.collection('blogs').getFullList<BlogRecord>();
@@ -69,10 +70,10 @@ export async function getArticleBySlug(slug: string): Promise<BlogArticle | null
     console.error('Error fetching article by slug:', error);
     return null;
   }
-}
+});
 
 // Fetch a single article by ID
-export async function getArticleById(id: string): Promise<BlogArticle | null> {
+export const getArticleById = cache(async (id: string): Promise<BlogArticle | null> => {
   try {
     const pb = getPocketBase();
     const record = await pb.collection('blogs').getOne<BlogRecord>(id);
@@ -81,10 +82,10 @@ export async function getArticleById(id: string): Promise<BlogArticle | null> {
     console.error('Error fetching article by ID:', error);
     return null;
   }
-}
+});
 
 // Get all slugs for static generation
-export async function getAllSlugs(): Promise<string[]> {
+export const getAllSlugs = cache(async (): Promise<string[]> => {
   try {
     const pb = getPocketBase();
     const records = await pb.collection('blogs').getFullList<BlogRecord>({
@@ -95,7 +96,7 @@ export async function getAllSlugs(): Promise<string[]> {
     console.error('Error fetching slugs:', error);
     return [];
   }
-}
+});
 
 // Get featured/popular article (first one for now)
 export async function getFeaturedArticle(): Promise<BlogArticle | null> {
@@ -104,10 +105,10 @@ export async function getFeaturedArticle(): Promise<BlogArticle | null> {
 }
 
 // Get related articles (excluding current one)
-export async function getRelatedArticles(
+export const getRelatedArticles = cache(async (
   currentId: string,
   limit = 3
-): Promise<BlogArticle[]> {
+): Promise<BlogArticle[]> => {
   try {
     const pb = getPocketBase();
     const records = await pb.collection('blogs').getList<BlogRecord>(1, limit + 1, {
@@ -122,7 +123,7 @@ export async function getRelatedArticles(
     console.error('Error fetching related articles:', error);
     return [];
   }
-}
+});
 
 // Format date for display
 export function formatDate(dateString: string): string {

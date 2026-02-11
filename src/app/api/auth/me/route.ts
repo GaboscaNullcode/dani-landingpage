@@ -17,5 +17,13 @@ export async function GET(request: NextRequest) {
 
   const compras = await getUserCompras(user.id);
 
-  return NextResponse.json({ user, compras });
+  // Only send fields the Dashboard/ProductCard components need
+  const comprasLite = compras.map(({ id, estado, stripeSubscriptionId, expand }) => ({
+    id,
+    estado,
+    stripeSubscriptionId,
+    expand,
+  }));
+
+  return NextResponse.json({ user, compras: comprasLite });
 }

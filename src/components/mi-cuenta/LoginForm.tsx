@@ -69,7 +69,9 @@ export default function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="tu@email.com"
-              className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors focus:border-coral focus:outline-none"
+              className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
+              autoComplete="email"
+              spellCheck={false}
             />
           </div>
 
@@ -87,7 +89,8 @@ export default function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Tu contrasena"
-              className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors focus:border-coral focus:outline-none"
+              className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
+              autoComplete="current-password"
             />
           </div>
 
@@ -105,7 +108,7 @@ export default function LoginForm() {
             {loading ? (
               <span className="inline-flex items-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Ingresando...
+                Ingresando\u2026
               </span>
             ) : (
               'Iniciar Sesion'
@@ -115,7 +118,7 @@ export default function LoginForm() {
 
         <div className="mt-6 text-center">
           <Link
-            href="#"
+            href="/mi-cuenta/login"
             className="text-sm text-gray-medium transition-colors hover:text-coral"
           >
             ¿Olvidaste tu contrasena?

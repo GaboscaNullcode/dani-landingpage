@@ -106,7 +106,7 @@ export default function BlogNewsletterCTA() {
                         >
                           <Sparkles className="h-4 w-4" />
                         </motion.span>
-                        Enviando...
+                        Enviando\u2026
                       </>
                     ) : (
                       <>

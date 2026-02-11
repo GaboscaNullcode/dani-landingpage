@@ -13,13 +13,18 @@ const categories = [
   { id: 'pagos', label: 'Pagos' },
 ];
 
-function FAQAccordionItem({ item, isOpen, onToggle }: { item: FAQItem; isOpen: boolean; onToggle: () => void }) {
+function FAQAccordionItem({ item, isOpen, onToggle, index }: { item: FAQItem; isOpen: boolean; onToggle: () => void; index: number }) {
+  const contentId = `faq-content-${index}`;
+  const triggerId = `faq-trigger-${index}`;
+
   return (
     <div className="border-b border-gray-light last:border-b-0">
       <button
+        id={triggerId}
         onClick={onToggle}
         className="flex w-full items-center justify-between py-5 text-left transition-colors hover:text-coral"
         aria-expanded={isOpen}
+        aria-controls={contentId}
       >
         <span className="pr-4 font-[var(--font-headline)] font-semibold text-gray-dark">
           {item.question}
@@ -35,6 +40,9 @@ function FAQAccordionItem({ item, isOpen, onToggle }: { item: FAQItem; isOpen: b
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id={contentId}
+            role="region"
+            aria-labelledby={triggerId}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -125,6 +133,7 @@ export default function FAQSection() {
             <FAQAccordionItem
               key={`${item.category}-${index}`}
               item={item}
+              index={index}
               isOpen={openIndex === index}
               onToggle={() => handleToggle(index)}
             />

@@ -1,8 +1,9 @@
 'use client';
 
+import { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'motion/react';
+import { motion, useInView } from 'motion/react';
 import { Hand, Laptop, Sparkles, ArrowRight, ChevronDown } from 'lucide-react';
 import RotatingText from './RotatingText';
 
@@ -17,7 +18,7 @@ const avatarImages = [
 ];
 
 // Floating decorative shapes
-const FloatingShapes = () => (
+const FloatingShapes = ({ isInView }: { isInView: boolean }) => (
   <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
     {/* Large coral blob - top right */}
     <motion.div
@@ -26,10 +27,10 @@ const FloatingShapes = () => (
         background:
           'linear-gradient(135deg, rgba(255, 107, 107, 0.4) 0%, rgba(224, 86, 160, 0.3) 100%)',
       }}
-      animate={{
+      animate={isInView ? {
         scale: [1, 1.1, 1],
         rotate: [0, 10, 0],
-      }}
+      } : { scale: 1, rotate: 0 }}
       transition={{
         duration: 15,
         repeat: Infinity,
@@ -44,10 +45,10 @@ const FloatingShapes = () => (
         background:
           'linear-gradient(135deg, rgba(167, 139, 250, 0.4) 0%, rgba(110, 231, 183, 0.3) 100%)',
       }}
-      animate={{
+      animate={isInView ? {
         scale: [1, 1.15, 1],
         rotate: [0, -15, 0],
-      }}
+      } : { scale: 1, rotate: 0 }}
       transition={{
         duration: 18,
         repeat: Infinity,
@@ -59,11 +60,11 @@ const FloatingShapes = () => (
     {/* Small floating circle - top left */}
     <motion.div
       className="absolute left-[10%] top-[15%] h-16 w-16 rounded-full bg-sunshine opacity-60"
-      animate={{
+      animate={isInView ? {
         y: [-10, 20, -10],
         x: [-5, 10, -5],
         rotate: [0, 180, 360],
-      }}
+      } : { y: 0, x: 0, rotate: 0 }}
       transition={{
         duration: 8,
         repeat: Infinity,
@@ -74,10 +75,10 @@ const FloatingShapes = () => (
     {/* Small floating circle - right side */}
     <motion.div
       className="absolute right-[15%] top-[30%] h-10 w-10 rounded-full bg-mint opacity-50"
-      animate={{
+      animate={isInView ? {
         y: [0, -25, 0],
         x: [0, 15, 0],
-      }}
+      } : { y: 0, x: 0 }}
       transition={{
         duration: 6,
         repeat: Infinity,
@@ -93,10 +94,10 @@ const FloatingShapes = () => (
         backgroundImage: 'radial-gradient(#ff6b6b 2px, transparent 2px)',
         backgroundSize: '12px 12px',
       }}
-      animate={{
+      animate={isInView ? {
         rotate: [0, 90, 0],
         scale: [1, 1.1, 1],
-      }}
+      } : { rotate: 0, scale: 1 }}
       transition={{
         duration: 12,
         repeat: Infinity,
@@ -110,10 +111,10 @@ const FloatingShapes = () => (
       style={{
         background: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
       }}
-      animate={{
+      animate={isInView ? {
         y: [-15, 15, -15],
         scale: [1, 1.2, 1],
-      }}
+      } : { y: 0, scale: 1 }}
       transition={{
         duration: 10,
         repeat: Infinity,
@@ -125,16 +126,20 @@ const FloatingShapes = () => (
 );
 
 export default function HeroSection() {
+  const heroRef = useRef(null);
+  const isHeroInView = useInView(heroRef, { margin: '200px' });
+
   return (
     <section
       id="hero"
+      ref={heroRef}
       className="noise-overlay relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-32"
       style={{
         background:
           'linear-gradient(135deg, #fef7f0 0%, #ffecd2 40%, #fce7f3 100%)',
       }}
     >
-      <FloatingShapes />
+      <FloatingShapes isInView={isHeroInView} />
 
       <div className="container-custom relative z-10 grid max-w-[1300px] items-center gap-12 lg:grid-cols-2 lg:gap-16">
         {/* Content Column */}
@@ -241,7 +246,7 @@ export default function HeroSection() {
             {/* Primary CTA */}
             <Link
               href="/asesorias"
-              className="btn-shimmer group relative inline-flex items-center gap-3 rounded-full px-8 py-4 font-[var(--font-headline)] text-base font-bold text-white shadow-[0_10px_40px_rgba(255,107,107,0.3)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(224,86,160,0.4)]"
+              className="btn-shimmer group relative inline-flex items-center gap-3 rounded-full px-8 py-4 font-[var(--font-headline)] text-base font-bold text-white shadow-[0_10px_40px_rgba(255,107,107,0.3)] transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(224,86,160,0.4)]"
               style={{
                 background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
               }}
@@ -258,7 +263,7 @@ export default function HeroSection() {
             {/* Secondary CTA */}
             <Link
               href="/empezar"
-              className="group relative inline-flex items-center gap-2 rounded-full border-2 border-black-deep bg-white px-8 py-4 font-[var(--font-headline)] text-base font-bold text-black-deep transition-all duration-500 hover:-translate-y-1 hover:border-coral hover:bg-coral hover:text-white hover:shadow-[0_15px_40px_rgba(255,107,107,0.3)]"
+              className="group relative inline-flex items-center gap-2 rounded-full border-2 border-black-deep bg-white px-8 py-4 font-[var(--font-headline)] text-base font-bold text-black-deep transition-[transform,border-color,background-color,color,box-shadow] duration-500 hover:-translate-y-1 hover:border-coral hover:bg-coral hover:text-white hover:shadow-[0_15px_40px_rgba(255,107,107,0.3)]"
             >
               <span>Ver recursos gratis</span>
               <Sparkles className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />

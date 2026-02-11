@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { getPocketBase } from './pocketbase';
 import type { ProductoRecord, Product } from '@/types/tienda';
 
@@ -32,7 +33,7 @@ function transformProductRecord(record: ProductoRecord): Product {
 }
 
 // Fetch all products
-export async function getAllProducts(): Promise<Product[]> {
+export const getAllProducts = cache(async (): Promise<Product[]> => {
   try {
     const pb = getPocketBase();
     const records = await pb
@@ -45,10 +46,10 @@ export async function getAllProducts(): Promise<Product[]> {
     console.error('Error fetching products:', error);
     return [];
   }
-}
+});
 
 // Fetch featured products
-export async function getFeaturedProducts(): Promise<Product[]> {
+export const getFeaturedProducts = cache(async (): Promise<Product[]> => {
   try {
     const pb = getPocketBase();
     const records = await pb
@@ -62,10 +63,10 @@ export async function getFeaturedProducts(): Promise<Product[]> {
     console.error('Error fetching featured products:', error);
     return [];
   }
-}
+});
 
 // Fetch additional (non-featured, non-free) products
-export async function getAdditionalProducts(): Promise<Product[]> {
+export const getAdditionalProducts = cache(async (): Promise<Product[]> => {
   try {
     const pb = getPocketBase();
     const records = await pb
@@ -80,10 +81,10 @@ export async function getAdditionalProducts(): Promise<Product[]> {
     console.error('Error fetching additional products:', error);
     return [];
   }
-}
+});
 
 // Fetch free resources
-export async function getFreeResources(): Promise<Product[]> {
+export const getFreeResources = cache(async (): Promise<Product[]> => {
   try {
     const pb = getPocketBase();
     const records = await pb
@@ -97,10 +98,10 @@ export async function getFreeResources(): Promise<Product[]> {
     console.error('Error fetching free resources:', error);
     return [];
   }
-}
+});
 
 // Fetch community/subscription products
-export async function getCommunityProducts(): Promise<Product[]> {
+export const getCommunityProducts = cache(async (): Promise<Product[]> => {
   try {
     const pb = getPocketBase();
     const records = await pb
@@ -114,12 +115,12 @@ export async function getCommunityProducts(): Promise<Product[]> {
     console.error('Error fetching community products:', error);
     return [];
   }
-}
+});
 
 // Fetch a single product by slug
-export async function getProductBySlug(
+export const getProductBySlug = cache(async (
   slug: string,
-): Promise<Product | null> {
+): Promise<Product | null> => {
   try {
     const pb = getPocketBase();
     const record = await pb
@@ -130,10 +131,10 @@ export async function getProductBySlug(
     console.error('Error fetching product by slug:', error);
     return null;
   }
-}
+});
 
 // Get all slugs for static generation
-export async function getAllProductSlugs(): Promise<string[]> {
+export const getAllProductSlugs = cache(async (): Promise<string[]> => {
   try {
     const pb = getPocketBase();
     const records = await pb
@@ -146,4 +147,4 @@ export async function getAllProductSlugs(): Promise<string[]> {
     console.error('Error fetching product slugs:', error);
     return [];
   }
-}
+});

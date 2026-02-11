@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import PocketBase from 'pocketbase';
 import { getPocketBase, POCKETBASE_URL } from './pocketbase';
 import type { User } from '@/types/auth';
@@ -7,14 +8,14 @@ function generateTempPassword(): string {
   return crypto.randomBytes(4).toString('hex');
 }
 
-async function getAdminPb(): Promise<PocketBase> {
+const getAdminPb = cache(async (): Promise<PocketBase> => {
   const pb = getPocketBase();
   await pb.collection('_superusers').authWithPassword(
     process.env.POCKETBASE_ADMIN_EMAIL!,
     process.env.POCKETBASE_ADMIN_PASSWORD!,
   );
   return pb;
-}
+});
 
 interface UserRecord {
   id: string;

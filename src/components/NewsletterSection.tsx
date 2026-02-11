@@ -344,7 +344,7 @@ export default function NewsletterSection() {
                         onChange={(e) => setName(e.target.value)}
                         onFocus={() => setFocusedField('name')}
                         onBlur={() => setFocusedField(null)}
-                        className="w-full border-2 border-transparent bg-white py-4 pl-12 pr-5 font-[var(--font-dm-sans)] text-black-deep placeholder-gray-medium transition-all duration-300 focus:border-coral/30 focus:outline-none"
+                        className="w-full border-2 border-transparent bg-white py-4 pl-12 pr-5 font-[var(--font-dm-sans)] text-black-deep placeholder-gray-medium transition-colors duration-300 focus:border-coral/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
                         style={{
                           background:
                             focusedField === 'name'
@@ -393,7 +393,7 @@ export default function NewsletterSection() {
                         onChange={(e) => setEmail(e.target.value)}
                         onFocus={() => setFocusedField('email')}
                         onBlur={() => setFocusedField(null)}
-                        className="w-full border-2 border-transparent bg-white py-4 pl-12 pr-5 font-[var(--font-dm-sans)] text-black-deep placeholder-gray-medium transition-all duration-300 focus:border-coral/30 focus:outline-none"
+                        className="w-full border-2 border-transparent bg-white py-4 pl-12 pr-5 font-[var(--font-dm-sans)] text-black-deep placeholder-gray-medium transition-colors duration-300 focus:border-coral/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
                         style={{
                           background:
                             focusedField === 'email'
@@ -402,6 +402,7 @@ export default function NewsletterSection() {
                         }}
                         required
                         autoComplete="email"
+                        spellCheck={false}
                       />
                     </div>
                   </motion.div>
@@ -454,7 +455,7 @@ export default function NewsletterSection() {
                         >
                           <Sparkles className="h-5 w-5" />
                         </motion.span>
-                        Enviando...
+                        Enviando\u2026
                       </motion.span>
                     ) : (
                       <motion.span

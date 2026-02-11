@@ -103,7 +103,7 @@ export default function CheckoutButton({
 
       {showModal && (
         <div
-          className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/50 px-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/50 px-4 backdrop-blur-sm overscroll-contain"
           onClick={handleBackdropClick}
         >
           <div
@@ -146,7 +146,8 @@ export default function CheckoutButton({
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Ej: Maria Garcia"
-                    className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors placeholder:text-gray-medium/50 focus:border-coral focus:outline-none"
+                    className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors placeholder:text-gray-medium/50 focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
+                    autoComplete="name"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
@@ -171,7 +172,9 @@ export default function CheckoutButton({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="tu@email.com"
-                    className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors placeholder:text-gray-medium/50 focus:border-coral focus:outline-none"
+                    className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors placeholder:text-gray-medium/50 focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
+                    autoComplete="email"
+                    spellCheck={false}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
@@ -204,7 +207,7 @@ export default function CheckoutButton({
                   {loading ? (
                     <span className="inline-flex items-center gap-2">
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      Redirigiendo al pago...
+                      Redirigiendo al pago\u2026
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-2">

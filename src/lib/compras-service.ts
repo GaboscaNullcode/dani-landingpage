@@ -1,14 +1,15 @@
+import { cache } from 'react';
 import { getPocketBase } from './pocketbase';
 import type { Compra } from '@/types/auth';
 
-async function getAdminPb() {
+const getAdminPb = cache(async () => {
   const pb = getPocketBase();
   await pb.collection('_superusers').authWithPassword(
     process.env.POCKETBASE_ADMIN_EMAIL!,
     process.env.POCKETBASE_ADMIN_PASSWORD!,
   );
   return pb;
-}
+});
 
 function mapCompra(record: Record<string, unknown>): Compra {
   return {

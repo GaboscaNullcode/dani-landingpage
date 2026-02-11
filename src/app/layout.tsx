@@ -20,6 +20,10 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://remotecondani.com'),
+  other: {
+    'theme-color': '#fef7f0',
+    'color-scheme': 'light',
+  },
   title: {
     default: 'Remote con Dani - Trabaja desde casa y redescubre tu libertad',
     template: '%s | Remote con Dani',
@@ -80,7 +84,7 @@ export default function RootLayout({
         {/* Skip link para accesibilidad */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[9999] focus:rounded-lg focus:bg-coral focus:px-4 focus:py-2 focus:text-white focus:outline-none"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[9999] focus:rounded-lg focus:bg-coral focus:px-4 focus:py-2 focus:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-coral"
         >
           Saltar al contenido principal
         </a>

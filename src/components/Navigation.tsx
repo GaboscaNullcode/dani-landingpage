@@ -48,12 +48,12 @@ export default function Navigation() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.175, 0.885, 0.32, 1.275] }}
-      className={`fixed left-0 right-0 top-0 z-[1000] px-4 transition-all duration-500 ${
+      className={`fixed left-0 right-0 top-0 z-[1000] px-4 transition-[padding] duration-500 ${
         isScrolled ? 'py-3' : 'py-5'
       }`}
     >
       <motion.nav
-        className={`mx-auto flex items-center justify-between transition-all duration-500 ${
+        className={`mx-auto flex items-center justify-between transition-[max-width,background-color,padding,box-shadow,backdrop-filter] duration-500 ${
           isScrolled
             ? 'max-w-4xl rounded-full bg-white/80 px-6 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl'
             : 'container-custom bg-transparent px-6 py-0'
@@ -80,7 +80,7 @@ export default function Navigation() {
         </Link>
 
         {/* Desktop Menu */}
-        <ul className={`hidden items-center md:flex transition-all duration-500 ${isScrolled ? 'gap-5' : 'gap-8'}`}>
+        <ul className={`hidden items-center md:flex transition-[gap] duration-500 ${isScrolled ? 'gap-5' : 'gap-8'}`}>
           {navItems.map((item, index) => (
             <motion.li
               key={item.text}
