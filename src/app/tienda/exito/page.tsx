@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { CheckCircle, ArrowLeft, Mail, User } from 'lucide-react';
-import { stripe } from '@/lib/stripe';
+import { getStripe } from '@/lib/stripe';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,7 +24,7 @@ export default async function ExitoPage({
 
   if (session_id) {
     try {
-      const session = await stripe.checkout.sessions.retrieve(session_id, {
+      const session = await getStripe().checkout.sessions.retrieve(session_id, {
         expand: ['line_items.data.price.product'],
       });
 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stripe } from '@/lib/stripe';
+import { getStripe } from '@/lib/stripe';
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,12 +13,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const price = await stripe.prices.retrieve(priceId);
+    const stripeClient = getStripe();
+    const price = await stripeClient.prices.retrieve(priceId);
     const isSubscription = !!price.recurring;
 
     const domain = process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost:3000';
 
-    const session = await stripe.checkout.sessions.create({
+    const session = await stripeClient.checkout.sessions.create({
       line_items: [{ price: priceId, quantity: 1 }],
       mode: isSubscription ? 'subscription' : 'payment',
       success_url: `${domain}/tienda/exito?session_id={CHECKOUT_SESSION_ID}`,
