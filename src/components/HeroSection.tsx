@@ -302,13 +302,13 @@ export default function HeroSection() {
 
         {/* Image Column */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, rotate: -5 }}
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          initial={{ scale: 0.95, rotate: -2 }}
+          animate={{ scale: 1, rotate: 0 }}
           transition={{
-            duration: 1,
-            delay: 0.4,
+            duration: 0.8,
+            delay: 0.2,
             type: 'spring',
-            stiffness: 100,
+            stiffness: 120,
           }}
           className="relative hidden lg:block"
         >
@@ -339,6 +339,7 @@ export default function HeroSection() {
                 height={650}
                 className="relative z-10 w-full object-cover"
                 priority
+                fetchPriority="high"
               />
             </div>
 
