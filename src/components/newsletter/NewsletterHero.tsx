@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { motion } from 'motion/react';
 import { Mail, Gift, Check, Sparkles, BookOpen, Video, Users, ArrowRight } from 'lucide-react';
+import { useNewsletterForm } from '@/hooks/useNewsletterForm';
 
 const benefits = [
   {
@@ -28,21 +28,8 @@ const benefits = [
 ];
 
 export default function NewsletterHero() {
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simulate API call - Replace with actual newsletter service
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    setIsSuccess(true);
-    setIsSubmitting(false);
-  };
+  const { name, setName, email, setEmail, isSubmitting, isSuccess, error, handleSubmit } =
+    useNewsletterForm('newsletter_page');
 
   return (
     <>
@@ -195,6 +182,12 @@ export default function NewsletterHero() {
                             </>
                           )}
                         </button>
+
+                        {error && (
+                          <p className="text-center text-sm font-medium text-red-500">
+                            {error}
+                          </p>
+                        )}
 
                         <p className="text-center text-xs text-gray-medium">
                           Al suscribirte aceptas recibir emails de Remote con Dani.

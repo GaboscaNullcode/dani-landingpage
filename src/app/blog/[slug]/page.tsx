@@ -4,6 +4,7 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import PostHeader from '@/components/blog/PostHeader';
 import PostContent from '@/components/blog/PostContent';
+import BlogNewsletterCTA from '@/components/blog/BlogNewsletterCTA';
 import RelatedArticles from '@/components/blog/RelatedArticles';
 import {
   getArticleBySlug,
@@ -149,6 +150,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       <main id="main-content">
         <PostHeader article={article} />
         <PostContent content={article.content || defaultContent} />
+        <BlogNewsletterCTA />
         {relatedArticles.length > 0 && (
           <RelatedArticles articles={relatedArticles} />
         )}

@@ -13,24 +13,16 @@ import {
   Star,
   Zap,
   BookOpen,
+  Check,
 } from 'lucide-react';
+import { useNewsletterForm } from '@/hooks/useNewsletterForm';
 
 export default function NewsletterSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const [focusedField, setFocusedField] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    // Simulate submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log('Newsletter subscription:', { name, email });
-    setIsSubmitting(false);
-  };
+  const { name, setName, email, setEmail, isSubmitting, isSuccess, error, handleSubmit } =
+    useNewsletterForm('home');
 
   const benefits = [
     { icon: BookOpen, text: 'Plantilla paso a paso para tu título' },
@@ -292,7 +284,30 @@ export default function NewsletterSection() {
                 </p>
               </div>
 
-              {/* Form */}
+              {/* Form / Success */}
+              {isSuccess ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="py-8 text-center"
+                >
+                  <div
+                    className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
+                    style={{
+                      background: 'linear-gradient(135deg, #6ee7b7 0%, #34d399 100%)',
+                      boxShadow: '0 12px 32px rgba(52, 211, 153, 0.4)',
+                    }}
+                  >
+                    <Check className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="font-[var(--font-headline)] text-xl font-bold text-black-deep md:text-2xl">
+                    Listo, {name}!
+                  </h3>
+                  <p className="mt-2 text-sm text-gray-medium">
+                    Revisa tu inbox. Te enviamos la guia y contenido exclusivo.
+                  </p>
+                </motion.div>
+              ) : (
               <form onSubmit={handleSubmit} className="relative space-y-5">
                 {/* Name field */}
                 <div className="relative">
@@ -461,6 +476,13 @@ export default function NewsletterSection() {
                   </AnimatePresence>
                 </motion.button>
 
+                {/* Error display */}
+                {error && (
+                  <p className="text-center text-sm font-medium text-red-500">
+                    {error}
+                  </p>
+                )}
+
                 {/* Trust indicators */}
                 <div className="flex flex-col items-center gap-3 pt-2">
                   <div className="flex items-center gap-2 text-xs text-gray-medium">
@@ -479,6 +501,7 @@ export default function NewsletterSection() {
                   </div>
                 </div>
               </form>
+              )}
             </div>
           </motion.div>
         </motion.div>

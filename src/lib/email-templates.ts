@@ -102,6 +102,27 @@ export function getWelcomeEmailHtml(
   return baseLayout(content);
 }
 
+export function getNewsletterWelcomeEmailHtml(
+  name: string,
+  guideUrl: string,
+): string {
+  const content = `
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Bienvenida, ${name}!</h2>
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Gracias por unirte a la comunidad de <strong style="color:${BRAND.dark};">Remote con Dani</strong>.
+      Aqui tienes tu guia gratuita como te prometi:
+    </p>
+    ${button('Descargar mi Guia', guideUrl)}
+    <p style="margin:24px 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Cada semana recibiras en tu inbox tips y estrategias para construir tu carrera remota.
+      Desde optimizar tu perfil hasta conseguir clientes internacionales.
+    </p>
+    <p style="margin:0 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
+      Si tienes alguna pregunta, simplemente responde a este email.
+    </p>`;
+  return baseLayout(content);
+}
+
 export function getCommunityEmailHtml(
   productName: string,
   whatsappLink: string,
