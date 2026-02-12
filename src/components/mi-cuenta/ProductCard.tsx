@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import {
-  Download,
+  BookOpen,
   ExternalLink,
   MessageCircle,
   Lock,
@@ -169,14 +169,13 @@ function PurchasedCard({ compra, index }: { compra: Compra; index: number }) {
         {!isCancelled && (
           <div className="mt-auto">
             {producto.categoria === 'ebook' && (
-              <a
-                href={`/api/descargas/${compra.id}`}
-                download
+              <Link
+                href={`/mi-cuenta/viewer/${compra.id}`}
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
               >
-                <Download className="h-4 w-4" />
-                Descargar
-              </a>
+                <BookOpen className="h-4 w-4" />
+                Ver contenido
+              </Link>
             )}
 
             {(producto.categoria === 'curso' ||

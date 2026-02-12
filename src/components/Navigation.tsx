@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, memo } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -19,15 +19,30 @@ export default memo(function Navigation() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
+  const lastScrollY = useRef(0);
+
+  const isViewerPage = pathname.startsWith('/mi-cuenta/viewer/');
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const currentY = window.scrollY;
+      setIsScrolled(currentY > 50);
+
+      if (isViewerPage) {
+        if (currentY > lastScrollY.current && currentY > 80) {
+          setIsHidden(true);
+        } else {
+          setIsHidden(false);
+        }
+      }
+
+      lastScrollY.current = currentY;
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isViewerPage]);
 
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -50,9 +65,9 @@ export default memo(function Navigation() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.175, 0.885, 0.32, 1.275] }}
-      className={`fixed left-0 right-0 top-0 z-[1000] px-4 transition-[padding] duration-500 ${
+      className={`fixed left-0 right-0 top-0 z-[1000] px-4 transition-[padding,transform] duration-500 ${
         isScrolled ? 'py-3' : 'py-5'
-      }`}
+      } ${isHidden ? '-translate-y-full' : 'translate-y-0'}`}
     >
       <motion.nav
         className={`mx-auto flex items-center justify-between transition-[max-width,background-color,padding,box-shadow,backdrop-filter] duration-500 ${
