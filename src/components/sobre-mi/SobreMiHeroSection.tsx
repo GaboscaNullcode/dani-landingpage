@@ -140,7 +140,7 @@ export default function SobreMiHeroSection() {
                 <Heart className="h-6 w-6 fill-pink text-pink" />
               </motion.div>
               <span className="text-sm font-medium text-gray-medium">
-                Creando comunidad desde 2017
+                Creando Comunidad desde el 2024
               </span>
             </motion.div>
           </motion.div>
