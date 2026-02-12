@@ -61,108 +61,110 @@ export default memo(function Navigation() {
   };
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: [0.175, 0.885, 0.32, 1.275] }}
-      className={`fixed left-0 right-0 top-0 z-[1000] px-4 transition-[padding,transform] duration-500 ${
-        isScrolled ? 'py-3' : 'py-5'
-      } ${isHidden ? '-translate-y-full' : 'translate-y-0'}`}
-    >
-      <motion.nav
-        className={`mx-auto flex items-center justify-between transition-[max-width,background-color,padding,box-shadow,backdrop-filter] duration-500 ${
-          isScrolled
-            ? 'max-w-4xl rounded-full bg-white/80 px-6 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl'
-            : 'container-custom bg-transparent px-6 py-0'
-        }`}
+    <>
+      <motion.header
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6, ease: [0.175, 0.885, 0.32, 1.275] }}
+        className={`fixed left-0 right-0 top-0 z-[1000] px-4 transition-[padding,transform] duration-500 ${
+          isScrolled ? 'py-3' : 'py-5'
+        } ${isHidden ? '-translate-y-full' : 'translate-y-0'}`}
       >
-        {/* Logo */}
-        <Link href="/" className="relative z-[1002]">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 400 }}
-          >
-            <Image
-              src="/images/logos/logo-blanco-small.png"
-              alt="Remote con Dani"
-              width={160}
-              height={44}
-              className={`w-auto brightness-0 transition-all duration-500 ${
-                isScrolled ? 'h-8' : 'h-11'
-              }`}
-              priority
-            />
-          </motion.div>
-        </Link>
+        <motion.nav
+          className={`mx-auto flex items-center justify-between transition-[max-width,background-color,padding,box-shadow,backdrop-filter] duration-500 ${
+            isScrolled
+              ? 'max-w-4xl rounded-full bg-white/80 px-6 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl'
+              : 'container-custom bg-transparent px-6 py-0'
+          }`}
+        >
+          {/* Logo */}
+          <Link href="/" className="relative z-[1002]">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: 'spring', stiffness: 400 }}
+            >
+              <Image
+                src="/images/logos/logo-blanco-small.png"
+                alt="Remote con Dani"
+                width={160}
+                height={44}
+                className={`w-auto brightness-0 transition-all duration-500 ${
+                  isScrolled ? 'h-8' : 'h-11'
+                }`}
+                priority
+              />
+            </motion.div>
+          </Link>
 
-        {/* Desktop Menu */}
-        <ul className={`hidden items-center md:flex transition-[gap] duration-500 ${isScrolled ? 'gap-5' : 'gap-8'}`}>
-          {navItems.map((item, index) => (
+          {/* Desktop Menu */}
+          <ul className={`hidden items-center md:flex transition-[gap] duration-500 ${isScrolled ? 'gap-5' : 'gap-8'}`}>
+            {navItems.map((item, index) => (
+              <motion.li
+                key={item.text}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+              >
+                <Link
+                  href={item.href}
+                  aria-current={pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)) ? 'page' : undefined}
+                  className={`nav-link-underline group relative font-[var(--font-dm-sans)] font-semibold tracking-wide transition-colors duration-500 hover:text-coral ${
+                    isScrolled ? 'text-xs' : 'text-sm'
+                  } ${pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)) ? 'text-coral' : 'text-gray-dark'}`}
+                >
+                  {item.text}
+                </Link>
+              </motion.li>
+            ))}
             <motion.li
-              key={item.text}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: 0.5 }}
             >
               <Link
-                href={item.href}
-                aria-current={pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)) ? 'page' : undefined}
-                className={`nav-link-underline group relative font-[var(--font-dm-sans)] font-semibold tracking-wide transition-colors duration-500 hover:text-coral ${
-                  isScrolled ? 'text-xs' : 'text-sm'
-                } ${pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)) ? 'text-coral' : 'text-gray-dark'}`}
+                href="/mi-cuenta"
+                className={`flex items-center justify-center rounded-full border-2 border-gray-light text-gray-dark transition-all duration-300 hover:border-coral hover:text-coral ${
+                  isScrolled ? 'h-8 w-8' : 'h-9 w-9'
+                }`}
+                aria-label="Mi Cuenta"
               >
-                {item.text}
+                <User className={isScrolled ? 'h-3.5 w-3.5' : 'h-4 w-4'} />
               </Link>
             </motion.li>
-          ))}
-          <motion.li
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, delay: 0.5 }}
-          >
-            <Link
-              href="/mi-cuenta"
-              className={`flex items-center justify-center rounded-full border-2 border-gray-light text-gray-dark transition-all duration-300 hover:border-coral hover:text-coral ${
-                isScrolled ? 'h-8 w-8' : 'h-9 w-9'
-              }`}
-              aria-label="Mi Cuenta"
+            <motion.li
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: 0.6 }}
             >
-              <User className={isScrolled ? 'h-3.5 w-3.5' : 'h-4 w-4'} />
-            </Link>
-          </motion.li>
-          <motion.li
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, delay: 0.6 }}
-          >
-            <Link
-              href="/empezar"
-              className={`btn-shimmer group relative inline-flex items-center gap-2 rounded-full font-[var(--font-headline)] font-bold text-white transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(255,107,107,0.4)] ${
-                isScrolled ? 'px-4 py-2 text-xs' : 'px-6 py-3 text-sm'
-              }`}
-              style={{
-                background: 'var(--gradient-coral-pink)',
-              }}
-            >
-              <span>Empezar</span>
-              <motion.div
-                animate={{ rotate: [0, 15, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
+              <Link
+                href="/empezar"
+                className={`btn-shimmer group relative inline-flex items-center gap-2 rounded-full font-[var(--font-headline)] font-bold text-white transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(255,107,107,0.4)] ${
+                  isScrolled ? 'px-4 py-2 text-xs' : 'px-6 py-3 text-sm'
+                }`}
+                style={{
+                  background: 'var(--gradient-coral-pink)',
+                }}
               >
-                <Sparkles className={isScrolled ? 'h-3 w-3' : 'h-4 w-4'} />
-              </motion.div>
-            </Link>
-          </motion.li>
-        </ul>
+                <span>Empezar</span>
+                <motion.div
+                  animate={{ rotate: [0, 15, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <Sparkles className={isScrolled ? 'h-3 w-3' : 'h-4 w-4'} />
+                </motion.div>
+              </Link>
+            </motion.li>
+          </ul>
 
-      </motion.nav>
+        </motion.nav>
+      </motion.header>
 
-      {/* Hamburger Button - Outside nav to avoid container restrictions */}
+      {/* Hamburger Button - Outside header to avoid transform containment */}
       <button
-        className={`absolute right-4 z-[1002] flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-xl bg-white shadow-md md:hidden ${
-          isScrolled ? 'top-1/2 -translate-y-1/2' : 'top-1/2 -translate-y-1/2'
-        }`}
+        className={`fixed right-4 z-[1002] flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-xl bg-white shadow-md md:hidden ${
+          isScrolled ? 'top-3' : 'top-5'
+        } ${isHidden ? '-translate-y-[200%]' : 'translate-y-0'} transition-[top,transform] duration-500`}
         onClick={toggleMobileMenu}
         aria-label="Toggle menu"
         aria-expanded={isMobileMenuOpen}
@@ -190,7 +192,7 @@ export default memo(function Navigation() {
         />
       </button>
 
-      {/* Mobile Menu Overlay - Outside nav to avoid container restrictions */}
+      {/* Mobile Menu Overlay - Outside header to avoid transform containment */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -284,6 +286,6 @@ export default memo(function Navigation() {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </>
   );
 });
