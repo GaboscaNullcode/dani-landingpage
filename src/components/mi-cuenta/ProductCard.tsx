@@ -1,5 +1,8 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion } from 'motion/react';
 import {
   Download,
   ExternalLink,
@@ -14,11 +17,13 @@ import type { Product } from '@/types/tienda';
 interface PurchasedProductCardProps {
   compra: Compra;
   variant: 'purchased';
+  index?: number;
 }
 
 interface LockedProductCardProps {
   product: Product;
   variant: 'locked';
+  index?: number;
 }
 
 type ProductCardProps = PurchasedProductCardProps | LockedProductCardProps;
@@ -40,15 +45,23 @@ const categoryColors: Record<string, string> = {
 };
 
 export default function ProductCard(props: ProductCardProps) {
+  const index = props.index ?? 0;
+
   if (props.variant === 'locked') {
-    return <LockedCard product={props.product} />;
+    return <LockedCard product={props.product} index={index} />;
   }
-  return <PurchasedCard compra={props.compra} />;
+  return <PurchasedCard compra={props.compra} index={index} />;
 }
 
-function LockedCard({ product }: { product: Product }) {
+function LockedCard({ product, index }: { product: Product; index: number }) {
   return (
-    <div className="group relative overflow-hidden rounded-2xl bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)]">
+    <motion.div
+      initial={{ opacity: 0, y: 25 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={{ y: -6, transition: { duration: 0.25 } }}
+      className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)]"
+    >
       <div className="relative aspect-video w-full overflow-hidden">
         <Image
           src={product.image}
@@ -61,7 +74,7 @@ function LockedCard({ product }: { product: Product }) {
         </div>
       </div>
 
-      <div className="p-5">
+      <div className="flex flex-1 flex-col p-5">
         <div className="mb-3 flex items-center gap-2">
           <span
             className={`rounded-full px-3 py-1 text-xs font-semibold ${
@@ -82,25 +95,29 @@ function LockedCard({ product }: { product: Product }) {
 
         <Link
           href={`/tienda/${product.slug}`}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+          className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
         >
           Obtener acceso
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
-function PurchasedCard({ compra }: { compra: Compra }) {
+function PurchasedCard({ compra, index }: { compra: Compra; index: number }) {
   const producto = compra.expand?.producto;
   if (!producto) return null;
 
   const isCancelled = compra.estado === 'cancelada';
 
   return (
-    <div
-      className={`group relative overflow-hidden rounded-2xl bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)] ${
+    <motion.div
+      initial={{ opacity: 0, y: 25 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={!isCancelled ? { y: -6, transition: { duration: 0.25 } } : undefined}
+      className={`group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)] ${
         isCancelled ? 'opacity-70' : ''
       }`}
     >
@@ -123,7 +140,7 @@ function PurchasedCard({ compra }: { compra: Compra }) {
         </div>
       )}
 
-      <div className="p-5">
+      <div className="flex flex-1 flex-col p-5">
         <div className="mb-3 flex items-center gap-2">
           <span
             className={`rounded-full px-3 py-1 text-xs font-semibold ${
@@ -150,12 +167,12 @@ function PurchasedCard({ compra }: { compra: Compra }) {
         </h3>
 
         {!isCancelled && (
-          <div>
+          <div className="mt-auto">
             {producto.categoria === 'ebook' && (
               <a
                 href={`/api/descargas/${compra.id}`}
                 download
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
               >
                 <Download className="h-4 w-4" />
                 Descargar
@@ -178,7 +195,7 @@ function PurchasedCard({ compra }: { compra: Compra }) {
                 href={producto.whatsapp_link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-green-500 to-green-600 px-4 py-2.5 text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-green-500 to-green-600 px-4 py-2.5 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
               >
                 <MessageCircle className="h-4 w-4" />
                 Ir al grupo
@@ -187,6 +204,6 @@ function PurchasedCard({ compra }: { compra: Compra }) {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
