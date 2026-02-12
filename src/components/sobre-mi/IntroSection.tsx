@@ -14,7 +14,7 @@ export default function IntroSection() {
       id="intro"
       ref={ref}
       className="relative overflow-hidden bg-white"
-      style={{ padding: 'var(--section-padding) 2rem' }}
+      style={{ padding: 'var(--section-padding) 0' }}
     >
       {/* Background decorative elements */}
       <div className="pointer-events-none absolute inset-0">

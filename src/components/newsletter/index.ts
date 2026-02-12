@@ -1,1 +1,1 @@
-export { default as NewsletterHero } from './NewsletterHero';
+// NewsletterHero replaced by shared NewsletterSection component

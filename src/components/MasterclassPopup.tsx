@@ -67,7 +67,7 @@ export default function MasterclassPopup() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 100, scale: 0.8 }}
           transition={{ type: 'spring', stiffness: 260, damping: 25 }}
-          className="fixed bottom-6 left-6 z-[999] w-[calc(100%-3rem)] max-w-sm sm:w-auto"
+          className="fixed bottom-4 left-4 right-20 z-[999] max-w-sm md:bottom-6 md:left-6 md:right-auto md:w-auto"
         >
           <div className="relative overflow-hidden rounded-2xl bg-white p-5 shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
             {/* Background gradient */}

@@ -10,8 +10,8 @@ import {
   QuickNavSection,
   MasterclassSection,
   BlogHighlightsSection,
-  NewsletterStageSection,
 } from '@/components/stages/stage1';
+import NewsletterFormCard from '@/components/NewsletterFormCard';
 
 export const metadata: Metadata = {
   title: 'Recursos Gratuitos - Stage 1 | Remote con Dani',
@@ -46,7 +46,13 @@ export default function RecursosGratuitosPage() {
         <MasterclassSection />
         <BlogHighlightsSection />
         <WhatsAppCommunityCard />
-        <NewsletterStageSection />
+        <section className="bg-cream/50 py-16 md:py-20">
+          <div className="container-custom">
+            <div className="mx-auto max-w-md">
+              <NewsletterFormCard />
+            </div>
+          </div>
+        </section>
         <StageTransitionCTA
           text="¿Ya sientes que esto sí es para ti, pero te abruma la información?"
           description="Descubre el paso a paso para avanzar con claridad."

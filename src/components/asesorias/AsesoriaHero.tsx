@@ -6,8 +6,10 @@ import { Calendar, Clock, Video, ArrowDown } from 'lucide-react';
 export default function AsesoriaHero() {
   return (
     <section
-      className="relative min-h-[90vh] overflow-hidden pt-32 pb-20"
+      className="relative min-h-[90vh] overflow-hidden"
       style={{
+        paddingTop: 'var(--hero-padding-top)',
+        paddingBottom: 'var(--section-padding)',
         background: 'linear-gradient(135deg, #fef7f0 0%, #ffecd2 50%, #fce7f3 100%)',
       }}
     >

@@ -16,7 +16,7 @@ export default function PostHeader({ article }: PostHeaderProps) {
     <header
       className="relative overflow-hidden"
       style={{
-        paddingTop: 'calc(80px + 3rem)',
+        paddingTop: 'var(--hero-padding-top)',
         paddingBottom: '0',
         background: 'linear-gradient(135deg, #fef7f0 0%, #ffecd2 50%, #fce7f3 100%)',
       }}

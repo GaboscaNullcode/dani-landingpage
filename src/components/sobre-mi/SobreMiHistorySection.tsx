@@ -348,7 +348,7 @@ export default function SobreMiHistorySection() {
       id="history"
       ref={containerRef}
       className="relative overflow-hidden bg-teal-dark"
-      style={{ padding: 'var(--section-padding) 2rem' }}
+      style={{ padding: 'var(--section-padding) 0' }}
     >
       {/* Background decorative blobs */}
       <div className="pointer-events-none absolute inset-0">

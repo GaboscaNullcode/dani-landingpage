@@ -13,7 +13,7 @@ export default function SobreMiCTASection() {
     <section
       ref={ref}
       className="relative overflow-hidden bg-gradient-to-br from-teal-dark via-[#2d3f42] to-teal-dark"
-      style={{ padding: 'var(--section-padding) 2rem' }}
+      style={{ padding: 'var(--section-padding) 0' }}
     >
       {/* Background decorative elements */}
       <div className="pointer-events-none absolute inset-0">

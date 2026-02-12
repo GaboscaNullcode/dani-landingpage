@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { NewsletterHero } from '@/components/newsletter';
+import NewsletterSection from '@/components/NewsletterSection';
 
 export const metadata: Metadata = {
   title: 'Newsletter - Remote con Dani | Guía Gratuita y Masterclass',
@@ -28,7 +28,7 @@ export default function NewsletterPage() {
     <>
       <Navigation />
       <main id="main-content">
-        <NewsletterHero />
+        <NewsletterSection source="newsletter_page" />
       </main>
       <Footer />
     </>

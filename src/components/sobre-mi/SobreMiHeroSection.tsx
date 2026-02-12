@@ -13,7 +13,10 @@ export default function SobreMiHeroSection() {
     <section
       ref={ref}
       className="relative min-h-[90vh] overflow-hidden bg-cream"
-      style={{ padding: 'var(--section-padding) 2rem' }}
+      style={{
+        paddingTop: 'var(--hero-padding-top)',
+        paddingBottom: 'var(--section-padding)',
+      }}
     >
       {/* Background decorative blobs */}
       <div className="pointer-events-none absolute inset-0">

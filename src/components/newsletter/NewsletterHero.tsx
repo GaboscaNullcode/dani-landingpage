@@ -35,8 +35,10 @@ export default function NewsletterHero() {
     <>
       {/* Hero Section */}
       <section
-        className="relative min-h-screen overflow-hidden pt-32 pb-20"
+        className="relative min-h-screen overflow-hidden"
         style={{
+          paddingTop: 'var(--hero-padding-top)',
+          paddingBottom: 'var(--section-padding)',
           background: 'linear-gradient(135deg, #fef7f0 0%, #ffecd2 50%, #fce7f3 100%)',
         }}
       >

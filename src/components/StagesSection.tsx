@@ -124,7 +124,7 @@ export default function StagesSection() {
       ref={ref}
       className="relative overflow-hidden"
       style={{
-        padding: 'var(--section-padding) 2rem',
+        padding: 'var(--section-padding) 0',
         background:
           'linear-gradient(135deg, #fef7f0 0%, #fce7f3 50%, #fef7f0 100%)',
       }}

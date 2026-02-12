@@ -9,7 +9,13 @@ interface StageHeroProps {
 
 export default function StageHero({ title, subtitle }: StageHeroProps) {
   return (
-    <section className="relative overflow-hidden bg-teal-dark pb-20 pt-40">
+    <section
+      className="relative overflow-hidden bg-teal-dark"
+      style={{
+        paddingTop: 'var(--hero-padding-top)',
+        paddingBottom: 'var(--section-padding)',
+      }}
+    >
       {/* Decorative blobs */}
       <div className="pointer-events-none absolute inset-0">
         <div

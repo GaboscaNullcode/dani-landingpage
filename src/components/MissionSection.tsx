@@ -18,7 +18,7 @@ export default function MissionSection() {
       id="mission"
       ref={ref}
       className="bg-white"
-      style={{ padding: 'var(--section-padding) 2rem' }}
+      style={{ padding: 'var(--section-padding) 0' }}
     >
       <div className="container-custom mx-auto max-w-[1000px] text-center">
         {/* Header */}

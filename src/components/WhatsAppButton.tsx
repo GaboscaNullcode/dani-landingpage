@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { MessageCircle } from 'lucide-react';
+import WhatsAppIcon from '@/components/ui/WhatsAppIcon';
 
 interface WhatsAppButtonProps {
   phoneNumber?: string;
@@ -20,7 +20,7 @@ export default function WhatsAppButton({
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 z-[1000] flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-shadow hover:shadow-xl md:h-14 md:w-14"
+      className="fixed bottom-4 right-4 z-[1000] flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-shadow hover:shadow-xl md:bottom-6 md:right-6 md:h-14 md:w-14"
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 1, type: 'spring', stiffness: 260, damping: 20 }}
@@ -32,7 +32,7 @@ export default function WhatsAppButton({
       <span className="absolute h-full w-full animate-ping rounded-full bg-[#25D366] opacity-30" />
 
       {/* Icon */}
-      <MessageCircle className="relative h-7 w-7 fill-current" />
+      <WhatsAppIcon className="relative h-6 w-6 md:h-7 md:w-7" />
     </motion.a>
   );
 }

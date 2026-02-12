@@ -113,7 +113,7 @@ function TestimonialCard({
         y: -12,
         scale: 1.03,
       }}
-      className="group relative w-[340px] flex-shrink-0 overflow-hidden rounded-[28px] bg-white p-1 shadow-[0_8px_40px_rgba(0,0,0,0.06)] transition-all duration-500 hover:shadow-[0_25px_70px_rgba(0,0,0,0.12)] md:w-[380px]"
+      className="group relative w-[300px] flex-shrink-0 overflow-hidden rounded-[28px] bg-white p-1 shadow-[0_8px_40px_rgba(0,0,0,0.06)] transition-all duration-500 hover:shadow-[0_25px_70px_rgba(0,0,0,0.12)] md:w-[380px]"
     >
       {/* Animated gradient border on hover */}
       <div
@@ -334,9 +334,9 @@ export default function TestimonialsSection() {
         {/* Infinite Carousel */}
         <div className="relative">
           {/* Gradient fade left */}
-          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-white to-transparent md:w-32" />
+          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-32 bg-gradient-to-r from-white to-transparent md:w-48" />
           {/* Gradient fade right */}
-          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-white to-transparent md:w-32" />
+          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-32 bg-gradient-to-l from-white to-transparent md:w-48" />
 
           {/* Carousel track */}
           <div className="overflow-hidden py-4">

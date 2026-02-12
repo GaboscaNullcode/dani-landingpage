@@ -60,9 +60,10 @@ export default async function CategoryPage({ params }: PageProps) {
       <main id="main-content">
         {/* Category Hero */}
         <section
-          className="relative overflow-hidden pt-[calc(80px+3rem)]"
+          className="relative overflow-hidden"
           style={{
-            paddingBottom: '2rem',
+            paddingTop: 'var(--hero-padding-top)',
+            paddingBottom: 'var(--section-padding)',
             background:
               'linear-gradient(135deg, #fef7f0 0%, #ffecd2 50%, #fce7f3 100%)',
           }}

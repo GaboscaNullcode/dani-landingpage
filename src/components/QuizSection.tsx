@@ -612,7 +612,7 @@ export default function QuizSection() {
       <div
         className="container-custom relative z-10"
         style={{
-          padding: 'var(--section-padding) 2rem',
+          padding: 'var(--section-padding) 0',
           paddingTop: 'clamp(10rem, 18vw, 14rem)',
         }}
       >

@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
         hostname: 'securenlandco.b-cdn.net',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'd1yei2z3i6k35z.cloudfront.net',
+        pathname: '/**',
+      },
     ],
   },
   experimental: {

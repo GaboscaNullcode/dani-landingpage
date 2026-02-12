@@ -133,7 +133,7 @@ export default function HeroSection() {
     <section
       id="hero"
       ref={heroRef}
-      className="noise-overlay relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-32"
+      className="noise-overlay relative flex min-h-screen items-center justify-center overflow-hidden py-32"
       style={{
         background:
           'linear-gradient(135deg, #fef7f0 0%, #ffecd2 40%, #fce7f3 100%)',

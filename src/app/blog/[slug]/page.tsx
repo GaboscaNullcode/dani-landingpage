@@ -4,7 +4,7 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import PostHeader from '@/components/blog/PostHeader';
 import PostContent from '@/components/blog/PostContent';
-import BlogNewsletterCTA from '@/components/blog/BlogNewsletterCTA';
+import NewsletterFormCard from '@/components/NewsletterFormCard';
 import RelatedArticles from '@/components/blog/RelatedArticles';
 import {
   getArticleBySlug,
@@ -155,7 +155,13 @@ export default async function BlogPostPage({ params }: PageProps) {
       <main id="main-content">
         <PostHeader article={article} />
         <PostContent content={article.content || defaultContent} />
-        <BlogNewsletterCTA />
+        <section className="bg-cream/50 py-16 md:py-20">
+          <div className="container-custom">
+            <div className="mx-auto max-w-md">
+              <NewsletterFormCard source="blog" />
+            </div>
+          </div>
+        </section>
         {relatedArticles.length > 0 && (
           <RelatedArticles articles={relatedArticles} />
         )}

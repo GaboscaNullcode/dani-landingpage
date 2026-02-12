@@ -70,7 +70,7 @@ export default function SobreMiExperienceSection() {
       id="experience"
       ref={ref}
       className="bg-cream"
-      style={{ padding: 'var(--section-padding) 2rem' }}
+      style={{ padding: 'var(--section-padding) 0' }}
     >
       <div className="container-custom">
         {/* Header */}

@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { MessageCircle, Briefcase, Video, Users, Globe } from 'lucide-react';
+import { Briefcase, Video, Users, Globe } from 'lucide-react';
+import WhatsAppIcon from '@/components/ui/WhatsAppIcon';
 
 const communityItems = [
   { icon: Briefcase, text: 'Ofertas laborales 2x/semana' },
@@ -23,7 +24,7 @@ export default function WhatsAppCommunityCard() {
         >
           <div className="mb-2 flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-500 text-white">
-              <MessageCircle className="h-6 w-6" />
+              <WhatsAppIcon className="h-6 w-6" />
             </div>
             <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-700">
               COMUNIDAD
@@ -69,7 +70,7 @@ export default function WhatsAppCommunityCard() {
             whileTap={{ scale: 0.98 }}
             className="mt-8 inline-flex items-center gap-2 rounded-full bg-green-500 px-8 py-4 font-[var(--font-headline)] font-bold text-white transition-shadow duration-300 hover:shadow-[0_10px_30px_rgba(34,197,94,0.3)]"
           >
-            <MessageCircle className="h-5 w-5" />
+            <WhatsAppIcon className="h-5 w-5" />
             Unirme al grupo de WhatsApp
           </motion.a>
         </motion.div>

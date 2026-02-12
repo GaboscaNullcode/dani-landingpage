@@ -24,7 +24,7 @@ export default function BlogPreviewSection({
       ref={ref}
       className="relative overflow-hidden"
       style={{
-        padding: 'var(--section-padding) 2rem',
+        padding: 'var(--section-padding) 0',
         background:
           'linear-gradient(180deg, #ffffff 0%, #fef7f0 40%, #fce7f3 100%)',
       }}
