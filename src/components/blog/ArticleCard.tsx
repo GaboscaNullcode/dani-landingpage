@@ -44,10 +44,10 @@ function ArticleCard({
             <div className="mb-3 flex items-center gap-3">
               <span
                 className="h-1.5 w-1.5 rounded-full"
-                style={{ backgroundColor: '#ff6b6b' }}
+                style={{ backgroundColor: article.category?.accentColor || '#ff6b6b' }}
               />
               <span className="text-sm font-medium text-gray-medium">
-                Blog
+                {article.category?.name || 'Blog'}
               </span>
               <span className="text-gray-300">·</span>
               <span className="text-sm text-gray-medium">{formatDate(article.publishedAt)}</span>
@@ -94,10 +94,10 @@ function ArticleCard({
         <div className="mb-3 flex items-center gap-3">
           <span
             className="h-1.5 w-1.5 rounded-full"
-            style={{ backgroundColor: '#ff6b6b' }}
+            style={{ backgroundColor: article.category?.accentColor || '#ff6b6b' }}
           />
           <span className="text-xs font-medium uppercase tracking-wide text-gray-medium">
-            Blog
+            {article.category?.name || 'Blog'}
           </span>
         </div>
 

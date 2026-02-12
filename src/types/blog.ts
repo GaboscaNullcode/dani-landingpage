@@ -1,12 +1,32 @@
 import type { RecordModel } from 'pocketbase';
 
+// PocketBase categorias_blog record
+export interface CategoriaBlogRecord extends RecordModel {
+  nombre: string;
+  slug: string;
+  color_acento: string;
+}
+
 // PocketBase blog record structure
 export interface BlogRecord extends RecordModel {
   titulo: string;
   contenido: string;
   portada_url: string;
+  categoria: string;
   created: string;
   updated: string;
+  expand?: {
+    categoria?: CategoriaBlogRecord;
+  };
+}
+
+// Frontend blog category
+export interface BlogCategory {
+  id: string;
+  name: string;
+  slug: string;
+  accentColor: string;
+  articleCount: number;
 }
 
 // Transformed blog article for frontend use
@@ -20,6 +40,12 @@ export interface BlogArticle {
   publishedAt: string;
   updatedAt: string;
   readTime: number;
+  category?: {
+    id: string;
+    name: string;
+    slug: string;
+    accentColor: string;
+  };
 }
 
 // Helper to generate slug from title

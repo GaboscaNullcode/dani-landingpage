@@ -86,6 +86,17 @@ export default function PostHeader({ article }: PostHeaderProps) {
           >
             Blog
           </Link>
+          {article.category && (
+            <>
+              <ChevronRight className="h-4 w-4 text-gray-300" />
+              <Link
+                href={`/blog/categoria/${article.category.slug}`}
+                className="font-[var(--font-dm-sans)] text-gray-medium transition-colors hover:text-coral"
+              >
+                {article.category.name}
+              </Link>
+            </>
+          )}
           <ChevronRight className="h-4 w-4 text-gray-300" />
           <span className="font-[var(--font-dm-sans)] text-coral">
             Artículo
@@ -99,11 +110,19 @@ export default function PostHeader({ article }: PostHeaderProps) {
           transition={{ duration: 0.4, delay: 0.05 }}
           className="mb-4"
         >
-          <span
-            className="inline-flex items-center gap-2 rounded-full bg-coral px-4 py-1.5 font-[var(--font-dm-sans)] text-xs font-medium uppercase tracking-wider text-white"
-          >
-            Blog
-          </span>
+          {article.category ? (
+            <Link
+              href={`/blog/categoria/${article.category.slug}`}
+              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-[var(--font-dm-sans)] text-xs font-medium uppercase tracking-wider text-white transition-opacity hover:opacity-90"
+              style={{ backgroundColor: article.category.accentColor }}
+            >
+              {article.category.name}
+            </Link>
+          ) : (
+            <span className="inline-flex items-center gap-2 rounded-full bg-coral px-4 py-1.5 font-[var(--font-dm-sans)] text-xs font-medium uppercase tracking-wider text-white">
+              Blog
+            </span>
+          )}
         </motion.div>
 
         {/* Title */}

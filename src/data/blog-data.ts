@@ -1,15 +1,5 @@
 // Blog data types and dummy content
 
-export interface Category {
-  id: string;
-  name: string;
-  slug: string;
-  image: string;
-  articleCount: number;
-  gradient: string;
-  accentColor: string;
-}
-
 export interface Article {
   id: string;
   title: string;
@@ -22,54 +12,6 @@ export interface Article {
   isPopular: boolean;
   content?: string; // HTML content for the article
 }
-
-export const categories: Category[] = [
-  {
-    id: 'plataformas',
-    name: 'Plataformas de Trabajo Remoto',
-    slug: 'plataformas-trabajo-remoto',
-    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80',
-    articleCount: 12,
-    gradient: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 100%)',
-    accentColor: '#ff6b6b',
-  },
-  {
-    id: 'mentalidad',
-    name: 'Mentalidad & Crecimiento',
-    slug: 'mentalidad-crecimiento',
-    image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&q=80',
-    articleCount: 8,
-    gradient: 'linear-gradient(135deg, #a78bfa 0%, #e056a0 100%)',
-    accentColor: '#a78bfa',
-  },
-  {
-    id: 'vida-remota',
-    name: 'Vida Remota & Balance Personal',
-    slug: 'vida-remota-balance',
-    image: 'https://images.unsplash.com/photo-1501139083538-0139583c060f?w=800&q=80',
-    articleCount: 10,
-    gradient: 'linear-gradient(135deg, #6ee7b7 0%, #a78bfa 100%)',
-    accentColor: '#6ee7b7',
-  },
-  {
-    id: 'behind-laptop',
-    name: 'Behind the Laptop',
-    slug: 'behind-the-laptop',
-    image: 'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=800&q=80',
-    articleCount: 6,
-    gradient: 'linear-gradient(135deg, #e056a0 0%, #ff6b6b 100%)',
-    accentColor: '#e056a0',
-  },
-  {
-    id: 'tips',
-    name: 'Tips & Herramientas',
-    slug: 'tips-herramientas',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
-    articleCount: 15,
-    gradient: 'linear-gradient(135deg, #fcd34d 0%, #ff6b6b 100%)',
-    accentColor: '#fcd34d',
-  },
-];
 
 export const articles: Article[] = [
   {
@@ -279,12 +221,6 @@ export const getLatestArticles = (limit?: number) => {
   );
   return limit ? sorted.slice(0, limit) : sorted;
 };
-
-export const getArticlesByCategory = (categoryId: string) =>
-  articles.filter((a) => a.categoryId === categoryId);
-
-export const getCategoryById = (categoryId: string) =>
-  categories.find((c) => c.id === categoryId);
 
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);

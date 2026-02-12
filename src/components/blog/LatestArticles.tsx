@@ -9,9 +9,15 @@ import type { BlogArticle } from '@/types/blog';
 
 interface LatestArticlesProps {
   articles: BlogArticle[];
+  title?: string;
+  subtitle?: string;
 }
 
-export default function LatestArticles({ articles }: LatestArticlesProps) {
+export default function LatestArticles({
+  articles,
+  title,
+  subtitle,
+}: LatestArticlesProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
 
@@ -104,10 +110,10 @@ export default function LatestArticles({ articles }: LatestArticlesProps) {
         >
           <div>
             <p className="mb-2 font-[var(--font-dm-sans)] text-sm font-medium uppercase tracking-[0.15em] text-lavender">
-              Más artículos
+              {subtitle || 'Más artículos'}
             </p>
             <h2 className="font-[var(--font-headline)] text-2xl font-bold text-black-deep md:text-3xl">
-              Últimas publicaciones
+              {title || 'Últimas publicaciones'}
             </h2>
           </div>
 

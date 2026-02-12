@@ -98,6 +98,7 @@ function generateArticleJsonLd(article: NonNullable<Awaited<ReturnType<typeof ge
       '@id': `https://remotecondani.com/blog/${article.slug}`,
     },
     wordCount: article.content ? article.content.split(/\s+/).length : 500,
+    ...(article.category && { articleSection: article.category.name }),
   };
 }
 
@@ -109,7 +110,11 @@ export default async function BlogPostPage({ params }: PageProps) {
     notFound();
   }
 
-  const relatedArticles = await getRelatedArticles(article.id, 3);
+  const relatedArticles = await getRelatedArticles(
+    article.id,
+    3,
+    article.category?.id,
+  );
 
   // Default content if no content is provided
   const defaultContent = `
