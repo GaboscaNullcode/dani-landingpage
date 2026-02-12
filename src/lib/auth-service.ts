@@ -85,6 +85,22 @@ export async function getCurrentUser(token: string): Promise<User | null> {
   }
 }
 
+export async function changeUserPassword(
+  userId: string,
+  email: string,
+  oldPassword: string,
+  newPassword: string,
+): Promise<void> {
+  const pb = getPocketBase();
+  await pb.collection('users').authWithPassword(email, oldPassword);
+
+  const adminPb = await getAdminPb();
+  await adminPb.collection('users').update(userId, {
+    password: newPassword,
+    passwordConfirm: newPassword,
+  });
+}
+
 export async function requestPasswordReset(email: string): Promise<void> {
   const pb = getPocketBase();
   await pb.collection('users').requestPasswordReset(email);

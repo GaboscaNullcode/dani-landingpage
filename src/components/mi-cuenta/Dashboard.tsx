@@ -11,10 +11,12 @@ import {
   Lock,
   Sparkles,
   Package,
+  KeyRound,
 } from 'lucide-react';
 import type { User, Compra } from '@/types/auth';
 import type { Product } from '@/types/tienda';
 import ProductCard from './ProductCard';
+import ChangePasswordModal from './ChangePasswordModal';
 
 interface MeResponse {
   user: User;
@@ -28,6 +30,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [loggingOut, setLoggingOut] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -156,18 +159,27 @@ export default function Dashboard() {
             <p className="mt-1 text-gray-medium">{data.user.email}</p>
           </div>
 
-          <button
-            onClick={handleLogout}
-            disabled={loggingOut}
-            className="inline-flex items-center gap-2 self-start rounded-xl border-2 border-gray-light px-5 py-2.5 font-semibold text-gray-carbon transition-colors duration-200 hover:border-coral hover:text-coral disabled:opacity-60"
-          >
-            {loggingOut ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <LogOut className="h-4 w-4" />
-            )}
-            Cerrar Sesion
-          </button>
+          <div className="flex items-center gap-2 self-start">
+            <button
+              onClick={() => setShowChangePassword(true)}
+              className="inline-flex items-center gap-2 rounded-xl border-2 border-gray-light px-5 py-2.5 font-semibold text-gray-carbon transition-colors duration-200 hover:border-coral hover:text-coral"
+            >
+              <KeyRound className="h-4 w-4" />
+              <span className="hidden sm:inline">Cambiar Contrasena</span>
+            </button>
+            <button
+              onClick={handleLogout}
+              disabled={loggingOut}
+              className="inline-flex items-center gap-2 rounded-xl border-2 border-gray-light px-5 py-2.5 font-semibold text-gray-carbon transition-colors duration-200 hover:border-coral hover:text-coral disabled:opacity-60"
+            >
+              {loggingOut ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <LogOut className="h-4 w-4" />
+              )}
+              Cerrar Sesion
+            </button>
+          </div>
         </div>
       </motion.div>
 
@@ -258,6 +270,10 @@ export default function Dashboard() {
             </Link>
           </motion.div>
         )}
+      <ChangePasswordModal
+        isOpen={showChangePassword}
+        onClose={() => setShowChangePassword(false)}
+      />
     </div>
   );
 }
