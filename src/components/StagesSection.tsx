@@ -115,7 +115,7 @@ export default function StagesSection() {
 
   const handleQuizClose = useCallback(() => {
     setQuizOpen(false);
-    quizTriggerRef.current?.focus();
+    quizTriggerRef.current?.focus({ preventScroll: true });
   }, []);
 
   return (
@@ -186,7 +186,7 @@ export default function StagesSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="mb-12 flex justify-center"
+          className="mb-8 flex justify-center"
         >
           <button
             ref={quizTriggerRef}

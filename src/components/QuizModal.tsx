@@ -141,9 +141,9 @@ export default function QuizModal({ isOpen, onClose, onResult }: QuizModalProps)
       document.body.style.width = '100%';
       document.body.style.overflow = 'hidden';
 
-      // Focus close button on open
+      // Focus close button on open (sin scroll)
       requestAnimationFrame(() => {
-        closeButtonRef.current?.focus();
+        closeButtonRef.current?.focus({ preventScroll: true });
       });
 
       return () => {
@@ -153,9 +153,9 @@ export default function QuizModal({ isOpen, onClose, onResult }: QuizModalProps)
         document.body.style.overflow = '';
         window.scrollTo(0, scrollY);
 
-        // Restore focus
+        // Restore focus sin scroll
         if (previousActiveElement.current instanceof HTMLElement) {
-          previousActiveElement.current.focus();
+          previousActiveElement.current.focus({ preventScroll: true });
         }
       };
     }
@@ -194,12 +194,12 @@ export default function QuizModal({ isOpen, onClose, onResult }: QuizModalProps)
         if (e.shiftKey) {
           if (document.activeElement === first) {
             e.preventDefault();
-            last.focus();
+            last.focus({ preventScroll: true });
           }
         } else {
           if (document.activeElement === last) {
             e.preventDefault();
-            first.focus();
+            first.focus({ preventScroll: true });
           }
         }
       }

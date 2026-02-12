@@ -8,9 +8,9 @@ import { Instagram, Heart } from 'lucide-react';
 const footerLinks = [
   { text: 'Home', href: '/' },
   { text: 'Sobre Mi', href: '/sobre-mi' },
-  { text: 'Servicios', href: '#servicios' },
-  { text: 'Recursos', href: '/recursos' },
-  { text: 'Testimonios', href: '#testimonios' },
+  { text: 'Servicios', href: '/asesorias' },
+  { text: 'Recursos', href: '/empezar' },
+  { text: 'Testimonios', href: '/#testimonios' },
 ];
 
 const socialLinks = [
