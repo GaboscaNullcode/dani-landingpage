@@ -86,6 +86,17 @@ export async function cancelCompraBySubscription(
   }
 }
 
+export async function getUserPurchasedProductIds(
+  userId: string,
+): Promise<Set<string>> {
+  const compras = await getUserCompras(userId);
+  return new Set(
+    compras
+      .filter((c) => c.estado === 'activa')
+      .map((c) => c.producto),
+  );
+}
+
 export async function getCompraForDownload(
   compraId: string,
   userId: string,

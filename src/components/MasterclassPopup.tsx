@@ -17,12 +17,19 @@ function useHasMounted() {
   );
 }
 
+function hasAuthCookie(): boolean {
+  return document.cookie.split(';').some((c) => c.trim().startsWith('pb_auth='));
+}
+
 export default function MasterclassPopup() {
   const [isVisible, setIsVisible] = useState(false);
   const hasMounted = useHasMounted();
 
   useEffect(() => {
     if (!hasMounted) return;
+
+    // Don't show popup for logged-in users
+    if (hasAuthCookie()) return;
 
     // Check if user has dismissed the popup recently
     const dismissedAt = localStorage.getItem(STORAGE_KEY);

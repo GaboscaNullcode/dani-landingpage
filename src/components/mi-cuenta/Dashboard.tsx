@@ -3,13 +3,15 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { LogOut, ShoppingBag, Loader2 } from 'lucide-react';
+import { LogOut, ShoppingBag, Loader2, Lock } from 'lucide-react';
 import type { User, Compra } from '@/types/auth';
+import type { Product } from '@/types/tienda';
 import ProductCard from './ProductCard';
 
 interface MeResponse {
   user: User;
   compras: Compra[];
+  allProducts: Product[];
 }
 
 export default function Dashboard() {
@@ -114,7 +116,52 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {data.compras.length === 0 ? (
+      {/* Purchased products */}
+      {data.compras.length > 0 && (
+        <div>
+          <h2 className="mb-4 font-[var(--font-headline)] text-xl font-bold text-black-deep">
+            Mis Productos
+          </h2>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {data.compras.map((compra) => (
+              <ProductCard key={compra.id} compra={compra} variant="purchased" />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Locked products (not purchased) */}
+      {(() => {
+        const purchasedProductIds = new Set(
+          data.compras
+            .filter((c) => c.estado === 'activa')
+            .map((c) => c.producto),
+        );
+        const lockedProducts = (data.allProducts || []).filter(
+          (p) => !purchasedProductIds.has(p.id) && !p.isFree,
+        );
+
+        if (lockedProducts.length === 0) return null;
+
+        return (
+          <div>
+            <div className="mb-4 flex items-center gap-2">
+              <Lock className="h-5 w-5 text-gray-carbon" />
+              <h2 className="font-[var(--font-headline)] text-xl font-bold text-black-deep">
+                Otros Productos
+              </h2>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {lockedProducts.map((product) => (
+                <ProductCard key={product.id} product={product} variant="locked" />
+              ))}
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* Empty state: no purchases and no products to show */}
+      {data.compras.length === 0 && (!data.allProducts || data.allProducts.length === 0) && (
         <div className="rounded-2xl bg-white py-16 text-center shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
           <ShoppingBag className="mx-auto mb-4 h-12 w-12 text-gray-light" />
           <h2 className="mb-2 font-[var(--font-headline)] text-xl font-bold text-gray-dark">
@@ -130,12 +177,6 @@ export default function Dashboard() {
             <ShoppingBag className="h-4 w-4" />
             Ir a la Tienda
           </Link>
-        </div>
-      ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {data.compras.map((compra) => (
-            <ProductCard key={compra.id} compra={compra} />
-          ))}
         </div>
       )}
     </div>

@@ -1,9 +1,11 @@
 export { default as Navigation } from './Navigation';
 export { default as HeroSection } from './HeroSection';
 export { default as AboutSection } from './AboutSection';
+export { default as StagesSection } from './StagesSection';
 export { default as HistorySection } from './HistorySection';
 export { default as ExperienceSection } from './ExperienceSection';
 export { default as MissionSection } from './MissionSection';
+export { default as BlogPreviewSection } from './BlogPreviewSection';
 export { default as CTASection } from './CTASection';
 export { default as Footer } from './Footer';
 export { default as QuizSection } from './QuizSection';

@@ -1,11 +1,27 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Download, ExternalLink, MessageCircle } from 'lucide-react';
+import {
+  Download,
+  ExternalLink,
+  MessageCircle,
+  Lock,
+  CircleCheck,
+  ArrowRight,
+} from 'lucide-react';
 import type { Compra } from '@/types/auth';
+import type { Product } from '@/types/tienda';
 
-interface ProductCardProps {
+interface PurchasedProductCardProps {
   compra: Compra;
+  variant: 'purchased';
 }
+
+interface LockedProductCardProps {
+  product: Product;
+  variant: 'locked';
+}
+
+type ProductCardProps = PurchasedProductCardProps | LockedProductCardProps;
 
 const categoryLabels: Record<string, string> = {
   ebook: 'E-book',
@@ -23,7 +39,60 @@ const categoryColors: Record<string, string> = {
   gratis: 'bg-sunshine/15 text-gray-dark',
 };
 
-export default function ProductCard({ compra }: ProductCardProps) {
+export default function ProductCard(props: ProductCardProps) {
+  if (props.variant === 'locked') {
+    return <LockedCard product={props.product} />;
+  }
+  return <PurchasedCard compra={props.compra} />;
+}
+
+function LockedCard({ product }: { product: Product }) {
+  return (
+    <div className="group relative overflow-hidden rounded-2xl bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)]">
+      <div className="relative aspect-video w-full overflow-hidden">
+        <Image
+          src={product.image}
+          alt={product.name}
+          fill
+          className="object-cover grayscale-[80%] opacity-60 transition-all duration-300 group-hover:grayscale-[60%] group-hover:opacity-70"
+        />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Lock className="h-10 w-10 text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]" />
+        </div>
+      </div>
+
+      <div className="p-5">
+        <div className="mb-3 flex items-center gap-2">
+          <span
+            className={`rounded-full px-3 py-1 text-xs font-semibold ${
+              categoryColors[product.category] || 'bg-gray-light text-gray-dark'
+            }`}
+          >
+            {categoryLabels[product.category] || product.category}
+          </span>
+        </div>
+
+        <h3 className="mb-2 font-[var(--font-headline)] text-lg font-bold text-black-deep">
+          {product.name}
+        </h3>
+
+        <p className="mb-4 line-clamp-2 text-sm text-gray-carbon">
+          {product.description}
+        </p>
+
+        <Link
+          href={`/tienda/${product.slug}`}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+        >
+          Obtener acceso
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function PurchasedCard({ compra }: { compra: Compra }) {
   const producto = compra.expand?.producto;
   if (!producto) return null;
 
@@ -63,6 +132,12 @@ export default function ProductCard({ compra }: ProductCardProps) {
           >
             {categoryLabels[producto.categoria] || producto.categoria}
           </span>
+          {!isCancelled && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-mint/15 px-3 py-1 text-xs font-semibold text-teal-dark">
+              <CircleCheck className="h-3 w-3" />
+              Disponible
+            </span>
+          )}
           {compra.stripeSubscriptionId && compra.estado === 'activa' && (
             <span className="rounded-full bg-mint/15 px-3 py-1 text-xs font-semibold text-teal-dark">
               Suscripcion activa

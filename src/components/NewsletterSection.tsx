@@ -6,29 +6,20 @@ import {
   Mail,
   Sparkles,
   ArrowRight,
-  Gift,
   Lock,
   User,
   CheckCircle2,
-  Star,
-  Zap,
-  BookOpen,
   Check,
+  Send,
 } from 'lucide-react';
 import { useNewsletterForm } from '@/hooks/useNewsletterForm';
 
 export default function NewsletterSection() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const { name, setName, email, setEmail, isSubmitting, isSuccess, error, handleSubmit } =
     useNewsletterForm('home');
-
-  const benefits = [
-    { icon: BookOpen, text: 'Plantilla paso a paso para tu título' },
-    { icon: Star, text: 'Ejemplos reales de títulos exitosos' },
-    { icon: Zap, text: 'Bonus: Checklist de optimización' },
-  ];
 
   return (
     <section
@@ -36,24 +27,22 @@ export default function NewsletterSection() {
       ref={ref}
       className="relative overflow-hidden"
       style={{
-        padding: 'clamp(4rem, 10vw, 8rem) 1.5rem',
-        background: 'linear-gradient(180deg, #fef7f0 0%, #fce4ec 50%, #f8e1f4 100%)',
+        padding: 'var(--section-padding) 2rem',
+        background:
+          'linear-gradient(180deg, #fef7f0 0%, #fce4ec 50%, #f8e1f4 100%)',
       }}
     >
-      {/* Sophisticated background elements */}
+      {/* Background decorative elements */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        {/* Large gradient orb - top left */}
         <motion.div
-          className="absolute -left-32 -top-32 h-[500px] w-[500px] rounded-full opacity-40"
+          className="blob absolute -left-32 -top-20 h-[450px] w-[450px] opacity-20"
           style={{
             background:
-              'radial-gradient(circle, rgba(255,107,107,0.4) 0%, rgba(224,86,160,0.2) 50%, transparent 70%)',
-            filter: 'blur(60px)',
+              'linear-gradient(135deg, rgba(255, 107, 107, 0.3) 0%, rgba(224, 86, 160, 0.2) 100%)',
           }}
           animate={{
             scale: [1, 1.1, 1],
-            x: [0, 30, 0],
-            y: [0, 20, 0],
+            rotate: [0, 10, 0],
           }}
           transition={{
             duration: 15,
@@ -61,18 +50,14 @@ export default function NewsletterSection() {
             ease: 'easeInOut',
           }}
         />
-
-        {/* Medium orb - bottom right */}
         <motion.div
-          className="absolute -bottom-20 -right-20 h-[400px] w-[400px] rounded-full opacity-30"
+          className="blob absolute -bottom-20 -right-20 h-[380px] w-[380px] opacity-15"
           style={{
             background:
-              'radial-gradient(circle, rgba(167,139,250,0.4) 0%, rgba(224,86,160,0.2) 50%, transparent 70%)',
-            filter: 'blur(50px)',
+              'linear-gradient(135deg, rgba(167, 139, 250, 0.3) 0%, rgba(110, 231, 183, 0.2) 100%)',
           }}
           animate={{
             scale: [1, 1.15, 1],
-            x: [0, -20, 0],
           }}
           transition={{
             duration: 12,
@@ -81,234 +66,118 @@ export default function NewsletterSection() {
           }}
         />
 
-        {/* Floating decorative shapes */}
+        {/* Floating icon decorations */}
         <motion.div
-          className="absolute left-[10%] top-[15%] h-3 w-3 rounded-full bg-coral"
-          animate={{ y: [-10, 10, -10], opacity: [0.6, 1, 0.6] }}
-          transition={{ duration: 4, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute right-[15%] top-[25%] h-2 w-2 rounded-full bg-pink"
-          animate={{ y: [8, -8, 8], opacity: [0.5, 0.9, 0.5] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-[20%] left-[20%] h-4 w-4 rounded-full bg-lavender/50"
-          animate={{ y: [-12, 12, -12], scale: [1, 1.2, 1] }}
+          className="absolute left-[8%] top-[18%] flex h-11 w-11 items-center justify-center rounded-full bg-coral/20 opacity-50"
+          animate={{ y: [-10, 10, -10], rotate: [-5, 5, -5] }}
           transition={{ duration: 5, repeat: Infinity }}
-        />
-
-        {/* Geometric accent lines */}
-        <svg
-          className="absolute right-[5%] top-[30%] h-32 w-32 opacity-20"
-          viewBox="0 0 100 100"
         >
-          <motion.circle
-            cx="50"
-            cy="50"
-            r="40"
-            fill="none"
-            stroke="url(#gradient1)"
-            strokeWidth="0.5"
-            strokeDasharray="8 4"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-          />
-          <defs>
-            <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#ff6b6b" />
-              <stop offset="100%" stopColor="#e056a0" />
-            </linearGradient>
-          </defs>
-        </svg>
+          <Mail className="h-5 w-5 text-coral" />
+        </motion.div>
+        <motion.div
+          className="absolute bottom-[20%] right-[12%] flex h-10 w-10 items-center justify-center rounded-full bg-lavender/30 opacity-40"
+          animate={{ y: [8, -8, 8], rotate: [5, -5, 5] }}
+          transition={{ duration: 6, repeat: Infinity }}
+        >
+          <Send className="h-5 w-5 text-lavender" />
+        </motion.div>
       </div>
 
-      <div className="container-custom relative z-10 mx-auto max-w-6xl">
+      <div className="container-custom relative z-10">
+        {/* Centered header — same pattern as other sections */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="grid items-center gap-8 lg:grid-cols-2 lg:gap-16"
+          transition={{ duration: 0.8 }}
+          className="mb-12 text-center"
         >
-          {/* Left side - Content */}
-          <div className="order-2 lg:order-1">
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="mb-6 inline-flex items-center gap-2"
-            >
-              <span
-                className="flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-white shadow-lg"
-                style={{
-                  background: 'var(--gradient-coral-pink)',
-                  boxShadow: '0 8px 32px rgba(255,107,107,0.35)',
-                }}
-              >
-                <Gift className="h-4 w-4" />
-                GRATIS
-              </span>
-              <motion.span
-                animate={{ rotate: [0, 10, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <Sparkles className="h-5 w-5 text-sunshine" />
-              </motion.span>
-            </motion.div>
-
-            {/* Title */}
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="mb-4 font-[var(--font-headline)] text-3xl font-bold leading-tight text-black-deep md:text-4xl lg:text-[2.75rem]"
-            >
-              Descarga la guía{' '}
-              <span
-                className="relative inline-block"
-                style={{
-                  background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 50%, #a78bfa 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
-                &ldquo;Fórmula para un Título Optimizado&rdquo;
-                <motion.span
-                  className="absolute -bottom-1 left-0 h-1 rounded-full"
-                  style={{
-                    background: 'linear-gradient(90deg, #ff6b6b 0%, #e056a0 100%)',
-                  }}
-                  initial={{ width: 0 }}
-                  animate={isInView ? { width: '100%' } : {}}
-                  transition={{ delay: 0.8, duration: 0.6 }}
-                />
-              </span>
-            </motion.h2>
-
-            {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="mb-8 text-lg text-gray-carbon md:text-xl"
-            >
-              Y únete a <span className="font-semibold text-coral">+2,500 profesionales</span> que
-              reciben contenido exclusivo cada semana
-            </motion.p>
-
-            {/* Benefits list */}
-            <motion.ul
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : {}}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="space-y-4"
-            >
-              {benefits.map((benefit, index) => (
-                <motion.li
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.6 + index * 0.1, duration: 0.5 }}
-                  className="flex items-center gap-3"
-                >
-                  <span
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(255,107,107,0.15) 0%, rgba(224,86,160,0.15) 100%)',
-                    }}
-                  >
-                    <benefit.icon className="h-5 w-5 text-coral" />
-                  </span>
-                  <span className="font-medium text-gray-dark">{benefit.text}</span>
-                </motion.li>
-              ))}
-            </motion.ul>
-          </div>
-
-          {/* Right side - Form Card */}
           <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.95 }}
-            animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-            transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="order-1 lg:order-2"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.6 }}
+            className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/80 px-5 py-2 shadow-md backdrop-blur-sm"
           >
-            <div
-              className="relative overflow-hidden rounded-3xl p-8 md:p-10"
-              style={{
-                background: 'rgba(255, 255, 255, 0.85)',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255, 255, 255, 0.6)',
-                boxShadow: `
-                  0 4px 6px rgba(0, 0, 0, 0.02),
-                  0 12px 24px rgba(224, 86, 160, 0.08),
-                  0 24px 48px rgba(255, 107, 107, 0.1),
-                  inset 0 1px 1px rgba(255, 255, 255, 0.8)
-                `,
-              }}
-            >
-              {/* Decorative corner accent */}
-              <div
-                className="absolute -right-16 -top-16 h-32 w-32 rounded-full opacity-60"
-                style={{
-                  background:
-                    'radial-gradient(circle, rgba(255,107,107,0.3) 0%, transparent 70%)',
-                }}
-              />
-              <div
-                className="absolute -bottom-12 -left-12 h-24 w-24 rounded-full opacity-40"
-                style={{
-                  background:
-                    'radial-gradient(circle, rgba(167,139,250,0.3) 0%, transparent 70%)',
-                }}
-              />
+            <Mail className="h-5 w-5 text-pink" />
+            <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
+              Newsletter semanal
+            </span>
+          </motion.div>
 
-              {/* Form header */}
-              <div className="relative mb-8 text-center">
-                <motion.div
+          <h2 className="text-section-title font-[var(--font-headline)] font-bold text-black-deep">
+            Empieza tu camino al trabajo remoto con contenido exclusivo cada semana...
+          </h2>
+
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="mx-auto mt-5 max-w-xl"
+          >
+            <p className="text-lg leading-relaxed text-gray-carbon">
+              Regístrate y recibe{' '}
+              <span className="font-bold text-coral underline decoration-coral/40 decoration-2 underline-offset-2">
+                GRATIS
+              </span>{' '}
+              la guía &ldquo;Fórmula para un Título Optimizado&rdquo;.
+              Ideal para destacar en plataformas freelance y mejorar tu CV.
+            </p>
+          </motion.div>
+        </motion.div>
+
+        {/* Form Card — centered, max-width constrained */}
+        <motion.div
+          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+          animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+          transition={{ delay: 0.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="mx-auto max-w-md"
+        >
+          <div
+            className="relative overflow-hidden rounded-[28px] bg-white p-8 shadow-[0_10px_50px_rgba(0,0,0,0.08)]"
+            style={{
+              border: '1px solid rgba(255, 255, 255, 0.6)',
+            }}
+          >
+            {/* Decorative corner accents */}
+            <div
+              className="absolute -right-12 -top-12 h-24 w-24 rounded-full opacity-50"
+              style={{
+                background:
+                  'radial-gradient(circle, rgba(255,107,107,0.3) 0%, transparent 70%)',
+              }}
+            />
+            <div
+              className="absolute -bottom-10 -left-10 h-20 w-20 rounded-full opacity-40"
+              style={{
+                background:
+                  'radial-gradient(circle, rgba(167,139,250,0.3) 0%, transparent 70%)',
+              }}
+            />
+
+            {/* Form / Success */}
+            {isSuccess ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="py-6 text-center"
+              >
+                <div
                   className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
                   style={{
-                    background: 'var(--gradient-coral-pink)',
-                    boxShadow: '0 12px 32px rgba(255, 107, 107, 0.4)',
+                    background: 'linear-gradient(135deg, #6ee7b7 0%, #34d399 100%)',
+                    boxShadow: '0 12px 32px rgba(52, 211, 153, 0.4)',
                   }}
-                  whileHover={{ scale: 1.05, rotate: 5 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
                 >
-                  <Mail className="h-8 w-8 text-white" />
-                </motion.div>
+                  <Check className="h-8 w-8 text-white" />
+                </div>
                 <h3 className="font-[var(--font-headline)] text-xl font-bold text-black-deep md:text-2xl">
-                  Recibe tu guía gratis
+                  Listo, {name}!
                 </h3>
                 <p className="mt-2 text-sm text-gray-medium">
-                  Solo ingresa tus datos y la enviaremos a tu inbox
+                  Revisa tu inbox. Te enviamos la guía y contenido exclusivo.
                 </p>
-              </div>
-
-              {/* Form / Success */}
-              {isSuccess ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="py-8 text-center"
-                >
-                  <div
-                    className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
-                    style={{
-                      background: 'linear-gradient(135deg, #6ee7b7 0%, #34d399 100%)',
-                      boxShadow: '0 12px 32px rgba(52, 211, 153, 0.4)',
-                    }}
-                  >
-                    <Check className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="font-[var(--font-headline)] text-xl font-bold text-black-deep md:text-2xl">
-                    Listo, {name}!
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-medium">
-                    Revisa tu inbox. Te enviamos la guia y contenido exclusivo.
-                  </p>
-                </motion.div>
-              ) : (
-              <form onSubmit={handleSubmit} className="relative space-y-5">
+              </motion.div>
+            ) : (
+              <form onSubmit={handleSubmit} className="relative space-y-4">
                 {/* Name field */}
                 <div className="relative">
                   <label htmlFor="newsletter-name" className="sr-only">
@@ -321,7 +190,7 @@ export default function NewsletterSection() {
                     transition={{ duration: 0.2 }}
                   >
                     <div
-                      className="group relative overflow-hidden rounded-2xl transition-all duration-300"
+                      className="group relative overflow-hidden rounded-xl transition-shadow duration-300"
                       style={{
                         boxShadow:
                           focusedField === 'name'
@@ -339,18 +208,12 @@ export default function NewsletterSection() {
                       <input
                         id="newsletter-name"
                         type="text"
-                        placeholder="Tu nombre"
+                        placeholder="Nombre"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         onFocus={() => setFocusedField('name')}
                         onBlur={() => setFocusedField(null)}
-                        className="w-full border-2 border-transparent bg-white py-4 pl-12 pr-5 font-[var(--font-dm-sans)] text-black-deep placeholder-gray-medium transition-colors duration-300 focus:border-coral/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
-                        style={{
-                          background:
-                            focusedField === 'name'
-                              ? 'linear-gradient(to right, rgba(255,255,255,1), rgba(254,247,240,1))'
-                              : '#ffffff',
-                        }}
+                        className="w-full rounded-xl border-2 border-gray-100 bg-white py-3.5 pl-12 pr-5 font-[var(--font-dm-sans)] text-black-deep placeholder-gray-400 transition-colors duration-300 focus:border-coral/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
                         required
                         autoComplete="name"
                       />
@@ -370,7 +233,7 @@ export default function NewsletterSection() {
                     transition={{ duration: 0.2 }}
                   >
                     <div
-                      className="group relative overflow-hidden rounded-2xl transition-all duration-300"
+                      className="group relative overflow-hidden rounded-xl transition-shadow duration-300"
                       style={{
                         boxShadow:
                           focusedField === 'email'
@@ -393,13 +256,7 @@ export default function NewsletterSection() {
                         onChange={(e) => setEmail(e.target.value)}
                         onFocus={() => setFocusedField('email')}
                         onBlur={() => setFocusedField(null)}
-                        className="w-full border-2 border-transparent bg-white py-4 pl-12 pr-5 font-[var(--font-dm-sans)] text-black-deep placeholder-gray-medium transition-colors duration-300 focus:border-coral/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
-                        style={{
-                          background:
-                            focusedField === 'email'
-                              ? 'linear-gradient(to right, rgba(255,255,255,1), rgba(254,247,240,1))'
-                              : '#ffffff',
-                        }}
+                        className="w-full rounded-xl border-2 border-gray-100 bg-white py-3.5 pl-12 pr-5 font-[var(--font-dm-sans)] text-black-deep placeholder-gray-400 transition-colors duration-300 focus:border-coral/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
                         required
                         autoComplete="email"
                         spellCheck={false}
@@ -412,10 +269,10 @@ export default function NewsletterSection() {
                 <motion.button
                   type="submit"
                   disabled={isSubmitting}
-                  className="group relative w-full overflow-hidden rounded-2xl py-4 font-[var(--font-headline)] text-base font-bold text-white transition-all duration-500 disabled:opacity-70"
+                  className="btn-shimmer group relative w-full overflow-hidden rounded-full py-4 font-[var(--font-headline)] text-base font-bold text-white transition-[transform,box-shadow] duration-500 disabled:opacity-70"
                   style={{
-                    background: 'linear-gradient(135deg, #ff6b6b 0%, #e056a0 50%, #d64c94 100%)',
-                    boxShadow: '0 12px 36px rgba(255, 107, 107, 0.35)',
+                    background: 'var(--gradient-coral-pink)',
+                    boxShadow: '0 10px 30px rgba(255, 107, 107, 0.35)',
                   }}
                   whileHover={{
                     y: -3,
@@ -423,23 +280,6 @@ export default function NewsletterSection() {
                   }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  {/* Shimmer effect */}
-                  <motion.div
-                    className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                    style={{
-                      background:
-                        'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
-                    }}
-                    animate={{
-                      x: ['-100%', '100%'],
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      repeatDelay: 1,
-                    }}
-                  />
-
                   <AnimatePresence mode="wait">
                     {isSubmitting ? (
                       <motion.span
@@ -455,7 +295,7 @@ export default function NewsletterSection() {
                         >
                           <Sparkles className="h-5 w-5" />
                         </motion.span>
-                        Enviando\u2026
+                        Enviando&hellip;
                       </motion.span>
                     ) : (
                       <motion.span
@@ -465,7 +305,7 @@ export default function NewsletterSection() {
                         exit={{ opacity: 0, y: -10 }}
                         className="flex items-center justify-center gap-2"
                       >
-                        <span>Quiero mi guía gratis</span>
+                        <span>Unirme a la newsletter</span>
                         <motion.span
                           animate={{ x: [0, 4, 0] }}
                           transition={{ duration: 1.2, repeat: Infinity }}
@@ -485,12 +325,12 @@ export default function NewsletterSection() {
                 )}
 
                 {/* Trust indicators */}
-                <div className="flex flex-col items-center gap-3 pt-2">
-                  <div className="flex items-center gap-2 text-xs text-gray-medium">
-                    <Lock className="h-3.5 w-3.5" />
-                    <span>Tu información está 100% segura</span>
-                  </div>
+                <div className="flex flex-col items-center gap-2 pt-1">
                   <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1 text-xs text-gray-medium">
+                      <Lock className="h-3.5 w-3.5" />
+                      <span>100% seguro</span>
+                    </div>
                     <div className="flex items-center gap-1 text-xs text-gray-medium">
                       <CheckCircle2 className="h-3.5 w-3.5 text-mint" />
                       <span>Sin spam</span>
@@ -502,9 +342,8 @@ export default function NewsletterSection() {
                   </div>
                 </div>
               </form>
-              )}
-            </div>
-          </motion.div>
+            )}
+          </div>
         </motion.div>
       </div>
     </section>

@@ -7,7 +7,7 @@ import { motion, useInView } from 'motion/react';
 import { Hand, Laptop, Sparkles, ArrowRight, ChevronDown } from 'lucide-react';
 import RotatingText from './RotatingText';
 
-const rotatingWords = ['libertad', 'tranquilidad', 'propósito', 'independencia'];
+const rotatingWords = ['libertad', 'claridad', 'propósito', 'independencia'];
 
 // Unsplash avatar URLs for social proof
 const avatarImages = [
@@ -153,16 +153,21 @@ export default function HeroSection() {
               type: 'spring',
               stiffness: 200,
             }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/80 px-5 py-2.5 shadow-md backdrop-blur-sm"
+            className="mb-6 inline-flex flex-col items-center gap-0.5 rounded-full bg-white/80 px-5 py-2.5 shadow-md backdrop-blur-sm lg:items-start"
           >
-            <motion.div
-              animate={{ rotate: [0, 15, -15, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            >
-              <Hand className="h-5 w-5 text-coral" />
-            </motion.div>
-            <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
-              Tu guía hacia el trabajo remoto
+            <div className="flex items-center gap-2">
+              <motion.div
+                animate={{ rotate: [0, 15, -15, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                <Hand className="h-5 w-5 text-coral" />
+              </motion.div>
+              <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
+                Vive en Modo Remoto
+              </span>
+            </div>
+            <span className="font-[var(--font-dm-sans)] text-xs text-gray-medium">
+              Intención clara, acción real
             </span>
           </motion.div>
 
@@ -173,7 +178,7 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 0.2, ease: [0.175, 0.885, 0.32, 1.275] }}
             className="text-hero-title mb-8 font-[var(--font-headline)] font-bold text-black-deep"
           >
-            Deja el miedo atrás y conquista tu{' '}
+            Deja el miedo atrás y construye tu{' '}
             <span className="relative inline-block text-pink md:inline">
               <RotatingText
                 texts={rotatingWords}
@@ -222,6 +227,17 @@ export default function HeroSection() {
             </span>
           </motion.h1>
 
+          {/* Subheadline */}
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="mb-4 max-w-xl font-[var(--font-headline)] text-lg font-semibold text-gray-dark lg:mx-0"
+          >
+            Acompañamiento real para empezar, crecer y trabajar remoto con
+            claridad.
+          </motion.p>
+
           {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 30 }}
@@ -229,7 +245,7 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-body-large mb-10 max-w-xl text-gray-carbon lg:mx-0"
           >
-            Sé que el primer paso da miedo. Por eso te acompaño de la mano
+            Sé que dar el primer paso da miedo. Por eso te acompaño de la mano
             para que construyas tu carrera remota con{' '}
             <span className="font-semibold text-pink">claridad</span>,{' '}
             <span className="font-semibold text-coral">confianza</span> y{' '}

@@ -5,16 +5,27 @@ import { ShoppingBag, BookOpen } from 'lucide-react';
 import { motion } from 'motion/react';
 import type { Product } from '@/types/tienda';
 import { SectionHeader, FeaturedProductCard, CompactProductCard } from './TiendaSections';
+import type { PurchaseStatus } from './TiendaSections';
 
 interface SeccionProductosProps {
   featuredProducts: Product[];
   additionalProducts: Product[];
+  purchasedProductIds?: string[];
+  isLoggedIn?: boolean;
 }
 
 export default memo(function SeccionProductos({
   featuredProducts,
   additionalProducts,
+  purchasedProductIds = [],
+  isLoggedIn = false,
 }: SeccionProductosProps) {
+  const purchasedSet = new Set(purchasedProductIds);
+  const getStatus = (productId: string): PurchaseStatus => {
+    if (!isLoggedIn) return 'none';
+    return purchasedSet.has(productId) ? 'purchased' : 'locked';
+  };
+
   // El curso principal (más vendido)
   const cursoDestacado = featuredProducts.find((p) => p.category === 'curso');
 
@@ -59,7 +70,7 @@ export default memo(function SeccionProductos({
         {/* Producto destacado */}
         {cursoDestacado && (
           <div className="mb-12">
-            <FeaturedProductCard product={cursoDestacado} />
+            <FeaturedProductCard product={cursoDestacado} purchaseStatus={getStatus(cursoDestacado.id)} />
           </div>
         )}
 
@@ -71,6 +82,7 @@ export default memo(function SeccionProductos({
               product={product}
               index={index}
               accentColor={product.category === 'masterclass' ? 'lavender' : 'coral'}
+              purchaseStatus={getStatus(product.id)}
             />
           ))}
         </div>

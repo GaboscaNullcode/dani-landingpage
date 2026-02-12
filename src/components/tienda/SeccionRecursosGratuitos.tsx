@@ -7,10 +7,14 @@ import { SectionHeader, FreeResourceCard } from './TiendaSections';
 
 interface SeccionRecursosGratuitosProps {
   freeResources: Product[];
+  purchasedProductIds?: string[];
+  isLoggedIn?: boolean;
 }
 
 export default function SeccionRecursosGratuitos({
   freeResources,
+  purchasedProductIds = [],
+  isLoggedIn = false,
 }: SeccionRecursosGratuitosProps) {
   // Filtrar solo los recursos gratuitos (excluir comunidad)
   const gratuitosOnly = freeResources.filter((r) => r.isFree);
@@ -50,7 +54,14 @@ export default function SeccionRecursosGratuitos({
         {/* Grid de recursos gratuitos */}
         <div className="mx-auto grid max-w-3xl gap-6 md:grid-cols-2">
           {gratuitosOnly.map((resource, index) => (
-            <FreeResourceCard key={resource.id} product={resource} index={index} />
+            <FreeResourceCard
+              key={resource.id}
+              product={resource}
+              index={index}
+              purchaseStatus={
+                !isLoggedIn ? 'none' : purchasedProductIds.includes(resource.id) ? 'purchased' : 'none'
+              }
+            />
           ))}
         </div>
       </div>

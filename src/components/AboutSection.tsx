@@ -167,19 +167,30 @@ export default function AboutSection() {
             <div className="space-y-5 text-gray-carbon">
               <p className="text-lg leading-relaxed">
                 Hace 6 años estaba exactamente donde tú estás ahora: queriendo
-                cambiar mi vida pero sin saber si realmente podía lograrlo.
+                cambiar mi vida, pero sin saber si realmente podía lograrlo.
               </p>
               <p className="text-lg leading-relaxed">
                 Empecé ganando{' '}
-                <span className="font-semibold text-coral">$3.25 la hora</span>{' '}
-                como intérprete. Hoy trabajo con clientes de todo el mundo
-                y ayudo a otras personas a hacer lo mismo.
+                <span className="font-semibold text-coral">$3.25 la hora</span>,
+                sin carrera universitaria. Aprendí oficios que me llenaron de
+                habilidades y me permitieron crecer en el mundo remoto.
+              </p>
+              <p className="text-lg leading-relaxed">
+                Comencé como intérprete, y con el tiempo trabajé como asistente
+                virtual, community manager, brand manager, soporte
+                administrativo, project manager, operaciones, y más.
+              </p>
+              <p className="text-lg leading-relaxed">
+                Hoy trabajo con clientes de todo el mundo y acompaño a otras
+                personas a construir su propio camino remoto.
               </p>
               <p className="text-lg leading-relaxed">
                 No necesitas un título especial ni contactos en la industria.
                 Solo necesitas{' '}
-                <span className="font-semibold text-pink">la guía correcta</span>{' '}
-                y alguien que ya haya recorrido el camino.
+                <span className="font-semibold text-pink">
+                  la guía correcta
+                </span>{' '}
+                y a alguien que ya haya recorrido el camino.
               </p>
 
               {/* Highlight box */}

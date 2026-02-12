@@ -8,9 +8,15 @@ import { SectionHeader, ServiceCard } from './TiendaSections';
 
 interface SeccionServiciosProps {
   communityProducts: Product[];
+  purchasedProductIds?: string[];
+  isLoggedIn?: boolean;
 }
 
-export default function SeccionServicios({ communityProducts }: SeccionServiciosProps) {
+export default function SeccionServicios({
+  communityProducts,
+  purchasedProductIds = [],
+  isLoggedIn = false,
+}: SeccionServiciosProps) {
   const comunidad = communityProducts[0];
 
   if (!comunidad) return null;
@@ -49,7 +55,12 @@ export default function SeccionServicios({ communityProducts }: SeccionServicios
 
         {/* Community Card */}
         <div className="mx-auto max-w-3xl">
-          <ServiceCard product={comunidad} />
+          <ServiceCard
+            product={comunidad}
+            purchaseStatus={
+              !isLoggedIn ? 'none' : purchasedProductIds.includes(comunidad.id) ? 'purchased' : 'locked'
+            }
+          />
         </div>
 
         {/* Asesoría CTA */}

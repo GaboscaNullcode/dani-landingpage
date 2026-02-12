@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import {
@@ -13,6 +14,8 @@ import {
   getFreeResources,
   getCommunityProducts,
 } from '@/lib/tienda-service';
+import { getCurrentUser } from '@/lib/auth-service';
+import { getUserPurchasedProductIds } from '@/lib/compras-service';
 
 export const revalidate = 60;
 
@@ -37,13 +40,33 @@ export const metadata: Metadata = {
   },
 };
 
+async function getUserPurchaseData(): Promise<{
+  isLoggedIn: boolean;
+  purchasedProductIds: string[];
+}> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('pb_auth')?.value;
+    if (!token) return { isLoggedIn: false, purchasedProductIds: [] };
+
+    const user = await getCurrentUser(token);
+    if (!user) return { isLoggedIn: false, purchasedProductIds: [] };
+
+    const purchasedIds = await getUserPurchasedProductIds(user.id);
+    return { isLoggedIn: true, purchasedProductIds: Array.from(purchasedIds) };
+  } catch {
+    return { isLoggedIn: false, purchasedProductIds: [] };
+  }
+}
+
 export default async function TiendaPage() {
-  const [featuredProducts, additionalProducts, freeResources, communityProducts] =
+  const [featuredProducts, additionalProducts, freeResources, communityProducts, purchaseData] =
     await Promise.all([
       getFeaturedProducts(),
       getAdditionalProducts(),
       getFreeResources(),
       getCommunityProducts(),
+      getUserPurchaseData(),
     ]);
 
   return (
@@ -51,12 +74,22 @@ export default async function TiendaPage() {
       <Navigation />
       <main id="main-content">
         <TiendaHero />
-        <SeccionRecursosGratuitos freeResources={freeResources} />
+        <SeccionRecursosGratuitos
+          freeResources={freeResources}
+          purchasedProductIds={purchaseData.purchasedProductIds}
+          isLoggedIn={purchaseData.isLoggedIn}
+        />
         <SeccionProductos
           featuredProducts={featuredProducts}
           additionalProducts={additionalProducts}
+          purchasedProductIds={purchaseData.purchasedProductIds}
+          isLoggedIn={purchaseData.isLoggedIn}
         />
-        <SeccionServicios communityProducts={communityProducts} />
+        <SeccionServicios
+          communityProducts={communityProducts}
+          purchasedProductIds={purchaseData.purchasedProductIds}
+          isLoggedIn={purchaseData.isLoggedIn}
+        />
       </main>
       <Footer />
     </>

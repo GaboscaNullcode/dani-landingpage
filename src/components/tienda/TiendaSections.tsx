@@ -12,9 +12,14 @@ import {
   BookOpen,
   Play,
   Crown,
+  Lock,
+  CircleCheck,
 } from 'lucide-react';
 import type { Product } from '@/types/tienda';
 import { formatPrice } from '@/types/tienda';
+
+// Purchase status: 'purchased' | 'locked' | 'none' (visitor, no login)
+export type PurchaseStatus = 'purchased' | 'locked' | 'none';
 
 // ============================================
 // COMPACT PRODUCT CARD (Horizontal Layout)
@@ -23,6 +28,7 @@ interface CompactCardProps {
   product: Product;
   index?: number;
   accentColor?: 'coral' | 'lavender' | 'mint';
+  purchaseStatus?: PurchaseStatus;
 }
 
 const accentStyles = {
@@ -49,8 +55,10 @@ const accentStyles = {
   },
 };
 
-function CompactProductCard({ product, index = 0, accentColor = 'coral' }: CompactCardProps) {
+function CompactProductCard({ product, index = 0, accentColor = 'coral', purchaseStatus = 'none' }: CompactCardProps) {
   const styles = accentStyles[accentColor];
+  const isLocked = purchaseStatus === 'locked';
+  const isPurchased = purchaseStatus === 'purchased';
 
   return (
     <motion.article
@@ -66,15 +74,26 @@ function CompactProductCard({ product, index = 0, accentColor = 'coral' }: Compa
           src={product.image}
           alt={product.name}
           fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className={`object-cover transition-transform duration-300 group-hover:scale-105 ${isLocked ? 'grayscale-[80%] opacity-60' : ''}`}
           sizes="80px"
         />
-        {product.badge && (
-          <span
-            className={`absolute -right-1 -top-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${styles.badge}`}
-          >
-            {product.badge}
+        {isLocked && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Lock className="h-6 w-6 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]" />
+          </div>
+        )}
+        {isPurchased ? (
+          <span className="absolute -right-1 -top-1 rounded-full bg-mint px-2 py-0.5 text-[10px] font-bold uppercase text-white">
+            Adquirido
           </span>
+        ) : (
+          product.badge && (
+            <span
+              className={`absolute -right-1 -top-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${styles.badge}`}
+            >
+              {product.badge}
+            </span>
+          )
         )}
       </div>
 
@@ -90,16 +109,41 @@ function CompactProductCard({ product, index = 0, accentColor = 'coral' }: Compa
         </div>
 
         <div className="mt-2 flex items-center justify-between">
-          <span className={`font-[var(--font-headline)] text-lg font-bold ${styles.price}`}>
-            {formatPrice(product.price)}
-          </span>
-          <Link
-            href={`/tienda/${product.slug}`}
-            className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-semibold text-white transition-all duration-200 ${styles.button}`}
-          >
-            {product.ctaText}
-            <ArrowRight className="h-3 w-3" />
-          </Link>
+          {isPurchased ? (
+            <span className="inline-flex items-center gap-1 text-sm font-semibold text-mint">
+              <CircleCheck className="h-4 w-4" />
+              Adquirido
+            </span>
+          ) : (
+            <span className={`font-[var(--font-headline)] text-lg font-bold ${styles.price}`}>
+              {formatPrice(product.price)}
+            </span>
+          )}
+          {isPurchased ? (
+            <Link
+              href={`/tienda/${product.slug}`}
+              className="inline-flex items-center gap-1 rounded-full bg-mint px-3 py-1.5 text-xs font-semibold text-white transition-all duration-200 hover:bg-teal-dark"
+            >
+              Ver producto
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          ) : isLocked ? (
+            <Link
+              href={`/tienda/${product.slug}`}
+              className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-coral to-pink px-3 py-1.5 text-xs font-semibold text-white transition-all duration-200 hover:shadow-md"
+            >
+              Obtener acceso
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          ) : (
+            <Link
+              href={`/tienda/${product.slug}`}
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-semibold text-white transition-all duration-200 ${styles.button}`}
+            >
+              {product.ctaText}
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          )}
         </div>
       </div>
     </motion.article>
@@ -111,9 +155,13 @@ function CompactProductCard({ product, index = 0, accentColor = 'coral' }: Compa
 // ============================================
 interface FeaturedCardProps {
   product: Product;
+  purchaseStatus?: PurchaseStatus;
 }
 
-function FeaturedProductCard({ product }: FeaturedCardProps) {
+function FeaturedProductCard({ product, purchaseStatus = 'none' }: FeaturedCardProps) {
+  const isLocked = purchaseStatus === 'locked';
+  const isPurchased = purchaseStatus === 'purchased';
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 30 }}
@@ -133,13 +181,24 @@ function FeaturedProductCard({ product }: FeaturedCardProps) {
             src={product.image}
             alt={product.name}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className={`object-cover transition-transform duration-500 group-hover:scale-105 ${isLocked ? 'grayscale-[80%] opacity-60' : ''}`}
             sizes="(max-width: 768px) 144px, 176px"
           />
-          {product.badge && (
-            <span className="absolute left-3 top-3 rounded-full bg-gradient-to-r from-coral to-pink px-3 py-1 text-xs font-bold uppercase text-white shadow-md">
-              {product.badge}
+          {isLocked && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Lock className="h-10 w-10 text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]" />
+            </div>
+          )}
+          {isPurchased ? (
+            <span className="absolute left-3 top-3 rounded-full bg-mint px-3 py-1 text-xs font-bold uppercase text-white shadow-md">
+              Adquirido
             </span>
+          ) : (
+            product.badge && (
+              <span className="absolute left-3 top-3 rounded-full bg-gradient-to-r from-coral to-pink px-3 py-1 text-xs font-bold uppercase text-white shadow-md">
+                {product.badge}
+              </span>
+            )
           )}
         </div>
 
@@ -174,24 +233,42 @@ function FeaturedProductCard({ product }: FeaturedCardProps) {
 
           {/* Price & CTA */}
           <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-baseline gap-2">
-              <span className="font-[var(--font-headline)] text-3xl font-bold text-coral">
-                {formatPrice(product.price)}
-              </span>
-              {product.originalPrice && (
-                <span className="text-lg text-gray-400 line-through">
-                  {formatPrice(product.originalPrice)}
+            {isPurchased ? (
+              <>
+                <span className="inline-flex items-center gap-2 font-[var(--font-headline)] text-xl font-bold text-mint">
+                  <CircleCheck className="h-6 w-6" />
+                  Adquirido
                 </span>
-              )}
-            </div>
+                <Link
+                  href={`/tienda/${product.slug}`}
+                  className="btn-shimmer inline-flex items-center gap-2 rounded-full bg-mint px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-teal-dark"
+                >
+                  Ver producto
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </>
+            ) : (
+              <>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-[var(--font-headline)] text-3xl font-bold text-coral">
+                    {formatPrice(product.price)}
+                  </span>
+                  {product.originalPrice && (
+                    <span className="text-lg text-gray-400 line-through">
+                      {formatPrice(product.originalPrice)}
+                    </span>
+                  )}
+                </div>
 
-            <Link
-              href={`/tienda/${product.slug}`}
-              className="btn-shimmer inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-coral to-pink px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(255,107,107,0.35)]"
-            >
-              {product.ctaText}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+                <Link
+                  href={`/tienda/${product.slug}`}
+                  className="btn-shimmer inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-coral to-pink px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(255,107,107,0.35)]"
+                >
+                  {isLocked ? 'Obtener acceso' : product.ctaText}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -205,9 +282,10 @@ function FeaturedProductCard({ product }: FeaturedCardProps) {
 interface FreeCardProps {
   product: Product;
   index?: number;
+  purchaseStatus?: PurchaseStatus;
 }
 
-function FreeResourceCard({ product, index = 0 }: FreeCardProps) {
+function FreeResourceCard({ product, index = 0, purchaseStatus = 'none' }: FreeCardProps) {
   const IconComponent = product.category === 'gratis' && product.name.includes('Masterclass')
     ? Play
     : BookOpen;
@@ -262,9 +340,10 @@ function FreeResourceCard({ product, index = 0 }: FreeCardProps) {
 // ============================================
 interface ServiceCardProps {
   product: Product;
+  purchaseStatus?: PurchaseStatus;
 }
 
-function ServiceCard({ product }: ServiceCardProps) {
+function ServiceCard({ product, purchaseStatus = 'none' }: ServiceCardProps) {
   return (
     <motion.article
       initial={{ opacity: 0, y: 30 }}
@@ -310,19 +389,37 @@ function ServiceCard({ product }: ServiceCardProps) {
             )}
 
             <div className="flex flex-col items-center gap-4 sm:flex-row">
-              <div className="flex items-baseline gap-1">
-                <span className="font-[var(--font-headline)] text-3xl font-bold text-lavender">
-                  {formatPrice(product.price, 'USD', product.isSubscription ? product.interval : undefined)}
-                </span>
-              </div>
+              {purchaseStatus === 'purchased' ? (
+                <>
+                  <span className="inline-flex items-center gap-2 font-[var(--font-headline)] text-xl font-bold text-mint">
+                    <CircleCheck className="h-6 w-6" />
+                    Adquirido
+                  </span>
+                  <Link
+                    href={`/tienda/${product.slug}`}
+                    className="btn-shimmer inline-flex items-center gap-2 rounded-full bg-mint px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-teal-dark"
+                  >
+                    Ver producto
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-baseline gap-1">
+                    <span className="font-[var(--font-headline)] text-3xl font-bold text-lavender">
+                      {formatPrice(product.price, 'USD', product.isSubscription ? product.interval : undefined)}
+                    </span>
+                  </div>
 
-              <Link
-                href={`/tienda/${product.slug}`}
-                className="btn-shimmer inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-lavender to-pink px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(167,139,250,0.35)]"
-              >
-                {product.ctaText}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+                  <Link
+                    href={`/tienda/${product.slug}`}
+                    className="btn-shimmer inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-lavender to-pink px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(167,139,250,0.35)]"
+                  >
+                    {purchaseStatus === 'locked' ? 'Obtener acceso' : product.ctaText}
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
