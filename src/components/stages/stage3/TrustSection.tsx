@@ -4,10 +4,10 @@ import { motion } from 'motion/react';
 import { Quote } from 'lucide-react';
 
 const trustQuotes = [
-  'No te vendo un sueno, te doy las herramientas y la claridad para construirlo.',
-  'He trabajado remotamente por anos y se exactamente lo que se necesita para empezar.',
-  'Mi objetivo es que salgas con un plan claro, no con mas dudas.',
-  'Cada persona es diferente, por eso mis sesiones son 100% personalizadas.',
+  'Aquí no eres un número más: las asesorías son directamente conmigo. Me encargo de revisar tu perfil y acompañarte en lo que TÚ necesitas.',
+  'Acompañamiento real, sin intermediarios.',
+  'No te voy a prometer cifras mágicas ni tiempos irreales. Lo que sí hago es acompañarte para que no te sabotees cuando llegue la oportunidad.',
+  'Muchas personas llegan a entrevistas solas. La asesoría existe para que no llegues insegura.',
 ];
 
 export default function TrustSection() {
@@ -22,7 +22,7 @@ export default function TrustSection() {
           className="text-center"
         >
           <h2 className="text-section-title font-[var(--font-headline)] font-bold text-gray-dark">
-            ¿Por que confiar en mi?
+            ¿Por qué confiar en mí?
           </h2>
         </motion.div>
 

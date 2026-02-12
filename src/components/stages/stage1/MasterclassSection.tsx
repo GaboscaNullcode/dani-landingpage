@@ -10,19 +10,19 @@ import {
 } from 'lucide-react';
 
 const learningPoints = [
-  'Qué es realmente el trabajo remoto y qué tipos existen',
-  'Cómo saber si eres apto para trabajar desde casa',
-  'Las plataformas reales donde encontrar trabajo',
-  'Errores que comete el 90% de los que empiezan',
-  'Cómo preparar tu perfil para aplicar',
-  'Los primeros pasos concretos que puedes dar hoy',
+  'La diferencia real entre Trabajo Remoto y Asistencia Virtual, y cómo elegir el camino que más se ajusta a ti.',
+  'Nichos reales y oportunidades actuales, más allá de los roles saturados.',
+  'Plataformas de trabajo remoto y cómo usarlas de forma estratégica.',
+  'Documentos necesarios para postular y cómo prepararlos correctamente.',
+  'Herramientas esenciales (organización, comunicación, diseño y pagos).',
+  'Un cambio de enfoque para ver el trabajo remoto con más claridad y realismo.',
 ];
 
 const bonusItems = [
   {
     icon: FileText,
-    title: 'Ruta de inicio 7 dias',
-    description: 'Plan dia a dia para dar tu primer paso en el mundo remoto',
+    title: 'Ruta de inicio 7 días',
+    description: 'Plan día a día para dar tu primer paso en el mundo remoto',
   },
   {
     icon: ClipboardCheck,
@@ -81,9 +81,11 @@ export default function MasterclassSection() {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="mx-auto mt-6 max-w-2xl text-center text-gray-carbon"
           >
-            Una clase completa donde te explico todo lo que necesitas saber para
-            entender si el trabajo remoto es para ti y dar tu primer paso con
-            confianza.
+            En esta masterclass gratuita de 2 horas, Dani te explica cómo iniciar
+            en el trabajo remoto desde cero: qué opciones existen, qué busca el
+            mercado, qué necesitas para postular y cómo evitar errores comunes al
+            empezar. Es una sesión clara, práctica y honesta para ayudarte a
+            decidir tu siguiente paso con más criterio.
           </motion.p>
 
           {/* Learning points */}
@@ -95,7 +97,7 @@ export default function MasterclassSection() {
             className="mt-10 rounded-2xl bg-white p-8 shadow-sm"
           >
             <h3 className="mb-6 font-[var(--font-headline)] text-lg font-bold text-gray-dark">
-              Que vas a aprender
+              Qué vas a aprender
             </h3>
             <div className="grid gap-4 md:grid-cols-2">
               {learningPoints.map((point, index) => (
@@ -152,7 +154,7 @@ export default function MasterclassSection() {
             className="mt-10 text-center"
           >
             <a
-              href="#"
+              href="/tienda/masterclass-gratuita"
               className="btn-shimmer inline-flex items-center gap-3 rounded-full px-10 py-5 font-[var(--font-headline)] text-lg font-bold text-white"
               style={{ background: 'var(--gradient-coral-pink)' }}
             >

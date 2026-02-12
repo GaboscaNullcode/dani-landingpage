@@ -70,11 +70,11 @@ export default function NewsletterStageSection() {
               <BookOpen className="h-6 w-6" />
             </div>
             <h3 className="font-[var(--font-headline)] text-xl font-bold text-gray-dark">
-              Guia gratuita
+              Las habilidades que te harán brillar en el trabajo remoto
             </h3>
             <p className="mt-2 text-sm text-gray-carbon">
-              Descarga la guia completa para dar tu primer paso en el trabajo
-              remoto. Recibela directamente en tu email.
+              Descubre las habilidades blandas que te ayudarán a destacar,
+              comunicarte mejor y crecer en el mundo remoto.
             </p>
 
             {guideSubmitted ? (
@@ -100,14 +100,14 @@ export default function NewsletterStageSection() {
                     className="mt-0.5 accent-coral"
                     required
                   />
-                  Acepto recibir la guia y comunicaciones por email
+                  Acepto recibir la guía y comunicaciones por email
                 </label>
                 <button
                   type="submit"
                   className="btn-shimmer flex w-full items-center justify-center gap-2 rounded-full px-6 py-3 font-[var(--font-headline)] text-sm font-bold text-white"
                   style={{ background: 'var(--gradient-coral-pink)' }}
                 >
-                  Descargar Guia
+                  Descargar Guía
                   <ArrowRight className="h-4 w-4" />
                 </button>
               </form>
@@ -129,8 +129,13 @@ export default function NewsletterStageSection() {
               Newsletter semanal
             </h3>
             <p className="mt-2 text-sm text-gray-carbon">
-              Cada semana recibe tips, ofertas laborales y contenido exclusivo
-              sobre trabajo remoto directo en tu bandeja de entrada.
+              Empieza tu camino al trabajo remoto con contenido exclusivo cada
+              semana. Regístrate a mi newsletter.
+            </p>
+            <p className="mt-2 text-xs font-medium text-coral">
+              Y recibe GRATIS la guía &quot;Fórmula para un Título
+              Optimizado&quot;. Ideal para destacar en plataformas freelance y
+              mejorar tu CV.
             </p>
 
             {newsletterSubmitted ? (

@@ -6,6 +6,7 @@ import { ArrowRight, HelpCircle } from 'lucide-react';
 
 interface StageTransitionCTAProps {
   text: string;
+  description?: string;
   primaryText: string;
   primaryHref: string;
   quizText?: string;
@@ -13,6 +14,7 @@ interface StageTransitionCTAProps {
 
 export default function StageTransitionCTA({
   text,
+  description,
   primaryText,
   primaryHref,
   quizText = 'No estoy seguro/a → Hacer el quiz',
@@ -29,6 +31,18 @@ export default function StageTransitionCTA({
         >
           {text}
         </motion.p>
+
+        {description && (
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="mx-auto mt-4 max-w-lg text-gray-carbon"
+          >
+            {description}
+          </motion.p>
+        )}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

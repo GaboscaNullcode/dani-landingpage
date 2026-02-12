@@ -20,19 +20,19 @@ export default function MasterclassNote() {
           </div>
           <div className="flex-1 text-center md:text-left">
             <h3 className="font-[var(--font-headline)] text-lg font-bold text-gray-dark">
-              Recomendacion antes de agendar
+              Recomendación antes de agendar
             </h3>
             <p className="mt-2 text-sm text-gray-carbon">
-              Para aprovechar al maximo tu sesion, te recomiendo ver primero la
-              Masterclass Gratuita. Asi llegaras con contexto y podremos
-              enfocarnos en tu caso especifico.
+              Para aprovechar al máximo tu sesión, te recomendamos haber visto la
+              Masterclass Gratuita &quot;Vive en Modo Remoto&quot; antes de
+              agendar.
             </p>
           </div>
           <Link
             href="/recursos-gratuitos#masterclass"
             className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 border-coral px-6 py-3 font-[var(--font-headline)] text-sm font-bold text-coral transition-colors duration-300 hover:bg-coral hover:text-white"
           >
-            Ver Masterclass
+            Ver Masterclass Gratuita
             <ArrowRight className="h-4 w-4" />
           </Link>
         </motion.div>

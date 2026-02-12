@@ -13,12 +13,12 @@ const etapas = [
   {
     number: 1,
     icon: Compass,
-    title: 'Guia Practica para Iniciar',
+    title: 'Guía Práctica para Iniciar',
     description:
       'Todo lo que necesitas saber para entender el mundo remoto y prepararte para dar el primer paso.',
     items: [
       'Fundamentos del trabajo remoto',
-      'Preparacion de documentos esenciales',
+      'Preparación de documentos esenciales',
       'Plataformas reales donde buscar',
     ],
     color: 'bg-coral',
@@ -29,10 +29,10 @@ const etapas = [
     icon: Target,
     title: 'Define tu Camino + 40 Nichos',
     description:
-      'Descubre tu nicho ideal entre mas de 40 opciones y define tu camino con claridad.',
+      'Descubre tu nicho ideal entre más de 40 opciones y define tu camino con claridad.',
     items: [
       'Test de perfil profesional',
-      'Catalogo de 40+ nichos remotos',
+      'Catálogo de 40+ nichos remotos',
       'Estrategia de posicionamiento',
     ],
     color: 'bg-lavender',
@@ -41,11 +41,11 @@ const etapas = [
   {
     number: 3,
     icon: Rocket,
-    title: 'Optimizacion + Entrevistas + Mindset',
+    title: 'Optimización + Entrevistas + Mindset',
     description:
-      'Perfecciona tu perfil, prepara tus entrevistas y desarrolla la mentalidad para el exito remoto.',
+      'Perfecciona tu perfil, prepara tus entrevistas y desarrolla la mentalidad para el éxito remoto.',
     items: [
-      'Optimizacion de CV y portafolio',
+      'Optimización de CV y portafolio',
       'Simulacro de entrevistas',
       'Mindset del profesional remoto',
     ],
@@ -74,7 +74,7 @@ export default function RutaProductSection() {
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-gray-carbon">
             Un programa completo con 3 etapas que te lleva de la curiosidad al
-            trabajo remoto real. Sin saltos, sin confusion, todo en un solo
+            trabajo remoto real. Sin saltos, sin confusión, todo en un solo
             sistema.
           </p>
         </motion.div>
@@ -176,7 +176,7 @@ export default function RutaProductSection() {
           transition={{ duration: 0.6 }}
           className="mx-auto mt-12 max-w-xl text-center font-[var(--font-headline)] text-lg font-medium text-gray-carbon italic"
         >
-          &quot;Todo integrado en un solo sistema, disenado para avanzar sin
+          &quot;Todo integrado en un solo sistema, diseñado para avanzar sin
           saltos.&quot;
         </motion.p>
 
@@ -189,7 +189,7 @@ export default function RutaProductSection() {
           className="mt-10 text-center"
         >
           <a
-            href="#"
+            href="/tienda/curso-paso-a-paso"
             className="btn-shimmer inline-flex items-center gap-3 rounded-full px-10 py-5 font-[var(--font-headline)] text-lg font-bold text-white"
             style={{ background: 'var(--gradient-coral-pink)' }}
           >

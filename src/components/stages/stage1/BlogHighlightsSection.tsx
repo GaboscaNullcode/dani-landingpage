@@ -49,10 +49,10 @@ export default function BlogHighlightsSection() {
           className="text-center"
         >
           <h2 className="text-section-title font-[var(--font-headline)] font-bold text-gray-dark">
-            Articulos destacados
+            Artículos destacados
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-gray-carbon">
-            Lee los articulos que te van a ayudar a entender mejor el mundo
+            Lee los artículos que te van a ayudar a entender mejor el mundo
             remoto y dar tus primeros pasos.
           </p>
         </motion.div>
@@ -94,7 +94,7 @@ export default function BlogHighlightsSection() {
                   </p>
 
                   <div className="mt-4 flex items-center gap-1 text-sm font-semibold text-coral">
-                    Leer articulo
+                    Leer artículo
                     <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </div>
                 </Link>
@@ -114,7 +114,7 @@ export default function BlogHighlightsSection() {
             href="/blog"
             className="inline-flex items-center gap-2 font-[var(--font-headline)] font-bold text-coral transition-colors duration-300 hover:text-pink"
           >
-            Ver todos los articulos
+            Ver todos los artículos
             <ArrowRight className="h-5 w-5" />
           </Link>
         </motion.div>

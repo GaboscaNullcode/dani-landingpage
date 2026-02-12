@@ -40,7 +40,7 @@ export default function RecursosGratuitosPage() {
       <main id="main-content">
         <StageHero
           title="Descubre si el trabajo remoto es para ti"
-          subtitle="Explora recursos gratuitos que te ayudan a entender qué es el trabajo remoto, si es para ti, y cómo empezar sin invertir un centavo."
+          subtitle="Si estás empezando y tienes dudas, aquí encontrarás recursos claros y gratuitos para entender si este camino es para ti y avanzar con más tranquilidad."
         />
         <QuickNavSection />
         <MasterclassSection />
@@ -48,8 +48,9 @@ export default function RecursosGratuitosPage() {
         <WhatsAppCommunityCard />
         <NewsletterStageSection />
         <StageTransitionCTA
-          text="¿Ya sientes que esto si es para ti?"
-          primaryText="Ver la Ruta Paso a Paso"
+          text="¿Ya sientes que esto sí es para ti, pero te abruma la información?"
+          description="Descubre el paso a paso para avanzar con claridad."
+          primaryText="Quiero empezar con claridad"
           primaryHref="/ruta-recomendada"
         />
       </main>

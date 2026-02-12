@@ -22,32 +22,33 @@ interface ServiceCard {
 
 const services: ServiceCard[] = [
   {
-    name: 'Consultoria',
+    name: 'Consultoría',
     duration: '45 min',
     description:
-      'Una sesion enfocada para resolver dudas concretas y recibir orientacion clara sobre tu situacion.',
+      'Revisión rápida + preguntas puntuales. Te llevas tarea a casa y un reporte.',
     features: [
-      { text: 'Sesion 1:1 por videollamada', included: true },
-      { text: 'Reporte personalizado post-sesion', included: true },
-      { text: 'Revision de seguimiento', included: false },
-      { text: 'Acceso a comunidad privada', included: false },
+      { text: 'Consultoría de revisión', included: true },
+      { text: 'Preguntas puntuales', included: true },
+      { text: 'Reporte post-sesión', included: true },
+      { text: 'Sin revisión posterior', included: false },
+      { text: 'Sin comunidad privada', included: false },
     ],
-    ctaText: 'Agendar Consultoria',
+    ctaText: 'Agendar consultoría',
   },
   {
-    name: 'Asesoria',
+    name: 'Asesoría',
     duration: '90 min',
     badge: 'RECOMENDADO',
     badgeColor: 'bg-coral text-white',
     description:
-      'Una sesion profunda con plan de accion, revision y acceso a la comunidad para seguimiento continuo.',
+      'Sesión profunda con reporte + revisión + comunidad.',
     features: [
-      { text: 'Sesion 1:1 por videollamada', included: true },
-      { text: 'Reporte personalizado post-sesion', included: true },
-      { text: '1 revision de seguimiento', included: true },
-      { text: 'Acceso a comunidad privada', included: true },
+      { text: 'Asesoría completa', included: true },
+      { text: 'Reporte post-sesión', included: true },
+      { text: '1 revisión incluida', included: true },
+      { text: 'Acceso a Comunidad Privada', included: true },
     ],
-    ctaText: 'Agendar Asesoria',
+    ctaText: 'Agendar asesoría',
     highlight: true,
   },
   {
@@ -56,14 +57,15 @@ const services: ServiceCard[] = [
     badge: 'PREMIUM',
     badgeColor: 'bg-lavender text-white',
     description:
-      'El acompanamiento mas completo: sesion intensiva, multiples revisiones y comunidad de por vida.',
+      'El paquete más completo: teoría + asesoría + revisión + comunidad.',
     features: [
-      { text: 'Sesion 1:1 por videollamada', included: true },
-      { text: 'Reporte personalizado post-sesion', included: true },
-      { text: '2 revisiones de seguimiento', included: true },
-      { text: 'Acceso a comunidad privada', included: true },
+      { text: 'Programa intensivo', included: true },
+      { text: 'Asesoría personalizada', included: true },
+      { text: 'Reporte post-sesión', included: true },
+      { text: '2 revisiones incluidas', included: true },
+      { text: 'Acceso a Comunidad Privada', included: true },
     ],
-    ctaText: 'Agendar Programa',
+    ctaText: 'Agendar programa',
   },
 ];
 
@@ -82,7 +84,7 @@ export default function ServicesCardsSection() {
             Elige el servicio que mejor se adapte a ti
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-gray-carbon">
-            Todos los servicios incluyen sesion en vivo conmigo. Los pagos se
+            Todos los servicios incluyen sesión en vivo conmigo. Los pagos se
             procesan de forma segura con Stripe.
           </p>
         </motion.div>
@@ -149,7 +151,7 @@ export default function ServicesCardsSection() {
 
               {/* CTA */}
               <motion.a
-                href="#"
+                href="/asesorias#planes"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className={`mt-8 block rounded-full py-4 text-center font-[var(--font-headline)] font-bold transition-shadow duration-300 ${

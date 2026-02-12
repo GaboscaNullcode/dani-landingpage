@@ -36,9 +36,8 @@ export default function WhatsAppCommunityCard() {
 
           <p className="mt-4 text-gray-carbon">
             Si prefieres no hacerlo solo, la Comunidad{' '}
-            <strong>&quot;Vive en Modo Remoto&quot;</strong> es un espacio de
-            apoyo continuo con acceso a ofertas laborales, preguntas directas y
-            encuentros en vivo.
+            <strong>Remote con Dani</strong> es un espacio de apoyo continuo con
+            acceso a ofertas laborales, preguntas directas y encuentros en vivo.
           </p>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -65,7 +64,7 @@ export default function WhatsAppCommunityCard() {
           </div>
 
           <motion.a
-            href="#"
+            href="https://chat.whatsapp.com/PLACEHOLDER"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="mt-8 inline-flex items-center gap-2 rounded-full bg-green-500 px-8 py-4 font-[var(--font-headline)] font-bold text-white transition-shadow duration-300 hover:shadow-[0_10px_30px_rgba(34,197,94,0.3)]"
