@@ -20,6 +20,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'remotecondani.b-cdn.net',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'd1yei2z3i6k35z.cloudfront.net',
         pathname: '/**',
       },

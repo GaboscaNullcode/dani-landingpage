@@ -9,10 +9,10 @@ import { Sparkles, User } from 'lucide-react';
 
 const navItems = [
   { text: 'Home', href: '/' },
-  { text: 'Blog', href: '/blog' },
+  { text: 'Empieza Gratis', href: '/empezar' },
   { text: 'Tienda', href: '/tienda' },
-  { text: 'Asesorías', href: '/asesorias' },
-  { text: 'Info', href: '/info' },
+  { text: 'Acompañamiento 1:1', href: '/asesorias' },
+  { text: 'Centro de Ayuda', href: '/info' },
 ];
 
 export default memo(function Navigation() {
@@ -146,7 +146,7 @@ export default memo(function Navigation() {
                   background: 'var(--gradient-coral-pink)',
                 }}
               >
-                <span>Empezar</span>
+                <span>Empieza aquí</span>
                 <motion.div
                   animate={{ rotate: [0, 15, 0] }}
                   transition={{ duration: 2, repeat: Infinity }}
@@ -278,7 +278,7 @@ export default memo(function Navigation() {
                       'var(--gradient-coral-pink)',
                   }}
                 >
-                  <span>Empezar</span>
+                  <span>Empieza aquí</span>
                   <Sparkles className="h-5 w-5" />
                 </Link>
               </motion.li>
