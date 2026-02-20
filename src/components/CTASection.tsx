@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import Link from 'next/link';
 import { motion, useInView } from 'motion/react';
 import {
-  GraduationCap,
   BookOpen,
   MessageCircle,
   Lightbulb,
@@ -17,32 +16,31 @@ import {
 
 const ctaButtons = [
   {
-    text: 'Agendar mi Asesoría 1:1',
-    icon: MessageCircle,
-    href: '/asesorias',
+    text: 'Define tu Ruta Remota',
+    icon: Rocket,
+    href: '/empezar',
     gradient: 'var(--gradient-coral-pink)',
     shadow: 'rgba(255, 107, 107, 0.3)',
   },
   {
-    text: 'Ver Masterclass',
-    icon: GraduationCap,
-    href: '/tienda',
+    text: 'Empieza con la Guía Completa',
+    icon: BookOpen,
+    href: '/tienda/curso-paso-a-paso',
     gradient: 'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
     shadow: 'rgba(167, 139, 250, 0.3)',
   },
   {
-    text: 'Recursos Gratis',
-    icon: BookOpen,
-    href: '/empezar',
+    text: 'Agenda tu Acompañamiento 1:1',
+    icon: MessageCircle,
+    href: '/asesorias',
     gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
     shadow: 'rgba(224, 86, 160, 0.3)',
   },
 ];
 
 const trustBadges = [
-  { icon: CheckCircle, text: 'Garantía de satisfacción' },
-  { icon: MessageCircle, text: 'Seguimiento post-sesión' },
-  { icon: Heart, text: '+500 personas ya lo lograron' },
+  { icon: CheckCircle, text: 'Enfoque práctico y realista' },
+  { icon: Heart, text: 'Únete a nuestra comunidad remota' },
 ];
 
 export default function CTASection() {
@@ -128,10 +126,8 @@ export default function CTASection() {
           transition={{ duration: 0.8 }}
           className="mb-6 font-[var(--font-headline)] text-3xl font-bold text-black-deep md:text-4xl lg:text-5xl"
         >
-          ¿Cuánto más vas a esperar para{' '}
-          <span className="gradient-text">dar el primer paso</span> hacia la
-          vida{' '}
-          <span className="gradient-text-playful">que mereces</span>?
+          ¿Estas list@ para vivir en{' '}
+          <span className="gradient-text-playful">modo remoto</span>?
         </motion.h2>
 
         {/* Subtitle */}
@@ -142,7 +138,7 @@ export default function CTASection() {
           className="mx-auto mb-12 max-w-2xl text-lg text-gray-carbon"
         >
           Una sesión conmigo puede ahorrarte meses de prueba y error.{' '}
-          <span className="font-semibold text-pink">Hablemos de tu situación.</span>
+          <span className="font-semibold text-pink">Veamos tu caso y definamos tu ruta.</span>
         </motion.p>
 
         {/* CTA Buttons */}
