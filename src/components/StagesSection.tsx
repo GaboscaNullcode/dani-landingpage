@@ -82,7 +82,7 @@ const stages: StageData[] = [
       'Estrategia clara según tu experiencia y objetivo',
     ],
     cta: 'Ver opciones de acompañamiento',
-    href: '/servicios',
+    href: '/asesorias',
     icon: Rocket,
     gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
     shadowColor: 'rgba(224, 86, 160, 0.3)',
@@ -97,6 +97,7 @@ export default function StagesSection() {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [quizOpen, setQuizOpen] = useState(false);
   const [recommendedStage, setRecommendedStage] = useState<number | null>(null);
+  const [showTooltip, setShowTooltip] = useState(false);
   const quizTriggerRef = useRef<HTMLButtonElement>(null);
   const stagesGridRef = useRef<HTMLDivElement>(null);
 
@@ -176,8 +177,7 @@ export default function StagesSection() {
             <span className="gradient-text-playful">Dani</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-carbon">
-            Tu sendero hacia la libertad: elige tu ruta con Dani y transforma tu
-            trabajo.
+            Tu sendero hacia la libertad, elige tu ruta con Dani y empieza hoy
           </p>
         </motion.div>
 
@@ -188,20 +188,38 @@ export default function StagesSection() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mb-8 flex justify-center"
         >
-          <button
-            ref={quizTriggerRef}
-            onClick={() => setQuizOpen(true)}
-            className="group inline-flex items-center gap-3 rounded-full bg-white/90 px-5 py-2.5 shadow-md backdrop-blur-sm transition-shadow duration-300 hover:shadow-lg"
-          >
-            <CircleHelp className="h-4 w-4 text-pink" />
-            <span className="font-[var(--font-dm-sans)] text-sm text-gray-carbon">
-              ¿No sabes en qué etapa estás?
-            </span>
-            <span className="inline-flex items-center gap-1 font-[var(--font-dm-sans)] text-sm font-bold text-pink transition-colors duration-300 group-hover:text-coral">
-              Descúbrelo en 1 minuto
-              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
-            </span>
-          </button>
+          <div className="relative">
+            <button
+              ref={quizTriggerRef}
+              onClick={() => setQuizOpen(true)}
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+              className="group inline-flex items-center gap-3 rounded-full bg-white/90 px-5 py-2.5 shadow-md backdrop-blur-sm transition-shadow duration-300 hover:shadow-lg"
+            >
+              <CircleHelp className="h-4 w-4 text-pink" />
+              <span className="font-[var(--font-dm-sans)] text-sm text-gray-carbon">
+                ¿No sabes qué ruta tomar?
+              </span>
+              <span className="inline-flex items-center gap-1 font-[var(--font-dm-sans)] text-sm font-bold text-pink transition-colors duration-300 group-hover:text-coral">
+                Descúbrelo en 1 minuto
+                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+              </span>
+            </button>
+            <AnimatePresence>
+              {showTooltip && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute left-1/2 top-full z-30 mt-3 w-72 -translate-x-1/2 rounded-2xl bg-black-deep px-5 py-3.5 text-center font-[var(--font-dm-sans)] text-sm text-white shadow-xl"
+                >
+                  <div className="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 bg-black-deep" />
+                  Descubre por dónde empezar tu camino remoto, responde 5 preguntas para obtener tu ruta ideal
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </motion.div>
 
         {/* Stages Grid */}

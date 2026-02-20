@@ -10,13 +10,6 @@ import RotatingText from './RotatingText';
 const rotatingWords = ['libertad', 'claridad', 'propósito', 'independencia'];
 
 // Unsplash avatar URLs for social proof
-const avatarImages = [
-  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face',
-  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face',
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face',
-  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face',
-];
-
 // Floating decorative shapes
 const FloatingShapes = ({ isInView }: { isInView: boolean }) => (
   <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
@@ -153,7 +146,7 @@ export default function HeroSection() {
               type: 'spring',
               stiffness: 200,
             }}
-            className="mb-6 inline-flex flex-col items-center gap-0.5 rounded-full bg-white/80 px-5 py-2.5 shadow-md backdrop-blur-sm lg:items-start"
+            className="mb-6 inline-flex items-center rounded-full bg-white/80 px-5 py-2.5 shadow-md backdrop-blur-sm"
           >
             <div className="flex items-center gap-2">
               <motion.div
@@ -163,12 +156,9 @@ export default function HeroSection() {
                 <Hand className="h-5 w-5 text-coral" />
               </motion.div>
               <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
-                Vive en Modo Remoto
+                Tu guía hacia el trabajo remoto
               </span>
             </div>
-            <span className="font-[var(--font-dm-sans)] text-xs text-gray-medium">
-              Intención clara, acción real
-            </span>
           </motion.div>
 
           {/* Main Title */}
@@ -267,7 +257,7 @@ export default function HeroSection() {
                 background: 'var(--gradient-coral-pink)',
               }}
             >
-              <span>Agenda tu Asesoría</span>
+              <span>Agenda tu acompañamiento</span>
               <motion.div
                 animate={{ x: [0, 5, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
@@ -281,39 +271,11 @@ export default function HeroSection() {
               href="/empezar"
               className="group relative inline-flex items-center gap-2 rounded-full border-2 border-black-deep bg-white px-8 py-4 font-[var(--font-headline)] text-base font-bold text-black-deep transition-[transform,border-color,background-color,color,box-shadow] duration-500 hover:-translate-y-1 hover:border-coral hover:bg-coral hover:text-white hover:shadow-[0_15px_40px_rgba(255,107,107,0.3)]"
             >
-              <span>Ver recursos gratis</span>
-              <Sparkles className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
+              <span>Descubre tu ruta</span>
+              <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
           </motion.div>
 
-          {/* Social proof */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            className="mt-12 flex flex-wrap items-center justify-center gap-6 lg:justify-start"
-          >
-            <div className="flex -space-x-3">
-              {avatarImages.map((src, i) => (
-                <motion.div
-                  key={i}
-                  className="relative h-10 w-10 overflow-hidden rounded-full border-2 border-white shadow-md"
-                  whileHover={{ scale: 1.1, zIndex: 10 }}
-                >
-                  <Image
-                    src={src}
-                    alt={`Estudiante ${i + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="40px"
-                  />
-                </motion.div>
-              ))}
-            </div>
-            <div className="text-sm text-gray-carbon">
-              <span className="font-bold text-black-deep">+500 personas</span> ya dieron el salto con mi ayuda
-            </div>
-          </motion.div>
         </div>
 
         {/* Image Column */}
@@ -377,9 +339,9 @@ export default function HeroSection() {
                   <Laptop className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <div className="text-xs text-gray-medium">Sin jefes tóxicos</div>
+                  <div className="text-xs text-gray-medium">Intención clara, acción real</div>
                   <div className="font-[var(--font-headline)] font-bold text-black-deep">
-                    Tú decides cuándo
+                    Vive en modo remoto
                   </div>
                 </div>
               </div>
