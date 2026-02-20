@@ -19,6 +19,7 @@ interface NewsletterFormCardProps {
 
 export default function NewsletterFormCard({ source = 'home' }: NewsletterFormCardProps) {
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [accepted, setAccepted] = useState(false);
   const { name, setName, email, setEmail, isSubmitting, isSuccess, error, handleSubmit } =
     useNewsletterForm(source);
 
@@ -50,10 +51,10 @@ export default function NewsletterFormCard({ source = 'home' }: NewsletterFormCa
         <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-coral/10">
           <Mail className="h-5 w-5 text-coral" />
         </div>
-        <h3 className="font-[var(--font-headline)] text-lg font-bold text-black-deep">
+        <h3 className="font-[var(--font-headline)] text-xl font-bold text-black-deep">
           Contenido exclusivo cada semana
         </h3>
-        <p className="mt-1 text-sm leading-relaxed text-gray-medium">
+        <p className="mt-1 text-base leading-relaxed text-gray-medium">
           Recibe{' '}
           <span className="font-semibold text-coral">GRATIS</span> la guía
           &ldquo;Fórmula para un Título Optimizado&rdquo;.
@@ -176,11 +177,24 @@ export default function NewsletterFormCard({ source = 'home' }: NewsletterFormCa
             </motion.div>
           </div>
 
+          {/* Consent checkbox */}
+          <label className="flex cursor-pointer items-start gap-3 pt-1">
+            <input
+              type="checkbox"
+              checked={accepted}
+              onChange={(e) => setAccepted(e.target.checked)}
+              className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 accent-coral"
+            />
+            <span className="text-sm leading-snug text-gray-carbon">
+              Acepto recibir correos y puedo cancelar cuando quiera.
+            </span>
+          </label>
+
           {/* Submit button */}
           <motion.button
             type="submit"
-            disabled={isSubmitting}
-            className="btn-shimmer group relative w-full overflow-hidden rounded-full py-4 font-[var(--font-headline)] text-base font-bold text-white transition-[transform,box-shadow] duration-500 disabled:opacity-70"
+            disabled={isSubmitting || !accepted}
+            className="btn-shimmer group relative w-full overflow-hidden rounded-full py-4 font-[var(--font-headline)] text-base font-bold text-white transition-[transform,box-shadow] duration-500 disabled:cursor-not-allowed disabled:opacity-70"
             style={{
               background: 'var(--gradient-coral-pink)',
               boxShadow: '0 10px 30px rgba(255, 107, 107, 0.35)',

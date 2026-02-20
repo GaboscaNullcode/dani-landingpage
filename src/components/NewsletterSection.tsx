@@ -103,9 +103,9 @@ export default function NewsletterSection({ source = 'home' }: NewsletterSection
             initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="mx-auto mt-5 max-w-xl"
+            className="mx-auto mt-5 max-w-2xl"
           >
-            <p className="text-lg leading-relaxed text-gray-carbon">
+            <p className="text-lg leading-relaxed text-gray-carbon md:text-xl">
               Regístrate y recibe{' '}
               <span className="font-bold text-coral underline decoration-coral/40 decoration-2 underline-offset-2">
                 GRATIS
@@ -121,7 +121,7 @@ export default function NewsletterSection({ source = 'home' }: NewsletterSection
           initial={{ opacity: 0, y: 30, scale: 0.95 }}
           animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
           transition={{ delay: 0.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="mx-auto max-w-md"
+          className="mx-auto max-w-xl"
         >
           <NewsletterFormCard source={source} />
         </motion.div>
