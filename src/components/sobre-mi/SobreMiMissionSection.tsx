@@ -14,12 +14,12 @@ const missionPoints = [
   {
     icon: Target,
     title: 'Creer',
-    text: 'No necesitas titulo universitario ni contactos influyentes para empezar. Solo necesitas la decision de dar el primer paso',
+    text: 'No necesitas título universitario ni contactos influyentes para empezar. Solo necesitas la decisión de dar el primer paso',
   },
   {
     icon: Rocket,
     title: 'Construir',
-    text: 'Mostrarte como, con las habilidades que ya tienes, puedes construir una carrera online y crear la vida que mereces',
+    text: 'Mostrarte cómo, con las habilidades que ya tienes, puedes construir una carrera online y crear la vida que mereces',
   },
 ];
 
@@ -84,7 +84,7 @@ export default function SobreMiMissionSection() {
 
             {/* Subtitle */}
             <p className="mb-10 text-lg leading-relaxed text-gray-carbon">
-              Mi mision es ayudarte a construir la carrera remota que mereces.
+              Mi misión es ayudarte a construir la carrera remota que mereces.
               Estas son las tres cosas que quiero lograr contigo:
             </p>
 
@@ -171,8 +171,8 @@ export default function SobreMiMissionSection() {
               }}
             >
               <p className="font-[var(--font-headline)] text-sm font-semibold leading-relaxed text-gray-dark">
-                &ldquo;Solo con determinacion y las herramientas correctas
-                puedes lograrlo&rdquo;
+                &ldquo;Con determinación, las herramientas correctas y
+                acciones alineadas puedes lograrlo!&rdquo;
               </p>
               <div className="mt-2 text-xs font-medium text-coral">— Dani</div>
             </motion.div>

@@ -8,6 +8,7 @@ import {
   Layers,
   Users,
   MessageCircle,
+  Heart,
   Sparkles,
 } from 'lucide-react';
 
@@ -16,7 +17,7 @@ const experienceData = [
     icon: Calendar,
     title: 'Soporte Administrativo & Ejecutivo',
     description:
-      'Gestion de agendas, comunicacion con clientes, coordinacion de proyectos y operaciones diarias',
+      'Gestión de agendas, comunicación con clientes, coordinación de proyectos y operaciones diarias.',
     color: 'coral',
     gradient: 'from-coral to-pink',
   },
@@ -24,41 +25,51 @@ const experienceData = [
     icon: Briefcase,
     title: 'Social Media & Branding',
     description:
-      'Estrategias de contenido, diseno, gestion de comunidades, storytelling, paginas web y brand kits',
+      'Estrategias de contenido, diseño, gestión de comunidades, storytelling, páginas web y brand kits.',
     color: 'pink',
     gradient: 'from-pink to-lavender',
   },
   {
     icon: Layers,
-    title: 'Gestion de Proyectos',
+    title: 'Gestión de Proyectos & Operaciones',
     description:
-      'Coordinacion de equipos, optimizacion de procesos, flujos de trabajo, reclutamiento, KPIs y SOPs',
+      'Coordinación de equipos, optimización de procesos, flujos de trabajo, reclutamiento, KPIs y SOPs.',
     color: 'lavender',
     gradient: 'from-lavender to-mint',
   },
   {
     icon: Users,
-    title: 'Atencion al Cliente & Educacion',
+    title: 'Atención al Cliente & Educación',
     description:
-      'Comunicacion clara, empatia y soluciones practicas para resolver problemas de manera efectiva',
+      'Comunicación clara, empatía y soluciones prácticas para resolver problemas de manera efectiva.',
     color: 'mint',
     gradient: 'from-mint to-lavender',
   },
   {
     icon: MessageCircle,
-    title: 'Interpretacion',
+    title: 'Interpretación',
     description:
-      '8 anos de experiencia en servicio al cliente y medico para 5+ empresas americanas',
+      'Más de 8 años de experiencia en interpretación de servicio al cliente y médico para empresas americanas.',
     color: 'coral',
     gradient: 'from-coral to-pink',
+  },
+  {
+    icon: Heart,
+    title: 'Coaching & Mentorías',
+    description:
+      'Acompañamiento consciente enfocado en claridad mental, reprogramación, regulación del sistema nervioso y crecimiento personal para sostener procesos de cambio.',
+    color: 'pink',
+    gradient: 'from-pink to-lavender',
   },
 ];
 
 const achievements = [
-  'Trabaje con fundadores, CEOs y emprendedores internacionales',
-  'Ascendi de posiciones basicas a lider y manager',
-  'Bilingue ingles-espanol con experiencias internacionales',
-  'Experiencias en Dinamarca, Estados Unidos, Work & Travel, Au Pair',
+  'He trabajado con fundadores, CEOs y emprendedores internacionales.',
+  'Ascendí desde posiciones básicas como asistente virtual hasta roles de liderazgo y management.',
+  'Bilingüe inglés–español con experiencia profesional internacional.',
+  'Reclutadora en diversos rubros y equipos multiculturales.',
+  'Experiencia en Dinamarca y Estados Unidos (Work & Travel, Au Pair).',
+  'Hoy acompaño a personas como coach de trabajo remoto y coach integral.',
 ];
 
 export default function SobreMiExperienceSection() {
@@ -142,35 +153,24 @@ export default function SobreMiExperienceSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="mx-auto max-w-4xl"
         >
           <h3 className="mb-8 text-center font-[var(--font-headline)] text-2xl font-bold text-black-deep">
             Logros <span className="text-pink">Destacados</span>
           </h3>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {achievements.map((achievement, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.6 + index * 0.08 }}
                 className="flex items-start gap-4 rounded-2xl bg-white p-5 shadow-sm transition-all hover:shadow-md"
               >
                 <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-coral to-pink">
-                  <svg
-                    className="h-4 w-4 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={3}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
+                  <span className="text-sm font-bold text-white">
+                    {index + 1}
+                  </span>
                 </div>
                 <p className="font-medium text-gray-carbon">{achievement}</p>
               </motion.div>

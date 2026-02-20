@@ -106,21 +106,23 @@ const timelineData = [
 
 const platforms = [
   'Upwork',
-  'LinkedIn',
-  'Indeed',
   'Workana',
   'Fiverr',
-  'Get on Board',
+  'LinkedIn',
 ];
 
 const skills = [
-  'Gmail & Calendarios',
-  'Diseño en Canva',
-  'Social Media',
-  'Gestión de Proyectos',
-  'Real Estate',
   'Reclutamiento',
-  'Atención al Cliente',
+  'Gmail & Agenda',
+  'Social Media Mgmt',
+  'Gestión de Proyectos',
+  'Google Workspace',
+  'Canva PRO',
+  'ClickUp & Asana',
+  'Brand Management',
+  'Edición de Video',
+  'Real Estate',
+  'Operaciones',
 ];
 
 // Timeline item component - animates based on scroll progress
