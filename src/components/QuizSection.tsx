@@ -636,16 +636,16 @@ export default function QuizSection() {
               <Sparkles className="h-5 w-5 text-coral" />
             </motion.div>
             <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
-              Quiz de 30 segundos
+              Quiz Remote Con Dani
             </span>
           </motion.div>
 
           <h1 className="text-hero-title font-[var(--font-headline)] font-bold text-black-deep">
-            ¿Cómo supero el{' '}
-            <span className="gradient-text-playful">miedo inicial?</span>
+            Descubre por dónde empezar tu{' '}
+            <span className="gradient-text-playful">camino remoto</span>
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-lg text-gray-carbon">
-            Responde 3 preguntas y te digo exactamente qué necesitas según tu situación
+            Responde 5 preguntas para obtener tu ruta ideal
           </p>
         </motion.div>
 
@@ -713,7 +713,7 @@ export default function QuizSection() {
                 className="mb-8"
               >
                 <div className="flex items-center justify-center gap-2">
-                  {questions.map((_, index) => (
+                  {Array.from({ length: 5 }, (_, index) => (
                     <div key={index} className="flex items-center">
                       <motion.div
                         className={`flex h-10 w-10 items-center justify-center rounded-full font-[var(--font-headline)] font-bold transition-all duration-500 ${
@@ -740,7 +740,7 @@ export default function QuizSection() {
                           index + 1
                         )}
                       </motion.div>
-                      {index < questions.length - 1 && (
+                      {index < 4 && (
                         <div className="mx-1 h-1 w-8 overflow-hidden rounded-full bg-white/60 sm:w-12">
                           <motion.div
                             className="h-full rounded-full bg-gradient-to-r from-coral to-pink"
