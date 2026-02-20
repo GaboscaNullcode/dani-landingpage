@@ -101,10 +101,10 @@ export default function BlogPreviewSection({
           </motion.div>
 
           <h2 className="text-section-title font-[var(--font-headline)] font-bold text-black-deep">
-            Del blog
+            Blog: Hablemos de trabajo remoto
           </h2>
-          <p className="mx-auto mt-4 max-w-md text-lg text-gray-carbon">
-            Ideas cortas para avanzar sin abrumarte.
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-carbon">
+            Lee los artículos que te van a ayudar a entender mejor el mundo remoto y dar tus primeros pasos
           </p>
         </motion.div>
 

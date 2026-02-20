@@ -13,6 +13,7 @@ export interface BlogRecord extends RecordModel {
   contenido: string;
   portada_url: string;
   categoria: string;
+  preview_text?: string;
   created: string;
   updated: string;
   expand?: {

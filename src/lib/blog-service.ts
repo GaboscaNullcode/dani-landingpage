@@ -34,7 +34,7 @@ function transformBlogRecord(record: BlogRecord): BlogArticle {
     id: record.id,
     title: record.titulo,
     slug: generateSlug(record.titulo),
-    description: extractDescription(record.contenido),
+    description: record.preview_text || extractDescription(record.contenido),
     thumbnail: thumbnailUrl,
     content: record.contenido,
     publishedAt: record.created,
