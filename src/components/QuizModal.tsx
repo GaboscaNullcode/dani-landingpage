@@ -11,81 +11,57 @@ interface QuizModalProps {
   onResult: (stage: number) => void; // 1, 2, or 3
 }
 
+interface QuizOption {
+  id: string;
+  label: string;
+}
+
 interface StageQuestion {
   question: string;
-  options: { label: string; stage: 1 | 2 | 3 }[];
+  options: QuizOption[];
 }
 
 // ---------- Data ----------
 const questions: StageQuestion[] = [
   {
-    question: '¿Qué tan claro tienes lo que es el trabajo remoto?',
+    question: '¿En qué punto estás hoy?',
     options: [
-      { label: 'No tengo idea, recién estoy escuchando sobre esto', stage: 1 },
-      {
-        label: 'Tengo una idea general pero no sé por dónde empezar',
-        stage: 2,
-      },
-      { label: 'Lo tengo bastante claro y quiero empezar ya', stage: 3 },
+      { id: 'q1_a', label: 'Solo estoy explorando opciones' },
+      { id: 'q1_b', label: 'Ya decidí, pero estoy confundid@ / abrumad@' },
+      { id: 'q1_c', label: 'Ya decidí y quiero pasar a la acción YA!' },
     ],
   },
   {
-    question: '¿Has tomado algún curso o leído sobre trabajo remoto antes?',
+    question: '¿Qué es lo que más te frena ahora mismo?',
     options: [
-      { label: 'No, este sería mi primer acercamiento', stage: 1 },
-      {
-        label: 'Sí, pero la información me parece dispersa y desordenada',
-        stage: 2,
-      },
-      { label: 'Sí, tengo la base teórica y necesito aplicarla', stage: 3 },
+      { id: 'q2_a', label: 'No sé si esto es para mí' },
+      { id: 'q2_b', label: 'No sé por dónde empezar, ni qué hacer primero' },
+      { id: 'q2_c', label: 'Mi CV / perfil / postulaciones no están listos...' },
+      { id: 'q2_d', label: 'Me falta estrategia para conseguir entrevistas/clientes' },
     ],
   },
   {
-    question: '¿Tienes tu CV o perfil profesional listo para postular?',
+    question: '¿Has intentado postular o buscar trabajo remoto antes?',
     options: [
-      {
-        label: 'No tengo CV ni perfiles en plataformas freelance',
-        stage: 1,
-      },
-      {
-        label: 'Tengo algo armado pero sé que necesita mejoras',
-        stage: 2,
-      },
-      {
-        label: 'Lo tengo listo y quiero que alguien lo revise y optimice',
-        stage: 3,
-      },
-    ],
-  },
-  {
-    question: '¿Cuánto estarías dispuest@ a invertir en este momento?',
-    options: [
-      { label: 'Prefiero empezar con recursos gratuitos', stage: 1 },
-      {
-        label: 'Puedo invertir un monto accesible si vale la pena',
-        stage: 2,
-      },
-      {
-        label: 'Estoy list@ para invertir en acompañamiento profesional',
-        stage: 3,
-      },
+      { id: 'q3_a', label: 'No, todavía no' },
+      { id: 'q3_b', label: 'Sí, pero de forma irregular' },
+      { id: 'q3_c', label: 'Sí, con frecuencia, pero sin resultados claros' },
     ],
   },
   {
     question: '¿Qué necesitas más en este momento?',
     options: [
-      {
-        label: 'Entender si el trabajo remoto es realmente para mí',
-        stage: 1,
-      },
-      {
-        label: 'Un plan paso a paso ordenado para no perderme',
-        stage: 2,
-      },
-      {
-        label: 'Feedback personalizado y alguien que me guíe directo',
-        stage: 3,
-      },
+      { id: 'q4_a', label: 'Información clara sin presión' },
+      { id: 'q4_b', label: 'Un mapa paso a paso y orden mental' },
+      { id: 'q4_c', label: 'Acompañamiento directo y feedback personalizado' },
+    ],
+  },
+  {
+    question: '¿Qué nivel de apoyo prefieres para avanzar?',
+    options: [
+      { id: 'q5_a', label: 'Ir a mi ritmo con recursos gratuitos' },
+      { id: 'q5_b', label: 'Seguir una ruta estructurada (guía/curso)' },
+      { id: 'q5_c', label: 'Ir con acompañamiento 1:1 o programa intensivo' },
     ],
   },
 ];
@@ -93,14 +69,38 @@ const questions: StageQuestion[] = [
 const TOTAL = questions.length;
 
 // ---------- Helpers ----------
-function calculateWinningStage(answers: (1 | 2 | 3)[]): number {
-  const counts: Record<number, number> = { 1: 0, 2: 0, 3: 0 };
-  for (const stage of answers) {
-    counts[stage]++;
+// Misma lógica de reglas que QuizSection — prioridad: acción > confundido > explorando
+function getResult(answers: (string | null)[]): number {
+  const answer = (qi: number): string | null => {
+    const id = answers[qi];
+    if (!id) return null;
+    return id.split('_')[1];
+  };
+
+  const q1 = answer(0);
+  const q2 = answer(1);
+  const q3 = answer(2);
+  const q4 = answer(3);
+  const q5 = answer(4);
+
+  // Prioridad 1: "List@ para la acción" → stage 3
+  if (
+    q1 === 'c' ||
+    q2 === 'c' ||
+    q2 === 'd' ||
+    q3 === 'c' ||
+    q4 === 'c' ||
+    q5 === 'c'
+  ) {
+    return 3;
   }
-  // Tie-break: highest stage wins
-  if (counts[3] >= counts[2] && counts[3] >= counts[1]) return 3;
-  if (counts[2] >= counts[1]) return 2;
+
+  // Prioridad 2: "Confundid@" → stage 2
+  if (q1 === 'b' || q2 === 'b' || q4 === 'b' || q5 === 'b') {
+    return 2;
+  }
+
+  // Prioridad 3: "Explorando" → stage 1
   return 1;
 }
 
@@ -123,7 +123,7 @@ const slideVariants = {
 // ---------- Component ----------
 export default function QuizModal({ isOpen, onClose, onResult }: QuizModalProps) {
   const [currentQ, setCurrentQ] = useState(0);
-  const [answers, setAnswers] = useState<(1 | 2 | 3)[]>([]);
+  const [answers, setAnswers] = useState<(string | null)[]>([]);
   const [direction, setDirection] = useState(1); // 1 = forward, -1 = back
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
@@ -218,12 +218,12 @@ export default function QuizModal({ isOpen, onClose, onResult }: QuizModalProps)
     }
   };
 
-  const handleOptionSelect = (stageValue: 1 | 2 | 3, optionIndex: number) => {
+  const handleOptionSelect = (optionId: string, optionIndex: number) => {
     if (selectedOption !== null) return; // prevent double-click
     setSelectedOption(optionIndex);
 
     const newAnswers = [...answers];
-    newAnswers[currentQ] = stageValue;
+    newAnswers[currentQ] = optionId;
     setAnswers(newAnswers);
 
     // Auto-advance after 400ms
@@ -234,8 +234,8 @@ export default function QuizModal({ isOpen, onClose, onResult }: QuizModalProps)
         setCurrentQ((prev) => prev + 1);
       } else {
         // Última pregunta: calcular resultado, cerrar modal e informar al padre
-        const winningStage = calculateWinningStage(newAnswers);
-        onResult(winningStage);
+        const resultStage = getResult(newAnswers);
+        onResult(resultStage);
         onClose();
       }
     }, 400);
@@ -341,14 +341,14 @@ export default function QuizModal({ isOpen, onClose, onResult }: QuizModalProps)
                     {questions[currentQ].options.map((option, idx) => {
                       const isSelected = selectedOption === idx;
                       const wasAnswered =
-                        answers[currentQ] === option.stage &&
+                        answers[currentQ] === option.id &&
                         selectedOption === null;
 
                       return (
                         <motion.button
                           key={`${currentQ}-${idx}`}
                           onClick={() =>
-                            handleOptionSelect(option.stage, idx)
+                            handleOptionSelect(option.id, idx)
                           }
                           disabled={selectedOption !== null}
                           initial={{ opacity: 0, x: -20 }}
