@@ -92,7 +92,7 @@ export default function SobreMiHeroSection() {
                 <Sparkles className="h-5 w-5 text-coral" />
               </motion.div>
               <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-coral">
-                +6 anos en el mundo virtual
+                +6 años en el mundo virtual
               </span>
             </motion.div>
 
@@ -207,7 +207,7 @@ export default function SobreMiHeroSection() {
                   +6
                 </div>
                 <div className="text-sm font-medium text-gray-medium">
-                  Anos de experiencia
+                  años de experiencia
                 </div>
               </div>
             </motion.div>

@@ -114,7 +114,7 @@ export default function IntroSection() {
                 <Hand className="h-5 w-5 text-lavender" />
               </motion.div>
               <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-lavender">
-                Sobre Mi
+                Sobre Mí
               </span>
             </motion.div>
 
@@ -126,28 +126,40 @@ export default function IntroSection() {
             {/* Story paragraphs */}
             <div className="space-y-5 text-gray-carbon">
               <p className="text-lg leading-relaxed">
-                Y quiero compartir contigo como pase de{' '}
+                y quiero compartir contigo cómo pasé de{' '}
                 <span className="font-semibold text-coral">
-                  no tener experiencia, ni carrera universitaria, ni contactos,
-                  ni un ingles perfecto
-                </span>{' '}
-                a construir una carrera remota con clientes internacionales y
-                ganar en dolares.
+                  no tener experiencia, carrera universitaria ni contactos
+                </span>
+                , a construir una carrera remota con clientes internacionales y
+                ganar en dólares.
               </p>
 
               <p className="text-lg leading-relaxed">
-                Mi historia comenzo en 2017 cuando empece como interprete
+                Mi historia comenzó en 2017, cuando empecé como intérprete,
                 ganando apenas{' '}
                 <span className="font-semibold text-pink">$3.25 por hora</span>.
-                No tenia idea de que existia un mundo de posibilidades en el
-                trabajo remoto.
+                En ese momento no tenía idea de que existía un mundo de
+                posibilidades dentro del trabajo remoto.
               </p>
 
               <p className="text-lg leading-relaxed">
-                Con el tiempo, descubri el mundo del asistente virtual en
-                plataformas como Upwork y aprendi a crear perfiles estrategicos,
-                postular con intencion e identificar oportunidades segun mis
-                habilidades.
+                Fue así como en 2019 decidí lanzarme como freelancer, empezando
+                con interpretación y, durante la pandemia, dándome cuenta de
+                todas las oportunidades que realmente existían.
+              </p>
+
+              <p className="text-lg leading-relaxed">
+                Con el tiempo, descubrí el mundo del asistente virtual en
+                plataformas como Upwork, Workana y Freelancer, y aprendí a crear perfiles estratégicos, postular con
+                intención e identificar oportunidades según mis habilidades.
+              </p>
+
+              <p className="text-lg leading-relaxed">
+                Además, tuve la oportunidad de trabajar en reclutamiento para
+                plataformas de freelancers, lo que me permitió ver el proceso
+                desde el otro lado: entender qué buscan realmente al
+                seleccionar perfiles, qué valoran los clientes y qué se
+                necesita para siquiera ser tomado en cuenta para una entrevista.
               </p>
 
               {/* Quote box */}
@@ -158,9 +170,9 @@ export default function IntroSection() {
               >
                 <Quote className="mb-3 h-8 w-8 text-coral/40" />
                 <p className="font-[var(--font-headline)] text-lg font-semibold leading-relaxed text-gray-dark">
-                  &ldquo;Aprender rapido, ser proactiva y mantener un mindset
-                  fuerte fueron las claves que me permitieron crecer y ayudar a
-                  otros a hacer lo mismo.&rdquo;
+                  &ldquo;Aprender rápido, ser proactiva y mantener un mindset
+                  fuerte fueron las claves que me permitieron crecer y hoy
+                  ayudar a otras personas a hacer lo mismo.&rdquo;
                 </p>
               </motion.div>
             </div>
