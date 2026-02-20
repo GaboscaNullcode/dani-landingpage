@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, useInView } from 'motion/react';
 import {
@@ -26,8 +26,6 @@ import {
   Zap,
   Briefcase,
   TrendingUp,
-  DollarSign,
-  Gem,
   Crown,
   type LucideIcon,
 } from 'lucide-react';
@@ -36,8 +34,6 @@ import {
 interface QuizOption {
   id: string;
   label: string;
-  points: number;
-  flag?: string;
   icon: LucideIcon;
 }
 
@@ -69,53 +65,71 @@ interface LevelResult {
   shadowColor: string;
   accentColor: string;
   recommendations: ProductRecommendation[];
-  avRecommendation?: ProductRecommendation;
 }
 
 // Quiz Data con iconos para feedback visual
 const questions: QuizQuestion[] = [
   {
     id: 'question_1',
-    question: '¿Qué es lo que más te frena ahora mismo?',
-    subtitle: 'Sé honesta contigo misma',
+    question: '¿En qué punto estás hoy?',
+    subtitle: 'Elige la que mejor te represente',
     options: [
-      { id: 'q1_a', label: 'No sé si realmente puedo hacerlo', points: 0, icon: Sprout },
-      { id: 'q1_b', label: 'No sé por dónde empezar ni qué hacer primero', points: 1, icon: Search },
-      { id: 'q1_c', label: 'Ya sé qué hacer, pero no tomo acción', points: 2, icon: Zap },
-      { id: 'q1_d', label: 'Necesito que alguien revise mi estrategia', points: 3, icon: Target },
+      { id: 'q1_a', label: 'Solo estoy explorando opciones', icon: Search },
+      { id: 'q1_b', label: 'Ya decidí, pero estoy confundid@ / abrumad@', icon: HelpCircle },
+      { id: 'q1_c', label: 'Ya decidí y quiero pasar a la acción YA!', icon: Zap },
     ],
   },
   {
     id: 'question_2',
-    question: '¿Qué necesitas lograr primero?',
-    subtitle: 'Tu prioridad número uno',
+    question: '¿Qué es lo que más te frena ahora mismo?',
+    subtitle: 'Sé honesta contigo misma',
     options: [
-      { id: 'q2_a', label: 'Saber si el trabajo remoto es para mí', points: 0, icon: HelpCircle },
-      { id: 'q2_b', label: 'Aprender a ser Asistente Virtual', points: 1, flag: 'interes_av', icon: Briefcase },
-      { id: 'q2_c', label: 'Conseguir mi primer cliente o empleo', points: 2, icon: Rocket },
-      { id: 'q2_d', label: 'Mejorar mis resultados actuales', points: 3, icon: TrendingUp },
+      { id: 'q2_a', label: 'No sé si esto es para mí', icon: Compass },
+      { id: 'q2_b', label: 'No sé por dónde empezar, ni qué hacer primero', icon: Layers },
+      { id: 'q2_c', label: 'Mi CV / perfil / postulaciones no están listos...', icon: Briefcase },
+      { id: 'q2_d', label: 'Me falta estrategia para conseguir entrevistas/clientes', icon: Target },
     ],
   },
   {
     id: 'question_3',
-    question: '¿Cómo prefieres aprender?',
+    question: '¿Has intentado postular o buscar trabajo remoto antes?',
     subtitle: 'No hay respuesta incorrecta',
     options: [
-      { id: 'q3_a', label: 'A mi ritmo con recursos gratuitos', points: 0, icon: Gift },
-      { id: 'q3_b', label: 'Con una guía paso a paso ($7-$27)', points: 1, icon: DollarSign },
-      { id: 'q3_c', label: 'Con un curso completo y estructurado', points: 2, icon: Gem },
-      { id: 'q3_d', label: 'Con acompañamiento 1:1 personalizado', points: 3, icon: Crown },
+      { id: 'q3_a', label: 'No, todavía no', icon: Sprout },
+      { id: 'q3_b', label: 'Sí, pero de forma irregular', icon: TrendingUp },
+      { id: 'q3_c', label: 'Sí, con frecuencia, pero sin resultados claros', icon: Rocket },
+    ],
+  },
+  {
+    id: 'question_4',
+    question: '¿Qué necesitas más en este momento?',
+    subtitle: 'Tu prioridad número uno',
+    options: [
+      { id: 'q4_a', label: 'Información clara sin presión', icon: BookOpen },
+      { id: 'q4_b', label: 'Un mapa paso a paso y orden mental', icon: Layers },
+      { id: 'q4_c', label: 'Acompañamiento directo y feedback personalizado', icon: MessageCircle },
+    ],
+  },
+  {
+    id: 'question_5',
+    question: '¿Qué nivel de apoyo prefieres para avanzar?',
+    subtitle: 'Piensa en lo que realmente necesitas',
+    options: [
+      { id: 'q5_a', label: 'Ir a mi ritmo con recursos gratuitos', icon: Gift },
+      { id: 'q5_b', label: 'Seguir una ruta estructurada (guía/curso)', icon: GraduationCap },
+      { id: 'q5_c', label: 'Ir con acompañamiento 1:1 o programa intensivo', icon: Crown },
     ],
   },
 ];
 
-// Results Data
+// Results Data — 3 resultados basados en reglas
 const levelResults: Record<string, LevelResult> = {
-  nivel_0: {
-    id: 'nivel_0',
+  explorando: {
+    id: 'explorando',
     title: 'Explorador/a',
-    subtitle: 'Nivel Descubrimiento',
-    description: 'Es normal sentir dudas al principio. Lo importante es que ya estás aquí buscando respuestas. Empieza con calma, sin presión, y descubre si esto es para ti.',
+    subtitle: 'Estoy explorando',
+    description:
+      'Es normal sentir dudas al principio. Lo importante es que ya estás aquí buscando respuestas. Empieza con calma, sin presión, y descubre si esto es para ti.',
     icon: Compass,
     gradient: 'linear-gradient(135deg, #fef7f0 0%, #ffecd2 100%)',
     shadowColor: 'rgba(255, 240, 230, 0.6)',
@@ -151,11 +165,12 @@ const levelResults: Record<string, LevelResult> = {
       },
     ],
   },
-  nivel_1: {
-    id: 'nivel_1',
-    title: 'Iniciante',
-    subtitle: 'Nivel Preparación',
-    description: 'El miedo a no saber es el más fácil de vencer: se cura con información correcta. Necesitas una guía clara que elimine la confusión.',
+  confundido: {
+    id: 'confundido',
+    title: 'Buscador/a de Claridad',
+    subtitle: 'Estoy confundid@',
+    description:
+      'El miedo a no saber es el más fácil de vencer: se cura con información correcta. Necesitas una guía clara que elimine la confusión y te dé un plan paso a paso.',
     icon: Sprout,
     gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
     shadowColor: 'rgba(224, 86, 160, 0.4)',
@@ -164,7 +179,8 @@ const levelResults: Record<string, LevelResult> = {
       {
         name: 'eBook: Guía Práctica para Iniciar',
         price: '$27 USD',
-        description: 'Todo lo esencial para dar tus primeros pasos con confianza',
+        description:
+          'Todo lo esencial para dar tus primeros pasos con confianza',
         href: '/tienda',
         priority: 'primary',
         icon: BookOpen,
@@ -181,22 +197,13 @@ const levelResults: Record<string, LevelResult> = {
         gradient: 'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
       },
     ],
-    avRecommendation: {
-      name: 'Masterclass Asistente Virtual',
-      price: '$22 USD',
-      description: 'Curso especializado para convertirte en AV profesional',
-      href: '/masterclass-av',
-      priority: 'primary',
-      icon: GraduationCap,
-      gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
-      tag: 'Para ti',
-    },
   },
-  nivel_2: {
-    id: 'nivel_2',
-    title: 'En Acción',
-    subtitle: 'Nivel Lanzamiento',
-    description: 'Ya sabes que quieres esto. Ahora necesitas dejar de investigar y empezar a ejecutar con un sistema probado que te lleve a resultados.',
+  accion: {
+    id: 'accion',
+    title: 'Persona de Acción',
+    subtitle: 'Estoy list@ para la acción',
+    description:
+      'Ya sabes que quieres esto. Ahora necesitas dejar de investigar y empezar a ejecutar con un sistema probado y acompañamiento que te lleve a resultados.',
     icon: Rocket,
     gradient: 'var(--gradient-coral-pink)',
     shadowColor: 'rgba(255, 107, 107, 0.4)',
@@ -205,57 +212,65 @@ const levelResults: Record<string, LevelResult> = {
       {
         name: 'Curso Completo: Paso a Paso + 6 Bonos',
         price: '$47 USD',
-        description: 'La guía definitiva con todo incluido para lanzar tu carrera remota',
+        description:
+          'La guía definitiva con todo incluido para lanzar tu carrera remota',
         href: '/ebook-trabajo-remoto',
         priority: 'primary',
         icon: BookOpen,
         gradient: 'var(--gradient-coral-pink)',
         tag: 'Mejor valor',
       },
-    ],
-  },
-  nivel_3: {
-    id: 'nivel_3',
-    title: 'Estratega',
-    subtitle: 'Nivel Personalizado',
-    description: 'Tu situación es única y merece atención personalizada. Una sesión 1:1 conmigo puede ahorrarte meses de prueba y error.',
-    icon: Target,
-    gradient: 'linear-gradient(135deg, #374c4f 0%, #4a5c5f 100%)',
-    shadowColor: 'rgba(55, 76, 79, 0.4)',
-    accentColor: '#6ee7b7',
-    recommendations: [
       {
         name: 'Programa Intensivo 1:1',
         price: '$155 USD',
-        description: '4 horas donde construimos juntas tu estrategia completa para conseguir tu primer cliente',
-        href: '/asesorias',
-        priority: 'primary',
-        icon: MessageCircle,
-        gradient: 'var(--gradient-coral-pink)',
-        tag: 'Mejor inversión',
-      },
-      {
-        name: 'Sesión de Claridad',
-        price: '$66 USD',
-        description: '1.5 horas para salir de la confusión con un plan claro y respuestas concretas',
+        description:
+          '4 horas donde construimos juntas tu estrategia completa',
         href: '/asesorias',
         priority: 'secondary',
         icon: MessageCircle,
-        gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
+        gradient: 'linear-gradient(135deg, #374c4f 0%, #4a5c5f 100%)',
       },
     ],
   },
 };
 
-// Orden de niveles para la vista por niveles
-const levelOrder = ['nivel_0', 'nivel_1', 'nivel_2', 'nivel_3'];
+// Orden de resultados para la vista por niveles
+const levelOrder = ['explorando', 'confundido', 'accion'];
 
-// Helper function to determine level
-function getLevel(score: number): string {
-  if (score <= 2) return 'nivel_0';
-  if (score <= 4) return 'nivel_1';
-  if (score <= 6) return 'nivel_2';
-  return 'nivel_3';
+// Helper: determina el resultado según las reglas de asignación
+function getResult(answers: (string | null)[]): string {
+  // Extrae la letra de la opción (e.g. "q1_a" → "a")
+  const answer = (qi: number): string | null => {
+    const id = answers[qi];
+    if (!id) return null;
+    return id.split('_')[1];
+  };
+
+  const q1 = answer(0);
+  const q2 = answer(1);
+  const q3 = answer(2);
+  const q4 = answer(3);
+  const q5 = answer(4);
+
+  // Prioridad 1: "List@ para la acción"
+  if (
+    q1 === 'c' ||
+    q2 === 'c' ||
+    q2 === 'd' ||
+    q3 === 'c' ||
+    q4 === 'c' ||
+    q5 === 'c'
+  ) {
+    return 'accion';
+  }
+
+  // Prioridad 2: "Confundid@"
+  if (q1 === 'b' || q2 === 'b' || q4 === 'b' || q5 === 'b') {
+    return 'confundido';
+  }
+
+  // Prioridad 3: "Explorando" (default)
+  return 'explorando';
 }
 
 // Level Accordion Component
@@ -390,34 +405,19 @@ export default function QuizSection() {
 
   // Quiz state
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<(string | null)[]>([null, null, null]);
+  const [selectedAnswers, setSelectedAnswers] = useState<(string | null)[]>([null, null, null, null, null]);
   const [showResult, setShowResult] = useState(false);
-  const [interesAV, setInteresAV] = useState(false);
   const [direction, setDirection] = useState<'next' | 'prev'>('next');
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Levels view state
   const [expandedLevel, setExpandedLevel] = useState<string | null>('nivel_0');
 
-  // Calculate score
-  const calculateScore = useCallback((): number => {
-    return selectedAnswers.reduce((total, answerId, questionIndex) => {
-      if (!answerId) return total;
-      const question = questions[questionIndex];
-      const option = question.options.find((opt) => opt.id === answerId);
-      return total + (option?.points || 0);
-    }, 0);
-  }, [selectedAnswers]);
-
   // Handle option selection
-  const handleOptionSelect = (optionId: string, flag?: string) => {
+  const handleOptionSelect = (optionId: string) => {
     const newAnswers = [...selectedAnswers];
     newAnswers[currentQuestion] = optionId;
     setSelectedAnswers(newAnswers);
-
-    if (flag === 'interes_av') {
-      setInteresAV(true);
-    }
   };
 
   // Navigation handlers with improved transitions
@@ -456,15 +456,13 @@ export default function QuizSection() {
   const handleRestart = () => {
     setShowResult(false);
     setCurrentQuestion(0);
-    setSelectedAnswers([null, null, null]);
-    setInteresAV(false);
+    setSelectedAnswers([null, null, null, null, null]);
     setDirection('next');
   };
 
   // Get current result
-  const score = calculateScore();
-  const levelId = getLevel(score);
-  const result = levelResults[levelId];
+  const resultId = getResult(selectedAnswers);
+  const result = levelResults[resultId];
   const currentSelectedOption = selectedAnswers[currentQuestion];
 
   // Animation variants
@@ -841,7 +839,7 @@ export default function QuizSection() {
                               name={`question_${currentQuestion}`}
                               value={option.id}
                               checked={isSelected}
-                              onChange={() => handleOptionSelect(option.id, option.flag)}
+                              onChange={() => handleOptionSelect(option.id)}
                               className="sr-only"
                             />
 
@@ -977,7 +975,7 @@ export default function QuizSection() {
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-coral/20">
                     <Check className="h-3 w-3 text-coral" />
                   </span>
-                  30 segundos
+                  1 minuto
                 </span>
               </motion.div>
             </motion.div>
@@ -1126,77 +1124,23 @@ export default function QuizSection() {
 
                 <div
                   className={`grid gap-6 ${
-                    (interesAV && result.avRecommendation ? 1 : 0) + result.recommendations.length === 1
+                    result.recommendations.length === 1
                       ? 'md:grid-cols-1 md:max-w-md md:mx-auto'
-                      : (interesAV && result.avRecommendation ? 1 : 0) + result.recommendations.length === 2
+                      : result.recommendations.length === 2
                         ? 'md:grid-cols-2'
                         : 'md:grid-cols-2 lg:grid-cols-3'
                   }`}
                 >
-                  {/* AV recommendation first if applicable */}
-                  {interesAV && result.avRecommendation && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ delay: 0.9 }}
-                      whileHover={{ y: -8, scale: 1.02 }}
-                      className="group relative overflow-hidden rounded-[28px] p-6 text-white shadow-2xl sm:p-8"
-                      style={{
-                        background: result.avRecommendation.gradient,
-                        boxShadow: `0 25px 50px -12px ${result.shadowColor}`,
-                      }}
-                    >
-                      {/* Decorative elements */}
-                      <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
-                      <div className="absolute -bottom-4 -left-4 h-24 w-24 rounded-full bg-white/5" />
-
-                      {/* Tag */}
-                      {result.avRecommendation.tag && (
-                        <motion.span
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 1.1 }}
-                          className="absolute right-4 top-4 rounded-full bg-white/20 px-3 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur-sm"
-                        >
-                          {result.avRecommendation.tag}
-                        </motion.span>
-                      )}
-
-                      <div className="relative">
-                        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm">
-                          <result.avRecommendation.icon className="h-8 w-8" />
-                        </div>
-                        <h4 className="mb-3 font-[var(--font-headline)] text-xl font-bold sm:text-2xl">
-                          {result.avRecommendation.name}
-                        </h4>
-                        <p className="mb-5 text-sm text-white/90 sm:text-base">
-                          {result.avRecommendation.description}
-                        </p>
-                        <div className="mb-5 font-[var(--font-headline)] text-3xl font-black">
-                          {result.avRecommendation.price}
-                        </div>
-                        <Link
-                          href={result.avRecommendation.href}
-                          className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-[var(--font-dm-sans)] font-bold text-gray-dark shadow-lg transition-all duration-300 hover:shadow-xl group-hover:translate-x-1"
-                        >
-                          <span>Quiero esto</span>
-                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </Link>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* Regular recommendations */}
+                  {/* Recommendations */}
                   {result.recommendations.map((rec, index) => {
-                    const isPrimary = rec.priority === 'primary' && !interesAV;
-                    const delayIndex = interesAV && result.avRecommendation ? index + 1 : index;
+                    const isPrimary = rec.priority === 'primary';
 
                     return (
                       <motion.div
                         key={rec.name}
                         initial={{ opacity: 0, y: 30, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ delay: 0.9 + delayIndex * 0.1 }}
+                        transition={{ delay: 0.9 + index * 0.1 }}
                         whileHover={{ y: -8, scale: 1.02 }}
                         className={`group relative overflow-hidden rounded-[28px] p-6 shadow-xl transition-shadow duration-300 hover:shadow-2xl sm:p-8 ${
                           isPrimary ? 'text-white' : 'bg-white'
@@ -1219,7 +1163,7 @@ export default function QuizSection() {
                           <motion.span
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 1.1 + delayIndex * 0.1 }}
+                            transition={{ delay: 1.1 + index * 0.1 }}
                             className={`absolute right-4 top-4 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider ${
                               isPrimary ? 'bg-white/20 backdrop-blur-sm' : 'bg-gradient-to-r from-coral to-pink text-white'
                             }`}
