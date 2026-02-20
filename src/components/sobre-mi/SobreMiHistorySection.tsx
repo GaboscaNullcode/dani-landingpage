@@ -12,52 +12,84 @@ import {
 import {
   TrendingUp,
   Headphones,
-  Rocket,
+  Phone,
+  Lightbulb,
+  MapPin,
   Briefcase,
+  Heart,
   Globe,
   Sparkles,
+  Quote,
 } from 'lucide-react';
 
 const timelineData = [
   {
     year: '2017',
-    role: 'Intérprete',
-    salary: '$3.25/hora',
-    detail:
-      'Mis primeros pasos en el mundo remoto, ofreciendo servicios de interpretación telefónica',
+    role: 'Intérprete presencial',
+    salary: '$3.25 USD/hora',
+    detail: 'Primer contacto con clientes internacionales.',
     icon: Headphones,
     gradient: 'from-coral to-pink',
     colorHex: '#ff6b6b',
   },
   {
-    year: '2018',
-    role: 'Freelancer',
-    salary: 'Independiente',
-    detail:
-      'Lancé mi carrera como freelancer, expandiendo mis servicios y aprendiendo nuevas habilidades',
-    icon: Rocket,
+    year: '2019',
+    role: 'Primeros pasos en el mundo remoto',
+    salary: 'Interpretación telefónica',
+    detail: 'Ingreso sube a $12 USD por hora.',
+    icon: Phone,
     gradient: 'from-pink to-lavender',
     colorHex: '#e056a0',
   },
   {
-    year: '2019',
-    role: 'Asistente Virtual',
-    salary: 'Upwork',
+    year: '2020',
+    role: 'Descubrimiento + miedo',
+    salary: 'Momento clave',
     detail:
-      'Descubrí el mundo de asistencia virtual y comencé a trabajar con clientes en Upwork',
-    icon: Briefcase,
+      'Descubro que personas de habla hispana trabajan remoto como asistentes virtuales. Pensaba: "¿Quién me va a contratar sin experiencia?"',
+    icon: Lightbulb,
     gradient: 'from-lavender to-mint',
     colorHex: '#a78bfa',
   },
   {
     year: '2021',
-    role: 'VA Senior',
-    salary: 'Clientes Globales',
+    role: 'Salto al mundo remoto + vida nómada digital',
+    salary: 'Asistente Virtual',
     detail:
-      'Trabajé con CEOs, fundadores y emprendedores internacionales en proyectos de alto impacto',
-    icon: Globe,
+      'Empiezo como Asistente Virtual y decido comenzar a vivir como nómada digital, trabajando desde distintos lugares.',
+    icon: MapPin,
     gradient: 'from-mint to-lavender',
     colorHex: '#6ee7b7',
+  },
+  {
+    year: '2021 – 2024',
+    role: 'Crecimiento profesional',
+    salary: 'Múltiples roles',
+    detail:
+      'Asistente Ejecutiva · Reclutamiento & Training · Social Media Manager · Real Estate Account Manager · Intake & Acquisitions · Creación de Contenido & Brand Manager · Administradora de Operaciones · Manager de Operaciones',
+    icon: Briefcase,
+    gradient: 'from-coral to-pink',
+    colorHex: '#ff6b6b',
+  },
+  {
+    year: 'Dic 2024',
+    role: 'Nace Remote con Dani!',
+    salary: 'Nuevo inicio',
+    detail:
+      'Un espacio para acompañar a otras personas a construir su carrera remota con claridad y estrategia.',
+    icon: Heart,
+    gradient: 'from-pink to-lavender',
+    colorHex: '#e056a0',
+  },
+  {
+    year: '2025',
+    role: 'Manager de Operaciones & Social Media Manager',
+    salary: 'Clientes Globales',
+    detail:
+      'Trabajo con clientes internacionales mientras acompaño a nuevas personas en su camino remoto. Integro mi experiencia en reprogramación mental y regulación del sistema nervioso para acompañar procesos de crecimiento con claridad, enfoque y conciencia.',
+    icon: Globe,
+    gradient: 'from-lavender to-mint',
+    colorHex: '#a78bfa',
   },
   {
     year: 'HOY',
@@ -399,11 +431,13 @@ export default function SobreMiHistorySection() {
           </motion.div>
 
           <h2 className="text-section-title mb-4 font-[var(--font-headline)] font-black text-white">
-            De <span className="text-coral">$3.25/hora</span> a Coach
+            Mi <span className="text-coral">Camino</span>
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-white/60">
-            Mi evolución en el mundo digital, construyendo una carrera remota
-            paso a paso
+            Cómo construí mi carrera remota desde cero
+          </p>
+          <p className="mx-auto mt-2 max-w-2xl text-base font-semibold text-coral">
+            Para que tú también puedas hacerlo.
           </p>
         </motion.div>
 
@@ -467,6 +501,24 @@ export default function SobreMiHistorySection() {
               +6 años de crecimiento continuo
             </span>
           </motion.div>
+        </motion.div>
+
+        {/* Quote bubble */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={isFooterInView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="mx-auto mb-16 max-w-xl"
+        >
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+            <Quote className="mb-3 h-8 w-8 text-coral/40" />
+            <p className="font-[var(--font-headline)] text-lg font-semibold leading-relaxed text-white/80">
+              &ldquo;Si algo me ha enseñado el mundo remoto es que no hay
+              límites. Cuando crees en ti, defines intenciones claras y tomas
+              acciones alineadas, todo se vuelve posible. Y el aprendizaje
+              constante es la clave para seguir creciendo!&rdquo;
+            </p>
+          </div>
         </motion.div>
 
         {/* Skills & Platforms */}
