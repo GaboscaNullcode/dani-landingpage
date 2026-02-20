@@ -5,9 +5,6 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Play, Sparkles } from 'lucide-react';
 
-const STORAGE_KEY = 'masterclass-popup-dismissed';
-const DISMISS_DURATION_DAYS = 7;
-
 // Hook to detect client-side mounting without setState in useEffect
 function useHasMounted() {
   return useSyncExternalStore(
@@ -31,19 +28,7 @@ export default function MasterclassPopup() {
     // Don't show popup for logged-in users
     if (hasAuthCookie()) return;
 
-    // Check if user has dismissed the popup recently
-    const dismissedAt = localStorage.getItem(STORAGE_KEY);
-    if (dismissedAt) {
-      const dismissDate = new Date(dismissedAt);
-      const now = new Date();
-      const daysSinceDismiss = (now.getTime() - dismissDate.getTime()) / (1000 * 60 * 60 * 24);
-
-      if (daysSinceDismiss < DISMISS_DURATION_DAYS) {
-        return; // Don't show popup
-      }
-    }
-
-    // Show popup after a delay
+    // Show popup after a short delay
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 3000);
@@ -53,7 +38,6 @@ export default function MasterclassPopup() {
 
   const handleDismiss = () => {
     setIsVisible(false);
-    localStorage.setItem(STORAGE_KEY, new Date().toISOString());
   };
 
   // Don't render on server to avoid hydration mismatch
@@ -115,7 +99,7 @@ export default function MasterclassPopup() {
                 </p>
 
                 <Link
-                  href="/newsletter"
+                  href="/mi-cuenta/login"
                   onClick={handleDismiss}
                   className="btn-shimmer inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold text-white transition-all hover:-translate-y-0.5"
                   style={{

@@ -105,6 +105,7 @@ export default function NewsletterFormCard({ source = 'home' }: NewsletterFormCa
                       ? '0 0 0 3px rgba(255,107,107,0.2), 0 8px 24px rgba(255,107,107,0.15)'
                       : '0 2px 8px rgba(0,0,0,0.04)',
                 }}
+                suppressHydrationWarning
               >
                 <div className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2" aria-hidden="true">
                   <User
@@ -150,6 +151,7 @@ export default function NewsletterFormCard({ source = 'home' }: NewsletterFormCa
                       ? '0 0 0 3px rgba(255,107,107,0.2), 0 8px 24px rgba(255,107,107,0.15)'
                       : '0 2px 8px rgba(0,0,0,0.04)',
                 }}
+                suppressHydrationWarning
               >
                 <div className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2" aria-hidden="true">
                   <Mail
