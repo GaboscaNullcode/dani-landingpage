@@ -65,7 +65,7 @@ export default function MasterclassPopup() {
             {/* Close button */}
             <button
               onClick={handleDismiss}
-              className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-700"
+              className="absolute right-3 top-3 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-700"
               aria-label="Cerrar"
             >
               <X className="h-4 w-4" />
