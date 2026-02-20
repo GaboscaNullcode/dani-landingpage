@@ -7,10 +7,11 @@ import { Instagram, Heart } from 'lucide-react';
 
 const footerLinks = [
   { text: 'Home', href: '/' },
-  { text: 'Sobre Mi', href: '/sobre-mi' },
-  { text: 'Servicios', href: '/asesorias' },
-  { text: 'Recursos', href: '/empezar' },
+  { text: 'Ruta Remote con Dani', href: '/empezar' },
   { text: 'Testimonios', href: '/#testimonios' },
+  { text: 'Blog', href: '/blog' },
+  { text: 'Sobre mí', href: '/sobre-mi' },
+  { text: 'Newsletter', href: '/newsletter' },
 ];
 
 const socialLinks = [
@@ -131,8 +132,14 @@ export default function Footer() {
               Sobre Remote con Dani
             </h3>
             <p className="text-sm leading-relaxed text-white/60">
-              Ayudo a personas que quieren dar el salto al trabajo remoto
-              pero no saben por dónde empezar ni si realmente pueden lograrlo.
+              Remote con Dani nació porque yo también estuve perdida. Quería
+              trabajar remoto, pero no sabía por dónde empezar ni si realmente
+              alguien me contrataría. Con el tiempo entendí algo importante: no
+              era falta de capacidad, era falta de dirección.
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-white/60">
+              Por eso creé este espacio. Para darte claridad, estrategia y un
+              camino real para empezar — sin improvisar y sin promesas vacías.
             </p>
           </div>
 
@@ -170,10 +177,10 @@ export default function Footer() {
             </h3>
             <p className="text-sm text-white/60">
               <a
-                href="mailto:hola@remotecondani.com"
+                href="mailto:info@remotecondani.com"
                 className="transition-colors duration-300 hover:text-coral"
               >
-                hola@remotecondani.com
+                info@remotecondani.com
               </a>
             </p>
           </div>
