@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
         if (producto.orden === 1) {
           successUrl = `${domain}/asesorias/gracias-pago1`;
         } else {
-          successUrl = `${domain}/asesorias/agendar?session_id={CHECKOUT_SESSION_ID}`;
+          successUrl = `${domain}/asesorias/gracias`;
         }
       } else if (producto) {
         // Parent product — check if Programa Intensivo (has children)
@@ -39,13 +39,13 @@ export async function POST(request: NextRequest) {
         if (childPlans.length > 0) {
           successUrl = `${domain}/asesorias/gracias-completo`;
         } else {
-          successUrl = `${domain}/asesorias/agendar?session_id={CHECKOUT_SESSION_ID}`;
+          successUrl = `${domain}/asesorias/gracias`;
         }
       } else {
-        successUrl = `${domain}/asesorias/agendar?session_id={CHECKOUT_SESSION_ID}`;
+        successUrl = `${domain}/asesorias/gracias`;
       }
     } else if (isAsesoria) {
-      successUrl = `${domain}/asesorias/agendar?session_id={CHECKOUT_SESSION_ID}`;
+      successUrl = `${domain}/asesorias/gracias`;
     } else {
       successUrl = `${domain}/tienda/exito?session_id={CHECKOUT_SESSION_ID}`;
     }

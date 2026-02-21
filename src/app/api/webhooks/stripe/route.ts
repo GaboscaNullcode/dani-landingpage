@@ -117,7 +117,10 @@ export async function POST(request: NextRequest) {
               await sendProgramaIntensivoPago1Email(email, name, accessUrl);
             } else {
               await updateProgramIntensivePaymentState(user.id, { paid2: true });
-              console.log('[webhook] Programa Intensivo Pago 2 — skipping email (booking flow handles it)');
+              const schedulingUrl = `${domain}/asesorias/agendar?session_id=${session.id}`;
+              const masterclassUrl = `${domain}/tienda/masterclass-gratuita`;
+              console.log(`[webhook] Programa Intensivo Pago 2 — sending scheduling email to ${email}`);
+              await sendAsesoriaPostPaymentEmail(email, schedulingUrl, masterclassUrl);
             }
           } else if (producto) {
             // Parent product — check if it's a Programa Intensivo (has children)
