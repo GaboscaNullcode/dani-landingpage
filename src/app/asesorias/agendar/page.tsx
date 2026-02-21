@@ -1,8 +1,10 @@
 import { redirect } from 'next/navigation';
 import { getStripe } from '@/lib/stripe';
-import { getCalendarConfig } from '@/lib/reservas-service';
+import { getCalendarConfig, getReservaByCompra } from '@/lib/reservas-service';
 import { getAsesoriaPlanById } from '@/lib/tienda-service';
+import { getCompraByStripeSessionId } from '@/lib/compras-service';
 import BookingCalendar from '@/components/asesorias/BookingCalendar';
+import BookingConfirmation from '@/components/asesorias/BookingConfirmation';
 
 interface AgendarPageProps {
   searchParams: Promise<{ session_id?: string }>;
@@ -40,6 +42,12 @@ export default async function AgendarPage({ searchParams }: AgendarPageProps) {
     redirect('/asesorias');
   }
 
+  // Check if this session already has a booking
+  const compra = await getCompraByStripeSessionId(session_id);
+  const existingReserva = compra
+    ? await getReservaByCompra(compra.id)
+    : null;
+
   const config = await getCalendarConfig();
 
   return (
@@ -67,29 +75,44 @@ export default async function AgendarPage({ searchParams }: AgendarPageProps) {
       />
 
       <div className="container-custom relative z-10 py-20 md:py-28">
-        {/* Header */}
-        <div className="mb-12 text-center">
-          <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-coral/10 px-4 py-2 text-sm font-semibold text-coral">
-            Paso 2 de 2
-          </span>
-          <h1 className="mb-3 font-[var(--font-headline)] text-3xl font-bold text-gray-dark md:text-4xl">
-            Agenda tu sesion
-          </h1>
-          <p className="mx-auto max-w-md text-gray-medium">
-            Selecciona la fecha y hora que mejor te convenga para tu sesion.
-          </p>
-        </div>
+        {existingReserva ? (
+          <div className="mx-auto max-w-2xl rounded-3xl bg-white p-6 shadow-[0_10px_40px_rgba(0,0,0,0.08)] md:p-10">
+            <BookingConfirmation
+              planName={plan.name}
+              fecha={existingReserva.fechaHora.slice(0, 10)}
+              hora={existingReserva.fechaHora.slice(11, 16)}
+              duracionMinutos={plan.duracionMinutos}
+              timezone={config.timezone}
+              zoomJoinUrl={existingReserva.zoomJoinUrl || ''}
+            />
+          </div>
+        ) : (
+          <>
+            {/* Header */}
+            <div className="mb-12 text-center">
+              <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-coral/10 px-4 py-2 text-sm font-semibold text-coral">
+                Paso 2 de 2
+              </span>
+              <h1 className="mb-3 font-[var(--font-headline)] text-3xl font-bold text-gray-dark md:text-4xl">
+                Agenda tu sesion
+              </h1>
+              <p className="mx-auto max-w-md text-gray-medium">
+                Selecciona la fecha y hora que mejor te convenga para tu sesion.
+              </p>
+            </div>
 
-        {/* Calendar */}
-        <div className="mx-auto max-w-2xl rounded-3xl bg-white p-6 shadow-[0_10px_40px_rgba(0,0,0,0.08)] md:p-10">
-          <BookingCalendar
-            planId={planId}
-            planName={plan.name}
-            stripeSessionId={session_id}
-            duracionMinutos={plan.duracionMinutos}
-            timezone={config.timezone}
-          />
-        </div>
+            {/* Calendar */}
+            <div className="mx-auto max-w-2xl rounded-3xl bg-white p-6 shadow-[0_10px_40px_rgba(0,0,0,0.08)] md:p-10">
+              <BookingCalendar
+                planId={planId}
+                planName={plan.name}
+                stripeSessionId={session_id}
+                duracionMinutos={plan.duracionMinutos}
+                timezone={config.timezone}
+              />
+            </div>
+          </>
+        )}
       </div>
     </main>
   );
