@@ -25,6 +25,9 @@ export interface ProductoRecord {
   cta_texto: string;
   cta_link: string;
   stripe_price_id: string | null;
+  precio_descuento: number | null;
+  stripe_price_id_descuento: string | null;
+  descuento_activo: boolean;
   download_url: string | null;
   whatsapp_link: string | null;
   orden: number;

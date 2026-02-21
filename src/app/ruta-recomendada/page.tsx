@@ -45,6 +45,8 @@ export default async function RutaRecomendadaPage() {
         <WhatsAppCommunityCard
           priceId={community?.stripePriceId}
           productId={community?.id}
+          price={community?.price}
+          originalPrice={community?.originalPrice}
         />
         <StageTransitionCTA
           text="¿Necesitas acompanamiento mas personalizado?"

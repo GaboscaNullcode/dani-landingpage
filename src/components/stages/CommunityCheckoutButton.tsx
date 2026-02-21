@@ -16,12 +16,17 @@ import { useCheckoutAuth } from '@/hooks/useCheckoutAuth';
 interface CommunityCheckoutButtonProps {
   priceId: string;
   productId: string;
+  price?: number;
+  originalPrice?: number;
 }
 
 export default function CommunityCheckoutButton({
   priceId,
   productId,
+  price,
+  originalPrice,
 }: CommunityCheckoutButtonProps) {
+  const displayPrice = price != null ? `$${price}/mes` : '$5.99/mes';
   const { user, compras, loading: authLoading } = useCheckoutAuth();
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -133,8 +138,13 @@ export default function CommunityCheckoutButton({
     <>
       <div className="flex items-baseline gap-2">
         <span className="font-[var(--font-headline)] text-3xl font-bold text-lavender">
-          $5.99/mes
+          {displayPrice}
         </span>
+        {originalPrice && (
+          <span className="text-lg text-gray-medium line-through">
+            ${originalPrice}/mes
+          </span>
+        )}
       </div>
 
       <button
@@ -177,7 +187,7 @@ export default function CommunityCheckoutButton({
                 Comunidad Privada
               </h2>
               <p className="mt-1 text-sm text-white/85">
-                Suscripción mensual de $5.99/mes. Cancela cuando quieras.
+                Suscripción mensual de {displayPrice}. Cancela cuando quieras.
               </p>
             </div>
 

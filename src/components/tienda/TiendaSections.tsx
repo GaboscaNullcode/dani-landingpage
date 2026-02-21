@@ -405,10 +405,15 @@ function ServiceCard({ product, purchaseStatus = 'none' }: ServiceCardProps) {
                 </>
               ) : (
                 <>
-                  <div className="flex items-baseline gap-1">
+                  <div className="flex items-baseline gap-2">
                     <span className="font-[var(--font-headline)] text-3xl font-bold text-lavender">
                       {formatPrice(product.price, 'USD', product.isSubscription ? product.interval : undefined)}
                     </span>
+                    {product.originalPrice && (
+                      <span className="text-lg text-gray-medium line-through">
+                        {formatPrice(product.originalPrice, 'USD', product.isSubscription ? product.interval : undefined)}
+                      </span>
+                    )}
                   </div>
 
                   <Link

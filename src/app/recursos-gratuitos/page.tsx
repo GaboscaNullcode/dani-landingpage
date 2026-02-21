@@ -53,6 +53,8 @@ export default async function RecursosGratuitosPage() {
         <WhatsAppCommunityCard
           priceId={community?.stripePriceId}
           productId={community?.id}
+          price={community?.price}
+          originalPrice={community?.originalPrice}
         />
         <section className="bg-cream/50 py-16 md:py-20">
           <div className="container-custom">

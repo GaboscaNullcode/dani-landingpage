@@ -11,14 +11,23 @@ const FALLBACK_IMAGE =
   'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80';
 
 // Transform Supabase record to Product
+// When descuento_activo is true, swaps price/stripePriceId with the discount
+// values and sets originalPrice so components can show a strikethrough price.
 function transformProductRecord(record: ProductoRecord): Product {
+  const hasActiveDiscount =
+    record.descuento_activo &&
+    record.precio_descuento != null &&
+    record.stripe_price_id_descuento != null;
+
   return {
     id: record.id,
     name: record.nombre,
     slug: record.slug,
     description: record.descripcion,
-    price: record.precio,
-    originalPrice: record.precio_original || undefined,
+    price: hasActiveDiscount ? record.precio_descuento! : record.precio,
+    originalPrice: hasActiveDiscount
+      ? record.precio
+      : record.precio_original || undefined,
     currency: 'USD',
     image: record.imagen_url || FALLBACK_IMAGE,
     category: record.categoria,
@@ -30,7 +39,9 @@ function transformProductRecord(record: ProductoRecord): Product {
     interval: record.intervalo || undefined,
     ctaText: record.cta_texto,
     ctaLink: record.cta_link,
-    stripePriceId: record.stripe_price_id || undefined,
+    stripePriceId: hasActiveDiscount
+      ? record.stripe_price_id_descuento!
+      : record.stripe_price_id || undefined,
     downloadUrl: record.download_url || undefined,
     whatsappLink: record.whatsapp_link || undefined,
     order: record.orden || 0,

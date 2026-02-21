@@ -14,12 +14,17 @@ const communityItems = [
 interface WhatsAppCommunityCardProps {
   priceId?: string;
   productId?: string;
+  price?: number;
+  originalPrice?: number;
 }
 
 export default function WhatsAppCommunityCard({
   priceId,
   productId,
+  price,
+  originalPrice,
 }: WhatsAppCommunityCardProps) {
+  const displayPrice = price != null ? `$${price}/mes` : '$5.99/mes';
   return (
     <section className="bg-cream py-20">
       <div className="container-custom">
@@ -86,12 +91,21 @@ export default function WhatsAppCommunityCard({
                     <CommunityCheckoutButton
                       priceId={priceId}
                       productId={productId}
+                      price={price}
+                      originalPrice={originalPrice}
                     />
                   ) : (
                     <>
-                      <span className="font-[var(--font-headline)] text-3xl font-bold text-lavender">
-                        $5.99/mes
-                      </span>
+                      <div className="flex items-baseline gap-2">
+                        <span className="font-[var(--font-headline)] text-3xl font-bold text-lavender">
+                          {displayPrice}
+                        </span>
+                        {originalPrice && (
+                          <span className="text-lg text-gray-medium line-through">
+                            ${originalPrice}/mes
+                          </span>
+                        )}
+                      </div>
                       <a
                         href="https://chat.whatsapp.com/HYmBiEU0UXl2VsMMlWatAE"
                         target="_blank"

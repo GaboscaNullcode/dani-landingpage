@@ -193,7 +193,7 @@ export const freeResources: Product[] = [
     slug: 'comunidad',
     description:
       'No estás sola en esto. Conecta con personas que están en tu mismo camino y aprende de sus experiencias.',
-    price: 3.99,
+    price: 5.99,
     currency: 'USD',
     image: '/images/tienda/producto-comunidad-privada.jpg',
     category: 'comunidad',
