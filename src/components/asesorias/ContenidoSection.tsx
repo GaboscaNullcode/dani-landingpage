@@ -218,12 +218,20 @@ export default function ContenidoSection() {
             <p className="mx-auto mb-8 max-w-xl text-lg text-white/90">
               Agenda tu asesoría hoy y comienza a construir la carrera remota que mereces.
             </p>
-            <a
-              href="#planes"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-[var(--font-headline)] font-bold text-coral shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl"
-            >
-              Ver Planes Disponibles
-            </a>
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <a
+                href="#planes"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-[var(--font-headline)] font-bold text-coral shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl"
+              >
+                Ver Opciones Disponibles
+              </a>
+              <a
+                href="/#testimonios"
+                className="inline-flex items-center gap-2 rounded-full border-2 border-white px-8 py-4 font-[var(--font-headline)] font-bold text-white transition-all hover:-translate-y-1 hover:bg-white/10"
+              >
+                Leer Experiencias Reales
+              </a>
+            </div>
           </motion.div>
         </div>
 
