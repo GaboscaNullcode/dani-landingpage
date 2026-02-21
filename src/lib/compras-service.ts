@@ -72,6 +72,24 @@ export const getUserCompras = cache(
   },
 );
 
+export async function getCompraByStripeSessionId(
+  stripeSessionId: string,
+): Promise<Compra | null> {
+  try {
+    const supabase = getServiceSupabase();
+    const { data, error } = await supabase
+      .from('compras')
+      .select('*, productoDetail:productos(*)')
+      .eq('stripe_session_id', stripeSessionId)
+      .single();
+
+    if (error) throw error;
+    return data ? mapCompra(data) : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function cancelCompraBySubscription(
   stripeSubscriptionId: string,
 ): Promise<void> {

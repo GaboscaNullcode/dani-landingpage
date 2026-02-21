@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
 import { findOrCreateUser } from '@/lib/auth-service';
-import { createCompra, cancelCompraBySubscription } from '@/lib/compras-service';
+import {
+  createCompra,
+  cancelCompraBySubscription,
+  getCompraByStripeSessionId,
+} from '@/lib/compras-service';
 import { getProductById } from '@/lib/tienda-service';
 import {
   sendPurchaseEmail,
@@ -54,6 +58,16 @@ export async function POST(request: NextRequest) {
       }
 
       try {
+        // Check if compra already exists (may have been created by /api/reservas/crear)
+        const existingCompra = await getCompraByStripeSessionId(session.id);
+
+        if (existingCompra) {
+          // For asesorias, compra was already created by the booking endpoint — nothing to do
+          if (isAsesoria) break;
+
+          // For non-asesorias, still send emails using the existing compra
+        }
+
         const { user, isNew, tempPassword } = await findOrCreateUser(email, name);
 
         if (isNew && tempPassword) {
@@ -65,22 +79,12 @@ export async function POST(request: NextRequest) {
             ? (session.subscription as string)
             : undefined;
 
-        const compra = await createCompra(user.id, productId, session.id, subscriptionId);
+        if (!existingCompra) {
+          await createCompra(user.id, productId, session.id, subscriptionId);
+        }
 
-        // For asesorias: store compraId in session metadata but skip product emails
-        // (booking confirmation email will be sent after scheduling)
+        // For asesorias: skip product emails (booking confirmation sent after scheduling)
         if (isAsesoria) {
-          // Update the Stripe session metadata with compraId for the booking page
-          try {
-            await getStripe().checkout.sessions.update(session.id, {
-              metadata: {
-                ...session.metadata,
-                compraId: compra.id,
-              },
-            });
-          } catch {
-            console.error('Could not update session metadata with compraId');
-          }
           break;
         }
 

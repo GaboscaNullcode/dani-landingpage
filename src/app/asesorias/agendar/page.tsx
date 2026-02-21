@@ -17,7 +17,6 @@ export default async function AgendarPage({ searchParams }: AgendarPageProps) {
 
   // Validate Stripe session
   let planId: string;
-  let compraId: string;
 
   try {
     const stripe = getStripe();
@@ -28,7 +27,6 @@ export default async function AgendarPage({ searchParams }: AgendarPageProps) {
     }
 
     planId = session.metadata?.planId || '';
-    compraId = session.metadata?.compraId || '';
 
     if (!planId) {
       redirect('/asesorias');
@@ -65,7 +63,7 @@ export default async function AgendarPage({ searchParams }: AgendarPageProps) {
           <BookingCalendar
             planId={planId}
             planName={plan.name}
-            compraId={compraId}
+            stripeSessionId={session_id}
             duracionMinutos={plan.duracionMinutos}
             timezone={config.timezone}
           />

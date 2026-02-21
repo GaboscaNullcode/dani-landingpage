@@ -12,7 +12,7 @@ type BookingStep = 'calendar' | 'time' | 'summary' | 'confirming' | 'done';
 interface BookingCalendarProps {
   planId: string;
   planName: string;
-  compraId: string;
+  stripeSessionId: string;
   duracionMinutos: number;
   timezone: string;
 }
@@ -20,7 +20,7 @@ interface BookingCalendarProps {
 export default function BookingCalendar({
   planId,
   planName,
-  compraId,
+  stripeSessionId,
   duracionMinutos,
   timezone,
 }: BookingCalendarProps) {
@@ -63,7 +63,7 @@ export default function BookingCalendar({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          compraId,
+          stripeSessionId,
           planId,
           fecha: selectedDate,
           hora: selectedSlot,
