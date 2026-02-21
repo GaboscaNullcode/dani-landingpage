@@ -69,13 +69,12 @@ export default function RutaProductSection() {
             PRODUCTO ESTRELLA
           </span>
           <h2 className="text-section-title mt-4 font-[var(--font-headline)] font-bold text-gray-dark">
-            Ruta Paso a Paso{' '}
-            <span className="gradient-text">Remota</span>
+            Ruta Remota:{' '}
+            <span className="gradient-text">Paso a Paso</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-gray-carbon">
-            Un programa completo con 3 etapas que te lleva de la curiosidad al
-            trabajo remoto real. Sin saltos, sin confusión, todo en un solo
-            sistema.
+            La ruta estructurada que te lleva desde la decisión hasta estar
+            listo para postular, sin perder tiempo probando qué hacer primero.
           </p>
         </motion.div>
 
@@ -176,8 +175,8 @@ export default function RutaProductSection() {
           transition={{ duration: 0.6 }}
           className="mx-auto mt-12 max-w-xl text-center font-[var(--font-headline)] text-lg font-medium text-gray-carbon italic"
         >
-          &quot;Todo integrado en un solo sistema, diseñado para avanzar sin
-          saltos.&quot;
+          &quot;No es teoría suelta. Es un recorrido claro para que avances
+          sin perderte.&quot;
         </motion.p>
 
         {/* CTA */}

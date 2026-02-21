@@ -9,9 +9,9 @@ import {
 import { RutaProductSection } from '@/components/stages/stage2';
 
 export const metadata: Metadata = {
-  title: 'Ruta Paso a Paso Remota - Stage 2 | Remote con Dani',
+  title: 'Ruta Remota: Paso a Paso - Stage 2 | Remote con Dani',
   description:
-    'Empieza tu camino remoto con una ruta paso a paso. Un sistema completo con 3 etapas para pasar de cero a tu primer trabajo remoto.',
+    'La ruta estructurada que te lleva desde la decisión hasta estar listo para postular. Un sistema con 3 etapas para tu primer trabajo remoto.',
   keywords: [
     'ruta trabajo remoto',
     'curso trabajo remoto',
@@ -19,9 +19,9 @@ export const metadata: Metadata = {
     'programa trabajo remoto',
   ],
   openGraph: {
-    title: 'Ruta Paso a Paso Remota - Stage 2 | Remote con Dani',
+    title: 'Ruta Remota: Paso a Paso - Stage 2 | Remote con Dani',
     description:
-      'Un sistema completo con 3 etapas para pasar de cero a tu primer trabajo remoto.',
+      'La ruta estructurada que te lleva desde la decisión hasta estar listo para postular.',
     type: 'website',
     locale: 'es_ES',
   },
