@@ -10,7 +10,6 @@ import {
   Compass,
   Sprout,
   Rocket,
-  Target,
   RotateCcw,
   Mail,
   BookOpen,
@@ -22,11 +21,6 @@ import {
   ChevronDown,
   HelpCircle,
   Layers,
-  Search,
-  Zap,
-  Briefcase,
-  TrendingUp,
-  Crown,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -40,7 +34,6 @@ interface QuizOption {
 interface QuizQuestion {
   id: string;
   question: string;
-  subtitle: string;
   options: QuizOption[];
 }
 
@@ -72,52 +65,47 @@ const questions: QuizQuestion[] = [
   {
     id: 'question_1',
     question: '¿En qué punto estás hoy?',
-    subtitle: 'Elige la que mejor te represente',
     options: [
-      { id: 'q1_a', label: 'Solo estoy explorando opciones', icon: Search },
+      { id: 'q1_a', label: 'Solo estoy explorando opciones', icon: Compass },
       { id: 'q1_b', label: 'Ya decidí, pero estoy confundid@ / abrumad@', icon: HelpCircle },
-      { id: 'q1_c', label: 'Ya decidí y quiero pasar a la acción YA!', icon: Zap },
+      { id: 'q1_c', label: 'Ya decidí y quiero pasar a la acción YA!', icon: Rocket },
     ],
   },
   {
     id: 'question_2',
     question: '¿Qué es lo que más te frena ahora mismo?',
-    subtitle: 'Sé honesta contigo misma',
     options: [
       { id: 'q2_a', label: 'No sé si esto es para mí', icon: Compass },
-      { id: 'q2_b', label: 'No sé por dónde empezar, ni qué hacer primero', icon: Layers },
-      { id: 'q2_c', label: 'Mi CV / perfil / postulaciones no están listos...', icon: Briefcase },
-      { id: 'q2_d', label: 'Me falta estrategia para conseguir entrevistas/clientes', icon: Target },
+      { id: 'q2_b', label: 'No sé por dónde empezar, ni qué hacer primero', icon: HelpCircle },
+      { id: 'q2_c', label: 'Mi CV / perfil / postulaciones no están listos...', icon: Rocket },
+      { id: 'q2_d', label: 'Me falta estrategia para conseguir entrevistas/clientes', icon: Rocket },
     ],
   },
   {
     id: 'question_3',
     question: '¿Has intentado postular o buscar trabajo remoto antes?',
-    subtitle: 'No hay respuesta incorrecta',
     options: [
-      { id: 'q3_a', label: 'No, todavía no', icon: Sprout },
-      { id: 'q3_b', label: 'Sí, pero de forma irregular', icon: TrendingUp },
+      { id: 'q3_a', label: 'No, todavía no', icon: Compass },
+      { id: 'q3_b', label: 'Sí, pero de forma irregular', icon: Compass },
       { id: 'q3_c', label: 'Sí, con frecuencia, pero sin resultados claros', icon: Rocket },
     ],
   },
   {
     id: 'question_4',
     question: '¿Qué necesitas más en este momento?',
-    subtitle: 'Tu prioridad número uno',
     options: [
-      { id: 'q4_a', label: 'Información clara sin presión', icon: BookOpen },
-      { id: 'q4_b', label: 'Un mapa paso a paso y orden mental', icon: Layers },
-      { id: 'q4_c', label: 'Acompañamiento directo y feedback personalizado', icon: MessageCircle },
+      { id: 'q4_a', label: 'Información clara sin presión', icon: Compass },
+      { id: 'q4_b', label: 'Un mapa paso a paso y orden mental', icon: HelpCircle },
+      { id: 'q4_c', label: 'Acompañamiento directo y feedback personalizado', icon: Rocket },
     ],
   },
   {
     id: 'question_5',
     question: '¿Qué nivel de apoyo prefieres para avanzar?',
-    subtitle: 'Piensa en lo que realmente necesitas',
     options: [
-      { id: 'q5_a', label: 'Ir a mi ritmo con recursos gratuitos', icon: Gift },
-      { id: 'q5_b', label: 'Seguir una ruta estructurada (guía/curso)', icon: GraduationCap },
-      { id: 'q5_c', label: 'Ir con acompañamiento 1:1 o programa intensivo', icon: Crown },
+      { id: 'q5_a', label: 'Ir a mi ritmo con recursos gratuitos', icon: Compass },
+      { id: 'q5_b', label: 'Seguir una ruta estructurada (guía/curso)', icon: HelpCircle },
+      { id: 'q5_c', label: 'Ir con acompañamiento 1:1 o programa intensivo', icon: Rocket },
     ],
   },
 ];
@@ -789,8 +777,9 @@ export default function QuizSection() {
                         >
                           Pregunta {currentQuestion + 1} de {questions.length}
                         </motion.span>
-                        <span className="font-[var(--font-dm-sans)] text-xs text-gray-medium">
-                          {questions[currentQuestion].subtitle}
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-coral/10 px-3 py-0.5 font-[var(--font-dm-sans)] text-xs font-medium text-coral">
+                          <Sparkles className="h-3 w-3" />
+                          Sé honesta contigo mism@
                         </span>
                       </div>
                       <motion.span

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, ArrowLeft, Check } from 'lucide-react';
+import { X, ArrowLeft, Check, Sparkles, Compass, HelpCircle, Rocket, type LucideIcon } from 'lucide-react';
 
 // ---------- Types ----------
 interface QuizModalProps {
@@ -14,6 +14,7 @@ interface QuizModalProps {
 interface QuizOption {
   id: string;
   label: string;
+  icon: LucideIcon;
 }
 
 interface StageQuestion {
@@ -26,42 +27,42 @@ const questions: StageQuestion[] = [
   {
     question: '¿En qué punto estás hoy?',
     options: [
-      { id: 'q1_a', label: 'Solo estoy explorando opciones' },
-      { id: 'q1_b', label: 'Ya decidí, pero estoy confundid@ / abrumad@' },
-      { id: 'q1_c', label: 'Ya decidí y quiero pasar a la acción YA!' },
+      { id: 'q1_a', label: 'Solo estoy explorando opciones', icon: Compass },
+      { id: 'q1_b', label: 'Ya decidí, pero estoy confundid@ / abrumad@', icon: HelpCircle },
+      { id: 'q1_c', label: 'Ya decidí y quiero pasar a la acción YA!', icon: Rocket },
     ],
   },
   {
     question: '¿Qué es lo que más te frena ahora mismo?',
     options: [
-      { id: 'q2_a', label: 'No sé si esto es para mí' },
-      { id: 'q2_b', label: 'No sé por dónde empezar, ni qué hacer primero' },
-      { id: 'q2_c', label: 'Mi CV / perfil / postulaciones no están listos...' },
-      { id: 'q2_d', label: 'Me falta estrategia para conseguir entrevistas/clientes' },
+      { id: 'q2_a', label: 'No sé si esto es para mí', icon: Compass },
+      { id: 'q2_b', label: 'No sé por dónde empezar, ni qué hacer primero', icon: HelpCircle },
+      { id: 'q2_c', label: 'Mi CV / perfil / postulaciones no están listos...', icon: Rocket },
+      { id: 'q2_d', label: 'Me falta estrategia para conseguir entrevistas/clientes', icon: Rocket },
     ],
   },
   {
     question: '¿Has intentado postular o buscar trabajo remoto antes?',
     options: [
-      { id: 'q3_a', label: 'No, todavía no' },
-      { id: 'q3_b', label: 'Sí, pero de forma irregular' },
-      { id: 'q3_c', label: 'Sí, con frecuencia, pero sin resultados claros' },
+      { id: 'q3_a', label: 'No, todavía no', icon: Compass },
+      { id: 'q3_b', label: 'Sí, pero de forma irregular', icon: Compass },
+      { id: 'q3_c', label: 'Sí, con frecuencia, pero sin resultados claros', icon: Rocket },
     ],
   },
   {
     question: '¿Qué necesitas más en este momento?',
     options: [
-      { id: 'q4_a', label: 'Información clara sin presión' },
-      { id: 'q4_b', label: 'Un mapa paso a paso y orden mental' },
-      { id: 'q4_c', label: 'Acompañamiento directo y feedback personalizado' },
+      { id: 'q4_a', label: 'Información clara sin presión', icon: Compass },
+      { id: 'q4_b', label: 'Un mapa paso a paso y orden mental', icon: HelpCircle },
+      { id: 'q4_c', label: 'Acompañamiento directo y feedback personalizado', icon: Rocket },
     ],
   },
   {
     question: '¿Qué nivel de apoyo prefieres para avanzar?',
     options: [
-      { id: 'q5_a', label: 'Ir a mi ritmo con recursos gratuitos' },
-      { id: 'q5_b', label: 'Seguir una ruta estructurada (guía/curso)' },
-      { id: 'q5_c', label: 'Ir con acompañamiento 1:1 o programa intensivo' },
+      { id: 'q5_a', label: 'Ir a mi ritmo con recursos gratuitos', icon: Compass },
+      { id: 'q5_b', label: 'Seguir una ruta estructurada (guía/curso)', icon: HelpCircle },
+      { id: 'q5_c', label: 'Ir con acompañamiento 1:1 o programa intensivo', icon: Rocket },
     ],
   },
 ];
@@ -331,6 +332,12 @@ export default function QuizModal({ isOpen, onClose, onResult }: QuizModalProps)
                   exit="exit"
                   transition={{ duration: 0.3, ease: 'easeInOut' }}
                 >
+                  {/* Motivational badge */}
+                  <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-coral/10 px-3.5 py-1 font-[var(--font-dm-sans)] text-xs font-medium text-coral">
+                    <Sparkles className="h-3 w-3" />
+                    Sé honesta contigo mism@
+                  </span>
+
                   {/* Question */}
                   <h2 className="mb-6 pr-6 font-[var(--font-headline)] text-xl font-bold text-black-deep sm:text-2xl">
                     {questions[currentQ].question}
@@ -362,17 +369,17 @@ export default function QuizModal({ isOpen, onClose, onResult }: QuizModalProps)
                                 : 'bg-cream/80 text-gray-700 hover:bg-gray-100'
                           }`}
                         >
-                          {/* Letter indicator */}
+                          {/* Icon indicator */}
                           <span
-                            className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg font-[var(--font-headline)] text-sm font-bold transition-colors ${
+                            className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg transition-colors ${
                               isSelected
                                 ? 'bg-white/20 text-white'
                                 : wasAnswered
                                   ? 'bg-coral/20 text-coral'
-                                  : 'bg-white text-gray-400 group-hover:text-gray-600'
+                                  : 'bg-white text-coral/70 group-hover:text-coral'
                             }`}
                           >
-                            {String.fromCharCode(65 + idx)}
+                            <option.icon className="h-4 w-4" />
                           </span>
 
                           {/* Label */}
