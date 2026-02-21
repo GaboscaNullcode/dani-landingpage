@@ -46,6 +46,7 @@ export async function POST(request: NextRequest) {
       const email = session.customer_details?.email;
       const name = session.customer_details?.name || session.metadata?.customerName || email?.split('@')[0] || 'Usuario';
       const productId = session.metadata?.productId;
+      const isAsesoria = session.metadata?.isAsesoria === 'true';
 
       if (!email || !productId) {
         console.error('Missing email or productId in checkout session');
@@ -64,7 +65,24 @@ export async function POST(request: NextRequest) {
             ? (session.subscription as string)
             : undefined;
 
-        await createCompra(user.id, productId, session.id, subscriptionId);
+        const compra = await createCompra(user.id, productId, session.id, subscriptionId);
+
+        // For asesorias: store compraId in session metadata but skip product emails
+        // (booking confirmation email will be sent after scheduling)
+        if (isAsesoria) {
+          // Update the Stripe session metadata with compraId for the booking page
+          try {
+            await getStripe().checkout.sessions.update(session.id, {
+              metadata: {
+                ...session.metadata,
+                compraId: compra.id,
+              },
+            });
+          } catch {
+            console.error('Could not update session metadata with compraId');
+          }
+          break;
+        }
 
         const producto = await getProductById(productId);
 

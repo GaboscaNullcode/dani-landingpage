@@ -2,14 +2,17 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Check, Star, Clock, Sparkles, ChevronDown } from 'lucide-react';
+import { Check, Star, Clock, Sparkles, ChevronDown, Loader2 } from 'lucide-react';
 import { planes } from '@/data/asesorias-data';
+import ProgramaIntensivoModal from './ProgramaIntensivoModal';
 
 const VISIBLE_FEATURES = 4;
 
 export default function PlanesSection() {
   const [expandedPlans, setExpandedPlans] = useState<Set<string>>(new Set());
   const [baseHeight, setBaseHeight] = useState(0);
+  const [showProgramaModal, setShowProgramaModal] = useState(false);
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
   const togglePlan = (planId: string) => {
@@ -43,6 +46,35 @@ export default function PlanesSection() {
     return () => window.removeEventListener('resize', measureBaseHeight);
   }, [measureBaseHeight]);
 
+  async function handleCheckout(planId: string) {
+    const plan = planes.find((p) => p.id === planId);
+    if (!plan || !plan.stripePriceId) return;
+
+    setLoadingPlan(planId);
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          priceId: plan.stripePriceId,
+          productId: plan.productId,
+          isAsesoria: true,
+          planId: plan.id,
+        }),
+      });
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        console.error('Checkout error:', data.error);
+        setLoadingPlan(null);
+      }
+    } catch {
+      console.error('Checkout request failed');
+      setLoadingPlan(null);
+    }
+  }
+
   return (
     <section id="planes" className="relative py-24 bg-white">
       <div className="container-custom">
@@ -75,6 +107,7 @@ export default function PlanesSection() {
               ? plan.features.slice(0, VISIBLE_FEATURES)
               : plan.features;
             const hiddenCount = plan.features.length - VISIBLE_FEATURES;
+            const isLoading = loadingPlan === plan.id;
 
             return (
               <motion.div
@@ -203,23 +236,46 @@ export default function PlanesSection() {
                 )}
 
                 {/* CTA */}
-                <a
-                  href={plan.ctaLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`btn-shimmer mt-auto block w-full rounded-full py-4 text-center font-[var(--font-headline)] font-bold transition-all hover:-translate-y-1 ${
-                    plan.isPopular
-                      ? 'bg-white text-gray-dark hover:shadow-[0_15px_40px_rgba(255,255,255,0.2)]'
-                      : 'text-white hover:shadow-[0_15px_40px_rgba(255,107,107,0.4)]'
-                  }`}
-                  style={
-                    !plan.isPopular
-                      ? { background: 'var(--gradient-coral-pink)' }
-                      : undefined
-                  }
-                >
-                  {plan.ctaText}
-                </a>
+                {plan.id === 'crea-camino' ? (
+                  <button
+                    onClick={() => setShowProgramaModal(true)}
+                    disabled={isLoading}
+                    className="btn-shimmer mt-auto block w-full rounded-full bg-white py-4 text-center font-[var(--font-headline)] font-bold text-gray-dark transition-all hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(255,255,255,0.2)] disabled:opacity-50"
+                  >
+                    {isLoading ? (
+                      <span className="inline-flex items-center justify-center gap-2">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Redirigiendo...
+                      </span>
+                    ) : (
+                      plan.ctaText
+                    )}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleCheckout(plan.id)}
+                    disabled={isLoading || loadingPlan !== null}
+                    className={`btn-shimmer mt-auto block w-full rounded-full py-4 text-center font-[var(--font-headline)] font-bold transition-all hover:-translate-y-1 disabled:opacity-50 ${
+                      plan.isPopular
+                        ? 'bg-white text-gray-dark hover:shadow-[0_15px_40px_rgba(255,255,255,0.2)]'
+                        : 'text-white hover:shadow-[0_15px_40px_rgba(255,107,107,0.4)]'
+                    }`}
+                    style={
+                      !plan.isPopular
+                        ? { background: 'var(--gradient-coral-pink)' }
+                        : undefined
+                    }
+                  >
+                    {isLoading ? (
+                      <span className="inline-flex items-center justify-center gap-2">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Redirigiendo...
+                      </span>
+                    ) : (
+                      plan.ctaText
+                    )}
+                  </button>
+                )}
 
                 {/* Decorative element for popular plan */}
                 {plan.isPopular && (
@@ -234,6 +290,12 @@ export default function PlanesSection() {
             );
           })}
         </div>
+
+        {/* Modal T&C Programa Intensivo */}
+        <ProgramaIntensivoModal
+          isOpen={showProgramaModal}
+          onClose={() => setShowProgramaModal(false)}
+        />
       </div>
     </section>
   );

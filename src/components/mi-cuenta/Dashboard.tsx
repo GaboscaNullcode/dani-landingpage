@@ -12,9 +12,15 @@ import {
   Sparkles,
   Package,
   KeyRound,
+  CalendarDays,
+  Video,
+  Clock,
+  XCircle,
 } from 'lucide-react';
 import type { User, Compra } from '@/types/auth';
 import type { Product } from '@/types/tienda';
+import type { Reserva } from '@/types/reservas';
+import { PLAN_NOMBRES } from '@/types/reservas';
 import ProductCard from './ProductCard';
 import ChangePasswordModal from './ChangePasswordModal';
 
@@ -24,28 +30,42 @@ interface MeResponse {
   allProducts: Product[];
 }
 
+interface ReservasResponse {
+  reservas: Reserva[];
+}
+
 export default function Dashboard() {
   const router = useRouter();
   const [data, setData] = useState<MeResponse | null>(null);
+  const [reservas, setReservas] = useState<Reserva[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [loggingOut, setLoggingOut] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('/api/auth/me');
-        if (res.status === 401) {
+        const [meRes, reservasRes] = await Promise.all([
+          fetch('/api/auth/me'),
+          fetch('/api/reservas/mis-reservas'),
+        ]);
+        if (meRes.status === 401) {
           router.push('/mi-cuenta/login');
           return;
         }
-        if (!res.ok) {
+        if (!meRes.ok) {
           setError('Error al cargar tus datos');
           return;
         }
-        const json = await res.json();
+        const json = await meRes.json();
         setData(json);
+
+        if (reservasRes.ok) {
+          const reservasJson: ReservasResponse = await reservasRes.json();
+          setReservas(reservasJson.reservas || []);
+        }
       } catch {
         setError('Error de conexion');
       } finally {
@@ -55,6 +75,29 @@ export default function Dashboard() {
 
     fetchData();
   }, [router]);
+
+  const handleCancelReserva = async (reservaId: string) => {
+    if (!confirm('Estas segura de que quieres cancelar esta reserva?')) return;
+    setCancellingId(reservaId);
+    try {
+      const res = await fetch('/api/reservas/cancelar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reservaId }),
+      });
+      if (res.ok) {
+        setReservas((prev) =>
+          prev.map((r) =>
+            r.id === reservaId ? { ...r, estado: 'cancelada' } : r,
+          ),
+        );
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setCancellingId(null);
+    }
+  };
 
   const handleLogout = async () => {
     setLoggingOut(true);
@@ -182,6 +225,91 @@ export default function Dashboard() {
           </div>
         </div>
       </motion.div>
+
+      {/* Upcoming bookings */}
+      {reservas.filter((r) => r.estado === 'confirmada' || r.estado === 'pendiente').length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+        >
+          <div className="mb-5 flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-coral/10">
+              <CalendarDays className="h-4 w-4 text-coral" />
+            </div>
+            <h2 className="font-[var(--font-headline)] text-xl font-bold text-black-deep">
+              Mis Asesorias
+            </h2>
+          </div>
+          <div className="space-y-4">
+            {reservas
+              .filter((r) => r.estado === 'confirmada' || r.estado === 'pendiente')
+              .map((reserva) => {
+                const fechaObj = new Date(reserva.fechaHora);
+                const fechaStr = fechaObj.toLocaleDateString('es-PE', {
+                  weekday: 'long',
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                });
+                const horaStr = fechaObj.toLocaleTimeString('es-PE', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                });
+                const planName = PLAN_NOMBRES[reserva.planId] || reserva.planId;
+                const isCancelling = cancellingId === reserva.id;
+
+                return (
+                  <div
+                    key={reserva.id}
+                    className="flex flex-col gap-4 rounded-2xl bg-white/70 p-5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between"
+                  >
+                    <div className="space-y-1">
+                      <p className="font-[var(--font-headline)] font-bold text-gray-dark">
+                        {planName}
+                      </p>
+                      <div className="flex flex-wrap items-center gap-3 text-sm text-gray-medium">
+                        <span className="inline-flex items-center gap-1 capitalize">
+                          <CalendarDays className="h-3.5 w-3.5" />
+                          {fechaStr}
+                        </span>
+                        <span className="inline-flex items-center gap-1">
+                          <Clock className="h-3.5 w-3.5" />
+                          {horaStr} ({reserva.timezone})
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 self-start">
+                      {reserva.zoomJoinUrl && (
+                        <a
+                          href={reserva.zoomJoinUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-coral/10 px-3 py-2 text-sm font-semibold text-coral transition-colors hover:bg-coral hover:text-white"
+                        >
+                          <Video className="h-3.5 w-3.5" />
+                          Zoom
+                        </a>
+                      )}
+                      <button
+                        onClick={() => handleCancelReserva(reserva.id)}
+                        disabled={isCancelling}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-gray-light px-3 py-2 text-sm text-gray-medium transition-colors hover:border-red-300 hover:text-red-500 disabled:opacity-50"
+                      >
+                        {isCancelling ? (
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        ) : (
+                          <XCircle className="h-3.5 w-3.5" />
+                        )}
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        </motion.div>
+      )}
 
       {/* Purchased products */}
       {data.compras.length > 0 && (

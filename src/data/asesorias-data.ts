@@ -5,6 +5,7 @@ export interface Plan {
   price: number;
   currency: 'USD';
   duration: string;
+  duracionMinutos: number;
   description: string;
   featuresTitle?: string;
   features: string[];
@@ -12,6 +13,8 @@ export interface Plan {
   isPopular: boolean;
   ctaText: string;
   ctaLink: string;
+  stripePriceId: string;
+  productId: string;
 }
 
 export interface ContenidoItem {
@@ -28,6 +31,9 @@ export const planes: Plan[] = [
     price: 39,
     currency: 'USD',
     duration: '45 minutos',
+    duracionMinutos: 45,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_CONSULTORIA_PRICE_ID || '',
+    productId: 'consultoria',
     description:
       'Para ti que ya estás intentando avanzar, pero sientes que algo no está funcionando. Esta sesión es ideal si necesitas una revisión estratégica, resolver dudas específicas o entender qué está fallando en tu proceso.',
     featuresTitle: 'En esta sesión:',
@@ -42,7 +48,7 @@ export const planes: Plan[] = [
     note: 'Esta es una sesión de revisión puntual que incluye el reporte post-sesión. No contempla seguimiento posterior ni acceso a la comunidad privada.',
     isPopular: false,
     ctaText: 'Quiero mi consultoría',
-    ctaLink: 'https://calendly.com/remotecondani/consultoria',
+    ctaLink: '#',
   },
   {
     id: 'iniciando',
@@ -51,6 +57,9 @@ export const planes: Plan[] = [
     price: 66,
     currency: 'USD',
     duration: '1.5 horas',
+    duracionMinutos: 90,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_ASESORIA_PRICE_ID || '',
+    productId: 'iniciando',
     description:
       'Si necesitas claridad profunda y una estrategia concreta para empezar o avanzar, esta sesión es para ti. Aquí trabajamos tu situación completa y diseñamos un plan accionable.',
     featuresTitle: 'Tú eliges el enfoque:',
@@ -68,7 +77,7 @@ export const planes: Plan[] = [
     note: 'Llega con tus preguntas y objetivo definido para aprovechar al máximo la sesión.',
     isPopular: false,
     ctaText: 'Quiero mi asesoría',
-    ctaLink: 'https://calendly.com/remotecondani/iniciando',
+    ctaLink: '#',
   },
   {
     id: 'crea-camino',
@@ -77,6 +86,9 @@ export const planes: Plan[] = [
     price: 169,
     currency: 'USD',
     duration: '4 horas',
+    duracionMinutos: 240,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PROGRAMA_PRICE_ID || '',
+    productId: 'crea-camino',
     description:
       'Si quieres construir tu camino remoto con estructura, claridad y acompañamiento completo, este programa es para ti. Combinamos teoría + práctica personalizada para que termines con perfil optimizado, documentos listos, estrategia clara, precios definidos y propuestas que funcionan.',
     features: [
@@ -95,7 +107,7 @@ export const planes: Plan[] = [
     ],
     isPopular: true,
     ctaText: 'Acceder al programa',
-    ctaLink: 'https://calendly.com/remotecondani/crea-camino',
+    ctaLink: '#',
   },
 ];
 

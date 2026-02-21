@@ -143,3 +143,131 @@ export function getCommunityEmailHtml(
     </p>`;
   return baseLayout(content);
 }
+
+// ── Booking emails ──
+
+export function getBookingConfirmationEmailHtml(
+  name: string,
+  planName: string,
+  fecha: string,
+  hora: string,
+  duracion: number,
+  timezone: string,
+  zoomUrl: string,
+): string {
+  const duracionText =
+    duracion >= 60
+      ? `${Math.floor(duracion / 60)}h ${duracion % 60 ? `${duracion % 60}min` : ''}`
+      : `${duracion} minutos`;
+
+  const content = `
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Tu sesion esta confirmada!</h2>
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Hola <strong style="color:${BRAND.dark};">${name}</strong>, tu <strong style="color:${BRAND.dark};">${planName}</strong> ha sido agendada.
+    </p>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="background-color:${BRAND.cream};border-radius:8px;width:100%;margin-bottom:24px;">
+      <tr>
+        <td style="padding:20px;">
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Fecha:</p>
+          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${fecha}</p>
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Hora:</p>
+          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${hora} (${timezone})</p>
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Duracion:</p>
+          <p style="margin:0;font-size:16px;color:${BRAND.dark};font-weight:600;">${duracionText}</p>
+        </td>
+      </tr>
+    </table>
+    ${button('Unirme a la sesion (Zoom)', zoomUrl)}
+    <p style="margin:24px 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
+      Si necesitas reprogramar o tienes dudas, responde a este email.
+    </p>`;
+  return baseLayout(content);
+}
+
+export function getBookingNotificationEmailHtml(
+  clientName: string,
+  clientEmail: string,
+  planName: string,
+  fecha: string,
+  hora: string,
+  duracion: number,
+  timezone: string,
+  zoomStartUrl: string,
+  notas?: string,
+): string {
+  const duracionText =
+    duracion >= 60
+      ? `${Math.floor(duracion / 60)}h ${duracion % 60 ? `${duracion % 60}min` : ''}`
+      : `${duracion} minutos`;
+
+  const content = `
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Nueva reserva de asesoria</h2>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="background-color:${BRAND.cream};border-radius:8px;width:100%;margin-bottom:24px;">
+      <tr>
+        <td style="padding:20px;">
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Cliente:</p>
+          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${clientName} (${clientEmail})</p>
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Plan:</p>
+          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${planName}</p>
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Fecha:</p>
+          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${fecha} a las ${hora} (${timezone})</p>
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Duracion:</p>
+          <p style="margin:0 0 ${notas ? '16px' : '0'};font-size:16px;color:${BRAND.dark};font-weight:600;">${duracionText}</p>
+          ${
+            notas
+              ? `<p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Notas del cliente:</p>
+          <p style="margin:0;font-size:16px;color:${BRAND.dark};font-style:italic;">${notas}</p>`
+              : ''
+          }
+        </td>
+      </tr>
+    </table>
+    ${button('Iniciar reunion (Host Zoom)', zoomStartUrl)}`;
+  return baseLayout(content);
+}
+
+export function getBookingReminderEmailHtml(
+  name: string,
+  planName: string,
+  fecha: string,
+  hora: string,
+  duracion: number,
+  timezone: string,
+  zoomUrl: string,
+  reminderType: '3d' | '24h' | '1h',
+): string {
+  const duracionText =
+    duracion >= 60
+      ? `${Math.floor(duracion / 60)}h ${duracion % 60 ? `${duracion % 60}min` : ''}`
+      : `${duracion} minutos`;
+
+  const reminderText =
+    reminderType === '3d'
+      ? 'Tu sesion es en 3 dias'
+      : reminderType === '24h'
+        ? 'Tu sesion es manana'
+        : 'Tu sesion empieza en 1 hora';
+
+  const content = `
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">${reminderText}</h2>
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Hola <strong style="color:${BRAND.dark};">${name}</strong>, te recordamos tu sesion de <strong style="color:${BRAND.dark};">${planName}</strong>:
+    </p>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="background-color:${BRAND.cream};border-radius:8px;width:100%;margin-bottom:24px;">
+      <tr>
+        <td style="padding:20px;">
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Fecha:</p>
+          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${fecha}</p>
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Hora:</p>
+          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${hora} (${timezone})</p>
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Duracion:</p>
+          <p style="margin:0;font-size:16px;color:${BRAND.dark};font-weight:600;">${duracionText}</p>
+        </td>
+      </tr>
+    </table>
+    ${button('Unirme a la sesion (Zoom)', zoomUrl)}
+    <p style="margin:24px 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
+      Recuerda estar lista unos minutos antes. Si necesitas reprogramar, responde a este email.
+    </p>`;
+  return baseLayout(content);
+}

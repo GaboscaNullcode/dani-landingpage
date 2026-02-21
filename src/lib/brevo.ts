@@ -11,6 +11,9 @@ import {
   getWelcomeEmailHtml,
   getCommunityEmailHtml,
   getNewsletterWelcomeEmailHtml,
+  getBookingConfirmationEmailHtml,
+  getBookingNotificationEmailHtml,
+  getBookingReminderEmailHtml,
 } from './email-templates';
 
 let apiInstance: TransactionalEmailsApi | null = null;
@@ -144,5 +147,88 @@ export async function sendNewsletterWelcomeEmail(
     process.env.NEWSLETTER_GUIDE_URL || 'https://remotecondani.com/newsletter';
   const subject = 'Tu guia gratuita esta aqui';
   const html = getNewsletterWelcomeEmailHtml(name, guideUrl);
+  await sendEmail(to, subject, html);
+}
+
+// ── Booking emails ──
+
+export async function sendBookingConfirmationEmail(
+  to: string,
+  name: string,
+  planName: string,
+  fecha: string,
+  hora: string,
+  duracion: number,
+  timezone: string,
+  zoomUrl: string,
+): Promise<void> {
+  const subject = `Tu sesion de ${planName} esta confirmada`;
+  const html = getBookingConfirmationEmailHtml(
+    name,
+    planName,
+    fecha,
+    hora,
+    duracion,
+    timezone,
+    zoomUrl,
+  );
+  await sendEmail(to, subject, html);
+}
+
+export async function sendBookingNotificationToDani(
+  clientName: string,
+  clientEmail: string,
+  planName: string,
+  fecha: string,
+  hora: string,
+  duracion: number,
+  timezone: string,
+  zoomStartUrl: string,
+  notas?: string,
+): Promise<void> {
+  const daniEmail = process.env.DANI_EMAIL || sender.email;
+  const subject = `Nueva reserva: ${planName} con ${clientName}`;
+  const html = getBookingNotificationEmailHtml(
+    clientName,
+    clientEmail,
+    planName,
+    fecha,
+    hora,
+    duracion,
+    timezone,
+    zoomStartUrl,
+    notas,
+  );
+  await sendEmail(daniEmail, subject, html);
+}
+
+export async function sendBookingReminderEmail(
+  to: string,
+  name: string,
+  planName: string,
+  fecha: string,
+  hora: string,
+  duracion: number,
+  timezone: string,
+  zoomUrl: string,
+  reminderType: '3d' | '24h' | '1h',
+): Promise<void> {
+  const reminderLabel =
+    reminderType === '3d'
+      ? 'en 3 dias'
+      : reminderType === '24h'
+        ? 'manana'
+        : 'en 1 hora';
+  const subject = `Recordatorio: tu ${planName} es ${reminderLabel}`;
+  const html = getBookingReminderEmailHtml(
+    name,
+    planName,
+    fecha,
+    hora,
+    duracion,
+    timezone,
+    zoomUrl,
+    reminderType,
+  );
   await sendEmail(to, subject, html);
 }

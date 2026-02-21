@@ -3,7 +3,7 @@ import { getStripe } from '@/lib/stripe';
 
 export async function POST(request: NextRequest) {
   try {
-    const { priceId, productId, customerEmail, customerName } =
+    const { priceId, productId, customerEmail, customerName, isAsesoria, planId } =
       await request.json();
 
     if (!priceId || typeof priceId !== 'string') {
@@ -19,16 +19,23 @@ export async function POST(request: NextRequest) {
 
     const domain = process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost:3000';
 
+    // Determine success/cancel URLs based on checkout type
+    const successUrl = isAsesoria
+      ? `${domain}/asesorias/agendar?session_id={CHECKOUT_SESSION_ID}`
+      : `${domain}/tienda/exito?session_id={CHECKOUT_SESSION_ID}`;
+    const cancelUrl = isAsesoria ? `${domain}/asesorias` : `${domain}/tienda`;
+
     const session = await stripeClient.checkout.sessions.create({
       line_items: [{ price: priceId, quantity: 1 }],
       mode: isSubscription ? 'subscription' : 'payment',
-      success_url: `${domain}/tienda/exito?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${domain}/tienda`,
+      success_url: successUrl,
+      cancel_url: cancelUrl,
       ...(isSubscription ? {} : { customer_creation: 'always' }),
       ...(customerEmail ? { customer_email: customerEmail } : {}),
       metadata: {
         productId: productId || '',
         customerName: customerName || '',
+        ...(isAsesoria ? { isAsesoria: 'true', planId: planId || '' } : {}),
       },
     });
 
