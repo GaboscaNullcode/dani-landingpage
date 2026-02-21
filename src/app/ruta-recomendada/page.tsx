@@ -33,7 +33,7 @@ export default function RutaRecomendadaPage() {
       <Navigation darkHero />
       <main id="main-content">
         <StageHero
-          title="Empieza tu camino remoto con una ruta paso a paso"
+          title="Empieza tu camino remoto paso a paso"
           subtitle="Un sistema paso a paso disenado para que avances con claridad, sin perderte en el camino."
         />
         <RutaProductSection />
