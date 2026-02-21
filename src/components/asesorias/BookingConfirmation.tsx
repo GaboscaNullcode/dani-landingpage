@@ -6,7 +6,8 @@ import {
   Video,
   Calendar,
   Clock,
-  ArrowRight,
+  Bell,
+  Play,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -63,19 +64,18 @@ export default function BookingConfirmation({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="mb-2 font-[var(--font-headline)] text-2xl font-bold text-gray-dark"
+        className="mb-2 font-[var(--font-headline)] text-3xl font-bold text-gray-dark"
       >
-        Reserva confirmada
+        Tu sesión está confirmada
       </motion.h3>
 
       <motion.p
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className="mb-8 text-gray-medium"
+        className="mb-6 text-lg text-gray-medium"
       >
-        Tu sesion ha sido agendada. Recibiras un email con los detalles y el
-        enlace de Zoom.
+        Tu asesoría ya está agendada.
       </motion.p>
 
       {/* Session details */}
@@ -83,7 +83,7 @@ export default function BookingConfirmation({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
-        className="mx-auto mb-8 max-w-sm space-y-3 rounded-2xl bg-cream p-6 text-left"
+        className="mx-auto mb-6 max-w-sm space-y-3 rounded-2xl bg-cream p-6 text-left"
       >
         <div className="flex items-center gap-3">
           <Calendar className="h-5 w-5 text-coral" />
@@ -99,34 +99,75 @@ export default function BookingConfirmation({
           <Video className="h-5 w-5 text-coral" />
           <span className="text-gray-dark">{planName} via Zoom</span>
         </div>
-      </motion.div>
-
-      {/* Actions */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7 }}
-        className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center"
-      >
         {zoomJoinUrl && (
           <a
             href={zoomJoinUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-xl border-2 border-gray-dark px-6 py-3 font-semibold text-gray-dark transition-colors hover:bg-gray-dark hover:text-white"
+            className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-coral hover:text-pink"
           >
             <Video className="h-4 w-4" />
-            Link de Zoom
+            Abrir enlace de Zoom
           </a>
         )}
+      </motion.div>
+
+      {/* Email reminder */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7 }}
+        className="mx-auto mb-8 max-w-sm rounded-2xl border border-gray-light/50 bg-white p-5 text-left"
+      >
+        <p className="mb-3 text-sm font-medium text-gray-dark">
+          En unos minutos recibirás un correo con:
+        </p>
+        <ul className="space-y-2 text-sm text-gray-medium">
+          <li className="flex items-center gap-2">
+            <Calendar className="h-4 w-4 shrink-0 text-coral" />
+            Fecha y hora
+          </li>
+          <li className="flex items-center gap-2">
+            <Video className="h-4 w-4 shrink-0 text-coral" />
+            Tu enlace personal de Zoom
+          </li>
+          <li className="flex items-center gap-2">
+            <Bell className="h-4 w-4 shrink-0 text-coral" />
+            Recordatorio automático
+          </li>
+        </ul>
+      </motion.div>
+
+      {/* Masterclass recommendation */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+        className="mx-auto mb-8 max-w-sm rounded-2xl bg-lavender/30 p-6"
+      >
+        <p className="mb-4 text-sm leading-relaxed text-gray-dark">
+          Mientras tanto, te recomiendo ver la masterclass gratuita para que
+          llegues con más claridad y podamos aprovechar al máximo nuestro tiempo
+          juntas.
+        </p>
         <Link
-          href="/mi-cuenta"
+          href="/tienda/masterclass-gratuita"
           className="btn-primary inline-flex items-center gap-2 rounded-xl px-6 py-3 font-bold"
         >
-          Ir a Mi Cuenta
-          <ArrowRight className="h-4 w-4" />
+          <Play className="h-4 w-4" />
+          Ver Masterclass
         </Link>
       </motion.div>
+
+      {/* Closing */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.9 }}
+        className="text-lg font-medium text-gray-dark"
+      >
+        Nos vemos pronto
+      </motion.p>
     </motion.div>
   );
 }
