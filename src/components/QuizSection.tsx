@@ -8,7 +8,6 @@ import {
   ArrowRight,
   ArrowLeft,
   Compass,
-  Sprout,
   Rocket,
   RotateCcw,
   Mail,
@@ -23,6 +22,7 @@ import {
   Layers,
   type LucideIcon,
 } from 'lucide-react';
+import { stages, type StageData } from './StagesSection';
 
 // Types
 interface QuizOption {
@@ -114,14 +114,14 @@ const questions: QuizQuestion[] = [
 const levelResults: Record<string, LevelResult> = {
   explorando: {
     id: 'explorando',
-    title: 'Explorador/a',
-    subtitle: 'Estoy explorando',
+    title: 'Estoy Explorando',
+    subtitle: 'Nivel de Descubrimiento',
     description:
       'Es normal sentir dudas al principio. Lo importante es que ya estás aquí buscando respuestas. Empieza con calma, sin presión, y descubre si esto es para ti.',
     icon: Compass,
-    gradient: 'linear-gradient(135deg, #fef7f0 0%, #ffecd2 100%)',
-    shadowColor: 'rgba(255, 240, 230, 0.6)',
-    accentColor: '#fcd34d',
+    gradient: 'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
+    shadowColor: 'rgba(167, 139, 250, 0.3)',
+    accentColor: '#a78bfa',
     recommendations: [
       {
         name: 'Newsletter Semanal',
@@ -155,13 +155,13 @@ const levelResults: Record<string, LevelResult> = {
   },
   confundido: {
     id: 'confundido',
-    title: 'Buscador/a de Claridad',
-    subtitle: 'Estoy confundid@',
+    title: 'Estoy confundid@',
+    subtitle: 'Nivel de Preparación',
     description:
       'El miedo a no saber es el más fácil de vencer: se cura con información correcta. Necesitas una guía clara que elimine la confusión y te dé un plan paso a paso.',
-    icon: Sprout,
-    gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
-    shadowColor: 'rgba(224, 86, 160, 0.4)',
+    icon: HelpCircle,
+    gradient: 'var(--gradient-coral-pink)',
+    shadowColor: 'rgba(255, 107, 107, 0.3)',
     accentColor: '#e056a0',
     recommendations: [
       {
@@ -188,14 +188,14 @@ const levelResults: Record<string, LevelResult> = {
   },
   accion: {
     id: 'accion',
-    title: 'Persona de Acción',
-    subtitle: 'Estoy list@ para la acción',
+    title: 'Estoy list@ para la acción',
+    subtitle: 'Nivel Personalizado',
     description:
       'Ya sabes que quieres esto. Ahora necesitas dejar de investigar y empezar a ejecutar con un sistema probado y acompañamiento que te lleve a resultados.',
     icon: Rocket,
-    gradient: 'var(--gradient-coral-pink)',
-    shadowColor: 'rgba(255, 107, 107, 0.4)',
-    accentColor: '#ff6b6b',
+    gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
+    shadowColor: 'rgba(224, 86, 160, 0.3)',
+    accentColor: '#e056a0',
     recommendations: [
       {
         name: 'Curso Completo: Paso a Paso + 6 Bonos',
@@ -264,16 +264,18 @@ function getResult(answers: (string | null)[]): string {
 // Level Accordion Component
 function LevelAccordion({
   level,
+  stage,
   isExpanded,
   onToggle,
-  index
+  index,
 }: {
   level: LevelResult;
+  stage: StageData;
   isExpanded: boolean;
   onToggle: () => void;
   index: number;
 }) {
-  const Icon = level.icon;
+  const Icon = stage.icon;
 
   return (
     <motion.div
@@ -291,7 +293,10 @@ function LevelAccordion({
         {/* Level Icon */}
         <div
           className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl text-white shadow-lg sm:h-16 sm:w-16"
-          style={{ background: level.gradient }}
+          style={{
+            background: stage.gradient,
+            boxShadow: `0 10px 30px ${stage.shadowColor}`,
+          }}
         >
           <Icon className="h-7 w-7 sm:h-8 sm:w-8" />
         </div>
@@ -299,9 +304,12 @@ function LevelAccordion({
         {/* Level Info */}
         <div className="flex-1">
           <h3 className="mb-1 font-[var(--font-headline)] text-xl font-bold text-black-deep sm:text-2xl">
-            {level.title}
+            {stage.title}
           </h3>
-          <p className="font-[var(--font-dm-sans)] text-sm text-gray-medium">
+          <p
+            className="font-[var(--font-dm-sans)] text-sm font-medium"
+            style={{ color: stage.accentColor }}
+          >
             {level.subtitle}
           </p>
         </div>
@@ -327,55 +335,40 @@ function LevelAccordion({
           >
             <div className="border-t border-gray-light/50 px-5 pb-6 pt-5 sm:px-6">
               {/* Description */}
-              <p className="mb-6 font-[var(--font-dm-sans)] text-gray-carbon">
-                {level.description}
+              <p className="mb-6 font-[var(--font-dm-sans)] text-sm leading-relaxed text-gray-carbon">
+                {stage.description}
               </p>
 
-              {/* Recommendations */}
-              <div className="space-y-3">
-                <h4 className="font-[var(--font-dm-sans)] text-sm font-semibold uppercase tracking-wider text-gray-medium">
-                  Recursos recomendados
-                </h4>
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {level.recommendations.map((rec) => (
-                    <Link
-                      key={rec.name}
-                      href={rec.href}
-                      className="group/card relative overflow-hidden rounded-xl bg-cream/60 p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-lg"
+              {/* Items */}
+              <ul className="mb-6 space-y-3">
+                {stage.items.map((item, idx) => (
+                  <li
+                    key={idx}
+                    className="flex items-start gap-3 text-gray-carbon"
+                  >
+                    <span
+                      className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-white"
+                      style={{ background: stage.gradient }}
                     >
-                      {rec.tag && (
-                        <span
-                          className="absolute right-2 top-2 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase text-white"
-                          style={{ background: rec.gradient }}
-                        >
-                          {rec.tag}
-                        </span>
-                      )}
-                      <div
-                        className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl"
-                        style={{ background: rec.gradient }}
-                      >
-                        <rec.icon className="h-5 w-5 text-white" />
-                      </div>
-                      <h5 className="mb-1 font-[var(--font-headline)] text-sm font-bold text-black-deep">
-                        {rec.name}
-                      </h5>
-                      <p className="mb-2 text-xs text-gray-carbon line-clamp-2">
-                        {rec.description}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <span
-                          className="font-[var(--font-headline)] text-lg font-black"
-                          style={{ color: rec.price === 'Gratis' ? '#6ee7b7' : '#ff6b6b' }}
-                        >
-                          {rec.price}
-                        </span>
-                        <ArrowRight className="h-4 w-4 text-gray-medium transition-transform group-hover/card:translate-x-1 group-hover/card:text-coral" />
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
+                      <Check className="h-3 w-3" />
+                    </span>
+                    <span className="text-sm">{item}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* CTA Button */}
+              <Link
+                href={stage.href}
+                className="btn-shimmer group/btn inline-flex items-center gap-2 rounded-full px-6 py-3 font-[var(--font-headline)] text-sm font-bold uppercase tracking-wide text-white transition-[transform,box-shadow] duration-500"
+                style={{
+                  background: stage.gradient,
+                  boxShadow: `0 10px 30px ${stage.shadowColor}`,
+                }}
+              >
+                <span>{stage.cta}</span>
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+              </Link>
             </div>
           </motion.div>
         )}
@@ -399,7 +392,7 @@ export default function QuizSection() {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Levels view state
-  const [expandedLevel, setExpandedLevel] = useState<string | null>('nivel_0');
+  const [expandedLevel, setExpandedLevel] = useState<string | null>('explorando');
 
   // Handle option selection
   const handleOptionSelect = (optionId: string) => {
@@ -996,6 +989,7 @@ export default function QuizSection() {
                   <LevelAccordion
                     key={levelKey}
                     level={levelResults[levelKey]}
+                    stage={stages[index]}
                     isExpanded={expandedLevel === levelKey}
                     onToggle={() => setExpandedLevel(expandedLevel === levelKey ? null : levelKey)}
                     index={index}
@@ -1084,8 +1078,7 @@ export default function QuizSection() {
                   transition={{ delay: 0.6 }}
                   className="mb-4 font-[var(--font-headline)] text-4xl font-bold text-black-deep sm:text-5xl"
                 >
-                  ¡Eres{' '}
-                  <span className="gradient-text-playful">{result.title}</span>!
+                  <span className="gradient-text-playful">{result.title}</span>
                 </motion.h2>
 
                 {/* Description */}
