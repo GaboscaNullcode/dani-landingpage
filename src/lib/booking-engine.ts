@@ -42,7 +42,7 @@ interface BookingInput {
 
 interface BookingResult {
   reserva: Reserva;
-  zoomJoinUrl: string;
+  zoomJoinUrl?: string;
 }
 
 export async function createBooking(
@@ -91,32 +91,43 @@ export async function createBooking(
   let zoomStartUrl: string | undefined;
   let googleEventId: string | undefined;
 
+  const hasZoom = !!(process.env.ZOOM_CLIENT_ID && process.env.ZOOM_CLIENT_SECRET && process.env.ZOOM_ACCOUNT_ID);
+  const hasGoogleCal = !!(process.env.GOOGLE_SERVICE_ACCOUNT_JSON && process.env.GOOGLE_CALENDAR_ID);
+
   try {
-    // 4. Create Zoom meeting
-    const zoomResult = await createZoomMeeting({
-      topic: `${planName} - ${clientName}`,
-      startTime: fechaHora,
-      durationMinutes: duracionMinutos,
-      timezone,
-    });
-    zoomMeetingId = zoomResult.meetingId;
-    zoomJoinUrl = zoomResult.joinUrl;
-    zoomStartUrl = zoomResult.startUrl;
+    // 4. Create Zoom meeting (optional)
+    if (hasZoom) {
+      const zoomResult = await createZoomMeeting({
+        topic: `${planName} - ${clientName}`,
+        startTime: fechaHora,
+        durationMinutes: duracionMinutos,
+        timezone,
+      });
+      zoomMeetingId = zoomResult.meetingId;
+      zoomJoinUrl = zoomResult.joinUrl;
+      zoomStartUrl = zoomResult.startUrl;
+    } else {
+      console.log('[booking] Zoom not configured, skipping meeting creation');
+    }
 
-    // 5. Create Google Calendar event
-    const endTime = new Date(
-      new Date(fechaHora).getTime() + duracionMinutos * 60000,
-    ).toISOString();
+    // 5. Create Google Calendar event (optional)
+    if (hasGoogleCal) {
+      const endTime = new Date(
+        new Date(fechaHora).getTime() + duracionMinutos * 60000,
+      ).toISOString();
 
-    googleEventId = await createCalendarEvent({
-      summary: `${planName} - ${clientName}`,
-      description: `Plan: ${planName}\nCliente: ${clientName} (${clientEmail})\nNotas: ${notasCliente || 'Sin notas'}`,
-      startDateTime: fechaHora,
-      endDateTime: endTime,
-      timezone,
-      attendeeEmail: clientEmail,
-      zoomJoinUrl: zoomResult.joinUrl,
-    });
+      googleEventId = await createCalendarEvent({
+        summary: `${planName} - ${clientName}`,
+        description: `Plan: ${planName}\nCliente: ${clientName} (${clientEmail})\nNotas: ${notasCliente || 'Sin notas'}`,
+        startDateTime: fechaHora,
+        endDateTime: endTime,
+        timezone,
+        attendeeEmail: clientEmail,
+        zoomJoinUrl: zoomJoinUrl,
+      });
+    } else {
+      console.log('[booking] Google Calendar not configured, skipping event creation');
+    }
 
     // 6. Update reservation to 'confirmada'
     const updatedReserva = await updateReserva(reserva.id, {

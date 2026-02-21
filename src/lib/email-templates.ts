@@ -153,7 +153,7 @@ export function getBookingConfirmationEmailHtml(
   hora: string,
   duracion: number,
   timezone: string,
-  zoomUrl: string,
+  zoomUrl?: string,
 ): string {
   const duracionText =
     duracion >= 60
@@ -177,7 +177,7 @@ export function getBookingConfirmationEmailHtml(
         </td>
       </tr>
     </table>
-    ${button('Unirme a la sesion (Zoom)', zoomUrl)}
+    ${zoomUrl ? button('Unirme a la sesion (Zoom)', zoomUrl) : `<p style="margin:0 0 0;color:${BRAND.gray};font-size:14px;">El enlace de la sesion sera enviado por separado.</p>`}
     <p style="margin:24px 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
       Si necesitas reprogramar o tienes dudas, responde a este email.
     </p>`;
@@ -192,7 +192,7 @@ export function getBookingNotificationEmailHtml(
   hora: string,
   duracion: number,
   timezone: string,
-  zoomStartUrl: string,
+  zoomStartUrl?: string,
   notas?: string,
 ): string {
   const duracionText =
@@ -222,7 +222,7 @@ export function getBookingNotificationEmailHtml(
         </td>
       </tr>
     </table>
-    ${button('Iniciar reunion (Host Zoom)', zoomStartUrl)}`;
+    ${zoomStartUrl ? button('Iniciar reunion (Host Zoom)', zoomStartUrl) : ''}`;
   return baseLayout(content);
 }
 

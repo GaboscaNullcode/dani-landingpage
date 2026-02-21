@@ -160,7 +160,7 @@ export async function sendBookingConfirmationEmail(
   hora: string,
   duracion: number,
   timezone: string,
-  zoomUrl: string,
+  zoomUrl?: string,
 ): Promise<void> {
   const subject = `Tu sesion de ${planName} esta confirmada`;
   const html = getBookingConfirmationEmailHtml(
@@ -183,7 +183,7 @@ export async function sendBookingNotificationToDani(
   hora: string,
   duracion: number,
   timezone: string,
-  zoomStartUrl: string,
+  zoomStartUrl?: string,
   notas?: string,
 ): Promise<void> {
   const daniEmail = process.env.DANI_EMAIL || sender.email;

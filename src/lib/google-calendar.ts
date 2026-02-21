@@ -35,12 +35,14 @@ export async function createCalendarEvent({
   endDateTime: string;
   timezone: string;
   attendeeEmail: string;
-  zoomJoinUrl: string;
+  zoomJoinUrl?: string;
 }): Promise<string> {
   const calendar = getCalendarClient();
   const calendarId = process.env.GOOGLE_CALENDAR_ID!;
 
-  const fullDescription = `${description}\n\nZoom: ${zoomJoinUrl}`;
+  const fullDescription = zoomJoinUrl
+    ? `${description}\n\nZoom: ${zoomJoinUrl}`
+    : description;
 
   const event = await calendar.events.insert({
     calendarId,
