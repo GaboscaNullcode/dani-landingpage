@@ -138,15 +138,77 @@ export const contenidoAsesoria: ContenidoItem[] = [
   },
 ];
 
-export const politicas = {
-  reprogramacion: {
-    title: 'Política de Reprogramación',
+export interface TerminoCondicion {
+  title: string;
+  content: string;
+  icon: string;
+}
+
+export const terminosCondiciones: TerminoCondicion[] = [
+  {
+    icon: 'clock',
+    title: 'Puntualidad',
     content:
-      'Puedes reprogramar tu sesión hasta 24 horas antes sin costo. Reprogramaciones con menos de 24 horas de anticipación están sujetas a disponibilidad.',
+      'La sesión empieza a la hora acordada. Esperamos máximo 15 minutos. Si no te conectas en ese tiempo, la sesión se pierde y no hay reembolso.',
   },
-  reembolso: {
-    title: 'Política de Reembolso',
+  {
+    icon: 'calendar-clock',
+    title: 'Cambiar la fecha',
     content:
-      'Si no estás satisfecha con la sesión, te ofrezco un reembolso del 50% si lo solicitas dentro de las primeras 24 horas después de la asesoría.',
+      'Si necesitas reprogramar: aviso con 24h o más → sin costo. Con menos de 24h → 25 USD. Segunda reprogramación o más → 39 USD por cada cambio adicional. La nueva fecha dependerá de la disponibilidad.',
   },
-};
+  {
+    icon: 'user-x',
+    title: 'Si no asistes',
+    content:
+      'Si no te presentas y no avisaste antes, la sesión se cancela sin reembolso ni posibilidad de reagendar.',
+  },
+  {
+    icon: 'ban',
+    title: 'Cancelaciones',
+    content:
+      'Con menos de 24h → no hay reembolso. Dentro de los primeros 10 días → se retiene el 40%. Entre el día 11 y 20 → se retiene el 80%. Después de 20 días → no hay reembolso.',
+  },
+  {
+    icon: 'book-open',
+    title: 'Programa Intensivo',
+    content:
+      'Para el programa de 4 horas debes completar el workbook y ebook antes de la sesión. Si no lo haces, el tiempo se usará para empezar desde cero.',
+  },
+  {
+    icon: 'wifi',
+    title: 'Conexión',
+    content:
+      'Necesitas una conexión estable. Si hay problemas técnicos graves, evaluaremos si es necesario reprogramar.',
+  },
+  {
+    icon: 'user-check',
+    title: 'Sesión personal',
+    content:
+      'La asesoría es solo para la persona registrada. No se puede transferir a otra persona.',
+  },
+  {
+    icon: 'shield-alert',
+    title: 'Emergencias',
+    content:
+      'Si Dani no puede asistir por una emergencia, se reprogramará la sesión o se hará un reembolso completo.',
+  },
+  {
+    icon: 'lock',
+    title: 'Materiales',
+    content:
+      'Los ebooks, workbook y materiales no pueden compartirse ni venderse.',
+  },
+  {
+    icon: 'clipboard-check',
+    title: 'Revisiones posteriores',
+    content:
+      'Las revisiones incluidas deben solicitarse dentro de 1 mes después de la sesión. Pasado ese plazo, se pierden y no podrán utilizarse.',
+  },
+  {
+    icon: 'badge-check',
+    title: 'Aceptación',
+    content:
+      'Al realizar el pago, confirmas que leíste y aceptas estos términos.',
+  },
+];

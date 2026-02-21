@@ -1,6 +1,7 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { useRef } from 'react';
+import { motion, useInView } from 'motion/react';
 import {
   Target,
   User,
@@ -9,10 +10,23 @@ import {
   DollarSign,
   CheckCircle,
   Sparkles,
-  RefreshCw,
-  Shield,
+  ScrollText,
+  Clock,
+  CalendarClock,
+  UserX,
+  Ban,
+  BookOpen,
+  Wifi,
+  UserCheck,
+  ShieldAlert,
+  Lock,
+  ClipboardCheck,
+  BadgeCheck,
 } from 'lucide-react';
-import { contenidoAsesoria, politicas } from '@/data/asesorias-data';
+import {
+  contenidoAsesoria,
+  terminosCondiciones,
+} from '@/data/asesorias-data';
 
 const iconMap: Record<string, React.ElementType> = {
   target: Target,
@@ -23,7 +37,26 @@ const iconMap: Record<string, React.ElementType> = {
   'check-circle': CheckCircle,
 };
 
+const terminoIconMap: Record<string, React.ElementType> = {
+  clock: Clock,
+  'calendar-clock': CalendarClock,
+  'user-x': UserX,
+  ban: Ban,
+  'book-open': BookOpen,
+  wifi: Wifi,
+  'user-check': UserCheck,
+  'shield-alert': ShieldAlert,
+  lock: Lock,
+  'clipboard-check': ClipboardCheck,
+  'badge-check': BadgeCheck,
+};
+
+const duplicatedTerminos = [...terminosCondiciones, ...terminosCondiciones];
+
 export default function ContenidoSection() {
+  const termsRef = useRef(null);
+  const isTermsInView = useInView(termsRef, { once: true, margin: '-100px' });
+
   return (
     <>
       {/* Contenido Section */}
@@ -97,48 +130,71 @@ export default function ContenidoSection() {
         </div>
       </section>
 
-      {/* Políticas Section */}
-      <section className="py-20 bg-white">
-        <div className="container-custom">
+      {/* Términos y Condiciones Carousel */}
+      <section ref={termsRef} className="overflow-hidden bg-white py-20">
+        <div className="relative z-10">
+          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mx-auto max-w-4xl"
+            animate={isTermsInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8 }}
+            className="container-custom mb-10 text-center"
           >
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* Reprogramación */}
-              <div className="rounded-2xl border border-gray-light p-6">
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-lavender/10">
-                    <RefreshCw className="h-5 w-5 text-lavender" />
-                  </div>
-                  <h3 className="font-[var(--font-headline)] font-bold text-gray-dark">
-                    {politicas.reprogramacion.title}
-                  </h3>
-                </div>
-                <p className="text-sm leading-relaxed text-gray-carbon">
-                  {politicas.reprogramacion.content}
-                </p>
-              </div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={isTermsInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.6 }}
+              className="mb-4 inline-flex items-center gap-2 rounded-full bg-lavender/10 px-5 py-2"
+            >
+              <ScrollText className="h-5 w-5 text-lavender" />
+              <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-lavender">
+                Antes de agendar
+              </span>
+            </motion.div>
 
-              {/* Reembolso */}
-              <div className="rounded-2xl border border-gray-light p-6">
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-mint/10">
-                    <Shield className="h-5 w-5 text-mint" />
-                  </div>
-                  <h3 className="font-[var(--font-headline)] font-bold text-gray-dark">
-                    {politicas.reembolso.title}
-                  </h3>
-                </div>
-                <p className="text-sm leading-relaxed text-gray-carbon">
-                  {politicas.reembolso.content}
-                </p>
+            <h2 className="text-section-title font-[var(--font-headline)] font-bold text-gray-dark">
+              Términos y condiciones
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-carbon">
+              Para que tu experiencia sea clara desde el inicio
+            </p>
+          </motion.div>
+
+          {/* Carousel */}
+          <div className="relative">
+            {/* Gradient fade left */}
+            <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-32 bg-gradient-to-r from-white to-transparent md:w-48" />
+            {/* Gradient fade right */}
+            <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-32 bg-gradient-to-l from-white to-transparent md:w-48" />
+
+            <div className="overflow-hidden py-4">
+              <div
+                className="flex gap-6 animate-carousel"
+                style={{ width: 'max-content' }}
+              >
+                {duplicatedTerminos.map((termino, index) => {
+                  const TermIcon =
+                    terminoIconMap[termino.icon] || CheckCircle;
+                  return (
+                    <div
+                      key={`${termino.title}-${index}`}
+                      className="w-[280px] flex-shrink-0 rounded-2xl border border-gray-light bg-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)] md:w-[340px]"
+                    >
+                      <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-lavender/10">
+                        <TermIcon className="h-5 w-5 text-lavender" />
+                      </div>
+                      <h3 className="mb-2 font-[var(--font-headline)] text-base font-bold text-gray-dark">
+                        {termino.title}
+                      </h3>
+                      <p className="text-sm leading-relaxed text-gray-carbon">
+                        {termino.content}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
