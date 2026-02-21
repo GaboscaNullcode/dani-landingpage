@@ -51,7 +51,7 @@ export default async function RutaRecomendadaPage() {
         <StageTransitionCTA
           text="¿Necesitas acompanamiento mas personalizado?"
           primaryText="Ver servicios personalizados"
-          primaryHref="/servicios"
+          primaryHref="/asesorias"
         />
       </main>
       <Footer />
