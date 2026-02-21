@@ -49,7 +49,7 @@ export default async function RutaRecomendadaPage() {
           originalPrice={community?.originalPrice}
         />
         <StageTransitionCTA
-          text="¿Necesitas acompanamiento mas personalizado?"
+          text="¿Necesitas ayuda personalizada?"
           primaryText="Ver servicios personalizados"
           primaryHref="/asesorias"
         />
