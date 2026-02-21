@@ -44,6 +44,8 @@ export async function POST(request: NextRequest) {
 
   const domain = process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost:3000';
 
+  console.log(`[webhook] Received event: ${event.type} (${event.id})`);
+
   switch (event.type) {
     case 'checkout.session.completed': {
       const session = event.data.object as Stripe.Checkout.Session;
@@ -52,25 +54,38 @@ export async function POST(request: NextRequest) {
       const productId = session.metadata?.productId;
       const isAsesoria = session.metadata?.isAsesoria === 'true';
 
+      console.log(`[webhook] checkout.session.completed:`, {
+        sessionId: session.id,
+        email,
+        productId,
+        isAsesoria,
+        paymentStatus: session.payment_status,
+        mode: session.mode,
+      });
+
       if (!email || !productId) {
-        console.error('Missing email or productId in checkout session');
+        console.error('[webhook] Missing email or productId in session metadata');
         break;
       }
 
       try {
         // Check if compra already exists (may have been created by /api/reservas/crear)
         const existingCompra = await getCompraByStripeSessionId(session.id);
+        console.log(`[webhook] Existing compra for session:`, existingCompra?.id || 'none');
 
         if (existingCompra) {
-          // For asesorias, compra was already created by the booking endpoint — nothing to do
-          if (isAsesoria) break;
-
-          // For non-asesorias, still send emails using the existing compra
+          if (isAsesoria) {
+            console.log('[webhook] Asesoria compra already exists, skipping');
+            break;
+          }
         }
 
+        console.log(`[webhook] Finding or creating user: ${email}`);
         const { user, isNew, tempPassword } = await findOrCreateUser(email, name);
+        console.log(`[webhook] User ${user.id} (isNew: ${isNew})`);
 
         if (isNew && tempPassword) {
+          console.log(`[webhook] Sending welcome email to ${email}`);
           await sendWelcomeEmail(email, name, tempPassword);
         }
 
@@ -80,18 +95,21 @@ export async function POST(request: NextRequest) {
             : undefined;
 
         if (!existingCompra) {
+          console.log(`[webhook] Creating compra: user=${user.id}, product=${productId}`);
           await createCompra(user.id, productId, session.id, subscriptionId);
+          console.log('[webhook] Compra created successfully');
         }
 
         // For asesorias: skip product emails (booking confirmation sent after scheduling)
         if (isAsesoria) {
+          console.log('[webhook] Asesoria — skipping product emails');
           break;
         }
 
         const producto = await getProductById(productId);
 
         if (!producto) {
-          console.error('Product not found:', productId);
+          console.error(`[webhook] Product not found: ${productId}`);
           break;
         }
 
@@ -101,6 +119,7 @@ export async function POST(request: NextRequest) {
           producto.categoria === 'comunidad' &&
           producto.whatsapp_link
         ) {
+          console.log(`[webhook] Sending community email to ${email}`);
           await sendCommunityEmail(
             email,
             name,
@@ -109,6 +128,7 @@ export async function POST(request: NextRequest) {
             accessUrl,
           );
         } else {
+          console.log(`[webhook] Sending purchase email to ${email}`);
           await sendPurchaseEmail(
             email,
             name,
@@ -117,8 +137,10 @@ export async function POST(request: NextRequest) {
             !!subscriptionId,
           );
         }
+
+        console.log('[webhook] Checkout fulfillment completed successfully');
       } catch (error) {
-        console.error('Error processing checkout fulfillment:', error);
+        console.error('[webhook] Error processing checkout fulfillment:', error);
         return NextResponse.json(
           { error: 'Error processing checkout fulfillment' },
           { status: 500 },
@@ -128,10 +150,12 @@ export async function POST(request: NextRequest) {
     }
     case 'customer.subscription.deleted': {
       const subscription = event.data.object as Stripe.Subscription;
+      console.log(`[webhook] Cancelling subscription: ${subscription.id}`);
       try {
         await cancelCompraBySubscription(subscription.id);
+        console.log('[webhook] Subscription cancelled successfully');
       } catch (error) {
-        console.error('Error cancelling subscription:', error);
+        console.error('[webhook] Error cancelling subscription:', error);
         return NextResponse.json(
           { error: 'Error cancelling subscription' },
           { status: 500 },
@@ -140,7 +164,7 @@ export async function POST(request: NextRequest) {
       break;
     }
     default:
-      console.log(`Unhandled event type: ${event.type}`);
+      console.log(`[webhook] Unhandled event type: ${event.type}`);
   }
 
   return NextResponse.json({ received: true });
