@@ -3,12 +3,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'motion/react';
+import { useState } from 'react';
 import {
   BookOpen,
   ExternalLink,
   Lock,
   CircleCheck,
   ArrowRight,
+  Settings,
+  Loader2,
 } from 'lucide-react';
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon';
 import type { Compra } from '@/types/auth';
@@ -106,10 +109,28 @@ function LockedCard({ product, index }: { product: Product; index: number }) {
 }
 
 function PurchasedCard({ compra, index }: { compra: Compra; index: number }) {
+  const [portalLoading, setPortalLoading] = useState(false);
   const producto = compra.productoDetail;
   if (!producto) return null;
 
   const isCancelled = compra.estado === 'cancelada';
+  const isActiveSubscription =
+    !!compra.stripeSubscriptionId && compra.estado === 'activa';
+
+  async function handleManageSubscription() {
+    setPortalLoading(true);
+    try {
+      const res = await fetch('/api/stripe/portal', { method: 'POST' });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setPortalLoading(false);
+    }
+  }
 
   return (
     <motion.div
@@ -199,6 +220,21 @@ function PurchasedCard({ compra, index }: { compra: Compra; index: number }) {
                 <WhatsAppIcon className="h-4 w-4" />
                 Ir al grupo
               </Link>
+            )}
+
+            {isActiveSubscription && (
+              <button
+                onClick={handleManageSubscription}
+                disabled={portalLoading}
+                className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-gray-light px-4 py-2.5 text-sm font-semibold text-gray-carbon transition-colors duration-200 hover:border-coral hover:text-coral disabled:opacity-60"
+              >
+                {portalLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Settings className="h-4 w-4" />
+                )}
+                Gestionar suscripcion
+              </button>
             )}
           </div>
         )}

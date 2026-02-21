@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
-import { findOrCreateUser, updateProgramIntensivePaymentState } from '@/lib/auth-service';
+import { findOrCreateUser, updateProgramIntensivePaymentState, updateStripeCustomerId } from '@/lib/auth-service';
 import {
   createCompra,
   cancelCompraBySubscription,
@@ -91,6 +91,13 @@ export async function POST(request: NextRequest) {
         if (isNew && tempPassword) {
           console.log(`[webhook] Sending welcome email to ${email}`);
           await sendWelcomeEmail(email, name, tempPassword);
+        }
+
+        // Save Stripe customer ID to profile (needed for Billing Portal)
+        const stripeCustomerId = session.customer as string | null;
+        if (stripeCustomerId && !user.stripeCustomerId) {
+          console.log(`[webhook] Saving stripe_customer_id: ${stripeCustomerId}`);
+          await updateStripeCustomerId(user.id, stripeCustomerId);
         }
 
         const subscriptionId =
