@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
+import { getProductById, getPaymentPlans } from '@/lib/tienda-service';
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,10 +21,34 @@ export async function POST(request: NextRequest) {
     const domain = process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost:3000';
 
     // Determine success/cancel URLs based on checkout type
-    const successUrl = isAsesoria
-      ? `${domain}/asesorias/agendar?session_id={CHECKOUT_SESSION_ID}`
-      : `${domain}/tienda/exito?session_id={CHECKOUT_SESSION_ID}`;
+    let successUrl: string;
     const cancelUrl = isAsesoria ? `${domain}/asesorias` : `${domain}/tienda`;
+
+    if (isAsesoria && productId) {
+      const producto = await getProductById(productId);
+      if (producto?.producto_padre) {
+        // Child product (split payment)
+        if (producto.orden === 1) {
+          successUrl = `${domain}/asesorias/gracias-pago1`;
+        } else {
+          successUrl = `${domain}/asesorias/agendar?session_id={CHECKOUT_SESSION_ID}`;
+        }
+      } else if (producto) {
+        // Parent product — check if Programa Intensivo (has children)
+        const childPlans = await getPaymentPlans(productId);
+        if (childPlans.length > 0) {
+          successUrl = `${domain}/asesorias/gracias-completo`;
+        } else {
+          successUrl = `${domain}/asesorias/agendar?session_id={CHECKOUT_SESSION_ID}`;
+        }
+      } else {
+        successUrl = `${domain}/asesorias/agendar?session_id={CHECKOUT_SESSION_ID}`;
+      }
+    } else if (isAsesoria) {
+      successUrl = `${domain}/asesorias/agendar?session_id={CHECKOUT_SESSION_ID}`;
+    } else {
+      successUrl = `${domain}/tienda/exito?session_id={CHECKOUT_SESSION_ID}`;
+    }
 
     const session = await stripeClient.checkout.sessions.create({
       line_items: [{ price: priceId, quantity: 1 }],

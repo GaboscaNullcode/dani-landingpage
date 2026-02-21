@@ -5,6 +5,9 @@ export interface User {
   email: string;
   name: string;
   stripeCustomerId?: string;
+  programIntensivePaidFull: boolean;
+  programIntensivePaid1: boolean;
+  programIntensivePaid2: boolean;
 }
 
 export interface Compra {

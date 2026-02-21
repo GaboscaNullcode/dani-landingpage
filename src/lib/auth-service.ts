@@ -20,10 +20,10 @@ export const getCurrentUser = cache(async (): Promise<User | null> => {
 
     if (!authUser) return null;
 
-    // Fetch profile data (name, stripe_customer_id)
+    // Fetch profile data (name, stripe_customer_id, program payment flags)
     const { data: profile } = await supabase
       .from('profiles')
-      .select('name, stripe_customer_id')
+      .select('name, stripe_customer_id, program_intensive_paid_full, program_intensive_paid_1, program_intensive_paid_2')
       .eq('id', authUser.id)
       .single();
 
@@ -32,6 +32,9 @@ export const getCurrentUser = cache(async (): Promise<User | null> => {
       email: authUser.email!,
       name: profile?.name || '',
       stripeCustomerId: profile?.stripe_customer_id || undefined,
+      programIntensivePaidFull: profile?.program_intensive_paid_full ?? false,
+      programIntensivePaid1: profile?.program_intensive_paid_1 ?? false,
+      programIntensivePaid2: profile?.program_intensive_paid_2 ?? false,
     };
   } catch {
     return null;
@@ -56,7 +59,7 @@ export async function loginUser(
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('name, stripe_customer_id')
+    .select('name, stripe_customer_id, program_intensive_paid_full, program_intensive_paid_1, program_intensive_paid_2')
     .eq('id', data.user.id)
     .single();
 
@@ -66,6 +69,9 @@ export async function loginUser(
       email: data.user.email!,
       name: profile?.name || '',
       stripeCustomerId: profile?.stripe_customer_id || undefined,
+      programIntensivePaidFull: profile?.program_intensive_paid_full ?? false,
+      programIntensivePaid1: profile?.program_intensive_paid_1 ?? false,
+      programIntensivePaid2: profile?.program_intensive_paid_2 ?? false,
     },
   };
 }
@@ -89,7 +95,7 @@ export async function findOrCreateUser(
     // Fetch profile
     const { data: profile } = await supabase
       .from('profiles')
-      .select('name, stripe_customer_id')
+      .select('name, stripe_customer_id, program_intensive_paid_full, program_intensive_paid_1, program_intensive_paid_2')
       .eq('id', existing.id)
       .single();
 
@@ -99,6 +105,9 @@ export async function findOrCreateUser(
         email: existing.email!,
         name: profile?.name || name,
         stripeCustomerId: profile?.stripe_customer_id || undefined,
+        programIntensivePaidFull: profile?.program_intensive_paid_full ?? false,
+        programIntensivePaid1: profile?.program_intensive_paid_1 ?? false,
+        programIntensivePaid2: profile?.program_intensive_paid_2 ?? false,
       },
       isNew: false,
     };
@@ -129,6 +138,9 @@ export async function findOrCreateUser(
       email: newUser.user.email!,
       name,
       stripeCustomerId: stripeCustomerId || undefined,
+      programIntensivePaidFull: false,
+      programIntensivePaid1: false,
+      programIntensivePaid2: false,
     },
     isNew: true,
     tempPassword,
@@ -184,6 +196,26 @@ export async function updateStripeCustomerId(
   const { error } = await supabase
     .from('profiles')
     .update({ stripe_customer_id: stripeCustomerId })
+    .eq('id', userId);
+  if (error) throw error;
+}
+
+/**
+ * Update Programa Intensivo payment flags on a user's profile.
+ */
+export async function updateProgramIntensivePaymentState(
+  userId: string,
+  flags: { paidFull?: boolean; paid1?: boolean; paid2?: boolean },
+): Promise<void> {
+  const supabase = getServiceSupabase();
+  const update: Record<string, boolean> = {};
+  if (flags.paidFull !== undefined) update.program_intensive_paid_full = flags.paidFull;
+  if (flags.paid1 !== undefined) update.program_intensive_paid_1 = flags.paid1;
+  if (flags.paid2 !== undefined) update.program_intensive_paid_2 = flags.paid2;
+
+  const { error } = await supabase
+    .from('profiles')
+    .update(update)
     .eq('id', userId);
   if (error) throw error;
 }

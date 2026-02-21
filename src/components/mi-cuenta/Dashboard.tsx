@@ -22,11 +22,13 @@ import type { Product } from '@/types/tienda';
 import type { Reserva } from '@/types/reservas';
 import ProductCard from './ProductCard';
 import ChangePasswordModal from './ChangePasswordModal';
+import ProgramaIntensivoSection from './ProgramaIntensivoSection';
 
 interface MeResponse {
   user: User;
   compras: Compra[];
   allProducts: Product[];
+  pago2Product: { id: string; stripePriceId: string; price: number } | null;
 }
 
 interface ReservasResponse {
@@ -311,6 +313,16 @@ export default function Dashboard() {
               })}
           </div>
         </motion.div>
+      )}
+
+      {/* Programa Intensivo */}
+      {(data.user.programIntensivePaidFull || data.user.programIntensivePaid1 || data.user.programIntensivePaid2) && (
+        <ProgramaIntensivoSection
+          paidFull={data.user.programIntensivePaidFull}
+          paid1={data.user.programIntensivePaid1}
+          paid2={data.user.programIntensivePaid2}
+          pago2Product={data.pago2Product}
+        />
       )}
 
       {/* Purchased products */}

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
-import { findOrCreateUser } from '@/lib/auth-service';
+import { findOrCreateUser, updateProgramIntensivePaymentState } from '@/lib/auth-service';
 import {
   createCompra,
   cancelCompraBySubscription,
@@ -110,16 +110,19 @@ export async function POST(request: NextRequest) {
           if (producto?.producto_padre) {
             // Child product = partial payment (Pago 1 or Pago 2)
             if (producto.orden === 1) {
+              await updateProgramIntensivePaymentState(user.id, { paid1: true });
               const accessUrl = `${domain}/mi-cuenta`;
               console.log(`[webhook] Programa Intensivo Pago 1 — sending materials email to ${email}`);
               await sendProgramaIntensivoPago1Email(email, name, accessUrl);
             } else {
+              await updateProgramIntensivePaymentState(user.id, { paid2: true });
               console.log('[webhook] Programa Intensivo Pago 2 — skipping email (booking flow handles it)');
             }
           } else if (producto) {
             // Parent product — check if it's a Programa Intensivo (has children)
             const childPlans = await getPaymentPlans(productId);
             if (childPlans.length > 0) {
+              await updateProgramIntensivePaymentState(user.id, { paidFull: true });
               const accessUrl = `${domain}/mi-cuenta`;
               console.log(`[webhook] Programa Intensivo full payment — sending access email to ${email}`);
               await sendProgramaIntensivoFullPaymentEmail(email, name, accessUrl);
