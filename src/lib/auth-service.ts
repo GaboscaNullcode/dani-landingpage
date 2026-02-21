@@ -1,6 +1,5 @@
 import { cache } from 'react';
-import PocketBase from 'pocketbase';
-import { getPocketBase, POCKETBASE_URL } from './pocketbase';
+import { createServerSupabase, getServiceSupabase } from './supabase/server';
 import type { User } from '@/types/auth';
 import crypto from 'crypto';
 
@@ -8,110 +7,183 @@ function generateTempPassword(): string {
   return crypto.randomBytes(4).toString('hex');
 }
 
-const getAdminPb = cache(async (): Promise<PocketBase> => {
-  const pb = getPocketBase();
-  await pb.collection('_superusers').authWithPassword(
-    process.env.POCKETBASE_ADMIN_EMAIL!,
-    process.env.POCKETBASE_ADMIN_PASSWORD!,
-  );
-  return pb;
+/**
+ * Get the current authenticated user from the Supabase session.
+ * Reads cookies automatically via @supabase/ssr.
+ */
+export const getCurrentUser = cache(async (): Promise<User | null> => {
+  try {
+    const supabase = await createServerSupabase();
+    const {
+      data: { user: authUser },
+    } = await supabase.auth.getUser();
+
+    if (!authUser) return null;
+
+    // Fetch profile data (name, stripe_customer_id)
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('name, stripe_customer_id')
+      .eq('id', authUser.id)
+      .single();
+
+    return {
+      id: authUser.id,
+      email: authUser.email!,
+      name: profile?.name || '',
+      stripeCustomerId: profile?.stripe_customer_id || undefined,
+    };
+  } catch {
+    return null;
+  }
 });
 
-interface UserRecord {
-  id: string;
-  email: string;
-  name: string;
-  stripe_customer_id?: string;
-}
-
-function mapUser(record: UserRecord): User {
-  return {
-    id: record.id,
-    email: record.email,
-    name: record.name,
-    stripeCustomerId: record.stripe_customer_id || undefined,
-  };
-}
-
+/**
+ * Sign in with email and password.
+ * Returns the user data. Session cookies are managed by @supabase/ssr.
+ */
 export async function loginUser(
   email: string,
   password: string,
-): Promise<{ token: string; user: User }> {
-  const pb = getPocketBase();
-  const result = await pb.collection('users').authWithPassword(email, password);
+): Promise<{ user: User }> {
+  const supabase = await createServerSupabase();
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) throw error;
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('name, stripe_customer_id')
+    .eq('id', data.user.id)
+    .single();
+
   return {
-    token: result.token,
-    user: mapUser(result.record as unknown as UserRecord),
+    user: {
+      id: data.user.id,
+      email: data.user.email!,
+      name: profile?.name || '',
+      stripeCustomerId: profile?.stripe_customer_id || undefined,
+    },
   };
 }
 
+/**
+ * Find or create a user (used by Stripe webhook).
+ * Uses service_role client to bypass RLS.
+ */
 export async function findOrCreateUser(
   email: string,
   name: string,
   stripeCustomerId?: string,
 ): Promise<{ user: User; isNew: boolean; tempPassword?: string }> {
-  const pb = await getAdminPb();
+  const supabase = getServiceSupabase();
 
-  try {
-    const existing = await pb
-      .collection('users')
-      .getFirstListItem(`email = "${email}"`);
-    return { user: mapUser(existing as unknown as UserRecord), isNew: false };
-  } catch {
-    const tempPassword = generateTempPassword();
-    const created = await pb.collection('users').create({
-      email,
-      name,
-      password: tempPassword,
-      passwordConfirm: tempPassword,
-      stripe_customer_id: stripeCustomerId || '',
-    });
+  // Try to find existing user by email
+  const { data: existingUsers } = await supabase.auth.admin.listUsers();
+  const existing = existingUsers?.users?.find((u) => u.email === email);
+
+  if (existing) {
+    // Fetch profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('name, stripe_customer_id')
+      .eq('id', existing.id)
+      .single();
+
     return {
-      user: mapUser(created as unknown as UserRecord),
-      isNew: true,
-      tempPassword,
+      user: {
+        id: existing.id,
+        email: existing.email!,
+        name: profile?.name || name,
+        stripeCustomerId: profile?.stripe_customer_id || undefined,
+      },
+      isNew: false,
     };
   }
-}
 
-export async function getCurrentUser(token: string): Promise<User | null> {
-  try {
-    const pb = new PocketBase(POCKETBASE_URL);
-    pb.authStore.save(token, null);
-    const result = await pb.collection('users').authRefresh();
-    return mapUser(result.record as unknown as UserRecord);
-  } catch {
-    return null;
+  // Create new user
+  const tempPassword = generateTempPassword();
+  const { data: newUser, error } = await supabase.auth.admin.createUser({
+    email,
+    password: tempPassword,
+    email_confirm: true,
+    user_metadata: { name },
+  });
+
+  if (error) throw error;
+
+  // Update profile with stripe_customer_id if provided
+  if (stripeCustomerId) {
+    await supabase
+      .from('profiles')
+      .update({ stripe_customer_id: stripeCustomerId })
+      .eq('id', newUser.user.id);
   }
+
+  return {
+    user: {
+      id: newUser.user.id,
+      email: newUser.user.email!,
+      name,
+      stripeCustomerId: stripeCustomerId || undefined,
+    },
+    isNew: true,
+    tempPassword,
+  };
 }
 
+/**
+ * Change user password. Verifies old password first, then updates.
+ */
 export async function changeUserPassword(
   userId: string,
   email: string,
   oldPassword: string,
   newPassword: string,
 ): Promise<void> {
-  const pb = getPocketBase();
-  await pb.collection('users').authWithPassword(email, oldPassword);
+  const supabase = await createServerSupabase();
 
-  const adminPb = await getAdminPb();
-  await adminPb.collection('users').update(userId, {
-    password: newPassword,
-    passwordConfirm: newPassword,
+  // Verify old password by attempting to sign in
+  const { error: authError } = await supabase.auth.signInWithPassword({
+    email,
+    password: oldPassword,
   });
+  if (authError) throw authError;
+
+  // Update password via admin API
+  const adminSupabase = getServiceSupabase();
+  const { error: updateError } =
+    await adminSupabase.auth.admin.updateUserById(userId, {
+      password: newPassword,
+    });
+  if (updateError) throw updateError;
 }
 
+/**
+ * Request a password reset email.
+ */
 export async function requestPasswordReset(email: string): Promise<void> {
-  const pb = getPocketBase();
-  await pb.collection('users').requestPasswordReset(email);
+  const supabase = await createServerSupabase();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${process.env.NEXT_PUBLIC_DOMAIN}/mi-cuenta/login`,
+  });
+  if (error) throw error;
 }
 
+/**
+ * Update a user's Stripe customer ID in their profile.
+ */
 export async function updateStripeCustomerId(
   userId: string,
   stripeCustomerId: string,
 ): Promise<void> {
-  const pb = await getAdminPb();
-  await pb.collection('users').update(userId, {
-    stripe_customer_id: stripeCustomerId,
-  });
+  const supabase = getServiceSupabase();
+  const { error } = await supabase
+    .from('profiles')
+    .update({ stripe_customer_id: stripeCustomerId })
+    .eq('id', userId);
+  if (error) throw error;
 }

@@ -106,7 +106,7 @@ function LockedCard({ product, index }: { product: Product; index: number }) {
 }
 
 function PurchasedCard({ compra, index }: { compra: Compra; index: number }) {
-  const producto = compra.expand?.producto;
+  const producto = compra.productoDetail;
   if (!producto) return null;
 
   const isCancelled = compra.estado === 'cancelada';

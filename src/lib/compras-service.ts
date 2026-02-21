@@ -1,15 +1,6 @@
 import { cache } from 'react';
-import { getPocketBase } from './pocketbase';
+import { getServiceSupabase } from './supabase/server';
 import type { Compra } from '@/types/auth';
-
-const getAdminPb = cache(async () => {
-  const pb = getPocketBase();
-  await pb.collection('_superusers').authWithPassword(
-    process.env.POCKETBASE_ADMIN_EMAIL!,
-    process.env.POCKETBASE_ADMIN_PASSWORD!,
-  );
-  return pb;
-});
 
 function mapCompra(record: Record<string, unknown>): Compra {
   return {
@@ -19,8 +10,8 @@ function mapCompra(record: Record<string, unknown>): Compra {
     stripeSessionId: record.stripe_session_id as string,
     stripeSubscriptionId: (record.stripe_subscription_id as string) || undefined,
     estado: record.estado as Compra['estado'],
-    created: record.created as string,
-    expand: record.expand as Compra['expand'],
+    created: record.created_at as string,
+    productoDetail: record.productoDetail as Compra['productoDetail'],
   };
 }
 
@@ -30,54 +21,82 @@ export async function createCompra(
   stripeSessionId: string,
   stripeSubscriptionId?: string,
 ): Promise<Compra> {
-  const pb = await getAdminPb();
-  const record = await pb.collection('compras').create({
-    usuario: userId,
-    producto: productoId,
-    stripe_session_id: stripeSessionId,
-    stripe_subscription_id: stripeSubscriptionId || '',
-    estado: 'activa',
-  });
-  return mapCompra(record);
+  const supabase = getServiceSupabase();
+  const { data, error } = await supabase
+    .from('compras')
+    .insert({
+      usuario: userId,
+      producto: productoId,
+      stripe_session_id: stripeSessionId,
+      stripe_subscription_id: stripeSubscriptionId || null,
+      estado: 'activa',
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return mapCompra(data);
 }
 
 export async function getCompraById(compraId: string): Promise<Compra | null> {
   try {
-    const pb = await getAdminPb();
-    const record = await pb.collection('compras').getOne(compraId, {
-      expand: 'producto',
-    });
-    return mapCompra(record);
+    const supabase = getServiceSupabase();
+    const { data, error } = await supabase
+      .from('compras')
+      .select('*, productoDetail:productos(*)')
+      .eq('id', compraId)
+      .single();
+
+    if (error) throw error;
+    return data ? mapCompra(data) : null;
   } catch {
     return null;
   }
 }
 
-export async function getUserCompras(userId: string): Promise<Compra[]> {
-  try {
-    const pb = await getAdminPb();
-    const records = await pb.collection('compras').getFullList({
-      filter: `usuario = "${userId}"`,
-      expand: 'producto',
-      sort: '-created',
-    });
-    return records.map(mapCompra);
-  } catch {
-    return [];
-  }
-}
+export const getUserCompras = cache(
+  async (userId: string): Promise<Compra[]> => {
+    try {
+      const supabase = getServiceSupabase();
+      const { data, error } = await supabase
+        .from('compras')
+        .select('*, productoDetail:productos(*)')
+        .eq('usuario', userId)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      return (data ?? []).map(mapCompra);
+    } catch {
+      return [];
+    }
+  },
+);
 
 export async function cancelCompraBySubscription(
   stripeSubscriptionId: string,
 ): Promise<void> {
-  const pb = await getAdminPb();
+  const supabase = getServiceSupabase();
   try {
-    const record = await pb
-      .collection('compras')
-      .getFirstListItem(`stripe_subscription_id = "${stripeSubscriptionId}"`);
-    await pb.collection('compras').update(record.id, {
-      estado: 'cancelada',
-    });
+    const { data, error: findError } = await supabase
+      .from('compras')
+      .select('id')
+      .eq('stripe_subscription_id', stripeSubscriptionId)
+      .single();
+
+    if (findError || !data) {
+      console.error(
+        'Compra not found for subscription:',
+        stripeSubscriptionId,
+      );
+      return;
+    }
+
+    const { error: updateError } = await supabase
+      .from('compras')
+      .update({ estado: 'cancelada' })
+      .eq('id', data.id);
+
+    if (updateError) throw updateError;
   } catch {
     console.error(
       'Compra not found for subscription:',
@@ -91,9 +110,7 @@ export async function getUserPurchasedProductIds(
 ): Promise<Set<string>> {
   const compras = await getUserCompras(userId);
   return new Set(
-    compras
-      .filter((c) => c.estado === 'activa')
-      .map((c) => c.producto),
+    compras.filter((c) => c.estado === 'activa').map((c) => c.producto),
   );
 }
 
@@ -102,12 +119,16 @@ export async function getCompraForDownload(
   userId: string,
 ): Promise<Compra | null> {
   try {
-    const pb = await getAdminPb();
-    const record = await pb.collection('compras').getOne(compraId, {
-      expand: 'producto',
-    });
-    if (record.usuario !== userId) return null;
-    return mapCompra(record);
+    const supabase = getServiceSupabase();
+    const { data, error } = await supabase
+      .from('compras')
+      .select('*, productoDetail:productos(*)')
+      .eq('id', compraId)
+      .eq('usuario', userId)
+      .single();
+
+    if (error) throw error;
+    return data ? mapCompra(data) : null;
   } catch {
     return null;
   }

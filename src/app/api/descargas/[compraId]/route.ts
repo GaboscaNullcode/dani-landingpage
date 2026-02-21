@@ -1,21 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth-service';
 import { getCompraForDownload } from '@/lib/compras-service';
-import type { ProductoRecord } from '@/types/tienda';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ compraId: string }> },
 ) {
-  const token = request.cookies.get('pb_auth')?.value;
+  const user = await getCurrentUser();
 
-  if (!token) {
-    return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
-  }
-
-  const user = await getCurrentUser(token);
   if (!user) {
-    return NextResponse.json({ error: 'Token invalido' }, { status: 401 });
+    return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
   }
 
   const { compraId } = await params;
@@ -35,8 +29,7 @@ export async function GET(
     );
   }
 
-  const producto = compra.expand?.producto as ProductoRecord | undefined;
-  const downloadUrl = producto?.download_url;
+  const downloadUrl = compra.productoDetail?.download_url;
 
   if (!downloadUrl) {
     return NextResponse.json(
@@ -56,8 +49,8 @@ export async function GET(
 
   const contentType =
     fileResponse.headers.get('content-type') || 'application/octet-stream';
-  const filename = producto?.nombre
-    ? `${producto.nombre.replace(/[^a-zA-Z0-9._-]/g, '_')}.pdf`
+  const filename = compra.productoDetail?.nombre
+    ? `${compra.productoDetail.nombre.replace(/[^a-zA-Z0-9._-]/g, '_')}.pdf`
     : 'descarga.pdf';
 
   return new NextResponse(fileResponse.body, {

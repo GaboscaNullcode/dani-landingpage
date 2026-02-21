@@ -1,20 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { updateSession } from '@/lib/supabase/middleware';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname === '/mi-cuenta/login') {
     return NextResponse.next();
   }
 
-  const token = request.cookies.get('pb_auth')?.value;
+  const { supabaseResponse, user } = await updateSession(request);
 
-  if (!token) {
+  if (!user) {
     const loginUrl = new URL('/mi-cuenta/login', request.url);
     return NextResponse.redirect(loginUrl);
   }
 
-  return NextResponse.next();
+  return supabaseResponse;
 }
 
 export const config = {

@@ -4,6 +4,7 @@ import { useState, useEffect, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Play, Sparkles } from 'lucide-react';
+import { createBrowserSupabase } from '@/lib/supabase/client';
 
 // Hook to detect client-side mounting without setState in useEffect
 function useHasMounted() {
@@ -14,10 +15,6 @@ function useHasMounted() {
   );
 }
 
-function hasAuthCookie(): boolean {
-  return document.cookie.split(';').some((c) => c.trim().startsWith('pb_auth='));
-}
-
 export default function MasterclassPopup() {
   const [isVisible, setIsVisible] = useState(false);
   const hasMounted = useHasMounted();
@@ -25,15 +22,23 @@ export default function MasterclassPopup() {
   useEffect(() => {
     if (!hasMounted) return;
 
-    // Don't show popup for logged-in users
-    if (hasAuthCookie()) return;
+    // Check auth state via Supabase client
+    const checkAuth = async () => {
+      const supabase = createBrowserSupabase();
+      const { data: { session } } = await supabase.auth.getSession();
 
-    // Show popup after a short delay
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 3000);
+      // Don't show popup for logged-in users
+      if (session) return;
 
-    return () => clearTimeout(timer);
+      // Show popup after a short delay
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    };
+
+    checkAuth();
   }, [hasMounted]);
 
   const handleDismiss = () => {

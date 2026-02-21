@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { cookies } from 'next/headers';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import {
@@ -45,11 +44,7 @@ async function getUserPurchaseData(): Promise<{
   purchasedProductIds: string[];
 }> {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('pb_auth')?.value;
-    if (!token) return { isLoggedIn: false, purchasedProductIds: [] };
-
-    const user = await getCurrentUser(token);
+    const user = await getCurrentUser();
     if (!user) return { isLoggedIn: false, purchasedProductIds: [] };
 
     const purchasedIds = await getUserPurchasedProductIds(user.id);

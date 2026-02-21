@@ -1,16 +1,12 @@
 import { cache } from 'react';
-import { getPocketBase } from './pocketbase';
+import { createAnonSupabase } from './supabase/server';
 import type {
   BlogRecord,
   BlogArticle,
   CategoriaBlogRecord,
   BlogCategory,
 } from '@/types/blog';
-import {
-  generateSlug,
-  estimateReadTime,
-  extractDescription,
-} from '@/types/blog';
+import { estimateReadTime, extractDescription } from '@/types/blog';
 
 // Transform expanded categoria into frontend shape
 function transformCategory(record: CategoriaBlogRecord) {
@@ -22,37 +18,39 @@ function transformCategory(record: CategoriaBlogRecord) {
   };
 }
 
-// Transform PocketBase record to BlogArticle
+// Transform Supabase record to BlogArticle
 function transformBlogRecord(record: BlogRecord): BlogArticle {
   const thumbnailUrl =
     record.portada_url ||
     'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&q=80';
 
-  const expandedCategoria = record.expand?.categoria;
+  const joinedCategoria = record.categoria_detail;
 
   return {
     id: record.id,
     title: record.titulo,
-    slug: generateSlug(record.titulo),
+    slug: record.slug,
     description: record.preview_text || extractDescription(record.contenido),
     thumbnail: thumbnailUrl,
     content: record.contenido,
-    publishedAt: record.created,
-    updatedAt: record.updated,
+    publishedAt: record.created_at,
+    updatedAt: record.updated_at,
     readTime: estimateReadTime(record.contenido),
-    category: expandedCategoria ? transformCategory(expandedCategoria) : undefined,
+    category: joinedCategoria ? transformCategory(joinedCategoria) : undefined,
   };
 }
 
 // Fetch all blog articles
 export const getAllArticles = cache(async (): Promise<BlogArticle[]> => {
   try {
-    const pb = getPocketBase();
-    const records = await pb.collection('blogs').getFullList<BlogRecord>({
-      sort: '-created',
-      expand: 'categoria',
-    });
-    return records.map(transformBlogRecord);
+    const supabase = createAnonSupabase();
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('*, categoria_detail:categorias_blog(*)')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return (data ?? []).map(transformBlogRecord);
   } catch (error) {
     console.error('Error fetching articles:', error);
     return [];
@@ -63,14 +61,15 @@ export const getAllArticles = cache(async (): Promise<BlogArticle[]> => {
 export const getLatestArticles = cache(
   async (limit?: number): Promise<BlogArticle[]> => {
     try {
-      const pb = getPocketBase();
-      const records = await pb
-        .collection('blogs')
-        .getList<BlogRecord>(1, limit || 50, {
-          sort: '-created',
-          expand: 'categoria',
-        });
-      return records.items.map(transformBlogRecord);
+      const supabase = createAnonSupabase();
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('*, categoria_detail:categorias_blog(*)')
+        .order('created_at', { ascending: false })
+        .limit(limit || 50);
+
+      if (error) throw error;
+      return (data ?? []).map(transformBlogRecord);
     } catch (error) {
       console.error('Error fetching latest articles:', error);
       return [];
@@ -82,14 +81,15 @@ export const getLatestArticles = cache(
 export const getArticleBySlug = cache(
   async (slug: string): Promise<BlogArticle | null> => {
     try {
-      const pb = getPocketBase();
-      const records = await pb.collection('blogs').getFullList<BlogRecord>({
-        expand: 'categoria',
-      });
+      const supabase = createAnonSupabase();
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('*, categoria_detail:categorias_blog(*)')
+        .eq('slug', slug)
+        .single();
 
-      const record = records.find((r) => generateSlug(r.titulo) === slug);
-
-      return record ? transformBlogRecord(record) : null;
+      if (error) throw error;
+      return data ? transformBlogRecord(data) : null;
     } catch (error) {
       console.error('Error fetching article by slug:', error);
       return null;
@@ -101,11 +101,15 @@ export const getArticleBySlug = cache(
 export const getArticleById = cache(
   async (id: string): Promise<BlogArticle | null> => {
     try {
-      const pb = getPocketBase();
-      const record = await pb.collection('blogs').getOne<BlogRecord>(id, {
-        expand: 'categoria',
-      });
-      return transformBlogRecord(record);
+      const supabase = createAnonSupabase();
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('*, categoria_detail:categorias_blog(*)')
+        .eq('id', id)
+        .single();
+
+      if (error) throw error;
+      return data ? transformBlogRecord(data) : null;
     } catch (error) {
       console.error('Error fetching article by ID:', error);
       return null;
@@ -116,11 +120,11 @@ export const getArticleById = cache(
 // Get all slugs for static generation
 export const getAllSlugs = cache(async (): Promise<string[]> => {
   try {
-    const pb = getPocketBase();
-    const records = await pb.collection('blogs').getFullList<BlogRecord>({
-      fields: 'titulo',
-    });
-    return records.map((r) => generateSlug(r.titulo));
+    const supabase = createAnonSupabase();
+    const { data, error } = await supabase.from('blogs').select('slug');
+
+    if (error) throw error;
+    return (data ?? []).map((r) => r.slug);
   } catch (error) {
     console.error('Error fetching slugs:', error);
     return [];
@@ -141,19 +145,22 @@ export const getRelatedArticles = cache(
     categoryId?: string,
   ): Promise<BlogArticle[]> => {
     try {
-      const pb = getPocketBase();
+      const supabase = createAnonSupabase();
 
       if (categoryId) {
         // Fetch articles from the same category first
-        const sameCategoryRecords = await pb
-          .collection('blogs')
-          .getList<BlogRecord>(1, limit + 1, {
-            sort: '-created',
-            filter: `categoria = "${categoryId}" && id != "${currentId}"`,
-            expand: 'categoria',
-          });
+        const { data: sameCategoryData, error: sameCatError } = await supabase
+          .from('blogs')
+          .select('*, categoria_detail:categorias_blog(*)')
+          .eq('categoria', categoryId)
+          .neq('id', currentId)
+          .order('created_at', { ascending: false })
+          .limit(limit);
 
-        const sameCategoryArticles = sameCategoryRecords.items.map(transformBlogRecord);
+        if (sameCatError) throw sameCatError;
+        const sameCategoryArticles = (sameCategoryData ?? []).map(
+          transformBlogRecord,
+        );
 
         if (sameCategoryArticles.length >= limit) {
           return sameCategoryArticles.slice(0, limit);
@@ -161,36 +168,36 @@ export const getRelatedArticles = cache(
 
         // Backfill with other articles
         const remaining = limit - sameCategoryArticles.length;
-        const sameCategoryIds = sameCategoryArticles.map((a) => a.id);
-        const excludeIds = [currentId, ...sameCategoryIds];
-        const excludeFilter = excludeIds.map((id) => `id != "${id}"`).join(' && ');
+        const excludeIds = [
+          currentId,
+          ...sameCategoryArticles.map((a) => a.id),
+        ];
 
-        const otherRecords = await pb
-          .collection('blogs')
-          .getList<BlogRecord>(1, remaining, {
-            sort: '-created',
-            filter: excludeFilter,
-            expand: 'categoria',
-          });
+        const { data: otherData, error: otherError } = await supabase
+          .from('blogs')
+          .select('*, categoria_detail:categorias_blog(*)')
+          .not('id', 'in', `(${excludeIds.join(',')})`)
+          .order('created_at', { ascending: false })
+          .limit(remaining);
+
+        if (otherError) throw otherError;
 
         return [
           ...sameCategoryArticles,
-          ...otherRecords.items.map(transformBlogRecord),
+          ...(otherData ?? []).map(transformBlogRecord),
         ];
       }
 
       // No category — just return recent articles excluding current
-      const records = await pb
-        .collection('blogs')
-        .getList<BlogRecord>(1, limit + 1, {
-          sort: '-created',
-          expand: 'categoria',
-        });
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('*, categoria_detail:categorias_blog(*)')
+        .neq('id', currentId)
+        .order('created_at', { ascending: false })
+        .limit(limit);
 
-      return records.items
-        .filter((r) => r.id !== currentId)
-        .slice(0, limit)
-        .map(transformBlogRecord);
+      if (error) throw error;
+      return (data ?? []).map(transformBlogRecord);
     } catch (error) {
       console.error('Error fetching related articles:', error);
       return [];
@@ -200,30 +207,23 @@ export const getRelatedArticles = cache(
 
 // ----- Category functions -----
 
-// Fetch all categories with article counts
+// Fetch all categories with article counts (single query instead of N+1)
 export const getAllCategories = cache(async (): Promise<BlogCategory[]> => {
   try {
-    const pb = getPocketBase();
-    const categories = await pb
-      .collection('categorias_blog')
-      .getFullList<CategoriaBlogRecord>({ sort: 'nombre' });
+    const supabase = createAnonSupabase();
+    const { data, error } = await supabase
+      .from('categorias_blog')
+      .select('*, blogs(count)')
+      .order('nombre');
 
-    // Count articles per category
-    const counts = await Promise.all(
-      categories.map(async (cat) => {
-        const result = await pb
-          .collection('blogs')
-          .getList(1, 1, { filter: `categoria = "${cat.id}"` });
-        return result.totalItems;
-      }),
-    );
+    if (error) throw error;
 
-    return categories.map((cat, i) => ({
+    return (data ?? []).map((cat) => ({
       id: cat.id,
       name: cat.nombre,
       slug: cat.slug,
       accentColor: cat.color_acento,
-      articleCount: counts[i],
+      articleCount: (cat.blogs as unknown as { count: number }[])?.[0]?.count ?? 0,
     }));
   } catch (error) {
     console.error('Error fetching categories:', error);
@@ -235,22 +235,25 @@ export const getAllCategories = cache(async (): Promise<BlogCategory[]> => {
 export const getCategoryBySlug = cache(
   async (slug: string): Promise<BlogCategory | null> => {
     try {
-      const pb = getPocketBase();
-      const record = await pb
-        .collection('categorias_blog')
-        .getFirstListItem<CategoriaBlogRecord>(`slug="${slug}"`);
+      const supabase = createAnonSupabase();
+      const { data, error } = await supabase
+        .from('categorias_blog')
+        .select('*, blogs(count)')
+        .eq('slug', slug)
+        .single();
 
-      const countResult = await pb
-        .collection('blogs')
-        .getList(1, 1, { filter: `categoria = "${record.id}"` });
+      if (error) throw error;
 
-      return {
-        id: record.id,
-        name: record.nombre,
-        slug: record.slug,
-        accentColor: record.color_acento,
-        articleCount: countResult.totalItems,
-      };
+      return data
+        ? {
+            id: data.id,
+            name: data.nombre,
+            slug: data.slug,
+            accentColor: data.color_acento,
+            articleCount:
+              (data.blogs as unknown as { count: number }[])?.[0]?.count ?? 0,
+          }
+        : null;
     } catch (error) {
       console.error('Error fetching category by slug:', error);
       return null;
@@ -262,18 +265,25 @@ export const getCategoryBySlug = cache(
 export const getArticlesByCategory = cache(
   async (categorySlug: string): Promise<BlogArticle[]> => {
     try {
-      const pb = getPocketBase();
-      const category = await pb
-        .collection('categorias_blog')
-        .getFirstListItem<CategoriaBlogRecord>(`slug="${categorySlug}"`);
+      const supabase = createAnonSupabase();
 
-      const records = await pb.collection('blogs').getFullList<BlogRecord>({
-        sort: '-created',
-        filter: `categoria = "${category.id}"`,
-        expand: 'categoria',
-      });
+      // First get the category ID
+      const { data: category, error: catError } = await supabase
+        .from('categorias_blog')
+        .select('id')
+        .eq('slug', categorySlug)
+        .single();
 
-      return records.map(transformBlogRecord);
+      if (catError || !category) throw catError || new Error('Category not found');
+
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('*, categoria_detail:categorias_blog(*)')
+        .eq('categoria', category.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      return (data ?? []).map(transformBlogRecord);
     } catch (error) {
       console.error('Error fetching articles by category:', error);
       return [];
@@ -281,12 +291,3 @@ export const getArticlesByCategory = cache(
   },
 );
 
-// Format date for display
-export function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('es-ES', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
-}

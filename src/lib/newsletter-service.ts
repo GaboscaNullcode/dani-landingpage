@@ -1,18 +1,7 @@
-import { getPocketBase } from './pocketbase';
-
-async function getAdminPb() {
-  const pb = getPocketBase();
-  await pb
-    .collection('_superusers')
-    .authWithPassword(
-      process.env.POCKETBASE_ADMIN_EMAIL!,
-      process.env.POCKETBASE_ADMIN_PASSWORD!,
-    );
-  return pb;
-}
+import { getServiceSupabase } from './supabase/server';
 
 /**
- * Creates or updates a newsletter subscriber in PocketBase.
+ * Creates or updates a newsletter subscriber in Supabase.
  * Returns the record id if successful.
  * Non-critical: callers should catch errors since Brevo is the primary store.
  */
@@ -22,32 +11,45 @@ export async function createOrUpdateSubscriber(
   brevoContactId: number,
   origen: 'home' | 'newsletter_page' | 'blog' | 'quiz',
 ): Promise<string> {
-  const pb = await getAdminPb();
+  const supabase = getServiceSupabase();
 
-  try {
-    // Check if subscriber already exists
-    const existing = await pb
-      .collection('suscriptores_newsletter')
-      .getFirstListItem(`email = "${email}"`);
+  // Try to find existing subscriber first
+  const { data: existing } = await supabase
+    .from('suscriptores_newsletter')
+    .select('id')
+    .eq('email', email)
+    .single();
 
-    // Update existing record
-    const updated = await pb
-      .collection('suscriptores_newsletter')
-      .update(existing.id, {
+  if (existing) {
+    // Update existing — preserve original 'origen'
+    const { data, error } = await supabase
+      .from('suscriptores_newsletter')
+      .update({
         nombre,
         brevo_contact_id: brevoContactId,
         activo: true,
-      });
-    return updated.id;
-  } catch {
-    // Not found — create new record
-    const record = await pb.collection('suscriptores_newsletter').create({
+      })
+      .eq('id', existing.id)
+      .select('id')
+      .single();
+
+    if (error) throw error;
+    return data!.id;
+  }
+
+  // Create new subscriber
+  const { data, error } = await supabase
+    .from('suscriptores_newsletter')
+    .insert({
       email,
       nombre,
       brevo_contact_id: brevoContactId,
       origen,
       activo: true,
-    });
-    return record.id;
-  }
+    })
+    .select('id')
+    .single();
+
+  if (error) throw error;
+  return data!.id;
 }

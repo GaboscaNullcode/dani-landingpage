@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth-service';
 import { getCompraForDownload } from '@/lib/compras-service';
@@ -9,14 +8,7 @@ export async function GET(
 ) {
   const { compraId } = await params;
 
-  const cookieStore = await cookies();
-  const token = cookieStore.get('pb_auth')?.value;
-
-  if (!token) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
-  }
-
-  const user = await getCurrentUser(token);
+  const user = await getCurrentUser();
   if (!user) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
@@ -30,15 +22,14 @@ export async function GET(
     return NextResponse.json({ error: 'Compra no activa' }, { status: 403 });
   }
 
-  const producto = compra.expand?.producto;
-  if (!producto?.download_url) {
+  if (!compra.productoDetail?.download_url) {
     return NextResponse.json(
       { error: 'Producto sin archivo disponible' },
       { status: 404 },
     );
   }
 
-  const pdfResponse = await fetch(producto.download_url);
+  const pdfResponse = await fetch(compra.productoDetail.download_url);
   if (!pdfResponse.ok) {
     return NextResponse.json(
       { error: 'Error al obtener el archivo' },

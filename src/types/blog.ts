@@ -1,24 +1,26 @@
-import type { RecordModel } from 'pocketbase';
-
-// PocketBase categorias_blog record
-export interface CategoriaBlogRecord extends RecordModel {
+// Supabase categorias_blog record
+export interface CategoriaBlogRecord {
+  id: string;
+  created_at: string;
+  updated_at: string;
   nombre: string;
   slug: string;
   color_acento: string;
 }
 
-// PocketBase blog record structure
-export interface BlogRecord extends RecordModel {
+// Supabase blog record structure
+export interface BlogRecord {
+  id: string;
+  created_at: string;
+  updated_at: string;
   titulo: string;
+  slug: string;
   contenido: string;
-  portada_url: string;
-  categoria: string;
-  preview_text?: string;
-  created: string;
-  updated: string;
-  expand?: {
-    categoria?: CategoriaBlogRecord;
-  };
+  portada_url: string | null;
+  categoria: string | null;
+  preview_text: string | null;
+  // Joined via `.select('*, categoria_detail:categorias_blog(*)')`
+  categoria_detail?: CategoriaBlogRecord | null;
 }
 
 // Frontend blog category
@@ -49,7 +51,7 @@ export interface BlogArticle {
   };
 }
 
-// Helper to generate slug from title
+// Helper to generate slug from title (kept for backward compatibility)
 export function generateSlug(title: string): string {
   return title
     .toLowerCase()
@@ -80,4 +82,14 @@ export function extractDescription(content: string): string {
   }
 
   return plainText.slice(0, 157) + '...';
+}
+
+// Format date for display
+export function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
 }

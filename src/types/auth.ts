@@ -15,7 +15,6 @@ export interface Compra {
   stripeSubscriptionId?: string;
   estado: 'activa' | 'cancelada' | 'reembolsada';
   created: string;
-  expand?: {
-    producto?: ProductoRecord;
-  };
+  // Supabase join: producto data is embedded directly (not via expand)
+  productoDetail?: ProductoRecord | null;
 }

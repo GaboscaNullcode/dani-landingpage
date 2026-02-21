@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
@@ -18,14 +17,7 @@ export default async function ViewerPage({
 }) {
   const { compraId } = await params;
 
-  const cookieStore = await cookies();
-  const token = cookieStore.get('pb_auth')?.value;
-
-  if (!token) {
-    redirect('/mi-cuenta/login');
-  }
-
-  const user = await getCurrentUser(token);
+  const user = await getCurrentUser();
   if (!user) {
     redirect('/mi-cuenta/login');
   }
@@ -35,7 +27,7 @@ export default async function ViewerPage({
     redirect('/mi-cuenta');
   }
 
-  const productName = compra.expand?.producto?.nombre ?? 'Documento';
+  const productName = compra.productoDetail?.nombre ?? 'Documento';
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">

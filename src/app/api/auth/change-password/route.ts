@@ -1,22 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  getCurrentUser,
-  changeUserPassword,
-  loginUser,
-} from '@/lib/auth-service';
+import { getCurrentUser, changeUserPassword, loginUser } from '@/lib/auth-service';
 
 export async function POST(request: NextRequest) {
   try {
-    const token = request.cookies.get('pb_auth')?.value;
-
-    if (!token) {
-      return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
-    }
-
-    const user = await getCurrentUser(token);
+    const user = await getCurrentUser();
 
     if (!user) {
-      return NextResponse.json({ error: 'Token invalido' }, { status: 401 });
+      return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
     }
 
     const { oldPassword, newPassword } = await request.json();
@@ -37,18 +27,11 @@ export async function POST(request: NextRequest) {
 
     await changeUserPassword(user.id, user.email, oldPassword, newPassword);
 
-    const { token: newToken } = await loginUser(user.email, newPassword);
+    // Re-login to refresh session with new credentials
+    await loginUser(user.email, newPassword);
 
-    const response = NextResponse.json({ success: true });
-    response.cookies.set('pb_auth', newToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 60 * 60 * 24 * 7,
-    });
-
-    return response;
+    // Session cookies are managed automatically by @supabase/ssr
+    return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json(
       { error: 'Contrasena actual incorrecta' },

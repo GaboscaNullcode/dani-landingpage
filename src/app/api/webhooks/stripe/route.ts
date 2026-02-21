@@ -2,14 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
 import { findOrCreateUser } from '@/lib/auth-service';
 import { createCompra, cancelCompraBySubscription } from '@/lib/compras-service';
+import { getProductById } from '@/lib/tienda-service';
 import {
   sendPurchaseEmail,
   sendWelcomeEmail,
   sendCommunityEmail,
 } from '@/lib/brevo';
-import { getPocketBase } from '@/lib/pocketbase';
 import type Stripe from 'stripe';
-import type { ProductoRecord } from '@/types/tienda';
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
@@ -67,10 +66,12 @@ export async function POST(request: NextRequest) {
 
         await createCompra(user.id, productId, session.id, subscriptionId);
 
-        const pb = getPocketBase();
-        const producto = await pb
-          .collection('productos')
-          .getOne<ProductoRecord>(productId);
+        const producto = await getProductById(productId);
+
+        if (!producto) {
+          console.error('Product not found:', productId);
+          break;
+        }
 
         const accessUrl = `${domain}/mi-cuenta`;
 

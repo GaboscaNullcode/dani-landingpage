@@ -1,13 +1,10 @@
 import { NextResponse } from 'next/server';
+import { createServerSupabase } from '@/lib/supabase/server';
 
 export async function POST() {
-  const response = NextResponse.json({ success: true });
-  response.cookies.set('pb_auth', '', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 0,
-  });
-  return response;
+  const supabase = await createServerSupabase();
+  await supabase.auth.signOut();
+
+  // Cookies are cleared automatically by @supabase/ssr
+  return NextResponse.json({ success: true });
 }

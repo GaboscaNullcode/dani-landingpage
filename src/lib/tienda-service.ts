@@ -1,11 +1,11 @@
 import { cache } from 'react';
-import { getPocketBase } from './pocketbase';
+import { createAnonSupabase, getServiceSupabase } from './supabase/server';
 import type { ProductoRecord, Product } from '@/types/tienda';
 
 const FALLBACK_IMAGE =
   'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80';
 
-// Transform PocketBase record to Product
+// Transform Supabase record to Product
 function transformProductRecord(record: ProductoRecord): Product {
   return {
     id: record.id,
@@ -35,13 +35,15 @@ function transformProductRecord(record: ProductoRecord): Product {
 // Fetch all products
 export const getAllProducts = cache(async (): Promise<Product[]> => {
   try {
-    const pb = getPocketBase();
-    const records = await pb
-      .collection('productos')
-      .getFullList<ProductoRecord>({
-        sort: 'orden,-created',
-      });
-    return records.map(transformProductRecord);
+    const supabase = createAnonSupabase();
+    const { data, error } = await supabase
+      .from('productos')
+      .select('*')
+      .order('orden', { ascending: true })
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return (data ?? []).map(transformProductRecord);
   } catch (error) {
     console.error('Error fetching products:', error);
     return [];
@@ -51,14 +53,17 @@ export const getAllProducts = cache(async (): Promise<Product[]> => {
 // Fetch featured products
 export const getFeaturedProducts = cache(async (): Promise<Product[]> => {
   try {
-    const pb = getPocketBase();
-    const records = await pb
-      .collection('productos')
-      .getFullList<ProductoRecord>({
-        filter: 'es_destacado = true && es_gratis = false',
-        sort: 'orden,-created',
-      });
-    return records.map(transformProductRecord);
+    const supabase = createAnonSupabase();
+    const { data, error } = await supabase
+      .from('productos')
+      .select('*')
+      .eq('es_destacado', true)
+      .eq('es_gratis', false)
+      .order('orden', { ascending: true })
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return (data ?? []).map(transformProductRecord);
   } catch (error) {
     console.error('Error fetching featured products:', error);
     return [];
@@ -68,15 +73,18 @@ export const getFeaturedProducts = cache(async (): Promise<Product[]> => {
 // Fetch additional (non-featured, non-free) products
 export const getAdditionalProducts = cache(async (): Promise<Product[]> => {
   try {
-    const pb = getPocketBase();
-    const records = await pb
-      .collection('productos')
-      .getFullList<ProductoRecord>({
-        filter:
-          'es_destacado = false && es_gratis = false && categoria != "comunidad"',
-        sort: 'orden,-created',
-      });
-    return records.map(transformProductRecord);
+    const supabase = createAnonSupabase();
+    const { data, error } = await supabase
+      .from('productos')
+      .select('*')
+      .eq('es_destacado', false)
+      .eq('es_gratis', false)
+      .neq('categoria', 'comunidad')
+      .order('orden', { ascending: true })
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return (data ?? []).map(transformProductRecord);
   } catch (error) {
     console.error('Error fetching additional products:', error);
     return [];
@@ -86,14 +94,16 @@ export const getAdditionalProducts = cache(async (): Promise<Product[]> => {
 // Fetch free resources
 export const getFreeResources = cache(async (): Promise<Product[]> => {
   try {
-    const pb = getPocketBase();
-    const records = await pb
-      .collection('productos')
-      .getFullList<ProductoRecord>({
-        filter: 'es_gratis = true',
-        sort: 'orden,-created',
-      });
-    return records.map(transformProductRecord);
+    const supabase = createAnonSupabase();
+    const { data, error } = await supabase
+      .from('productos')
+      .select('*')
+      .eq('es_gratis', true)
+      .order('orden', { ascending: true })
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return (data ?? []).map(transformProductRecord);
   } catch (error) {
     console.error('Error fetching free resources:', error);
     return [];
@@ -103,14 +113,16 @@ export const getFreeResources = cache(async (): Promise<Product[]> => {
 // Fetch community/subscription products
 export const getCommunityProducts = cache(async (): Promise<Product[]> => {
   try {
-    const pb = getPocketBase();
-    const records = await pb
-      .collection('productos')
-      .getFullList<ProductoRecord>({
-        filter: 'categoria = "comunidad"',
-        sort: 'orden,-created',
-      });
-    return records.map(transformProductRecord);
+    const supabase = createAnonSupabase();
+    const { data, error } = await supabase
+      .from('productos')
+      .select('*')
+      .eq('categoria', 'comunidad')
+      .order('orden', { ascending: true })
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return (data ?? []).map(transformProductRecord);
   } catch (error) {
     console.error('Error fetching community products:', error);
     return [];
@@ -118,33 +130,55 @@ export const getCommunityProducts = cache(async (): Promise<Product[]> => {
 });
 
 // Fetch a single product by slug
-export const getProductBySlug = cache(async (
-  slug: string,
-): Promise<Product | null> => {
-  try {
-    const pb = getPocketBase();
-    const record = await pb
-      .collection('productos')
-      .getFirstListItem<ProductoRecord>(`slug = "${slug}"`);
-    return transformProductRecord(record);
-  } catch (error) {
-    console.error('Error fetching product by slug:', error);
-    return null;
-  }
-});
+export const getProductBySlug = cache(
+  async (slug: string): Promise<Product | null> => {
+    try {
+      const supabase = createAnonSupabase();
+      const { data, error } = await supabase
+        .from('productos')
+        .select('*')
+        .eq('slug', slug)
+        .single();
+
+      if (error) throw error;
+      return data ? transformProductRecord(data) : null;
+    } catch (error) {
+      console.error('Error fetching product by slug:', error);
+      return null;
+    }
+  },
+);
 
 // Get all slugs for static generation
 export const getAllProductSlugs = cache(async (): Promise<string[]> => {
   try {
-    const pb = getPocketBase();
-    const records = await pb
-      .collection('productos')
-      .getFullList<ProductoRecord>({
-        fields: 'slug',
-      });
-    return records.map((r) => r.slug);
+    const supabase = createAnonSupabase();
+    const { data, error } = await supabase.from('productos').select('slug');
+
+    if (error) throw error;
+    return (data ?? []).map((r) => r.slug);
   } catch (error) {
     console.error('Error fetching product slugs:', error);
     return [];
   }
 });
+
+// Fetch a single product by ID (used by Stripe webhook)
+export async function getProductById(
+  productId: string,
+): Promise<ProductoRecord | null> {
+  try {
+    const supabase = getServiceSupabase();
+    const { data, error } = await supabase
+      .from('productos')
+      .select('*')
+      .eq('id', productId)
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error fetching product by ID:', error);
+    return null;
+  }
+}

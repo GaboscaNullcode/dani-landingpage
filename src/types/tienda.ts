@@ -1,28 +1,27 @@
-import type { RecordModel } from 'pocketbase';
-
-// PocketBase record structure for 'productos' collection
-export interface ProductoRecord extends RecordModel {
+// Supabase record structure for 'productos' table
+export interface ProductoRecord {
+  id: string;
+  created_at: string;
+  updated_at: string;
   nombre: string;
   slug: string;
   descripcion: string;
   precio: number;
-  precio_original: number;
-  imagen_url: string;
+  precio_original: number | null;
+  imagen_url: string | null;
   categoria: 'curso' | 'ebook' | 'masterclass' | 'comunidad' | 'gratis';
-  badge: string;
-  features: string[];
+  badge: string | null;
+  features: string[] | null;
   es_destacado: boolean;
   es_gratis: boolean;
   es_suscripcion: boolean;
-  intervalo: 'mensual' | 'trimestral' | 'anual' | '';
+  intervalo: 'mensual' | 'trimestral' | 'anual' | '' | null;
   cta_texto: string;
   cta_link: string;
-  stripe_price_id: string;
-  download_url: string;
-  whatsapp_link: string;
+  stripe_price_id: string | null;
+  download_url: string | null;
+  whatsapp_link: string | null;
   orden: number;
-  created: string;
-  updated: string;
 }
 
 // Frontend product model

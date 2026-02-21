@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { motion } from 'motion/react';
 import { ChevronRight, Clock, Calendar } from 'lucide-react';
 import type { BlogArticle } from '@/types/blog';
-import { formatDate } from '@/lib/blog-service';
+import { formatDate } from '@/types/blog';
 
 interface PostHeaderProps {
   article: BlogArticle;

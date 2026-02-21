@@ -12,18 +12,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { token, user } = await loginUser(email, password);
+    const { user } = await loginUser(email, password);
 
-    const response = NextResponse.json({ token, user });
-    response.cookies.set('pb_auth', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 60 * 60 * 24 * 7,
-    });
-
-    return response;
+    // Cookies are managed automatically by @supabase/ssr
+    return NextResponse.json({ user });
   } catch {
     return NextResponse.json(
       { error: 'Credenciales invalidas' },
