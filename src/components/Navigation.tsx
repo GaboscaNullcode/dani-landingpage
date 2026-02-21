@@ -15,7 +15,7 @@ const navItems = [
   { text: 'Centro de Ayuda', href: '/info' },
 ];
 
-export default memo(function Navigation() {
+export default memo(function Navigation({ darkHero = false }: { darkHero?: boolean }) {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -23,6 +23,7 @@ export default memo(function Navigation() {
   const lastScrollY = useRef(0);
 
   const isViewerPage = pathname.startsWith('/mi-cuenta/viewer/');
+  const useLightText = darkHero && !isScrolled;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -89,8 +90,8 @@ export default memo(function Navigation() {
                 alt="Remote con Dani"
                 width={160}
                 height={44}
-                className={`w-auto brightness-0 transition-all duration-500 ${
-                  isScrolled ? 'h-8' : 'h-11'
+                className={`w-auto transition-all duration-500 ${
+                  isScrolled ? 'h-8 brightness-0' : `h-11 ${useLightText ? '' : 'brightness-0'}`
                 }`}
                 priority
               />
@@ -111,7 +112,7 @@ export default memo(function Navigation() {
                   aria-current={pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)) ? 'page' : undefined}
                   className={`nav-link-underline group relative font-[var(--font-dm-sans)] font-semibold tracking-wide transition-colors duration-500 hover:text-coral ${
                     isScrolled ? 'text-xs' : 'text-sm'
-                  } ${pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)) ? 'text-coral' : 'text-gray-dark'}`}
+                  } ${pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)) ? 'text-coral' : useLightText ? 'text-white/90' : 'text-gray-dark'}`}
                 >
                   {item.text}
                 </Link>
@@ -124,8 +125,8 @@ export default memo(function Navigation() {
             >
               <Link
                 href="/mi-cuenta"
-                className={`flex items-center justify-center rounded-full border-2 border-gray-light text-gray-dark transition-all duration-300 hover:border-coral hover:text-coral ${
-                  isScrolled ? 'h-8 w-8' : 'h-9 w-9'
+                className={`flex items-center justify-center rounded-full border-2 transition-all duration-300 hover:border-coral hover:text-coral ${
+                  isScrolled ? 'h-8 w-8 border-gray-light text-gray-dark' : `h-9 w-9 ${useLightText ? 'border-white/40 text-white/90' : 'border-gray-light text-gray-dark'}`
                 }`}
                 aria-label="Mi Cuenta"
               >
@@ -162,9 +163,9 @@ export default memo(function Navigation() {
 
       {/* Hamburger Button - Outside header to avoid transform containment */}
       <button
-        className={`fixed right-4 z-[1002] flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-xl bg-white shadow-md md:hidden ${
-          isScrolled ? 'top-3' : 'top-5'
-        } ${isHidden ? '-translate-y-[200%]' : 'translate-y-0'} transition-[top,transform] duration-500`}
+        className={`fixed right-4 z-[1002] flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-xl shadow-md md:hidden ${
+          isScrolled || !useLightText ? 'bg-white' : 'bg-white/20 backdrop-blur-sm'
+        } ${isScrolled ? 'top-3' : 'top-5'} ${isHidden ? '-translate-y-[200%]' : 'translate-y-0'} transition-[top,transform,background-color] duration-500`}
         onClick={toggleMobileMenu}
         aria-label="Toggle menu"
         aria-expanded={isMobileMenuOpen}
@@ -174,21 +175,21 @@ export default memo(function Navigation() {
             rotate: isMobileMenuOpen ? 45 : 0,
             y: isMobileMenuOpen ? 8 : 0,
           }}
-          className="block h-0.5 w-5 rounded-full bg-gray-dark"
+          className={`block h-0.5 w-5 rounded-full ${useLightText ? 'bg-white' : 'bg-gray-dark'}`}
         />
         <motion.span
           animate={{
             opacity: isMobileMenuOpen ? 0 : 1,
             scale: isMobileMenuOpen ? 0 : 1,
           }}
-          className="block h-0.5 w-5 rounded-full bg-gray-dark"
+          className={`block h-0.5 w-5 rounded-full ${useLightText ? 'bg-white' : 'bg-gray-dark'}`}
         />
         <motion.span
           animate={{
             rotate: isMobileMenuOpen ? -45 : 0,
             y: isMobileMenuOpen ? -8 : 0,
           }}
-          className="block h-0.5 w-5 rounded-full bg-gray-dark"
+          className={`block h-0.5 w-5 rounded-full ${useLightText ? 'bg-white' : 'bg-gray-dark'}`}
         />
       </button>
 

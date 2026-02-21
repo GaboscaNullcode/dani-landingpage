@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 export default function RutaRecomendadaPage() {
   return (
     <>
-      <Navigation />
+      <Navigation darkHero />
       <main id="main-content">
         <StageHero
           title="Empieza tu camino remoto con una ruta paso a paso"

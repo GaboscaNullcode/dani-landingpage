@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 export default function ServiciosPage() {
   return (
     <>
-      <Navigation />
+      <Navigation darkHero />
       <main id="main-content">
         <StageHero
           title="Acompañamiento personalizado para tu camino remoto"
