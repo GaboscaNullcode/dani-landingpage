@@ -2,9 +2,10 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Check, Star, Clock, Sparkles, ChevronDown, Loader2 } from 'lucide-react';
+import { Check, Star, Clock, Sparkles, ChevronDown } from 'lucide-react';
 import type { AsesoriaPlan, PaymentPlan } from '@/types/tienda';
 import ProgramaIntensivoModal from './ProgramaIntensivoModal';
+import TerminosModal from './TerminosModal';
 
 const VISIBLE_FEATURES = 4;
 
@@ -17,7 +18,8 @@ export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSecti
   const [expandedPlans, setExpandedPlans] = useState<Set<string>>(new Set());
   const [baseHeight, setBaseHeight] = useState(0);
   const [showProgramaModal, setShowProgramaModal] = useState(false);
-  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const [showTerminosModal, setShowTerminosModal] = useState(false);
+  const [terminosPlan, setTerminosPlan] = useState<AsesoriaPlan | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
   const togglePlan = (planId: string) => {
@@ -51,33 +53,11 @@ export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSecti
     return () => window.removeEventListener('resize', measureBaseHeight);
   }, [measureBaseHeight]);
 
-  async function handleCheckout(planId: string) {
+  function handleShowTerminos(planId: string) {
     const plan = planes.find((p) => p.id === planId);
     if (!plan || !plan.stripePriceId) return;
-
-    setLoadingPlan(planId);
-    try {
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          priceId: plan.stripePriceId,
-          productId: plan.id,
-          isAsesoria: true,
-          planId: plan.id,
-        }),
-      });
-      const data = await response.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        console.error('Checkout error:', data.error);
-        setLoadingPlan(null);
-      }
-    } catch {
-      console.error('Checkout request failed');
-      setLoadingPlan(null);
-    }
+    setTerminosPlan(plan);
+    setShowTerminosModal(true);
   }
 
   return (
@@ -112,7 +92,6 @@ export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSecti
               ? plan.features.slice(0, VISIBLE_FEATURES)
               : plan.features;
             const hiddenCount = plan.features.length - VISIBLE_FEATURES;
-            const isLoading = loadingPlan === plan.id;
 
             return (
               <motion.div
@@ -244,23 +223,14 @@ export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSecti
                 {plan.id === 'crea-camino' ? (
                   <button
                     onClick={() => setShowProgramaModal(true)}
-                    disabled={isLoading}
-                    className="btn-shimmer mt-auto block w-full rounded-full bg-white py-4 text-center font-[var(--font-headline)] font-bold text-gray-dark transition-all hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(255,255,255,0.2)] disabled:opacity-50"
+                    className="btn-shimmer mt-auto block w-full rounded-full bg-white py-4 text-center font-[var(--font-headline)] font-bold text-gray-dark transition-all hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(255,255,255,0.2)]"
                   >
-                    {isLoading ? (
-                      <span className="inline-flex items-center justify-center gap-2">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        Redirigiendo...
-                      </span>
-                    ) : (
-                      plan.ctaText
-                    )}
+                    {plan.ctaText}
                   </button>
                 ) : (
                   <button
-                    onClick={() => handleCheckout(plan.id)}
-                    disabled={isLoading || loadingPlan !== null}
-                    className={`btn-shimmer mt-auto block w-full rounded-full py-4 text-center font-[var(--font-headline)] font-bold transition-all hover:-translate-y-1 disabled:opacity-50 ${
+                    onClick={() => handleShowTerminos(plan.id)}
+                    className={`btn-shimmer mt-auto block w-full rounded-full py-4 text-center font-[var(--font-headline)] font-bold transition-all hover:-translate-y-1 ${
                       plan.isPopular
                         ? 'bg-white text-gray-dark hover:shadow-[0_15px_40px_rgba(255,255,255,0.2)]'
                         : 'text-white hover:shadow-[0_15px_40px_rgba(255,107,107,0.4)]'
@@ -271,14 +241,7 @@ export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSecti
                         : undefined
                     }
                   >
-                    {isLoading ? (
-                      <span className="inline-flex items-center justify-center gap-2">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        Redirigiendo...
-                      </span>
-                    ) : (
-                      plan.ctaText
-                    )}
+                    {plan.ctaText}
                   </button>
                 )}
 
@@ -303,6 +266,15 @@ export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSecti
             onClose={() => setShowProgramaModal(false)}
             plan={planes.find((p) => p.id === 'crea-camino')!}
             paymentPlans={paymentPlans}
+          />
+        )}
+
+        {/* Modal T&C Consultoría / Asesoría */}
+        {terminosPlan && (
+          <TerminosModal
+            isOpen={showTerminosModal}
+            onClose={() => setShowTerminosModal(false)}
+            plan={terminosPlan}
           />
         )}
       </div>
