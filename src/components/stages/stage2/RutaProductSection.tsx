@@ -5,52 +5,82 @@ import {
   Compass,
   Target,
   Rocket,
+  Shield,
   ArrowRight,
   CheckCircle,
 } from 'lucide-react';
 
-const etapas = [
+interface Paso {
+  number: number;
+  icon: typeof Compass;
+  color: string;
+  borderColor: string;
+  title: string;
+  description: string;
+  label: string;
+  products: string[];
+  extra: string | null;
+  closing: string | null;
+}
+
+const pasos: Paso[] = [
   {
     number: 1,
     icon: Compass,
-    title: 'Guía Práctica para Iniciar',
-    description:
-      'Todo lo que necesitas saber para entender el mundo remoto y prepararte para dar el primer paso.',
-    items: [
-      'Fundamentos del trabajo remoto',
-      'Preparación de documentos esenciales',
-      'Plataformas reales donde buscar',
-    ],
     color: 'bg-coral',
     borderColor: 'border-coral',
+    title: 'Entiende el mundo remoto',
+    description:
+      'Primero construyes base. Aprendes cómo funciona el trabajo remoto, dónde buscar y qué necesitas preparar antes de postular. Aquí dejas de sentir que todo es desconocido.',
+    label: 'Aquí lees y trabajas:',
+    products: [
+      'Guía Práctica para el mundo del Trabajo Remoto',
+      'Primeros Pasos como Asistente Virtual',
+    ],
+    extra: null,
+    closing: null,
   },
   {
     number: 2,
     icon: Target,
-    title: 'Define tu Camino + 40 Nichos',
-    description:
-      'Descubre tu nicho ideal entre más de 40 opciones y define tu camino con claridad.',
-    items: [
-      'Test de perfil profesional',
-      'Catálogo de 40+ nichos remotos',
-      'Estrategia de posicionamiento',
-    ],
     color: 'bg-lavender',
     borderColor: 'border-lavender',
+    title: 'Define tu camino profesional',
+    description:
+      'Ahora necesitas dirección. Descubres tus fortalezas, exploras roles reales y eliges un enfoque claro.',
+    label: 'Aquí trabajas:',
+    products: ['Define tu Camino Remoto', '40 Nichos de Trabajo Remoto'],
+    extra: null,
+    closing: 'Aquí dejas de estar confundid@.',
   },
   {
     number: 3,
     icon: Rocket,
-    title: 'Optimización + Entrevistas + Mindset',
-    description:
-      'Perfecciona tu perfil, prepara tus entrevistas y desarrolla la mentalidad para el éxito remoto.',
-    items: [
-      'Optimización de CV y portafolio',
-      'Simulacro de entrevistas',
-      'Mindset del profesional remoto',
-    ],
     color: 'bg-mint',
     borderColor: 'border-mint',
+    title: 'Construye tu perfil profesional',
+    description: 'Con dirección clara, toca prepararte.',
+    label: 'Aquí desarrollas:',
+    products: ['Optimiza tu Perfil Profesional y Postula con Éxito'],
+    extra:
+      'Aprendes a crear un CV estratégico y presentarte con profesionalismo.',
+    closing: 'Aquí empiezas a verte list@.',
+  },
+  {
+    number: 4,
+    icon: Shield,
+    color: 'bg-gray-dark',
+    borderColor: 'border-gray-dark',
+    title: 'Postula con seguridad y mentalidad correcta',
+    description:
+      'El último paso es acción + confianza. Practicas entrevistas, fortaleces tu seguridad y desarrollas constancia.',
+    label: 'Aquí trabajas:',
+    products: [
+      'Ejercicios prácticos para postulación y entrevista',
+      'El Mindset Correcto',
+    ],
+    extra: null,
+    closing: 'Aquí dejas de dudar y empiezas a actuar.',
   },
 ];
 
@@ -58,6 +88,7 @@ export default function RutaProductSection() {
   return (
     <section className="bg-white py-20">
       <div className="container-custom">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -69,12 +100,13 @@ export default function RutaProductSection() {
             PRODUCTO ESTRELLA
           </span>
           <h2 className="text-section-title mt-4 font-[var(--font-headline)] font-bold text-gray-dark">
-            Ruta Remota:{' '}
-            <span className="gradient-text">Paso a Paso</span>
+            Ruta Paso a Paso{' '}
+            <span className="gradient-text">Remota</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-gray-carbon">
-            La ruta estructurada que te lleva desde la decisión hasta estar
-            listo para postular, sin perder tiempo probando qué hacer primero.
+            Un programa completo con 3 etapas que te lleva de la curiosidad al
+            trabajo remoto real. Sin saltos, sin confusión, todo en un solo
+            sistema.
           </p>
         </motion.div>
 
@@ -83,13 +115,13 @@ export default function RutaProductSection() {
           {/* Vertical line */}
           <div className="absolute bottom-0 left-6 top-0 hidden w-0.5 bg-gray-light md:left-1/2 md:block md:-translate-x-0.5" />
 
-          {etapas.map((etapa, index) => {
-            const Icon = etapa.icon;
+          {pasos.map((paso, index) => {
+            const Icon = paso.icon;
             const isEven = index % 2 === 0;
 
             return (
               <motion.div
-                key={etapa.number}
+                key={paso.number}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -101,62 +133,63 @@ export default function RutaProductSection() {
                 {/* Number circle (desktop center) */}
                 <div className="absolute left-6 top-0 z-10 hidden -translate-x-1/2 md:left-1/2 md:block">
                   <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-full ${etapa.color} font-[var(--font-headline)] text-lg font-bold text-white shadow-md`}
+                    className={`flex h-12 w-12 items-center justify-center rounded-full ${paso.color} font-[var(--font-headline)] text-lg font-bold text-white shadow-md`}
                   >
-                    {etapa.number}
+                    {paso.number}
                   </div>
                 </div>
 
-                {/* Content card */}
+                {/* Card with PASO content */}
                 <div
                   className={`md:w-1/2 ${
-                    isEven ? 'md:pr-12 md:text-right' : 'md:pl-12'
+                    isEven ? 'md:pr-12' : 'md:pl-12'
                   }`}
                 >
                   <div
-                    className={`rounded-2xl border-2 ${etapa.borderColor} bg-white p-6 shadow-sm`}
+                    className={`rounded-2xl border-2 ${paso.borderColor} bg-white p-6 shadow-sm`}
                   >
-                    <div
-                      className={`mb-3 flex items-center gap-3 ${
-                        isEven ? 'md:justify-end' : ''
-                      }`}
-                    >
-                      {/* Number circle (mobile) */}
+                    {/* Mobile number circle + title */}
+                    <div className="mb-3 flex items-start gap-3">
                       <div
-                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${etapa.color} font-[var(--font-headline)] text-sm font-bold text-white md:hidden`}
+                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${paso.color} font-[var(--font-headline)] text-sm font-bold text-white md:hidden`}
                       >
-                        {etapa.number}
-                      </div>
-                      <div
-                        className={`hidden h-10 w-10 shrink-0 items-center justify-center rounded-xl ${etapa.color}/10 md:flex`}
-                      >
-                        <Icon
-                          className={`h-5 w-5`}
-                          style={{ color: `var(--${etapa.color.replace('bg-', '')})` }}
-                        />
+                        {paso.number}
                       </div>
                       <h3 className="font-[var(--font-headline)] text-lg font-bold text-gray-dark">
-                        Etapa {etapa.number}: {etapa.title}
+                        {paso.title}
                       </h3>
                     </div>
 
                     <p className="text-sm text-gray-carbon">
-                      {etapa.description}
+                      {paso.description}
                     </p>
 
-                    <ul className="mt-4 space-y-2">
-                      {etapa.items.map((item) => (
+                    <p className="mt-4 text-sm font-semibold text-gray-dark">
+                      {paso.label}
+                    </p>
+                    <ul className="mt-2 space-y-2">
+                      {paso.products.map((product) => (
                         <li
-                          key={item}
-                          className={`flex items-center gap-2 text-sm text-gray-dark ${
-                            isEven ? 'md:justify-end' : ''
-                          }`}
+                          key={product}
+                          className="flex items-start gap-2 text-sm text-gray-dark"
                         >
-                          <CheckCircle className="h-4 w-4 shrink-0 text-green-500" />
-                          {item}
+                          <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
+                          <span>{product}</span>
                         </li>
                       ))}
                     </ul>
+
+                    {paso.extra && (
+                      <p className="mt-3 text-sm text-gray-carbon">
+                        {paso.extra}
+                      </p>
+                    )}
+
+                    {paso.closing && (
+                      <p className="mt-4 font-[var(--font-headline)] text-sm font-medium text-gray-dark italic">
+                        {paso.closing}
+                      </p>
+                    )}
                   </div>
                 </div>
 
