@@ -12,6 +12,7 @@ import {
   BlogHighlightsSection,
 } from '@/components/stages/stage1';
 import NewsletterFormCard from '@/components/NewsletterFormCard';
+import { getCommunityProducts } from '@/lib/tienda-service';
 
 export const metadata: Metadata = {
   title: 'Recursos Gratuitos - Stage 1 | Remote con Dani',
@@ -33,7 +34,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RecursosGratuitosPage() {
+export default async function RecursosGratuitosPage() {
+  const communityProducts = await getCommunityProducts();
+  const community = communityProducts[0];
+
   return (
     <>
       <Navigation />
@@ -46,7 +50,10 @@ export default function RecursosGratuitosPage() {
         <QuickNavSection />
         <MasterclassSection />
         <BlogHighlightsSection />
-        <WhatsAppCommunityCard />
+        <WhatsAppCommunityCard
+          priceId={community?.stripePriceId}
+          productId={community?.id}
+        />
         <section className="bg-cream/50 py-16 md:py-20">
           <div className="container-custom">
             <div className="mx-auto max-w-md">

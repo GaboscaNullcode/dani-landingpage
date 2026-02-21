@@ -4,7 +4,7 @@ import { getProductById, getPaymentPlans } from '@/lib/tienda-service';
 
 export async function POST(request: NextRequest) {
   try {
-    const { priceId, productId, customerEmail, customerName, isAsesoria, planId } =
+    const { priceId, productId, customerEmail, customerName, isAsesoria, isCommunity, planId } =
       await request.json();
 
     if (!priceId || typeof priceId !== 'string') {
@@ -22,9 +22,19 @@ export async function POST(request: NextRequest) {
 
     // Determine success/cancel URLs based on checkout type
     let successUrl: string;
-    const cancelUrl = isAsesoria ? `${domain}/asesorias` : `${domain}/tienda`;
+    let cancelUrl: string;
 
-    if (isAsesoria && productId) {
+    if (isCommunity) {
+      cancelUrl = `${domain}/ruta-recomendada`;
+    } else if (isAsesoria) {
+      cancelUrl = `${domain}/asesorias`;
+    } else {
+      cancelUrl = `${domain}/tienda`;
+    }
+
+    if (isCommunity) {
+      successUrl = `${domain}/comunidad/gracias`;
+    } else if (isAsesoria && productId) {
       const producto = await getProductById(productId);
       if (producto?.producto_padre) {
         // Child product (split payment)

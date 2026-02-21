@@ -3,6 +3,7 @@
 import { motion } from 'motion/react';
 import { Briefcase, Video, Users, Globe } from 'lucide-react';
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon';
+import CommunityCheckoutButton from './CommunityCheckoutButton';
 
 const communityItems = [
   { icon: Briefcase, text: 'Ofertas laborales 2x/semana' },
@@ -11,7 +12,15 @@ const communityItems = [
   { icon: Globe, text: 'Networking' },
 ];
 
-export default function WhatsAppCommunityCard() {
+interface WhatsAppCommunityCardProps {
+  priceId?: string;
+  productId?: string;
+}
+
+export default function WhatsAppCommunityCard({
+  priceId,
+  productId,
+}: WhatsAppCommunityCardProps) {
   return (
     <section className="bg-cream py-20">
       <div className="container-custom">
@@ -64,15 +73,22 @@ export default function WhatsAppCommunityCard() {
             })}
           </div>
 
-          <motion.a
-            href="https://chat.whatsapp.com/PLACEHOLDER"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-green-500 px-8 py-4 font-[var(--font-headline)] font-bold text-white transition-shadow duration-300 hover:shadow-[0_10px_30px_rgba(34,197,94,0.3)]"
-          >
-            <WhatsAppIcon className="h-5 w-5" />
-            Unirme al grupo de WhatsApp
-          </motion.a>
+          {priceId && productId ? (
+            <CommunityCheckoutButton
+              priceId={priceId}
+              productId={productId}
+            />
+          ) : (
+            <a
+              href="https://chat.whatsapp.com/HYmBiEU0UXl2VsMMlWatAE"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-green-500 px-8 py-4 font-[var(--font-headline)] font-bold text-white transition-shadow duration-300 hover:shadow-[0_10px_30px_rgba(34,197,94,0.3)]"
+            >
+              <WhatsAppIcon className="h-5 w-5" />
+              Unirme al grupo de WhatsApp
+            </a>
+          )}
         </motion.div>
       </div>
     </section>

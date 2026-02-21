@@ -7,6 +7,7 @@ import {
   StageTransitionCTA,
 } from '@/components/stages';
 import { RutaProductSection } from '@/components/stages/stage2';
+import { getCommunityProducts } from '@/lib/tienda-service';
 
 export const metadata: Metadata = {
   title: 'Ruta Remota: Paso a Paso - Stage 2 | Remote con Dani',
@@ -27,7 +28,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RutaRecomendadaPage() {
+export default async function RutaRecomendadaPage() {
+  const communityProducts = await getCommunityProducts();
+  const community = communityProducts[0];
+
   return (
     <>
       <Navigation />
@@ -38,7 +42,10 @@ export default function RutaRecomendadaPage() {
           subtitle="Un sistema paso a paso disenado para que avances con claridad, sin perderte en el camino."
         />
         <RutaProductSection />
-        <WhatsAppCommunityCard />
+        <WhatsAppCommunityCard
+          priceId={community?.stripePriceId}
+          productId={community?.id}
+        />
         <StageTransitionCTA
           text="¿Necesitas acompanamiento mas personalizado?"
           primaryText="Ver servicios personalizados"
