@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (isCommunity) {
-      successUrl = `${domain}/comunidad/gracias`;
+      successUrl = `${domain}/comunidad/gracias?session_id={CHECKOUT_SESSION_ID}`;
     } else if (isAsesoria && productId) {
       const producto = await getProductById(productId);
       if (producto?.producto_padre) {
