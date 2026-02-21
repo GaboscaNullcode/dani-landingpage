@@ -11,7 +11,10 @@ import {
   sendPurchaseEmail,
   sendWelcomeEmail,
   sendCommunityEmail,
+  sendProgramaIntensivoFullPaymentEmail,
+  sendProgramaIntensivoPago1Email,
 } from '@/lib/brevo';
+import { getPaymentPlans } from '@/lib/tienda-service';
 import type Stripe from 'stripe';
 
 export async function POST(request: NextRequest) {
@@ -100,13 +103,34 @@ export async function POST(request: NextRequest) {
           console.log('[webhook] Compra created successfully');
         }
 
-        // For asesorias: skip product emails (booking confirmation sent after scheduling)
+        const producto = await getProductById(productId);
+
+        // For asesorias: detect Programa Intensivo vs regular asesoria
         if (isAsesoria) {
-          console.log('[webhook] Asesoria — skipping product emails');
+          if (producto?.producto_padre) {
+            // Child product = partial payment (Pago 1 or Pago 2)
+            if (producto.orden === 1) {
+              const accessUrl = `${domain}/mi-cuenta`;
+              console.log(`[webhook] Programa Intensivo Pago 1 — sending materials email to ${email}`);
+              await sendProgramaIntensivoPago1Email(email, name, accessUrl);
+            } else {
+              console.log('[webhook] Programa Intensivo Pago 2 — skipping email (booking flow handles it)');
+            }
+          } else if (producto) {
+            // Parent product — check if it's a Programa Intensivo (has children)
+            const childPlans = await getPaymentPlans(productId);
+            if (childPlans.length > 0) {
+              const accessUrl = `${domain}/mi-cuenta`;
+              console.log(`[webhook] Programa Intensivo full payment — sending access email to ${email}`);
+              await sendProgramaIntensivoFullPaymentEmail(email, name, accessUrl);
+            } else {
+              console.log('[webhook] Regular asesoria — skipping product emails');
+            }
+          } else {
+            console.log('[webhook] Asesoria product not found — skipping emails');
+          }
           break;
         }
-
-        const producto = await getProductById(productId);
 
         if (!producto) {
           console.error(`[webhook] Product not found: ${productId}`);

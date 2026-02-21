@@ -14,6 +14,8 @@ import {
   getBookingConfirmationEmailHtml,
   getBookingNotificationEmailHtml,
   getBookingReminderEmailHtml,
+  getProgramaIntensivoFullPaymentEmailHtml,
+  getProgramaIntensivoPago1EmailHtml,
 } from './email-templates';
 
 let apiInstance: TransactionalEmailsApi | null = null;
@@ -147,6 +149,28 @@ export async function sendNewsletterWelcomeEmail(
     process.env.NEWSLETTER_GUIDE_URL || 'https://remotecondani.com/newsletter';
   const subject = 'Tu guia gratuita esta aqui';
   const html = getNewsletterWelcomeEmailHtml(name, guideUrl);
+  await sendEmail(to, subject, html);
+}
+
+// ── Programa Intensivo emails ──
+
+export async function sendProgramaIntensivoFullPaymentEmail(
+  to: string,
+  name: string,
+  accessUrl: string,
+): Promise<void> {
+  const subject = 'Tu Programa Intensivo ya esta activo';
+  const html = getProgramaIntensivoFullPaymentEmailHtml(name, accessUrl);
+  await sendEmail(to, subject, html);
+}
+
+export async function sendProgramaIntensivoPago1Email(
+  to: string,
+  name: string,
+  accessUrl: string,
+): Promise<void> {
+  const subject = 'Ya tienes acceso a tus materiales (Pago 1 recibido)';
+  const html = getProgramaIntensivoPago1EmailHtml(name, accessUrl);
   await sendEmail(to, subject, html);
 }
 

@@ -226,6 +226,61 @@ export function getBookingNotificationEmailHtml(
   return baseLayout(content);
 }
 
+// ── Programa Intensivo emails ──
+
+export function getProgramaIntensivoFullPaymentEmailHtml(
+  name: string,
+  accessUrl: string,
+): string {
+  const content = `
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Tu Programa Intensivo ya esta activo</h2>
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Hola <strong style="color:${BRAND.dark};">${name}</strong>, tu pago ha sido confirmado y ya tienes acceso completo a tu Programa Intensivo.
+    </p>
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Dentro de tu area de miembros encontraras:
+    </p>
+    <ul style="margin:0 0 16px;padding-left:20px;color:${BRAND.gray};font-size:16px;line-height:1.8;">
+      <li>10 videos estrategicos paso a paso</li>
+      <li>Ebooks y workbooks descargables</li>
+      <li>Acceso para agendar tu sesion 1:1 con Dani</li>
+    </ul>
+    <p style="margin:0 0 24px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Te recomiendo avanzar con los videos y el workbook antes de agendar tu sesion, asi aprovechas al maximo tu tiempo conmigo.
+    </p>
+    ${button('Acceder a mi Programa', accessUrl)}
+    <p style="margin:24px 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
+      Si tienes alguna pregunta, responde a este email y te ayudare.
+    </p>`;
+  return baseLayout(content);
+}
+
+export function getProgramaIntensivoPago1EmailHtml(
+  name: string,
+  accessUrl: string,
+): string {
+  const content = `
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Ya tienes acceso a tus materiales (Pago 1 recibido)</h2>
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Hola <strong style="color:${BRAND.dark};">${name}</strong>, tu primer pago ha sido confirmado y ya puedes acceder a tus materiales del Programa Intensivo.
+    </p>
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Ahora mismo tienes acceso a:
+    </p>
+    <ul style="margin:0 0 16px;padding-left:20px;color:${BRAND.gray};font-size:16px;line-height:1.8;">
+      <li>10 videos estrategicos paso a paso</li>
+      <li>Ebooks y workbooks descargables</li>
+    </ul>
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Una vez realices tu segundo pago, podras agendar tu sesion 1:1 con Dani. Te recomiendo tomarte unas 2 semanas para avanzar con los materiales antes de agendar.
+    </p>
+    ${button('Acceder a mis materiales', accessUrl)}
+    <p style="margin:24px 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
+      Si tienes alguna pregunta, responde a este email y te ayudare.
+    </p>`;
+  return baseLayout(content);
+}
+
 export function getBookingReminderEmailHtml(
   name: string,
   planName: string,
