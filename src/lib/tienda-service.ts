@@ -1,6 +1,11 @@
 import { cache } from 'react';
 import { createAnonSupabase, getServiceSupabase } from './supabase/server';
-import type { ProductoRecord, Product, AsesoriaPlan } from '@/types/tienda';
+import type {
+  ProductoRecord,
+  Product,
+  AsesoriaPlan,
+  PaymentPlan,
+} from '@/types/tienda';
 
 const FALLBACK_IMAGE =
   'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80';
@@ -29,6 +34,7 @@ function transformProductRecord(record: ProductoRecord): Product {
     downloadUrl: record.download_url || undefined,
     whatsappLink: record.whatsapp_link || undefined,
     order: record.orden || 0,
+    parentProductId: record.producto_padre || undefined,
     duracionMinutos: record.duracion_minutos || undefined,
     subtitle: record.subtitulo || undefined,
     note: record.nota || undefined,
@@ -116,6 +122,7 @@ export const getAdditionalProducts = cache(async (): Promise<Product[]> => {
       .eq('es_destacado', false)
       .eq('es_gratis', false)
       .neq('categoria', 'comunidad')
+      .is('producto_padre', null)
       .order('orden', { ascending: true })
       .order('created_at', { ascending: false });
 
@@ -240,6 +247,32 @@ export const getAsesoriaPlanById = cache(
     } catch (error) {
       console.error('Error fetching asesoria plan:', error);
       return null;
+    }
+  },
+);
+
+// Fetch payment plans (child products) for a parent product
+export const getPaymentPlans = cache(
+  async (parentId: string): Promise<PaymentPlan[]> => {
+    try {
+      const supabase = createAnonSupabase();
+      const { data, error } = await supabase
+        .from('productos')
+        .select('id, nombre, precio, stripe_price_id, badge')
+        .eq('producto_padre', parentId)
+        .order('orden', { ascending: true });
+
+      if (error) throw error;
+      return (data ?? []).map((r) => ({
+        id: r.id,
+        name: r.nombre,
+        price: r.precio,
+        stripePriceId: r.stripe_price_id || '',
+        label: r.badge || undefined,
+      }));
+    } catch (error) {
+      console.error('Error fetching payment plans:', error);
+      return [];
     }
   },
 );

@@ -2,18 +2,20 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { X, Loader2, CreditCard, CalendarRange } from 'lucide-react';
-import type { AsesoriaPlan } from '@/types/tienda';
+import type { AsesoriaPlan, PaymentPlan } from '@/types/tienda';
 
 interface ProgramaIntensivoModalProps {
   isOpen: boolean;
   onClose: () => void;
   plan: AsesoriaPlan;
+  paymentPlans?: PaymentPlan[];
 }
 
 export default function ProgramaIntensivoModal({
   isOpen,
   onClose,
   plan: programaPlan,
+  paymentPlans = [],
 }: ProgramaIntensivoModalProps) {
   const [accepted, setAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -94,9 +96,34 @@ export default function ProgramaIntensivoModal({
     }
   }
 
-  function handleDosPagos() {
-    // TODO: Implementar Modal #2 (tarea separada)
-    console.log('Hacer 2 pagos — pendiente Modal #2');
+  const pago1 = paymentPlans[0];
+
+  async function handleDosPagos() {
+    if (!pago1) return;
+    setError('');
+    setLoading(true);
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          priceId: pago1.stripePriceId,
+          productId: pago1.id,
+          isAsesoria: true,
+          planId: programaPlan.id,
+        }),
+      });
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setError('Error al procesar el pago. Intenta de nuevo.');
+        setLoading(false);
+      }
+    } catch {
+      setError('Error de conexión. Intenta de nuevo.');
+      setLoading(false);
+    }
   }
 
   if (!isOpen) return null;
@@ -183,16 +210,25 @@ export default function ProgramaIntensivoModal({
               )}
             </button>
 
-            <button
-              onClick={handleDosPagos}
-              disabled={!accepted}
-              className="w-full rounded-xl border-2 border-gray-dark px-6 py-3.5 font-bold text-gray-dark transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-dark hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:bg-transparent disabled:hover:text-gray-dark"
-            >
-              <span className="inline-flex items-center justify-center gap-2">
-                <CalendarRange className="h-4 w-4" />
-                Hacer 2 pagos
-              </span>
-            </button>
+            {pago1 && (
+              <button
+                onClick={handleDosPagos}
+                disabled={!accepted || loading}
+                className="w-full rounded-xl border-2 border-gray-dark px-6 py-3.5 font-bold text-gray-dark transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-dark hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:bg-transparent disabled:hover:text-gray-dark"
+              >
+                {loading ? (
+                  <span className="inline-flex items-center justify-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Redirigiendo al pago…
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center justify-center gap-2">
+                    <CalendarRange className="h-4 w-4" />
+                    Hacer 2 pagos de ${pago1.price}
+                  </span>
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -3,16 +3,17 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Check, Star, Clock, Sparkles, ChevronDown, Loader2 } from 'lucide-react';
-import type { AsesoriaPlan } from '@/types/tienda';
+import type { AsesoriaPlan, PaymentPlan } from '@/types/tienda';
 import ProgramaIntensivoModal from './ProgramaIntensivoModal';
 
 const VISIBLE_FEATURES = 4;
 
 interface PlanesSectionProps {
   planes: AsesoriaPlan[];
+  paymentPlans?: PaymentPlan[];
 }
 
-export default function PlanesSection({ planes }: PlanesSectionProps) {
+export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSectionProps) {
   const [expandedPlans, setExpandedPlans] = useState<Set<string>>(new Set());
   const [baseHeight, setBaseHeight] = useState(0);
   const [showProgramaModal, setShowProgramaModal] = useState(false);
@@ -301,6 +302,7 @@ export default function PlanesSection({ planes }: PlanesSectionProps) {
             isOpen={showProgramaModal}
             onClose={() => setShowProgramaModal(false)}
             plan={planes.find((p) => p.id === 'crea-camino')!}
+            paymentPlans={paymentPlans}
           />
         )}
       </div>

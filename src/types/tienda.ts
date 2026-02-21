@@ -34,6 +34,7 @@ export interface ProductoRecord {
   nota: string | null;
   features_title: string | null;
   mostrar_en_planes: boolean;
+  producto_padre: string | null;
 }
 
 // Frontend product model
@@ -65,6 +66,7 @@ export interface Product {
   downloadUrl?: string;
   whatsappLink?: string;
   order: number;
+  parentProductId?: string;
   // Asesoria-specific fields
   duracionMinutos?: number;
   subtitle?: string;
@@ -88,6 +90,15 @@ export interface AsesoriaPlan {
   isPopular: boolean;
   ctaText: string;
   stripePriceId: string;
+}
+
+// Payment plan (child product for split payments)
+export interface PaymentPlan {
+  id: string;
+  name: string;
+  price: number;
+  stripePriceId: string;
+  label?: string;
 }
 
 // Format price helper
