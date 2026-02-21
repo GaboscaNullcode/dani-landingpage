@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { X, Loader2, CreditCard, CalendarRange, ArrowLeft } from 'lucide-react';
 import type { AsesoriaPlan, PaymentPlan } from '@/types/tienda';
+import type { User } from '@/types/auth';
 
 type ModalStep = 'terms' | 'split-info';
 
@@ -11,6 +12,7 @@ interface ProgramaIntensivoModalProps {
   onClose: () => void;
   plan: AsesoriaPlan;
   paymentPlans?: PaymentPlan[];
+  user?: User | null;
 }
 
 export default function ProgramaIntensivoModal({
@@ -18,6 +20,7 @@ export default function ProgramaIntensivoModal({
   onClose,
   plan: programaPlan,
   paymentPlans = [],
+  user,
 }: ProgramaIntensivoModalProps) {
   const [accepted, setAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -85,6 +88,7 @@ export default function ProgramaIntensivoModal({
           productId: programaPlan.id,
           isAsesoria: true,
           planId: programaPlan.id,
+          ...(user ? { customerEmail: user.email, customerName: user.name } : {}),
         }),
       });
       const data = await response.json();
@@ -115,6 +119,7 @@ export default function ProgramaIntensivoModal({
           productId: pago1.id,
           isAsesoria: true,
           planId: programaPlan.id,
+          ...(user ? { customerEmail: user.email, customerName: user.name } : {}),
         }),
       });
       const data = await response.json();

@@ -2,8 +2,10 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Check, Star, Clock, Sparkles, ChevronDown } from 'lucide-react';
+import Link from 'next/link';
+import { Check, Star, Clock, Sparkles, ChevronDown, CircleCheck } from 'lucide-react';
 import type { AsesoriaPlan, PaymentPlan } from '@/types/tienda';
+import { useCheckoutAuth } from '@/hooks/useCheckoutAuth';
 import ProgramaIntensivoModal from './ProgramaIntensivoModal';
 import TerminosModal from './TerminosModal';
 
@@ -15,12 +17,28 @@ interface PlanesSectionProps {
 }
 
 export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSectionProps) {
+  const { user, compras } = useCheckoutAuth();
   const [expandedPlans, setExpandedPlans] = useState<Set<string>>(new Set());
   const [baseHeight, setBaseHeight] = useState(0);
   const [showProgramaModal, setShowProgramaModal] = useState(false);
   const [showTerminosModal, setShowTerminosModal] = useState(false);
   const [terminosPlan, setTerminosPlan] = useState<AsesoriaPlan | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  // Check if user already purchased a plan
+  function isPlanOwned(planId: string) {
+    if (planId === 'crea-camino') {
+      // Programa Intensivo: check payment flags or compras for parent/children
+      if (user?.programIntensivePaidFull || user?.programIntensivePaid1) return true;
+      const childIds = paymentPlans.map((p) => p.id);
+      return compras.some(
+        (c) =>
+          (c.producto === planId || childIds.includes(c.producto)) &&
+          c.estado === 'activa',
+      );
+    }
+    return compras.some((c) => c.producto === planId && c.estado === 'activa');
+  }
 
   const togglePlan = (planId: string) => {
     setExpandedPlans((prev) => {
@@ -220,7 +238,15 @@ export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSecti
                 )}
 
                 {/* CTA */}
-                {plan.id === 'crea-camino' ? (
+                {isPlanOwned(plan.id) ? (
+                  <Link
+                    href="/mi-cuenta"
+                    className="mt-auto flex w-full items-center justify-center gap-2 rounded-full bg-mint/20 py-4 text-center font-[var(--font-headline)] font-bold text-teal-dark transition-all hover:-translate-y-1"
+                  >
+                    <CircleCheck className="h-5 w-5" />
+                    Ya tienes este plan
+                  </Link>
+                ) : plan.id === 'crea-camino' ? (
                   <button
                     onClick={() => setShowProgramaModal(true)}
                     className="btn-shimmer mt-auto block w-full rounded-full bg-white py-4 text-center font-[var(--font-headline)] font-bold text-gray-dark transition-all hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(255,255,255,0.2)]"
@@ -266,6 +292,7 @@ export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSecti
             onClose={() => setShowProgramaModal(false)}
             plan={planes.find((p) => p.id === 'crea-camino')!}
             paymentPlans={paymentPlans}
+            user={user}
           />
         )}
 
@@ -275,6 +302,7 @@ export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSecti
             isOpen={showTerminosModal}
             onClose={() => setShowTerminosModal(false)}
             plan={terminosPlan}
+            user={user}
           />
         )}
       </div>

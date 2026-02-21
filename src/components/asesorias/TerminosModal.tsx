@@ -3,17 +3,20 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { X, Loader2 } from 'lucide-react';
 import type { AsesoriaPlan } from '@/types/tienda';
+import type { User } from '@/types/auth';
 
 interface TerminosModalProps {
   isOpen: boolean;
   onClose: () => void;
   plan: AsesoriaPlan;
+  user?: User | null;
 }
 
 export default function TerminosModal({
   isOpen,
   onClose,
   plan,
+  user,
 }: TerminosModalProps) {
   const [accepted, setAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -75,6 +78,7 @@ export default function TerminosModal({
           productId: plan.id,
           isAsesoria: true,
           planId: plan.id,
+          ...(user ? { customerEmail: user.email, customerName: user.name } : {}),
         }),
       });
       const data = await response.json();

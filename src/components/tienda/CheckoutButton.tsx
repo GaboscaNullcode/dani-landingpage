@@ -1,7 +1,17 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Loader2, X, User, Mail, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
+import {
+  ArrowRight,
+  Loader2,
+  X,
+  User,
+  Mail,
+  ShieldCheck,
+  CircleCheck,
+} from 'lucide-react';
+import { useCheckoutAuth } from '@/hooks/useCheckoutAuth';
 
 interface CheckoutButtonProps {
   priceId: string;
@@ -18,6 +28,7 @@ export default function CheckoutButton({
   className = '',
   style,
 }: CheckoutButtonProps) {
+  const { user, compras, loading: authLoading } = useCheckoutAuth();
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState('');
@@ -26,11 +37,15 @@ export default function CheckoutButton({
   const modalRef = useRef<HTMLDivElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
+  const alreadyOwned = compras.some(
+    (c) => c.producto === productId && c.estado === 'activa',
+  );
+
   useEffect(() => {
-    if (showModal && nameInputRef.current) {
+    if (showModal && !user && nameInputRef.current) {
       nameInputRef.current.focus();
     }
-  }, [showModal]);
+  }, [showModal, user]);
 
   useEffect(() => {
     if (!showModal) return;
@@ -47,18 +62,7 @@ export default function CheckoutButton({
     }
   }
 
-  async function handleCheckout() {
-    if (!name.trim() || !email.trim()) {
-      setError('Por favor completa todos los campos');
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError('Por favor ingresa un email valido');
-      return;
-    }
-
+  async function goToCheckout(customerName: string, customerEmail: string) {
     setError('');
     setLoading(true);
     try {
@@ -68,8 +72,8 @@ export default function CheckoutButton({
         body: JSON.stringify({
           priceId,
           productId,
-          customerEmail: email.trim(),
-          customerName: name.trim(),
+          customerEmail,
+          customerName,
         }),
       });
 
@@ -89,16 +93,61 @@ export default function CheckoutButton({
     }
   }
 
-  return (
-    <>
-      <button
-        onClick={() => setShowModal(true)}
-        disabled={loading}
+  function handleClick() {
+    if (user) {
+      goToCheckout(user.name, user.email);
+    } else {
+      setShowModal(true);
+    }
+  }
+
+  function handleModalCheckout() {
+    if (!name.trim() || !email.trim()) {
+      setError('Por favor completa todos los campos');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Por favor ingresa un email valido');
+      return;
+    }
+
+    goToCheckout(name.trim(), email.trim());
+  }
+
+  if (!authLoading && alreadyOwned) {
+    return (
+      <Link
+        href="/mi-cuenta"
         className={`${className} disabled:opacity-70`}
         style={style}
       >
-        {children}
-        <ArrowRight className="h-4 w-4" />
+        <CircleCheck className="h-4 w-4" />
+        Ya tienes este producto
+      </Link>
+    );
+  }
+
+  return (
+    <>
+      <button
+        onClick={handleClick}
+        disabled={loading || authLoading}
+        className={`${className} disabled:opacity-70`}
+        style={style}
+      >
+        {loading ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Redirigiendo al pago…
+          </>
+        ) : (
+          <>
+            {children}
+            <ArrowRight className="h-4 w-4" />
+          </>
+        )}
       </button>
 
       {showModal && (
@@ -178,7 +227,7 @@ export default function CheckoutButton({
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
-                        handleCheckout();
+                        handleModalCheckout();
                       }
                     }}
                   />
@@ -200,14 +249,14 @@ export default function CheckoutButton({
                 </div>
 
                 <button
-                  onClick={handleCheckout}
+                  onClick={handleModalCheckout}
                   disabled={loading}
                   className="w-full rounded-xl bg-gradient-to-r from-coral to-pink px-6 py-3.5 font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-60 disabled:hover:translate-y-0"
                 >
                   {loading ? (
                     <span className="inline-flex items-center gap-2">
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      Redirigiendo al pago\u2026
+                      Redirigiendo al pago…
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-2">

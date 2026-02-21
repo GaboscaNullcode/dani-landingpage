@@ -1,8 +1,18 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Loader2, X, User, Mail, ShieldCheck, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import {
+  Loader2,
+  X,
+  User,
+  Mail,
+  ShieldCheck,
+  ArrowRight,
+  CircleCheck,
+} from 'lucide-react';
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon';
+import { useCheckoutAuth } from '@/hooks/useCheckoutAuth';
 
 interface CommunityCheckoutButtonProps {
   priceId: string;
@@ -13,6 +23,7 @@ export default function CommunityCheckoutButton({
   priceId,
   productId,
 }: CommunityCheckoutButtonProps) {
+  const { user, compras, loading: authLoading } = useCheckoutAuth();
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState('');
@@ -21,11 +32,15 @@ export default function CommunityCheckoutButton({
   const modalRef = useRef<HTMLDivElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
+  const alreadyMember = compras.some(
+    (c) => c.producto === productId && c.estado === 'activa',
+  );
+
   useEffect(() => {
-    if (showModal && nameInputRef.current) {
+    if (showModal && !user && nameInputRef.current) {
       nameInputRef.current.focus();
     }
-  }, [showModal]);
+  }, [showModal, user]);
 
   useEffect(() => {
     if (!showModal) return;
@@ -42,18 +57,7 @@ export default function CommunityCheckoutButton({
     }
   }
 
-  async function handleCheckout() {
-    if (!name.trim() || !email.trim()) {
-      setError('Por favor completa todos los campos');
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError('Por favor ingresa un email valido');
-      return;
-    }
-
+  async function goToCheckout(customerName: string, customerEmail: string) {
     setError('');
     setLoading(true);
     try {
@@ -63,8 +67,8 @@ export default function CommunityCheckoutButton({
         body: JSON.stringify({
           priceId,
           productId,
-          customerEmail: email.trim(),
-          customerName: name.trim(),
+          customerEmail,
+          customerName,
           isCommunity: true,
         }),
       });
@@ -85,15 +89,59 @@ export default function CommunityCheckoutButton({
     }
   }
 
+  function handleClick() {
+    if (user) {
+      goToCheckout(user.name, user.email);
+    } else {
+      setShowModal(true);
+    }
+  }
+
+  function handleModalCheckout() {
+    if (!name.trim() || !email.trim()) {
+      setError('Por favor completa todos los campos');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Por favor ingresa un email valido');
+      return;
+    }
+
+    goToCheckout(name.trim(), email.trim());
+  }
+
+  if (!authLoading && alreadyMember) {
+    return (
+      <Link
+        href="/mi-cuenta"
+        className="mt-8 inline-flex items-center gap-2 rounded-full bg-green-500 px-8 py-4 font-[var(--font-headline)] font-bold text-white transition-shadow duration-300 hover:shadow-[0_10px_30px_rgba(34,197,94,0.3)]"
+      >
+        <CircleCheck className="h-5 w-5" />
+        Ya eres miembro — Ir a mi cuenta
+      </Link>
+    );
+  }
+
   return (
     <>
       <button
-        onClick={() => setShowModal(true)}
-        disabled={loading}
+        onClick={handleClick}
+        disabled={loading || authLoading}
         className="mt-8 inline-flex items-center gap-2 rounded-full bg-green-500 px-8 py-4 font-[var(--font-headline)] font-bold text-white transition-shadow duration-300 hover:shadow-[0_10px_30px_rgba(34,197,94,0.3)] disabled:opacity-70"
       >
-        <WhatsAppIcon className="h-5 w-5" />
-        Unirme a la Comunidad — $5.99/mes
+        {loading ? (
+          <>
+            <Loader2 className="h-5 w-5 animate-spin" />
+            Redirigiendo al pago…
+          </>
+        ) : (
+          <>
+            <WhatsAppIcon className="h-5 w-5" />
+            Unirme a la Comunidad — $5.99/mes
+          </>
+        )}
       </button>
 
       {showModal && (
@@ -172,7 +220,7 @@ export default function CommunityCheckoutButton({
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
-                        handleCheckout();
+                        handleModalCheckout();
                       }
                     }}
                   />
@@ -194,7 +242,7 @@ export default function CommunityCheckoutButton({
                 </div>
 
                 <button
-                  onClick={handleCheckout}
+                  onClick={handleModalCheckout}
                   disabled={loading}
                   className="w-full rounded-xl bg-gradient-to-r from-green-500 to-green-600 px-6 py-3.5 font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-60 disabled:hover:translate-y-0"
                 >
