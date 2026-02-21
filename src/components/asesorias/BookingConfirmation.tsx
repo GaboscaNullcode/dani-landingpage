@@ -9,10 +9,9 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import Link from 'next/link';
-import { PLAN_NOMBRES } from '@/types/reservas';
 
 interface BookingConfirmationProps {
-  planId: string;
+  planName: string;
   fecha: string;
   hora: string;
   duracionMinutos: number;
@@ -21,14 +20,13 @@ interface BookingConfirmationProps {
 }
 
 export default function BookingConfirmation({
-  planId,
+  planName,
   fecha,
   hora,
   duracionMinutos,
   timezone,
   zoomJoinUrl,
 }: BookingConfirmationProps) {
-  const planName = PLAN_NOMBRES[planId] || planId;
   const fechaFormatted = new Date(fecha + 'T12:00:00').toLocaleDateString(
     'es-PE',
     {

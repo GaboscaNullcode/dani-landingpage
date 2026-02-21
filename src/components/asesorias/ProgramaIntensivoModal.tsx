@@ -2,18 +2,18 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { X, Loader2, CreditCard, CalendarRange } from 'lucide-react';
-import { planes } from '@/data/asesorias-data';
-
-const programaPlan = planes.find((p) => p.id === 'crea-camino')!;
+import type { AsesoriaPlan } from '@/types/tienda';
 
 interface ProgramaIntensivoModalProps {
   isOpen: boolean;
   onClose: () => void;
+  plan: AsesoriaPlan;
 }
 
 export default function ProgramaIntensivoModal({
   isOpen,
   onClose,
+  plan: programaPlan,
 }: ProgramaIntensivoModalProps) {
   const [accepted, setAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -76,7 +76,7 @@ export default function ProgramaIntensivoModal({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           priceId: programaPlan.stripePriceId,
-          productId: programaPlan.productId,
+          productId: programaPlan.id,
           isAsesoria: true,
           planId: programaPlan.id,
         }),

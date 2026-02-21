@@ -9,7 +9,13 @@ export interface ProductoRecord {
   precio: number;
   precio_original: number | null;
   imagen_url: string | null;
-  categoria: 'curso' | 'ebook' | 'masterclass' | 'comunidad' | 'gratis';
+  categoria:
+    | 'curso'
+    | 'ebook'
+    | 'masterclass'
+    | 'comunidad'
+    | 'gratis'
+    | 'asesoria';
   badge: string | null;
   features: string[] | null;
   es_destacado: boolean;
@@ -22,6 +28,12 @@ export interface ProductoRecord {
   download_url: string | null;
   whatsapp_link: string | null;
   orden: number;
+  // Asesoria-specific columns
+  duracion_minutos: number | null;
+  subtitulo: string | null;
+  nota: string | null;
+  features_title: string | null;
+  mostrar_en_planes: boolean;
 }
 
 // Frontend product model
@@ -34,7 +46,13 @@ export interface Product {
   originalPrice?: number;
   currency: 'USD';
   image: string;
-  category: 'curso' | 'ebook' | 'masterclass' | 'comunidad' | 'gratis';
+  category:
+    | 'curso'
+    | 'ebook'
+    | 'masterclass'
+    | 'comunidad'
+    | 'gratis'
+    | 'asesoria';
   badge?: string;
   features?: string[];
   isFeatured: boolean;
@@ -47,6 +65,29 @@ export interface Product {
   downloadUrl?: string;
   whatsappLink?: string;
   order: number;
+  // Asesoria-specific fields
+  duracionMinutos?: number;
+  subtitle?: string;
+  note?: string;
+  featuresTitle?: string;
+}
+
+// Asesoria plan type (used by /asesorias page)
+export interface AsesoriaPlan {
+  id: string;
+  name: string;
+  subtitle: string;
+  price: number;
+  currency: 'USD';
+  duration: string;
+  duracionMinutos: number;
+  description: string;
+  featuresTitle?: string;
+  features: string[];
+  note?: string;
+  isPopular: boolean;
+  ctaText: string;
+  stripePriceId: string;
 }
 
 // Format price helper

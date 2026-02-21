@@ -5,7 +5,7 @@ import {
 } from '@/lib/reservas-service';
 import { sendBookingReminderEmail } from '@/lib/brevo';
 import { getServiceSupabase } from '@/lib/supabase/server';
-import { PLAN_NOMBRES } from '@/types/reservas';
+import { getAsesoriaPlanById } from '@/lib/tienda-service';
 
 export async function GET(request: NextRequest) {
   // Verify cron secret
@@ -39,7 +39,8 @@ export async function GET(request: NextRequest) {
 
       const email = authUser.user.email;
       const name = profile?.name || email.split('@')[0];
-      const planName = PLAN_NOMBRES[reserva.plan_id] || reserva.plan_id;
+      const plan = await getAsesoriaPlanById(reserva.plan_id);
+      const planName = plan?.name || reserva.plan_id;
       const fechaFormatted = new Date(reserva.fecha_hora).toLocaleDateString(
         'es-PE',
         {

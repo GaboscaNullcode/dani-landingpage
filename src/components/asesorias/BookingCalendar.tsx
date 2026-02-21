@@ -6,12 +6,12 @@ import CalendarGrid from './CalendarGrid';
 import TimeSlotPicker from './TimeSlotPicker';
 import BookingSummary from './BookingSummary';
 import BookingConfirmation from './BookingConfirmation';
-import { PLAN_NOMBRES } from '@/types/reservas';
 
 type BookingStep = 'calendar' | 'time' | 'summary' | 'confirming' | 'done';
 
 interface BookingCalendarProps {
   planId: string;
+  planName: string;
   compraId: string;
   duracionMinutos: number;
   timezone: string;
@@ -19,6 +19,7 @@ interface BookingCalendarProps {
 
 export default function BookingCalendar({
   planId,
+  planName,
   compraId,
   duracionMinutos,
   timezone,
@@ -29,8 +30,6 @@ export default function BookingCalendar({
   const [confirming, setConfirming] = useState(false);
   const [error, setError] = useState('');
   const [zoomJoinUrl, setZoomJoinUrl] = useState('');
-
-  const planName = PLAN_NOMBRES[planId] || planId;
 
   const { minDate, maxDate } = useMemo(() => {
     const min = new Date();
@@ -214,7 +213,7 @@ export default function BookingCalendar({
               transition={{ duration: 0.3 }}
             >
               <BookingSummary
-                planId={planId}
+                planName={planName}
                 fecha={selectedDate}
                 hora={selectedSlot}
                 duracionMinutos={duracionMinutos}
@@ -234,7 +233,7 @@ export default function BookingCalendar({
             transition={{ duration: 0.5 }}
           >
             <BookingConfirmation
-              planId={planId}
+              planName={planName}
               fecha={selectedDate}
               hora={selectedSlot}
               duracionMinutos={duracionMinutos}

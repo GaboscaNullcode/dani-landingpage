@@ -77,16 +77,3 @@ export interface BloqueoCalendarioRecord {
   motivo: string | null;
 }
 
-// ── Plan durations mapping ──
-
-export const PLAN_DURACIONES: Record<string, number> = {
-  consultoria: 45,
-  iniciando: 90,
-  'crea-camino': 240,
-};
-
-export const PLAN_NOMBRES: Record<string, string> = {
-  consultoria: 'Consultoria 1:1',
-  iniciando: 'Asesoria 1:1',
-  'crea-camino': 'Programa Intensivo',
-};

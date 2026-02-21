@@ -20,7 +20,6 @@ import {
 import type { User, Compra } from '@/types/auth';
 import type { Product } from '@/types/tienda';
 import type { Reserva } from '@/types/reservas';
-import { PLAN_NOMBRES } from '@/types/reservas';
 import ProductCard from './ProductCard';
 import ChangePasswordModal from './ChangePasswordModal';
 
@@ -32,12 +31,14 @@ interface MeResponse {
 
 interface ReservasResponse {
   reservas: Reserva[];
+  planNames: Record<string, string>;
 }
 
 export default function Dashboard() {
   const router = useRouter();
   const [data, setData] = useState<MeResponse | null>(null);
   const [reservas, setReservas] = useState<Reserva[]>([]);
+  const [planNames, setPlanNames] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [loggingOut, setLoggingOut] = useState(false);
@@ -65,6 +66,7 @@ export default function Dashboard() {
         if (reservasRes.ok) {
           const reservasJson: ReservasResponse = await reservasRes.json();
           setReservas(reservasJson.reservas || []);
+          setPlanNames(reservasJson.planNames || {});
         }
       } catch {
         setError('Error de conexion');
@@ -256,7 +258,7 @@ export default function Dashboard() {
                   hour: '2-digit',
                   minute: '2-digit',
                 });
-                const planName = PLAN_NOMBRES[reserva.planId] || reserva.planId;
+                const planName = planNames[reserva.planId] || reserva.planId;
                 const isCancelling = cancellingId === reserva.id;
 
                 return (

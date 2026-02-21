@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/supabase/server';
 import { getCompraById } from '@/lib/compras-service';
 import { createBooking } from '@/lib/booking-engine';
-import { PLAN_DURACIONES } from '@/types/reservas';
+import { getAsesoriaPlanById } from '@/lib/tienda-service';
 import { getCalendarConfig } from '@/lib/reservas-service';
 
 export async function POST(request: NextRequest) {
@@ -28,10 +28,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate plan
-    const duracion = PLAN_DURACIONES[planId];
-    if (!duracion) {
+    const plan = await getAsesoriaPlanById(planId);
+    if (!plan) {
       return NextResponse.json({ error: 'Plan no valido' }, { status: 400 });
     }
+    const duracion = plan.duracionMinutos;
 
     // Verify compra belongs to user
     const compra = await getCompraById(compraId);
@@ -62,6 +63,7 @@ export async function POST(request: NextRequest) {
       userId: user.id,
       compraId,
       planId,
+      planName: plan.name,
       fecha,
       hora,
       duracionMinutos: duracion,

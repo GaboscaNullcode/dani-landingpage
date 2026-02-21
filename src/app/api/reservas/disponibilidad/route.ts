@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAvailableSlots } from '@/lib/reservas-service';
-import { PLAN_DURACIONES } from '@/types/reservas';
+import { getAsesoriaPlanById } from '@/lib/tienda-service';
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,15 +23,15 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const duracion = PLAN_DURACIONES[planId];
-    if (!duracion) {
+    const plan = await getAsesoriaPlanById(planId);
+    if (!plan) {
       return NextResponse.json(
         { error: 'Plan no valido' },
         { status: 400 },
       );
     }
 
-    const disponibilidad = await getAvailableSlots(fecha, duracion);
+    const disponibilidad = await getAvailableSlots(fecha, plan.duracionMinutos);
 
     return NextResponse.json(disponibilidad);
   } catch (error) {

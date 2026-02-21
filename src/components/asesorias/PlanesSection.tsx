@@ -3,12 +3,16 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Check, Star, Clock, Sparkles, ChevronDown, Loader2 } from 'lucide-react';
-import { planes } from '@/data/asesorias-data';
+import type { AsesoriaPlan } from '@/types/tienda';
 import ProgramaIntensivoModal from './ProgramaIntensivoModal';
 
 const VISIBLE_FEATURES = 4;
 
-export default function PlanesSection() {
+interface PlanesSectionProps {
+  planes: AsesoriaPlan[];
+}
+
+export default function PlanesSection({ planes }: PlanesSectionProps) {
   const [expandedPlans, setExpandedPlans] = useState<Set<string>>(new Set());
   const [baseHeight, setBaseHeight] = useState(0);
   const [showProgramaModal, setShowProgramaModal] = useState(false);
@@ -57,7 +61,7 @@ export default function PlanesSection() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           priceId: plan.stripePriceId,
-          productId: plan.productId,
+          productId: plan.id,
           isAsesoria: true,
           planId: plan.id,
         }),
@@ -292,10 +296,13 @@ export default function PlanesSection() {
         </div>
 
         {/* Modal T&C Programa Intensivo */}
-        <ProgramaIntensivoModal
-          isOpen={showProgramaModal}
-          onClose={() => setShowProgramaModal(false)}
-        />
+        {planes.find((p) => p.id === 'crea-camino') && (
+          <ProgramaIntensivoModal
+            isOpen={showProgramaModal}
+            onClose={() => setShowProgramaModal(false)}
+            plan={planes.find((p) => p.id === 'crea-camino')!}
+          />
+        )}
       </div>
     </section>
   );

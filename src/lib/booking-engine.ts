@@ -24,13 +24,13 @@ import {
   sendBookingConfirmationEmail,
   sendBookingNotificationToDani,
 } from './brevo';
-import { PLAN_NOMBRES } from '@/types/reservas';
 import type { Reserva } from '@/types/reservas';
 
 interface BookingInput {
   userId: string;
   compraId: string;
   planId: string;
+  planName: string;
   fecha: string; // YYYY-MM-DD
   hora: string; // HH:MM
   duracionMinutos: number;
@@ -52,6 +52,7 @@ export async function createBooking(
     userId,
     compraId,
     planId,
+    planName,
     fecha,
     hora,
     duracionMinutos,
@@ -92,7 +93,6 @@ export async function createBooking(
 
   try {
     // 4. Create Zoom meeting
-    const planName = PLAN_NOMBRES[planId] || planId;
     const zoomResult = await createZoomMeeting({
       topic: `${planName} - ${clientName}`,
       startTime: fechaHora,

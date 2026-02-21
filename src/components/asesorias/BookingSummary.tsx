@@ -10,10 +10,8 @@ import {
   Loader2,
   ArrowLeft,
 } from 'lucide-react';
-import { PLAN_NOMBRES } from '@/types/reservas';
-
 interface BookingSummaryProps {
-  planId: string;
+  planName: string;
   fecha: string;
   hora: string;
   duracionMinutos: number;
@@ -24,7 +22,7 @@ interface BookingSummaryProps {
 }
 
 export default function BookingSummary({
-  planId,
+  planName,
   fecha,
   hora,
   duracionMinutos,
@@ -34,8 +32,6 @@ export default function BookingSummary({
   loading,
 }: BookingSummaryProps) {
   const [notas, setNotas] = useState('');
-
-  const planName = PLAN_NOMBRES[planId] || planId;
   const fechaFormatted = new Date(fecha + 'T12:00:00').toLocaleDateString(
     'es-PE',
     {

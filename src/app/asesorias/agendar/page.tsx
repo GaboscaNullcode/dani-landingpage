@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getStripe } from '@/lib/stripe';
 import { getCalendarConfig } from '@/lib/reservas-service';
-import { PLAN_DURACIONES } from '@/types/reservas';
+import { getAsesoriaPlanById } from '@/lib/tienda-service';
 import BookingCalendar from '@/components/asesorias/BookingCalendar';
 
 interface AgendarPageProps {
@@ -37,8 +37,8 @@ export default async function AgendarPage({ searchParams }: AgendarPageProps) {
     redirect('/asesorias');
   }
 
-  const duracion = PLAN_DURACIONES[planId];
-  if (!duracion) {
+  const plan = await getAsesoriaPlanById(planId);
+  if (!plan) {
     redirect('/asesorias');
   }
 
@@ -64,8 +64,9 @@ export default async function AgendarPage({ searchParams }: AgendarPageProps) {
         <div className="mx-auto max-w-2xl rounded-3xl bg-white p-6 shadow-[0_10px_40px_rgba(0,0,0,0.08)] md:p-10">
           <BookingCalendar
             planId={planId}
+            planName={plan.name}
             compraId={compraId}
-            duracionMinutos={duracion}
+            duracionMinutos={plan.duracionMinutos}
             timezone={config.timezone}
           />
         </div>

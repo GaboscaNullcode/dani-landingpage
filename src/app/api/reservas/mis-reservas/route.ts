@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/supabase/server';
 import { getUserReservas } from '@/lib/reservas-service';
+import { getAsesoriaPlanes } from '@/lib/tienda-service';
 
 export async function GET() {
   try {
@@ -13,9 +14,17 @@ export async function GET() {
       return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
     }
 
-    const reservas = await getUserReservas(user.id);
+    const [reservas, planes] = await Promise.all([
+      getUserReservas(user.id),
+      getAsesoriaPlanes(),
+    ]);
 
-    return NextResponse.json({ reservas });
+    const planNames: Record<string, string> = {};
+    for (const plan of planes) {
+      planNames[plan.id] = plan.name;
+    }
+
+    return NextResponse.json({ reservas, planNames });
   } catch (error) {
     console.error('Error fetching reservations:', error);
     return NextResponse.json(
