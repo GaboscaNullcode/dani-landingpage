@@ -10,7 +10,7 @@ export interface NewsletterSubscribeResponse {
   alreadySubscribed?: boolean;
 }
 
-// PocketBase record structure for suscriptores_newsletter collection
+// Supabase record structure for suscriptores_newsletter table
 export interface SuscriptorRecord {
   id: string;
   email: string;

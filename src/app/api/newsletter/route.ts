@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       body.name,
     );
 
-    // 2. Store in PocketBase (non-critical)
+    // 2. Store in Supabase (non-critical)
     try {
       await createOrUpdateSubscriber(
         body.email,
@@ -41,8 +41,8 @@ export async function POST(request: Request) {
         contactId,
         source as 'home' | 'newsletter_page' | 'blog' | 'quiz',
       );
-    } catch (pbError) {
-      console.error('PocketBase newsletter save failed (non-critical):', pbError);
+    } catch (dbError) {
+      console.error('Newsletter DB save failed (non-critical):', dbError);
     }
 
     // 3. Send welcome email only for new subscribers

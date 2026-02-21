@@ -10,11 +10,6 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'pocketbase-production-a78a.up.railway.app',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
         hostname: 'securenlandco.b-cdn.net',
         pathname: '/**',
       },

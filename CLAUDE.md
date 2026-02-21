@@ -15,7 +15,7 @@ No test runner is configured. Validate changes with `pnpm build`.
 
 ## Stack
 
-Next.js 16 (App Router) + React 19 + Tailwind CSS 4 + TypeScript strict + PocketBase + Stripe + Brevo. Package manager: **pnpm**. Deployed on **Vercel**. Domain: `remotecondani.com`.
+Next.js 16 (App Router) + React 19 + Tailwind CSS 4 + TypeScript strict + Supabase + Stripe + Brevo. Package manager: **pnpm**. Deployed on **Vercel**. Domain: `remotecondani.com`.
 
 ## Architecture
 
@@ -23,24 +23,24 @@ Next.js 16 (App Router) + React 19 + Tailwind CSS 4 + TypeScript strict + Pocket
 
 The project has **two data sources** that coexist:
 
-1. **PocketBase (primary, dynamic)** — Services in `src/lib/*-service.ts` fetch from PocketBase collections using `React.cache()` for request deduplication. Used in Server Components.
+1. **Supabase (primary, dynamic)** — Services in `src/lib/*-service.ts` fetch from Supabase tables using `React.cache()` for request deduplication. Used in Server Components.
 2. **Static data (fallback)** — `src/data/*.ts` files contain hardcoded product/blog/FAQ data. Some pages still reference these directly. When modifying product logic, check both `src/data/tienda-data.ts` and `src/lib/tienda-service.ts`.
 
 ### Type system: dual model pattern
 
 Each domain has two interfaces in `src/types/`:
-- `*Record` — mirrors the PocketBase collection schema (snake_case fields in Spanish: `titulo`, `portada_url`, `es_destacado`)
+- `*Record` — mirrors the Supabase table schema (snake_case fields in Spanish: `titulo`, `portada_url`, `es_destacado`)
 - Clean frontend model (camelCase) — used by components
 
 Transform functions in `src/lib/*-service.ts` convert between them (e.g., `transformProductRecord`).
 
-### PocketBase collections
+### Supabase tables
 
-- `blogs` — titulo, contenido, portada_url, categoria, preview_text
+- `blogs` — titulo, slug, contenido, portada_url, categoria (FK → categorias_blog), preview_text
 - `categorias_blog` — nombre, slug, color_acento
 - `productos` — nombre, slug, precio, stripe_price_id, imagen_url, categoria, es_destacado, es_gratis, download_url, whatsapp_link
-- `users` — email, name, stripe_customer_id
-- `compras` — usuario, producto, stripe_session_id, stripe_subscription_id, estado (activa/cancelada/reembolsada)
+- `profiles` — name, stripe_customer_id (FK → auth.users)
+- `compras` — usuario (FK → profiles), producto (FK → productos), stripe_session_id, stripe_subscription_id, estado (activa/cancelada/reembolsada)
 - `suscriptores_newsletter` — email, nombre, brevo_contact_id, origen, activo
 
 ### Payment flow (Stripe)
@@ -49,8 +49,8 @@ Transform functions in `src/lib/*-service.ts` convert between them (e.g., `trans
 2. API creates a Stripe Checkout Session (detects subscription vs one-time via `price.recurring`)
 3. Stripe redirects to `/tienda/exito?session_id=...`
 4. Webhook `POST /api/webhooks/stripe` handles `checkout.session.completed`:
-   - Creates/finds user in PocketBase via `findOrCreateUser`
-   - Records purchase in `compras` collection via `createCompra`
+   - Creates/finds user in Supabase via `findOrCreateUser`
+   - Records purchase in `compras` table via `createCompra`
    - Sends transactional emails via Brevo (welcome if new user, purchase confirmation, or community WhatsApp invite)
 5. `customer.subscription.deleted` cancels the associated purchase record
 
@@ -58,17 +58,16 @@ Stripe client is lazy-initialized (`getStripe()`) to prevent build-time crashes 
 
 ### Auth flow
 
-- PocketBase handles user authentication
-- `POST /api/auth/login` authenticates and sets `pb_auth` HttpOnly cookie (7-day max age)
-- Middleware (`src/middleware.ts`) protects `/mi-cuenta/*` routes (except `/mi-cuenta/login`)
+- Supabase Auth handles user authentication (cookies `sb-*` via `@supabase/ssr`)
+- Middleware (`src/middleware.ts`) protects `/mi-cuenta/*` routes (except `/mi-cuenta/login`) and refreshes session
 - API routes: `POST /api/auth/login`, `POST /api/auth/logout`, `POST /api/auth/me`, `POST /api/auth/change-password`
-- `auth-service.ts` uses admin auth (`getAdminPb()`) cached per request for server-side user operations
+- `auth-service.ts` uses `getServiceSupabase()` (service_role key) for server-side user operations
 
 ### Email (Brevo)
 
 - `src/lib/brevo.ts` — transactional emails (purchase, welcome, community) + newsletter contact management
 - `src/lib/email-templates.ts` — HTML email templates
-- Newsletter signup: `POST /api/newsletter` → adds contact to Brevo list (primary) + saves to PocketBase (non-critical backup)
+- Newsletter signup: `POST /api/newsletter` → adds contact to Brevo list (primary) + saves to Supabase (non-critical backup)
 
 ### Route structure
 
@@ -76,9 +75,9 @@ Stripe client is lazy-initialized (`getStripe()`) to prevent build-time crashes 
 |-------|-------------|
 | `/` | Landing page (Server Component, section-based) |
 | `/sobre-mi` | About page |
-| `/blog`, `/blog/[slug]` | Blog (articles from PocketBase) |
+| `/blog`, `/blog/[slug]` | Blog (articles from Supabase) |
 | `/blog/categoria/[slug]` | Articles by category |
-| `/tienda`, `/tienda/[slug]` | Shop (digital products from PocketBase) |
+| `/tienda`, `/tienda/[slug]` | Shop (digital products from Supabase) |
 | `/tienda/exito` | Post-checkout success page |
 | `/asesorias` | Consulting/coaching page |
 | `/empezar` | Getting started funnel/quiz |
@@ -109,16 +108,16 @@ Additional API routes: `GET /api/descargas/[compraId]`, `GET /api/pdf/[compraId]
 - **Markdown**: parsed with `marked` (blog articles).
 - **PDFs**: rendered with `react-pdf`.
 - **Path alias**: `@/*` → `./src/*`
-- **PocketBase singleton**: use `getPocketBase()` for server-side, `createPocketBase()` for client-side.
-- **Image domains**: Unsplash, PocketBase Railway, BunnyCDN (`securenlandco.b-cdn.net`, `remotecondani.b-cdn.net`), and CloudFront are allowlisted in `next.config.ts`.
+- **Supabase**: `createServerSupabase()` for Server Components with auth, `createAnonSupabase()` for public queries, `getServiceSupabase()` for admin operations (bypasses RLS).
+- **Image domains**: Unsplash, BunnyCDN (`securenlandco.b-cdn.net`, `remotecondani.b-cdn.net`), and CloudFront are allowlisted in `next.config.ts`.
 - **Accessibility**: Skip-to-content link in root layout, `prefers-reduced-motion` media query disables all animations.
 - **Prettier**: single quotes, trailing commas ES5, `prettier-plugin-tailwindcss` for automatic class sorting.
 
 ## Environment variables
 
 Required in `.env.local`:
-- `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
+- `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
 - `NEXT_PUBLIC_DOMAIN`
-- `POCKETBASE_ADMIN_EMAIL`, `POCKETBASE_ADMIN_PASSWORD`
+- `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
 - `BREVO_API_KEY`, `BREVO_SENDER_EMAIL`, `BREVO_SENDER_NAME`, `BREVO_NEWSLETTER_LIST_ID`
 - `NEWSLETTER_GUIDE_URL`

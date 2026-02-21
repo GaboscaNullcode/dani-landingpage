@@ -48,7 +48,6 @@ export const createAnonSupabase = cache(() => {
 /**
  * Creates a Supabase admin client using the service_role key.
  * Bypasses RLS — use only in server-side code (API routes, webhooks).
- * Replaces the old getAdminPb() pattern.
  */
 export const getServiceSupabase = cache(() => {
   return createClient(
