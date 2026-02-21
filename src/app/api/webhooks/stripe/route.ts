@@ -13,6 +13,7 @@ import {
   sendCommunityEmail,
   sendProgramaIntensivoFullPaymentEmail,
   sendProgramaIntensivoPago1Email,
+  sendAsesoriaPostPaymentEmail,
 } from '@/lib/brevo';
 import { getPaymentPlans } from '@/lib/tienda-service';
 import type Stripe from 'stripe';
@@ -127,7 +128,10 @@ export async function POST(request: NextRequest) {
               console.log(`[webhook] Programa Intensivo full payment — sending access email to ${email}`);
               await sendProgramaIntensivoFullPaymentEmail(email, name, accessUrl);
             } else {
-              console.log('[webhook] Regular asesoria — skipping product emails');
+              const schedulingUrl = `${domain}/asesorias/agendar?session_id=${session.id}`;
+              const masterclassUrl = `${domain}/tienda/masterclass-gratuita`;
+              console.log(`[webhook] Regular asesoria — sending post-payment email to ${email}`);
+              await sendAsesoriaPostPaymentEmail(email, schedulingUrl, masterclassUrl);
             }
           } else {
             console.log('[webhook] Asesoria product not found — skipping emails');

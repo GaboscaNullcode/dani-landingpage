@@ -23,6 +23,8 @@ interface ProgramaIntensivoSectionProps {
   paid1: boolean;
   paid2: boolean;
   pago2Product: Pago2Product | null;
+  bookingSessionId: string | null;
+  parentProductId: string | null;
 }
 
 export default function ProgramaIntensivoSection({
@@ -30,6 +32,8 @@ export default function ProgramaIntensivoSection({
   paid1,
   paid2,
   pago2Product,
+  bookingSessionId,
+  parentProductId,
 }: ProgramaIntensivoSectionProps) {
   const [checkingOut, setCheckingOut] = useState(false);
 
@@ -50,6 +54,7 @@ export default function ProgramaIntensivoSection({
           priceId: pago2Product.stripePriceId,
           productId: pago2Product.id,
           isAsesoria: true,
+          planId: parentProductId,
         }),
       });
       const data = await res.json();
@@ -91,11 +96,11 @@ export default function ProgramaIntensivoSection({
               ejercicios.
             </p>
             <Link
-              href="/mi-cuenta"
+              href="/mi-cuenta/programa-intensivo"
               className="inline-flex items-center gap-1.5 rounded-lg bg-coral/10 px-4 py-2 text-sm font-semibold text-coral transition-colors hover:bg-coral hover:text-white"
             >
               <PlayCircle className="h-4 w-4" />
-              Ver materiales
+              Ver videos y materiales
             </Link>
           </div>
 
@@ -113,13 +118,20 @@ export default function ProgramaIntensivoSection({
                 <p className="mb-4 text-sm text-gray-medium">
                   Agenda tu sesion personalizada de 90 minutos con Dani.
                 </p>
-                <Link
-                  href="/asesorias/agendar"
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-coral to-pink px-4 py-2 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 hover:shadow-md"
-                >
-                  <CalendarDays className="h-4 w-4" />
-                  Agendar sesion
-                </Link>
+                {bookingSessionId ? (
+                  <Link
+                    href={`/asesorias/agendar?session_id=${bookingSessionId}`}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-coral to-pink px-4 py-2 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 hover:shadow-md"
+                  >
+                    <CalendarDays className="h-4 w-4" />
+                    Agendar sesion
+                  </Link>
+                ) : (
+                  <p className="text-sm text-gray-medium">
+                    No pudimos encontrar tu sesion de pago. Contacta a Dani para
+                    recibir ayuda.
+                  </p>
+                )}
               </>
             )}
 

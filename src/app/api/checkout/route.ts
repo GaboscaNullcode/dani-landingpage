@@ -50,6 +50,17 @@ export async function POST(request: NextRequest) {
       successUrl = `${domain}/tienda/exito?session_id={CHECKOUT_SESSION_ID}`;
     }
 
+    // Derive planId when isAsesoria but planId is missing
+    let resolvedPlanId = planId || '';
+    if (isAsesoria && !resolvedPlanId && productId) {
+      const producto = await getProductById(productId);
+      if (producto?.producto_padre) {
+        resolvedPlanId = producto.producto_padre;
+      } else if (producto) {
+        resolvedPlanId = productId;
+      }
+    }
+
     const session = await stripeClient.checkout.sessions.create({
       line_items: [{ price: priceId, quantity: 1 }],
       mode: isSubscription ? 'subscription' : 'payment',
@@ -60,7 +71,7 @@ export async function POST(request: NextRequest) {
       metadata: {
         productId: productId || '',
         customerName: customerName || '',
-        ...(isAsesoria ? { isAsesoria: 'true', planId: planId || '' } : {}),
+        ...(isAsesoria ? { isAsesoria: 'true', planId: resolvedPlanId } : {}),
       },
     });
 

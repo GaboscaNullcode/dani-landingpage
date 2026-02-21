@@ -144,6 +144,40 @@ export function getCommunityEmailHtml(
   return baseLayout(content);
 }
 
+// ── Asesoria post-payment email ──
+
+export function getAsesoriaPostPaymentEmailHtml(
+  schedulingUrl: string,
+  masterclassUrl: string,
+): string {
+  const content = `
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Ya casi estamos list@s</h2>
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Hola 💛
+    </p>
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      ¡Gracias por confiar en este espacio!
+    </p>
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      El siguiente paso es elegir la fecha y hora que mejor te funcione.
+    </p>
+    <p style="margin:0 0 8px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Aquí puedes agendar tu sesión:
+    </p>
+    ${button('Agendar mi sesión', schedulingUrl)}
+    <p style="margin:24px 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Una vez confirmes el horario, recibirás automáticamente el enlace de Zoom y todos los detalles.
+    </p>
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Te recomiendo ver (o volver a ver) la <a href="${masterclassUrl}" style="color:${BRAND.coral};font-weight:600;text-decoration:underline;">masterclass gratuita</a> antes de nuestra sesión. Te dará más contexto y nos permitirá aprovechar el tiempo al máximo.
+    </p>
+    <p style="margin:16px 0 0;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Nos vemos pronto,<br>
+      Dani ✨
+    </p>`;
+  return baseLayout(content);
+}
+
 // ── Booking emails ──
 
 export function getBookingConfirmationEmailHtml(

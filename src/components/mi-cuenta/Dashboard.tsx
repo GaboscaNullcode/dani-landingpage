@@ -29,6 +29,8 @@ interface MeResponse {
   compras: Compra[];
   allProducts: Product[];
   pago2Product: { id: string; stripePriceId: string; price: number } | null;
+  bookingSessionId: string | null;
+  parentProductId: string | null;
 }
 
 interface ReservasResponse {
@@ -322,6 +324,8 @@ export default function Dashboard() {
           paid1={data.user.programIntensivePaid1}
           paid2={data.user.programIntensivePaid2}
           pago2Product={data.pago2Product}
+          bookingSessionId={data.bookingSessionId}
+          parentProductId={data.parentProductId}
         />
       )}
 

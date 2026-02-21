@@ -16,6 +16,7 @@ import {
   getBookingReminderEmailHtml,
   getProgramaIntensivoFullPaymentEmailHtml,
   getProgramaIntensivoPago1EmailHtml,
+  getAsesoriaPostPaymentEmailHtml,
 } from './email-templates';
 
 let apiInstance: TransactionalEmailsApi | null = null;
@@ -171,6 +172,18 @@ export async function sendProgramaIntensivoPago1Email(
 ): Promise<void> {
   const subject = 'Ya tienes acceso a tus materiales (Pago 1 recibido)';
   const html = getProgramaIntensivoPago1EmailHtml(name, accessUrl);
+  await sendEmail(to, subject, html);
+}
+
+// ── Asesoria post-payment email ──
+
+export async function sendAsesoriaPostPaymentEmail(
+  to: string,
+  schedulingUrl: string,
+  masterclassUrl: string,
+): Promise<void> {
+  const subject = 'Ya casi estamos list@s ✨ Agenda tu sesión';
+  const html = getAsesoriaPostPaymentEmailHtml(schedulingUrl, masterclassUrl);
   await sendEmail(to, subject, html);
 }
 
