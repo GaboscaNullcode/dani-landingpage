@@ -41,7 +41,7 @@ export default function AsesoriaHero() {
             className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 shadow-md backdrop-blur-sm"
           >
             <Video className="h-4 w-4 text-coral" />
-            <span className="text-sm font-semibold text-gray-dark">Tu situación merece atención personalizada</span>
+            <span className="text-sm font-semibold text-gray-dark">Elige el acompañamiento adecuado para ti.</span>
           </motion.div>
 
           {/* Title */}
@@ -51,8 +51,8 @@ export default function AsesoriaHero() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="text-hero-title mb-6 font-[var(--font-headline)] font-bold text-gray-dark"
           >
-            Deja de dar vueltas.{' '}
-            <span className="gradient-text">Hablemos.</span>
+            El momento es ahora,{' '}
+            <span className="gradient-text">Vamos paso a paso.</span>
           </motion.h1>
 
           {/* Subtitle */}
@@ -63,7 +63,7 @@ export default function AsesoriaHero() {
             className="text-body-large mx-auto mb-10 max-w-2xl text-gray-carbon"
           >
             Una sesión conmigo puede ahorrarte meses de prueba y error.
-            Te doy claridad, un plan concreto y la confianza para dar el siguiente paso.
+            Te doy claridad, una estrategia concreta y la seguridad para avanzar con dirección.
           </motion.p>
 
           {/* Features */}
@@ -89,7 +89,7 @@ export default function AsesoriaHero() {
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-lavender/10">
                 <Clock className="h-5 w-5 text-lavender" />
               </div>
-              <span className="font-medium">Seguimiento incluido</span>
+              <span className="font-medium">Reporte incluido</span>
             </div>
           </motion.div>
 
@@ -107,7 +107,7 @@ export default function AsesoriaHero() {
                 boxShadow: '0 10px 40px rgba(255, 107, 107, 0.3)',
               }}
             >
-              <span>Ver Planes</span>
+              <span>Ver opciones</span>
               <ArrowDown className="h-4 w-4" />
             </a>
           </motion.div>

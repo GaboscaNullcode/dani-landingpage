@@ -18,13 +18,13 @@ export default function PlanesSection() {
         >
           <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-coral/10 px-4 py-2 text-sm font-semibold text-coral">
             <Sparkles className="h-4 w-4" />
-            Elige tu plan
+            Pensado para tí
           </span>
           <h2 className="text-section-title mb-4 font-[var(--font-headline)] font-bold text-gray-dark">
-            Planes de Asesoría
+            Elige tu Acompañamiento
           </h2>
           <p className="text-lg text-gray-carbon">
-            Dos opciones diseñadas para diferentes etapas de tu camino hacia el trabajo remoto.
+            Tres opciones diseñadas para diferentes etapas de tu camino hacia el trabajo remoto.
           </p>
         </motion.div>
 

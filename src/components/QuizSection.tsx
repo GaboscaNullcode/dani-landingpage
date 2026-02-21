@@ -117,7 +117,7 @@ const levelResults: Record<string, LevelResult> = {
     title: 'Estoy Explorando',
     subtitle: 'Nivel de Descubrimiento',
     description:
-      'Es normal sentir dudas al principio. Lo importante es que ya estás aquí buscando respuestas. Empieza con calma, sin presión, y descubre si esto es para ti.',
+      'Si te llama la atención el trabajo remoto pero todavía no sabes por dónde empezar, aquí tienes recursos gratuitos y claros para informarte sin presión.',
     icon: Compass,
     gradient: 'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
     shadowColor: 'rgba(167, 139, 250, 0.3)',
@@ -128,25 +128,25 @@ const levelResults: Record<string, LevelResult> = {
         price: 'Gratis',
         description: 'Recibe tips y recursos cada semana directo en tu correo',
         href: '/newsletter',
-        priority: 'primary',
+        priority: 'secondary',
         icon: Mail,
         gradient: 'var(--gradient-coral-pink)',
-        tag: 'Recomendado',
       },
       {
         name: 'Guía de Inicio',
         price: 'Gratis',
         description: 'Tu primer mapa mental del trabajo remoto',
-        href: '/recursos',
-        priority: 'secondary',
+        href: '/recursos-gratuitos',
+        priority: 'primary',
         icon: Gift,
         gradient: 'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
+        tag: 'Recomendado',
       },
       {
         name: 'Masterclass Gratuita',
         price: 'Gratis',
         description: 'Descubre si el mundo remoto es para ti',
-        href: '/recursos',
+        href: '/recursos-gratuitos',
         priority: 'secondary',
         icon: GraduationCap,
         gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
@@ -158,12 +158,22 @@ const levelResults: Record<string, LevelResult> = {
     title: 'Estoy confundid@',
     subtitle: 'Nivel de Preparación',
     description:
-      'El miedo a no saber es el más fácil de vencer: se cura con información correcta. Necesitas una guía clara que elimine la confusión y te dé un plan paso a paso.',
+      'Tienes la intención, pero la información suelta abruma. Aquí encuentras una ruta clara para empezar con orden y avanzar sin adivinar.',
     icon: HelpCircle,
     gradient: 'var(--gradient-coral-pink)',
     shadowColor: 'rgba(255, 107, 107, 0.3)',
     accentColor: '#e056a0',
     recommendations: [
+      {
+        name: 'eBook: Define tu Camino Remoto',
+        price: '$7 USD',
+        description: 'Clarifica tus objetivos y define tu ruta ideal',
+        href: '/tienda',
+        priority: 'secondary',
+        icon: BookOpen,
+        gradient: 'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
+        tag: 'Para Iniciar',
+      },
       {
         name: 'eBook: Guía Práctica para Iniciar',
         price: '$27 USD',
@@ -176,13 +186,15 @@ const levelResults: Record<string, LevelResult> = {
         tag: 'Más vendido',
       },
       {
-        name: 'eBook: Define tu Camino Remoto',
-        price: '$7 USD',
-        description: 'Clarifica tus objetivos y define tu ruta ideal',
+        name: 'Curso Completo: Paso a Paso + 6 Bonos',
+        price: '$47 USD',
+        description:
+          'La guía definitiva con todo incluido para lanzar tu carrera remota',
         href: '/tienda',
         priority: 'secondary',
-        icon: BookOpen,
-        gradient: 'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
+        icon: Layers,
+        gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
+        tag: 'Mejor opción',
       },
     ],
   },
@@ -191,28 +203,28 @@ const levelResults: Record<string, LevelResult> = {
     title: 'Estoy list@ para la acción',
     subtitle: 'Nivel Personalizado',
     description:
-      'Ya sabes que quieres esto. Ahora necesitas dejar de investigar y empezar a ejecutar con un sistema probado y acompañamiento que te lleve a resultados.',
+      'Tienes la decisión tomada y quieres postular con estrategia profesional YA. Buscas claridad total, feedback directo y un plan adaptado a tu caso.',
     icon: Rocket,
     gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
     shadowColor: 'rgba(224, 86, 160, 0.3)',
     accentColor: '#e056a0',
     recommendations: [
       {
-        name: 'Curso Completo: Paso a Paso + 6 Bonos',
-        price: '$47 USD',
-        description:
-          'La guía definitiva con todo incluido para lanzar tu carrera remota',
-        href: '/ebook-trabajo-remoto',
-        priority: 'primary',
-        icon: BookOpen,
-        gradient: 'var(--gradient-coral-pink)',
-        tag: 'Mejor valor',
-      },
-      {
         name: 'Programa Intensivo 1:1',
         price: '$155 USD',
         description:
-          '4 horas donde construimos juntas tu estrategia completa',
+          '4 horas donde construimos juntas tu estrategia completa para conseguir tu primer trabajo remoto',
+        href: '/asesorias',
+        priority: 'primary',
+        icon: MessageCircle,
+        gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
+        tag: 'Mejor inversión',
+      },
+      {
+        name: 'Sesión de Claridad',
+        price: '$66 USD',
+        description:
+          '1.5 horas para salir de la confusión con un plan claro y respuestas concretas',
         href: '/asesorias',
         priority: 'secondary',
         icon: MessageCircle,
@@ -335,40 +347,56 @@ function LevelAccordion({
           >
             <div className="border-t border-gray-light/50 px-5 pb-6 pt-5 sm:px-6">
               {/* Description */}
-              <p className="mb-6 font-[var(--font-dm-sans)] text-sm leading-relaxed text-gray-carbon">
-                {stage.description}
+              <p className="mb-5 font-[var(--font-dm-sans)] text-sm leading-relaxed text-gray-carbon">
+                {level.description}
               </p>
 
-              {/* Items */}
-              <ul className="mb-6 space-y-3">
-                {stage.items.map((item, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-start gap-3 text-gray-carbon"
+              {/* Resource Recommendations */}
+              <p className="mb-3 font-[var(--font-headline)] text-xs font-bold uppercase tracking-wider text-gray-medium">
+                Recursos recomendados
+              </p>
+              <div className="space-y-2.5">
+                {level.recommendations.map((rec) => (
+                  <Link
+                    key={rec.name}
+                    href={rec.href}
+                    className="group/card flex items-center gap-3 rounded-2xl bg-cream/60 p-3 transition-colors hover:bg-cream sm:gap-4 sm:p-4"
                   >
-                    <span
-                      className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-white"
-                      style={{ background: stage.gradient }}
+                    {/* Icon */}
+                    <div
+                      className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl text-white sm:h-12 sm:w-12"
+                      style={{ background: rec.gradient }}
                     >
-                      <Check className="h-3 w-3" />
-                    </span>
-                    <span className="text-sm">{item}</span>
-                  </li>
-                ))}
-              </ul>
+                      <rec.icon className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </div>
 
-              {/* CTA Button */}
-              <Link
-                href={stage.href}
-                className="btn-shimmer group/btn inline-flex items-center gap-2 rounded-full px-6 py-3 font-[var(--font-headline)] text-sm font-bold uppercase tracking-wide text-white transition-[transform,box-shadow] duration-500"
-                style={{
-                  background: stage.gradient,
-                  boxShadow: `0 10px 30px ${stage.shadowColor}`,
-                }}
-              >
-                <span>{stage.cta}</span>
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
-              </Link>
+                    {/* Content */}
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <h4 className="font-[var(--font-headline)] text-sm font-bold text-black-deep sm:text-base">
+                          {rec.name}
+                        </h4>
+                        {rec.tag && (
+                          <span className="rounded-full bg-gradient-to-r from-coral to-pink px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+                            {rec.tag}
+                          </span>
+                        )}
+                      </div>
+                      <p className="mt-0.5 line-clamp-1 text-xs text-gray-carbon sm:text-sm">
+                        {rec.description}
+                      </p>
+                    </div>
+
+                    {/* Price + Arrow */}
+                    <div className="flex flex-shrink-0 items-center gap-2 sm:gap-3">
+                      <span className="font-[var(--font-headline)] text-sm font-bold text-coral sm:text-base">
+                        {rec.price}
+                      </span>
+                      <ArrowRight className="h-4 w-4 text-gray-medium transition-transform group-hover/card:translate-x-1 group-hover/card:text-coral" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}
