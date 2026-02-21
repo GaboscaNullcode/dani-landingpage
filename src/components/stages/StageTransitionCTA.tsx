@@ -27,7 +27,7 @@ export default function StageTransitionCTA({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mx-auto max-w-xl font-[var(--font-headline)] text-2xl font-bold text-gray-dark md:text-3xl"
+          className="mx-auto max-w-2xl font-[var(--font-headline)] text-2xl font-bold text-gray-dark md:text-3xl"
         >
           {text}
         </motion.p>
