@@ -117,8 +117,8 @@ export async function getAvailableSlots(
   const dayEnd = `${fecha}T23:59:59`;
   const bloqueos = await getBloqueos(dayStart, dayEnd);
 
-  // 3. Get existing reservations for this date
-  const supabase = createAnonSupabase();
+  // 3. Get existing reservations for this date (service role bypasses RLS)
+  const supabase = getServiceSupabase();
   const { data: reservasExistentes } = await supabase
     .from('reservas')
     .select('fecha_hora, duracion_minutos')
