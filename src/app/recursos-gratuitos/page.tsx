@@ -36,9 +36,10 @@ export const metadata: Metadata = {
 export default function RecursosGratuitosPage() {
   return (
     <>
-      <Navigation darkHero />
+      <Navigation />
       <main id="main-content">
         <StageHero
+          variant="light"
           title="Descubre si el trabajo remoto es para ti"
           subtitle="Si estás empezando y tienes dudas, aquí encontrarás recursos claros y gratuitos para entender si este camino es para ti y avanzar con más tranquilidad."
         />
