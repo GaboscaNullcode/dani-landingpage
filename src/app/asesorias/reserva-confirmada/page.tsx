@@ -9,8 +9,30 @@ import {
 
 export default function ReservaConfirmadaPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-cream">
-      <div className="container-custom py-20 text-center">
+    <main
+      className="relative flex min-h-screen items-center justify-center overflow-hidden"
+      style={{
+        background:
+          'linear-gradient(135deg, #fef7f0 0%, #ffecd2 50%, #fce7f3 100%)',
+      }}
+    >
+      {/* Decorative blobs */}
+      <div
+        className="blob absolute -right-32 -top-32 h-[500px] w-[500px] opacity-30"
+        style={{
+          background:
+            'linear-gradient(135deg, rgba(255, 107, 107, 0.4) 0%, rgba(224, 86, 160, 0.3) 100%)',
+        }}
+      />
+      <div
+        className="blob absolute -left-32 bottom-0 h-[400px] w-[400px] opacity-20"
+        style={{
+          background:
+            'linear-gradient(135deg, rgba(167, 139, 250, 0.4) 0%, rgba(110, 231, 183, 0.3) 100%)',
+        }}
+      />
+
+      <div className="container-custom relative z-10 py-20 md:py-28 text-center">
         <div className="mx-auto max-w-md">
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
             <CheckCircle className="h-10 w-10 text-green-500" />

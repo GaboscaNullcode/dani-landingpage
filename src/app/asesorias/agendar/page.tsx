@@ -43,8 +43,30 @@ export default async function AgendarPage({ searchParams }: AgendarPageProps) {
   const config = await getCalendarConfig();
 
   return (
-    <main className="min-h-screen bg-cream">
-      <div className="container-custom py-12 md:py-20">
+    <main
+      className="relative min-h-screen overflow-hidden"
+      style={{
+        background:
+          'linear-gradient(135deg, #fef7f0 0%, #ffecd2 50%, #fce7f3 100%)',
+      }}
+    >
+      {/* Decorative blobs */}
+      <div
+        className="blob absolute -right-32 -top-32 h-[500px] w-[500px] opacity-30"
+        style={{
+          background:
+            'linear-gradient(135deg, rgba(255, 107, 107, 0.4) 0%, rgba(224, 86, 160, 0.3) 100%)',
+        }}
+      />
+      <div
+        className="blob absolute -left-32 bottom-0 h-[400px] w-[400px] opacity-20"
+        style={{
+          background:
+            'linear-gradient(135deg, rgba(167, 139, 250, 0.4) 0%, rgba(110, 231, 183, 0.3) 100%)',
+        }}
+      />
+
+      <div className="container-custom relative z-10 py-20 md:py-28">
         {/* Header */}
         <div className="mb-12 text-center">
           <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-coral/10 px-4 py-2 text-sm font-semibold text-coral">
