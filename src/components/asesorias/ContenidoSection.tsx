@@ -52,10 +52,14 @@ export default function ContenidoSection() {
               Lo que trabajaremos
             </span>
             <h2 className="text-section-title mb-4 font-[var(--font-headline)] font-bold text-gray-dark">
-              Contenido de las Asesorías
+              Qué podemos trabajar según tu plan
             </h2>
             <p className="text-lg text-gray-carbon">
-              Cada sesión está diseñada para darte herramientas prácticas y resultados tangibles.
+              Cada acompañamiento se adapta a tu momento.{' '}
+              <strong className="font-semibold text-gray-dark">
+                Dependiendo del plan que elijas
+              </strong>
+              , trabajaremos algunas o todas estas áreas:
             </p>
           </motion.div>
 

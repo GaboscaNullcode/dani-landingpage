@@ -29,7 +29,7 @@ export default function PlanesSection() {
         </motion.div>
 
         {/* Plans Grid */}
-        <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-2">
+        <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-3">
           {planes.map((plan, index) => (
             <motion.div
               key={plan.id}
@@ -37,7 +37,7 @@ export default function PlanesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.15 }}
-              className={`relative overflow-hidden rounded-3xl p-8 transition-all duration-300 hover:-translate-y-2 ${
+              className={`relative flex flex-col overflow-hidden rounded-3xl p-8 transition-all duration-300 hover:-translate-y-2 ${
                 plan.isPopular
                   ? 'bg-gradient-to-br from-gray-dark to-black-deep text-white shadow-[0_20px_60px_rgba(0,0,0,0.2)]'
                   : 'bg-white shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-gray-light'
@@ -85,7 +85,12 @@ export default function PlanesSection() {
               </p>
 
               {/* Features */}
-              <ul className="mb-8 space-y-3">
+              {plan.featuresTitle && (
+                <p className={`mb-3 text-sm font-semibold ${plan.isPopular ? 'text-white' : 'text-gray-dark'}`}>
+                  {plan.featuresTitle}
+                </p>
+              )}
+              <ul className="mb-4 space-y-3">
                 {plan.features.map((feature, idx) => (
                   <li key={idx} className="flex items-start gap-3">
                     <div className={`mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full ${
@@ -100,12 +105,19 @@ export default function PlanesSection() {
                 ))}
               </ul>
 
+              {/* Note */}
+              {plan.note && (
+                <p className={`mb-8 text-xs italic leading-relaxed ${plan.isPopular ? 'text-gray-400' : 'text-gray-medium'}`}>
+                  {plan.note}
+                </p>
+              )}
+
               {/* CTA */}
               <a
                 href={plan.ctaLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`btn-shimmer block w-full rounded-full py-4 text-center font-[var(--font-headline)] font-bold transition-all hover:-translate-y-1 ${
+                className={`btn-shimmer mt-auto block w-full rounded-full py-4 text-center font-[var(--font-headline)] font-bold transition-all hover:-translate-y-1 ${
                   plan.isPopular
                     ? 'bg-white text-gray-dark hover:shadow-[0_15px_40px_rgba(255,255,255,0.2)]'
                     : 'text-white hover:shadow-[0_15px_40px_rgba(255,107,107,0.4)]'

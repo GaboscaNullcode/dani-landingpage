@@ -6,7 +6,9 @@ export interface Plan {
   currency: 'USD';
   duration: string;
   description: string;
+  featuresTitle?: string;
   features: string[];
+  note?: string;
   isPopular: boolean;
   ctaText: string;
   ctaLink: string;
@@ -20,24 +22,52 @@ export interface ContenidoItem {
 
 export const planes: Plan[] = [
   {
+    id: 'consultoria',
+    name: 'Consultoría 1:1',
+    subtitle: 'Para revisiones puntuales',
+    price: 39,
+    currency: 'USD',
+    duration: '45 minutos',
+    description:
+      'Para ti que ya estás intentando avanzar, pero sientes que algo no está funcionando. Esta sesión es ideal si necesitas una revisión estratégica, resolver dudas específicas o entender qué está fallando en tu proceso.',
+    featuresTitle: 'En esta sesión:',
+    features: [
+      'Analizamos tu situación actual con enfoque estratégico',
+      'Revisamos tus documentos o perfil',
+      'Identificamos qué está frenando tus resultados',
+      'Definimos tu próximo paso concreto',
+      'Te llevas tareas claras para aplicar',
+      'Reporte post-sesión con correcciones',
+    ],
+    note: 'Esta es una sesión de revisión puntual que incluye el reporte post-sesión. No contempla seguimiento posterior ni acceso a la comunidad privada.',
+    isPopular: false,
+    ctaText: 'Quiero mi consultoría',
+    ctaLink: 'https://calendly.com/remotecondani/consultoria',
+  },
+  {
     id: 'iniciando',
-    name: 'Sesión de Claridad',
-    subtitle: 'Para salir de la confusión',
+    name: 'Asesoría 1:1',
+    subtitle: 'Para avanzar con claridad y dirección',
     price: 66,
     currency: 'USD',
     duration: '1.5 horas',
     description:
-      'Para ti que llevas semanas (o meses) dando vueltas sin saber qué hacer primero. Saldrás con un plan claro y las respuestas que necesitas.',
+      'Si necesitas claridad profunda y una estrategia concreta para empezar o avanzar, esta sesión es para ti. Aquí trabajamos tu situación completa y diseñamos un plan accionable.',
+    featuresTitle: 'Tú eliges el enfoque:',
     features: [
-      'Analizamos tu situación actual sin rodeos',
-      'Identificamos qué está frenándote realmente',
-      'Definimos tu próximo paso concreto',
-      'Plan de acción para tus primeras 2 semanas',
-      'Lista de recursos específicos para ti',
-      'Seguimiento por email (7 días)',
+      'Analizamos tu punto de partida',
+      'Identificamos bloqueos reales',
+      'Revisión de perfil o documentos',
+      'Estrategia clara y personalizada',
+      'Plan de acción para las próximas 2 semanas',
+      'Lista de recursos específicos',
+      'Reporte post-sesión',
+      '1 revisión post-sesión vía email',
+      'Acceso a la Comunidad Privada RCD',
     ],
+    note: 'Llega con tus preguntas y objetivo definido para aprovechar al máximo la sesión.',
     isPopular: false,
-    ctaText: 'Quiero mi sesión',
+    ctaText: 'Quiero mi asesoría',
     ctaLink: 'https://calendly.com/remotecondani/iniciando',
   },
   {
@@ -71,33 +101,39 @@ export const planes: Plan[] = [
 
 export const contenidoAsesoria: ContenidoItem[] = [
   {
-    title: 'Saber por dónde empezar',
-    description: 'Se acabó la parálisis por análisis. Identificamos tu punto de partida real y qué hacer primero.',
+    title: 'Claridad sobre por dónde empezar',
+    description:
+      'Identificamos tu punto de partida real y el primer paso estratégico.',
     icon: 'target',
   },
   {
     title: 'Un perfil que te represente',
-    description: 'Aprenderás a presentarte sin sonar genérica ni copiar lo que hacen todos.',
+    description:
+      'Te ayudo a presentarte con enfoque profesional, sin sonar genérica ni copiar fórmulas vacías.',
     icon: 'user',
   },
   {
-    title: 'Propuestas que funcionan',
-    description: 'Te enseño el método que uso yo para escribir propuestas que obtienen respuesta.',
+    title: 'Propuestas que generan respuesta',
+    description:
+      'Aprendes cómo estructurar propuestas que aumentan tus probabilidades de respuesta.',
     icon: 'file-text',
   },
   {
     title: 'Confianza para negociar',
-    description: 'Cómo responder cuando te piden descuentos o dudan de ti, sin perder el proyecto.',
+    description:
+      'Cómo responder ante descuentos o dudas sin perder el proyecto.',
     icon: 'message-circle',
   },
   {
-    title: 'Precios que reflejen tu valor',
-    description: 'Define tarifas con las que te sientas bien, sin subestimarte ni perder oportunidades.',
+    title: 'Precios alineados a tu valor',
+    description:
+      'Definimos tarifas estratégicas con las que te sientas segura.',
     icon: 'dollar-sign',
   },
   {
-    title: 'Un plan que puedas seguir',
-    description: 'Pasos concretos, realistas, que puedas ejecutar esta misma semana.',
+    title: 'Un plan accionable',
+    description:
+      'Pasos concretos y realistas que puedas ejecutar esta misma semana.',
     icon: 'check-circle',
   },
 ];
