@@ -188,6 +188,7 @@ export function getBookingConfirmationEmailHtml(
   duracion: number,
   timezone: string,
   zoomUrl?: string,
+  masterclassUrl?: string,
 ): string {
   const duracionText =
     duracion >= 60
@@ -195,25 +196,36 @@ export function getBookingConfirmationEmailHtml(
       : `${duracion} minutos`;
 
   const content = `
-    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Tu sesion esta confirmada!</h2>
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Tu sesión con Dani está confirmada ✨</h2>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Hola <strong style="color:${BRAND.dark};">${name}</strong>, tu <strong style="color:${BRAND.dark};">${planName}</strong> ha sido agendada.
+      Hola 💛
+    </p>
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Tu sesión ya está agendada.
     </p>
     <table role="presentation" cellpadding="0" cellspacing="0" style="background-color:${BRAND.cream};border-radius:8px;width:100%;margin-bottom:24px;">
       <tr>
         <td style="padding:20px;">
-          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Fecha:</p>
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">📅 Fecha:</p>
           <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${fecha}</p>
-          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Hora:</p>
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">🕒 Hora:</p>
           <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${hora} (${timezone})</p>
-          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Duracion:</p>
-          <p style="margin:0;font-size:16px;color:${BRAND.dark};font-weight:600;">${duracionText}</p>
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">⏱️ Duración:</p>
+          <p style="margin:0 0 ${zoomUrl ? '16px' : '0'};font-size:16px;color:${BRAND.dark};font-weight:600;">${duracionText}</p>
+          ${zoomUrl ? `<p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">🔗 Enlace de Zoom:</p>
+          <p style="margin:0;font-size:16px;"><a href="${zoomUrl}" style="color:${BRAND.coral};font-weight:600;text-decoration:underline;">Unirme a la sesión</a></p>` : `<p style="margin:0;font-size:14px;color:${BRAND.gray};">El enlace de la sesión será enviado por separado.</p>`}
         </td>
       </tr>
     </table>
-    ${zoomUrl ? button('Unirme a la sesion (Zoom)', zoomUrl) : `<p style="margin:0 0 0;color:${BRAND.gray};font-size:14px;">El enlace de la sesion sera enviado por separado.</p>`}
-    <p style="margin:24px 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
-      Si necesitas reprogramar o tienes dudas, responde a este email.
+    ${masterclassUrl ? `<p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Te recomiendo ver la <a href="${masterclassUrl}" style="color:${BRAND.coral};font-weight:600;text-decoration:underline;">masterclass gratuita</a> antes de nuestra sesión para que llegues con más contexto y podamos enfocarnos directamente en tu caso.
+    </p>` : ''}
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:14px;line-height:1.6;">
+      Si necesitas reprogramar, revisa los términos y condiciones antes de hacerlo.
+    </p>
+    <p style="margin:0;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Nos vemos pronto,<br>
+      Dani ✨
     </p>`;
   return baseLayout(content);
 }

@@ -198,8 +198,9 @@ export async function sendBookingConfirmationEmail(
   duracion: number,
   timezone: string,
   zoomUrl?: string,
+  masterclassUrl?: string,
 ): Promise<void> {
-  const subject = `Tu sesion de ${planName} esta confirmada`;
+  const subject = 'Tu sesión con Dani está confirmada ✨';
   const html = getBookingConfirmationEmailHtml(
     name,
     planName,
@@ -208,6 +209,7 @@ export async function sendBookingConfirmationEmail(
     duracion,
     timezone,
     zoomUrl,
+    masterclassUrl,
   );
   await sendEmail(to, subject, html);
 }

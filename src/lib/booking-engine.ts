@@ -147,6 +147,9 @@ export async function createBooking(
     });
     const formattedTime = hora;
 
+    const domain = process.env.NEXT_PUBLIC_DOMAIN || 'https://remotecondani.com';
+    const masterclassUrl = `${domain}/tienda/masterclass-gratuita`;
+
     Promise.allSettled([
       sendBookingConfirmationEmail(
         clientEmail,
@@ -157,6 +160,7 @@ export async function createBooking(
         duracionMinutos,
         timezone,
         zoomJoinUrl,
+        masterclassUrl,
       ),
       sendBookingNotificationToDani(
         clientName,
