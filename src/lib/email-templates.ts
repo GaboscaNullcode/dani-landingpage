@@ -178,6 +178,24 @@ export function getAsesoriaPostPaymentEmailHtml(
   return baseLayout(content);
 }
 
+// ── Password reset email ──
+
+export function getPasswordResetEmailHtml(resetUrl: string): string {
+  const content = `
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Restablece tu contrasena</h2>
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Recibimos una solicitud para restablecer tu contrasena. Haz clic en el boton para crear una nueva:
+    </p>
+    ${button('Restablecer Contrasena', resetUrl)}
+    <p style="margin:24px 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
+      Si no solicitaste esto, puedes ignorar este email. Tu contrasena no cambiara.
+    </p>
+    <p style="margin:8px 0 0;color:${BRAND.gray};font-size:13px;line-height:1.6;">
+      Este enlace expira en 1 hora.
+    </p>`;
+  return baseLayout(content);
+}
+
 // ── Booking emails ──
 
 export function getBookingConfirmationEmailHtml(

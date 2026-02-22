@@ -175,14 +175,26 @@ export async function changeUserPassword(
 }
 
 /**
- * Request a password reset email.
+ * Request a password reset email via Brevo.
+ * Uses admin.generateLink() to create a secure recovery link,
+ * then sends it via Brevo for consistent branding.
  */
 export async function requestPasswordReset(email: string): Promise<void> {
-  const supabase = await createServerSupabase();
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_DOMAIN}/mi-cuenta/login`,
+  const { sendPasswordResetEmail } = await import('./brevo');
+  const supabase = getServiceSupabase();
+
+  const redirectTo = `${process.env.NEXT_PUBLIC_DOMAIN}/mi-cuenta/reset-password`;
+
+  const { data, error } = await supabase.auth.admin.generateLink({
+    type: 'recovery',
+    email,
+    options: { redirectTo },
   });
+
   if (error) throw error;
+
+  const actionLink = data.properties.action_link;
+  await sendPasswordResetEmail(email, actionLink);
 }
 
 /**

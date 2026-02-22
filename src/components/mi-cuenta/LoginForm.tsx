@@ -2,11 +2,17 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { motion } from 'motion/react';
-import { LogIn, Loader2, Sparkles, UserPlus } from 'lucide-react';
+import {
+  LogIn,
+  Loader2,
+  Sparkles,
+  UserPlus,
+  Mail,
+  ArrowLeft,
+} from 'lucide-react';
 
-type Mode = 'login' | 'signup';
+type Mode = 'login' | 'signup' | 'forgot';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -16,6 +22,7 @@ export default function LoginForm() {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [forgotSuccess, setForgotSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,6 +30,22 @@ export default function LoginForm() {
     setLoading(true);
 
     try {
+      if (mode === 'forgot') {
+        const res = await fetch('/api/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+
+        if (!res.ok) {
+          setError('Error al enviar el enlace. Intenta de nuevo.');
+          return;
+        }
+
+        setForgotSuccess(true);
+        return;
+      }
+
       if (mode === 'signup') {
         const res = await fetch('/api/auth/signup', {
           method: 'POST',
@@ -62,9 +85,19 @@ export default function LoginForm() {
   const switchMode = (newMode: Mode) => {
     setMode(newMode);
     setError('');
+    setForgotSuccess(false);
   };
 
   const isLogin = mode === 'login';
+  const isForgot = mode === 'forgot';
+
+  const badgeText = isForgot
+    ? 'Recuperar acceso'
+    : isLogin
+      ? 'Bienvenido/a de vuelta'
+      : 'Unete a la comunidad';
+
+  const BadgeIcon = isForgot ? Mail : isLogin ? LogIn : UserPlus;
 
   return (
     <div className="relative mx-auto w-full max-w-md">
@@ -125,7 +158,7 @@ export default function LoginForm() {
               <Sparkles className="h-4 w-4 text-coral" />
             </motion.div>
             <span className="text-xs font-semibold text-coral">
-              {isLogin ? 'Bienvenido/a de vuelta' : 'Unete a la comunidad'}
+              {badgeText}
             </span>
           </motion.div>
 
@@ -135,38 +168,36 @@ export default function LoginForm() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-coral to-pink"
           >
-            {isLogin ? (
-              <LogIn className="h-6 w-6 text-white" />
-            ) : (
-              <UserPlus className="h-6 w-6 text-white" />
-            )}
+            <BadgeIcon className="h-6 w-6 text-white" />
           </motion.div>
 
-          {/* Tabs */}
-          <div className="mb-4 flex rounded-xl bg-gray-light/40 p-1">
-            <button
-              type="button"
-              onClick={() => switchMode('signup')}
-              className={`flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition-all ${
-                !isLogin
-                  ? 'bg-white text-coral shadow-sm'
-                  : 'text-gray-medium hover:text-gray-dark'
-              }`}
-            >
-              Crear cuenta
-            </button>
-            <button
-              type="button"
-              onClick={() => switchMode('login')}
-              className={`flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition-all ${
-                isLogin
-                  ? 'bg-white text-coral shadow-sm'
-                  : 'text-gray-medium hover:text-gray-dark'
-              }`}
-            >
-              Iniciar sesion
-            </button>
-          </div>
+          {/* Tabs (hidden in forgot mode) */}
+          {!isForgot && (
+            <div className="mb-4 flex rounded-xl bg-gray-light/40 p-1">
+              <button
+                type="button"
+                onClick={() => switchMode('signup')}
+                className={`flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition-all ${
+                  !isLogin
+                    ? 'bg-white text-coral shadow-sm'
+                    : 'text-gray-medium hover:text-gray-dark'
+                }`}
+              >
+                Crear cuenta
+              </button>
+              <button
+                type="button"
+                onClick={() => switchMode('login')}
+                className={`flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition-all ${
+                  isLogin
+                    ? 'bg-white text-coral shadow-sm'
+                    : 'text-gray-medium hover:text-gray-dark'
+                }`}
+              >
+                Iniciar sesion
+              </button>
+            </div>
+          )}
 
           <motion.p
             initial={{ opacity: 0 }}
@@ -174,121 +205,152 @@ export default function LoginForm() {
             transition={{ duration: 0.5, delay: 0.5 }}
             className="mt-2 text-sm text-gray-medium"
           >
-            {isLogin
-              ? 'Accede a tus productos y recursos'
-              : 'Crea tu cuenta para acceder a todo'}
+            {isForgot
+              ? 'Ingresa tu email y te enviaremos un enlace'
+              : isLogin
+                ? 'Accede a tus productos y recursos'
+                : 'Crea tu cuenta para acceder a todo'}
           </motion.p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {!isLogin && (
+        {isForgot && forgotSuccess ? (
+          <motion.div
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-4"
+          >
+            <div className="rounded-xl bg-green-50 px-4 py-3 text-center text-sm text-green-700">
+              Si el email existe en nuestro sistema, recibiras un enlace para
+              restablecer tu contrasena. Revisa tu bandeja de entrada.
+            </div>
+            <button
+              type="button"
+              onClick={() => switchMode('login')}
+              className="mx-auto flex items-center gap-2 text-sm text-gray-medium transition-colors hover:text-coral"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Volver al inicio de sesion
+            </button>
+          </motion.div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {!isLogin && !isForgot && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <label
+                  htmlFor="name"
+                  className="mb-1 block text-sm font-semibold text-gray-dark"
+                >
+                  Nombre
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Tu nombre"
+                  className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
+                  autoComplete="name"
+                />
+              </motion.div>
+            )}
+
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
             >
               <label
-                htmlFor="name"
+                htmlFor="email"
                 className="mb-1 block text-sm font-semibold text-gray-dark"
               >
-                Nombre
+                Email
               </label>
               <input
-                id="name"
-                type="text"
+                id="email"
+                type="email"
                 required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Tu nombre"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="tu@email.com"
                 className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
-                autoComplete="name"
+                autoComplete="email"
+                spellCheck={false}
               />
             </motion.div>
-          )}
 
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-          >
-            <label
-              htmlFor="email"
-              className="mb-1 block text-sm font-semibold text-gray-dark"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="tu@email.com"
-              className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
-              autoComplete="email"
-              spellCheck={false}
-            />
-          </motion.div>
+            {!isForgot && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+              >
+                <label
+                  htmlFor="password"
+                  className="mb-1 block text-sm font-semibold text-gray-dark"
+                >
+                  Contrasena
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  required
+                  minLength={mode === 'signup' ? 6 : undefined}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder={
+                    isLogin ? 'Tu contrasena' : 'Minimo 6 caracteres'
+                  }
+                  className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
+                  autoComplete={isLogin ? 'current-password' : 'new-password'}
+                />
+              </motion.div>
+            )}
 
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <label
-              htmlFor="password"
-              className="mb-1 block text-sm font-semibold text-gray-dark"
-            >
-              Contrasena
-            </label>
-            <input
-              id="password"
-              type="password"
-              required
-              minLength={mode === 'signup' ? 6 : undefined}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder={
-                isLogin ? 'Tu contrasena' : 'Minimo 6 caracteres'
-              }
-              className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
-              autoComplete={isLogin ? 'current-password' : 'new-password'}
-            />
-          </motion.div>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600"
+              >
+                {error}
+              </motion.div>
+            )}
 
-          {error && (
             <motion.div
-              initial={{ opacity: 0, y: -5 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600"
+              transition={{ duration: 0.5, delay: 0.7 }}
             >
-              {error}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-xl bg-gradient-to-r from-coral to-pink px-6 py-3 font-bold text-white shadow-lg transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-60 disabled:hover:translate-y-0"
+              >
+                {loading ? (
+                  <span className="inline-flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    {isForgot
+                      ? 'Enviando...'
+                      : isLogin
+                        ? 'Ingresando…'
+                        : 'Creando cuenta…'}
+                  </span>
+                ) : isForgot ? (
+                  'Enviar enlace'
+                ) : isLogin ? (
+                  'Iniciar Sesion'
+                ) : (
+                  'Crear Cuenta'
+                )}
+              </button>
             </motion.div>
-          )}
-
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.7 }}
-          >
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-xl bg-gradient-to-r from-coral to-pink px-6 py-3 font-bold text-white shadow-lg transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-60 disabled:hover:translate-y-0"
-            >
-              {loading ? (
-                <span className="inline-flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  {isLogin ? 'Ingresando…' : 'Creando cuenta…'}
-                </span>
-              ) : isLogin ? (
-                'Iniciar Sesion'
-              ) : (
-                'Crear Cuenta'
-              )}
-            </button>
-          </motion.div>
-        </form>
+          </form>
+        )}
 
         {isLogin && (
           <motion.div
@@ -297,12 +359,31 @@ export default function LoginForm() {
             transition={{ duration: 0.5, delay: 0.8 }}
             className="mt-6 text-center"
           >
-            <Link
-              href="/mi-cuenta/login"
+            <button
+              type="button"
+              onClick={() => switchMode('forgot')}
               className="text-sm text-gray-medium transition-colors hover:text-coral"
             >
               ¿Olvidaste tu contrasena?
-            </Link>
+            </button>
+          </motion.div>
+        )}
+
+        {isForgot && !forgotSuccess && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            className="mt-6 text-center"
+          >
+            <button
+              type="button"
+              onClick={() => switchMode('login')}
+              className="inline-flex items-center gap-2 text-sm text-gray-medium transition-colors hover:text-coral"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Volver al inicio de sesion
+            </button>
           </motion.div>
         )}
       </motion.div>

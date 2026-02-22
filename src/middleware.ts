@@ -4,7 +4,7 @@ import { updateSession } from '@/lib/supabase/middleware';
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname === '/mi-cuenta/login') {
+  if (pathname === '/mi-cuenta/login' || pathname === '/mi-cuenta/reset-password') {
     return NextResponse.next();
   }
 

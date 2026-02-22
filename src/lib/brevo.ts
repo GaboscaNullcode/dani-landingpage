@@ -11,6 +11,7 @@ import {
   getWelcomeEmailHtml,
   getCommunityEmailHtml,
   getNewsletterWelcomeEmailHtml,
+  getPasswordResetEmailHtml,
   getBookingConfirmationEmailHtml,
   getBookingNotificationEmailHtml,
   getBookingReminderEmailHtml,
@@ -150,6 +151,17 @@ export async function sendNewsletterWelcomeEmail(
     process.env.NEWSLETTER_GUIDE_URL || 'https://remotecondani.com/newsletter';
   const subject = 'Tu guia gratuita esta aqui';
   const html = getNewsletterWelcomeEmailHtml(name, guideUrl);
+  await sendEmail(to, subject, html);
+}
+
+// ── Password reset email ──
+
+export async function sendPasswordResetEmail(
+  to: string,
+  resetUrl: string,
+): Promise<void> {
+  const subject = 'Restablece tu contrasena';
+  const html = getPasswordResetEmailHtml(resetUrl);
   await sendEmail(to, subject, html);
 }
 
