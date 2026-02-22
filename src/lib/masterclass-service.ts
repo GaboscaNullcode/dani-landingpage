@@ -19,6 +19,7 @@ function transformTestimonioRecord(
     socialNetwork: record.red_social,
     socialUsername: record.usuario_red_social,
     icon: record.icono,
+    avatarUrl: record.avatar_url,
   };
 }
 

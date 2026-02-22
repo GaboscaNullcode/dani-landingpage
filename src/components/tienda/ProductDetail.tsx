@@ -12,7 +12,6 @@ import {
   Play,
   Users,
   ArrowLeft,
-  Sparkles,
   Gift,
 } from 'lucide-react';
 import type { Product } from '@/types/tienda';
@@ -39,23 +38,6 @@ const categoryLabels: Record<string, string> = {
   gratis: 'Recurso Gratuito',
 };
 
-// Testimonios de ejemplo (se podrían mover a un archivo de datos)
-const testimonials = [
-  {
-    name: 'María González',
-    role: 'Asistente Virtual',
-    content:
-      'Este recurso cambió completamente mi perspectiva. Las estrategias son claras y prácticas.',
-    avatar: '/images/testimonials/avatar-1.jpg',
-  },
-  {
-    name: 'Laura Mendez',
-    role: 'Freelancer',
-    content:
-      'Gracias a esto conseguí mis primeros 3 clientes en menos de un mes. Totalmente recomendado.',
-    avatar: '/images/testimonials/avatar-2.jpg',
-  },
-];
 
 export default function ProductDetail({ product }: ProductDetailProps) {
   const CategoryIcon = categoryIcons[product.category] || Download;
@@ -236,54 +218,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               fill="#ffffff"
             />
           </svg>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-20 bg-white">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mx-auto mb-12 max-w-2xl text-center"
-          >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-coral/10 px-4 py-2 text-sm font-semibold text-coral">
-              <Sparkles className="h-4 w-4" />
-              Testimonios
-            </span>
-            <h2 className="text-section-title mb-4 font-[var(--font-headline)] font-bold text-gray-dark">
-              Lo que dicen quienes lo han probado
-            </h2>
-          </motion.div>
-
-          <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={testimonial.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="rounded-2xl bg-cream p-6"
-              >
-                <div className="mb-4 flex gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-sunshine text-sunshine" />
-                  ))}
-                </div>
-                <p className="mb-4 italic text-gray-carbon">&ldquo;{testimonial.content}&rdquo;</p>
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-gradient-to-br from-coral to-pink" />
-                  <div>
-                    <p className="font-semibold text-gray-dark">{testimonial.name}</p>
-                    <p className="text-sm text-gray-medium">{testimonial.role}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 

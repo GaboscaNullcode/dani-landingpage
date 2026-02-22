@@ -1,11 +1,12 @@
 'use client';
 
 import { useRef } from 'react';
+import Image from 'next/image';
 import { motion, useInView } from 'motion/react';
-import { Star, Instagram, Quote } from 'lucide-react';
+import { Star, Instagram, Quote, User } from 'lucide-react';
 import type { TestimonioMasterclass } from '@/types/masterclass';
 
-interface TestimonialGridProps {
+interface TestimonialCarouselProps {
   testimonials: TestimonioMasterclass[];
 }
 
@@ -62,9 +63,9 @@ function TestimonialCard({
           <Quote className="h-24 w-24" strokeWidth={1} />
         </motion.div>
 
-        {/* Header: Emoji avatar + Social badge */}
+        {/* Header: Avatar + Social badge */}
         <div className="mb-5 flex items-start justify-between">
-          {/* Emoji avatar with gradient ring */}
+          {/* Avatar with gradient ring */}
           <div className="relative">
             <motion.div
               className="absolute -inset-1 rounded-full opacity-80"
@@ -78,9 +79,24 @@ function TestimonialCard({
                 ease: 'linear',
               }}
             />
-            <div className="relative flex h-14 w-14 items-center justify-center rounded-full border-[3px] border-white bg-white text-2xl shadow-lg">
-              {testimonial.icon}
-            </div>
+            {testimonial.avatarUrl ? (
+              <div className="relative h-14 w-14 overflow-hidden rounded-full border-[3px] border-white shadow-lg">
+                <Image
+                  src={testimonial.avatarUrl}
+                  alt={testimonial.name}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  sizes="56px"
+                />
+              </div>
+            ) : (
+              <div className="relative flex h-14 w-14 items-center justify-center rounded-full border-[3px] border-white bg-white shadow-lg">
+                <User
+                  className="h-6 w-6"
+                  style={{ color: gradient.from }}
+                />
+              </div>
+            )}
             {/* Pulse indicator */}
             <motion.div
               className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full border-2 border-white"
@@ -109,7 +125,7 @@ function TestimonialCard({
                 className="text-xs font-semibold"
                 style={{ color: gradient.from }}
               >
-                Instagram
+                {testimonial.socialNetwork}
               </span>
             </motion.div>
           )}
@@ -163,9 +179,9 @@ function TestimonialCard({
   );
 }
 
-export default function TestimonialGrid({
+export default function TestimonialCarousel({
   testimonials,
-}: TestimonialGridProps) {
+}: TestimonialCarouselProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 

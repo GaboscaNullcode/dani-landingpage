@@ -11,6 +11,7 @@ export interface TestimonioMasterclassRecord {
   icono: string;
   activo: boolean;
   orden: number;
+  avatar_url: string | null;
 }
 
 // Frontend model
@@ -23,6 +24,7 @@ export interface TestimonioMasterclass {
   socialNetwork: string | null;
   socialUsername: string | null;
   icon: string;
+  avatarUrl: string | null;
 }
 
 // Masterclass content from programa_contenido table

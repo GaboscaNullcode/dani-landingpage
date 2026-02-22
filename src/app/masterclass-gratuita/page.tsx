@@ -1,10 +1,10 @@
 import { Metadata } from 'next';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import TestimonialsSection from '@/components/TestimonialsSection';
 import {
   MasterclassHero,
   MasterclassResources,
-  MasterclassTestimonials,
 } from '@/components/masterclass';
 import VideoPlayer from '@/components/mi-cuenta/programa-intensivo/VideoPlayer';
 import MasterclassCTA from '@/components/masterclass/MasterclassCTA';
@@ -82,7 +82,17 @@ export default async function MasterclassGratuitaPage() {
         )}
 
         {/* Testimonials */}
-        <MasterclassTestimonials />
+        <TestimonialsSection
+          id="testimonios-masterclass"
+          badge="Testimonios reales"
+          title={
+            <>
+              Lo que dicen quienes{' '}
+              <span className="gradient-text-playful">ya la vieron.</span>
+            </>
+          }
+          subtitle="Historias de personas que dieron el primer paso con esta masterclass"
+        />
 
         {/* CTA */}
         <MasterclassCTA />
