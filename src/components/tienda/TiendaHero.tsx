@@ -9,7 +9,7 @@ export default function TiendaHero() {
       className="relative overflow-hidden"
       style={{
         paddingTop: 'var(--hero-padding-top)',
-        paddingBottom: 'var(--section-padding)',
+        paddingBottom: 'clamp(2.5rem, 5vw, 4rem)',
         background: 'linear-gradient(135deg, #fef7f0 0%, #ffecd2 50%, #fce7f3 100%)',
       }}
     >
@@ -102,7 +102,7 @@ export default function TiendaHero() {
       </div>
 
       <div className="container-custom relative z-10">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -116,7 +116,7 @@ export default function TiendaHero() {
             >
               <Sparkles className="h-4 w-4 text-coral" />
             </motion.div>
-            <span className="font-[var(--font-dm-sans)] text-sm font-semibold uppercase tracking-wider text-gray-carbon">
+            <span className="font-[var(--font-dm-sans)] text-sm font-semibold tracking-wider text-gray-carbon">
               Todo lo que necesitas para empezar
             </span>
           </motion.div>
@@ -126,11 +126,12 @@ export default function TiendaHero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="mb-6 font-[var(--font-headline)] text-[clamp(2.5rem,7vw,4.5rem)] font-bold leading-[1.1] text-black-deep"
+            className="mb-6 font-[var(--font-headline)] text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[1.2] text-black-deep"
           >
-            Deja de improvisar.{' '}
+            Menos confusión. Más claridad.
+            <br />
             <span className="relative inline-block">
-              <span className="gradient-text">Elige tu recurso</span>
+              <span className="gradient-text">Empieza tu camino remoto con guía.</span>
               <motion.span
                 className="absolute -bottom-2 left-0 h-[4px] w-full rounded-full"
                 style={{ background: 'linear-gradient(90deg, #ff6b6b, #e056a0)' }}
@@ -147,38 +148,14 @@ export default function TiendaHero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mx-auto max-w-xl text-lg leading-relaxed text-gray-carbon md:text-xl"
+            className="mx-auto max-w-2xl text-lg leading-relaxed text-gray-carbon md:text-xl"
           >
-            Guías, cursos y herramientas que te dan claridad y te ahorran
-            meses de prueba y error.
+            Guías, cursos y herramientas diseñadas para darte claridad y
+            ahorrarte meses de prueba y error. Aquí encontrarás recursos
+            prácticos para avanzar con seguridad — sin sentirte perdida ni
+            saturada.
           </motion.p>
 
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="mt-10 flex flex-wrap items-center justify-center gap-8 md:gap-12"
-          >
-            {[
-              { number: '500+', label: 'Personas ya lo lograron' },
-              { number: '6', label: 'Recursos probados' },
-              { number: '24/7', label: 'Acceso inmediato' },
-            ].map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-                className="text-center"
-              >
-                <div className="font-[var(--font-headline)] text-3xl font-bold text-coral md:text-4xl">
-                  {stat.number}
-                </div>
-                <div className="mt-1 text-sm font-medium text-gray-carbon">{stat.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
         </div>
       </div>
     </section>
