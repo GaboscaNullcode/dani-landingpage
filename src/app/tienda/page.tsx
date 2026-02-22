@@ -6,6 +6,7 @@ import {
   SeccionProductos,
   SeccionNiveles,
   SeccionServicios,
+  SeccionWhatsApp,
 } from '@/components/tienda';
 import {
   getFeaturedProducts,
@@ -82,6 +83,7 @@ export default async function TiendaPage() {
           purchasedProductIds={purchaseData.purchasedProductIds}
           isLoggedIn={purchaseData.isLoggedIn}
         />
+        <SeccionWhatsApp />
       </main>
       <Footer />
     </>
