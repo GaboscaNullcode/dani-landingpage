@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'motion/react';
+import Image from 'next/image';
 import {
   LogOut,
   ShoppingBag,
@@ -16,6 +17,8 @@ import {
   Video,
   Clock,
   XCircle,
+  Gift,
+  ArrowRight,
 } from 'lucide-react';
 import type { User, Compra } from '@/types/auth';
 import type { Product } from '@/types/tienda';
@@ -171,6 +174,7 @@ export default function Dashboard() {
   const lockedProducts = (data.allProducts || []).filter(
     (p) => !purchasedProductIds.has(p.id) && !p.isFree,
   );
+  const freeProducts = (data.allProducts || []).filter((p) => p.isFree);
 
   return (
     <div className="relative space-y-10">
@@ -327,6 +331,69 @@ export default function Dashboard() {
           bookingSessionId={data.bookingSessionId}
           parentProductId={data.parentProductId}
         />
+      )}
+
+      {/* Free resources */}
+      {freeProducts.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+        >
+          <div className="mb-5 flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-coral/10">
+              <Gift className="h-4 w-4 text-coral" />
+            </div>
+            <h2 className="font-[var(--font-headline)] text-xl font-bold text-black-deep">
+              Recursos Gratuitos
+            </h2>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {freeProducts.map((product, index) => (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -6, transition: { duration: 0.25 } }}
+                className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)]"
+              >
+                {/* Image */}
+                {product.image && (
+                  <div className="relative aspect-video w-full overflow-hidden">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                    {/* GRATIS badge overlay */}
+                    <div className="absolute top-3 right-3">
+                      <span className="rounded-full bg-green-500 px-3 py-1 text-xs font-bold text-white shadow-lg">
+                        GRATIS
+                      </span>
+                    </div>
+                  </div>
+                )}
+                <div className="flex flex-1 flex-col p-5">
+                  <h3 className="mb-2 font-[var(--font-headline)] text-lg font-bold text-black-deep">
+                    {product.name}
+                  </h3>
+                  <p className="mb-4 line-clamp-2 text-sm text-gray-carbon">
+                    {product.description}
+                  </p>
+                  <Link
+                    href={product.ctaLink}
+                    className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                  >
+                    {product.ctaText}
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       )}
 
       {/* Purchased products */}
