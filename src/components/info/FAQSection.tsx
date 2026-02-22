@@ -3,14 +3,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown, HelpCircle, Sparkles } from 'lucide-react';
-import { faqItems, FAQItem } from '@/data/faq-data';
+import { faqItems, type FAQItem } from '@/data/faq-data';
 
 const categories = [
-  { id: 'all', label: 'Todas' },
   { id: 'general', label: 'General' },
-  { id: 'productos', label: 'Productos' },
-  { id: 'asesorias', label: 'Asesorías' },
+  { id: 'ebooks', label: 'Ebooks' },
+  { id: 'acompanamiento', label: 'Acompañamiento' },
   { id: 'pagos', label: 'Pagos' },
+  { id: 'terminos', label: 'Términos' },
+  { id: 'all', label: 'Todas' },
 ];
 
 function FAQAccordionItem({ item, isOpen, onToggle, index }: { item: FAQItem; isOpen: boolean; onToggle: () => void; index: number }) {
@@ -49,9 +50,9 @@ function FAQAccordionItem({ item, isOpen, onToggle, index }: { item: FAQItem; is
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <p className="pb-5 pr-8 text-gray-carbon leading-relaxed">
+            <div className="pb-5 pr-8 text-gray-carbon leading-relaxed">
               {item.answer}
-            </p>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -61,10 +61,20 @@ export default function InfoHero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
+            className="mb-4 text-xl font-medium text-gray-dark md:text-2xl"
+          >
+            ¿Tienes dudas antes de empezar?
+          </motion.p>
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.25 }}
             className="text-body-large mx-auto mb-10 max-w-2xl text-gray-carbon"
           >
-            Aquí encontrarás respuestas a las preguntas más frecuentes, formas de contactarme
-            y todo lo que necesitas saber sobre Remote con Dani.
+            Aquí encontrarás respuesta a las preguntas más frecuentes y formas
+            de contactarme
           </motion.p>
 
           {/* Quick links */}
@@ -74,20 +84,28 @@ export default function InfoHero() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="flex flex-wrap items-center justify-center gap-4"
           >
-            <a
-              href="#faq"
+            <button
+              onClick={() =>
+                document
+                  .getElementById('faq')
+                  ?.scrollIntoView({ behavior: 'smooth' })
+              }
               className="flex items-center gap-2 rounded-full bg-white px-6 py-3 font-medium text-gray-dark shadow-md transition-all hover:-translate-y-1 hover:shadow-lg"
             >
               <HelpCircle className="h-5 w-5 text-coral" />
               Preguntas Frecuentes
-            </a>
-            <a
-              href="#contacto"
+            </button>
+            <button
+              onClick={() =>
+                document
+                  .getElementById('contacto')
+                  ?.scrollIntoView({ behavior: 'smooth' })
+              }
               className="flex items-center gap-2 rounded-full bg-white px-6 py-3 font-medium text-gray-dark shadow-md transition-all hover:-translate-y-1 hover:shadow-lg"
             >
               <Heart className="h-5 w-5 text-pink" />
               Contacto
-            </a>
+            </button>
           </motion.div>
         </div>
       </div>

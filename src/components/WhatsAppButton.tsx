@@ -9,7 +9,7 @@ interface WhatsAppButtonProps {
 }
 
 export default function WhatsAppButton({
-  phoneNumber = '51950907963',
+  phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '51950907963',
   message = 'Hola Dani, me gustaría saber más sobre tu acompañamiento para trabajo remoto',
 }: WhatsAppButtonProps) {
   const encodedMessage = encodeURIComponent(message);

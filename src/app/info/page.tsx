@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { InfoHero, ContactoSection, FAQSection } from '@/components/info';
+import { StageTransitionCTA } from '@/components/stages';
 
 export const metadata: Metadata = {
   title: 'Info - Remote con Dani | Preguntas Frecuentes y Contacto',
@@ -30,6 +31,11 @@ export default function InfoPage() {
         <InfoHero />
         <FAQSection />
         <ContactoSection />
+        <StageTransitionCTA
+          text="¿Necesitas acompañamiento más personalizado?"
+          primaryText="Ver servicios personalizados"
+          primaryHref="/asesorias"
+        />
       </main>
       <Footer />
     </>

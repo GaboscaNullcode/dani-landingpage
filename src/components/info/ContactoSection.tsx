@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { Mail, Instagram, Youtube, MessageCircle, ExternalLink } from 'lucide-react';
+import { Mail, Instagram, Music, ExternalLink } from 'lucide-react';
+import WhatsAppIcon from '@/components/ui/WhatsAppIcon';
 import { contactInfo } from '@/data/faq-data';
 
 const socialLinks = [
@@ -22,18 +23,18 @@ const socialLinks = [
     bgColor: 'bg-pink/10',
   },
   {
-    name: 'YouTube',
-    value: contactInfo.youtube,
-    url: contactInfo.youtubeUrl,
-    icon: Youtube,
-    color: '#ff0000',
-    bgColor: 'bg-red-50',
+    name: 'WhatsApp',
+    value: 'WhatsApp',
+    url: `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`,
+    icon: WhatsAppIcon,
+    color: '#ffffff',
+    bgColor: 'bg-[#25d366]',
   },
   {
     name: 'TikTok',
     value: contactInfo.tiktok,
     url: contactInfo.tiktokUrl,
-    icon: MessageCircle,
+    icon: Music,
     color: '#a78bfa',
     bgColor: 'bg-lavender/10',
   },
@@ -54,7 +55,9 @@ export default function ContactoSection() {
             Conecta Conmigo
           </h2>
           <p className="text-lg text-gray-carbon">
-            Estoy aquí para ayudarte. Elige el canal que prefieras para comunicarte conmigo.
+            ¿Tienes dudas? Escríbeme directamente.
+            <br />
+            Elige el canal que prefieras. Si buscas respuesta rápida, WhatsApp es la mejor opción.
           </p>
         </motion.div>
 
@@ -75,8 +78,9 @@ export default function ContactoSection() {
               >
                 <div
                   className={`flex h-12 w-12 items-center justify-center rounded-xl ${link.bgColor} transition-transform duration-300 group-hover:scale-110`}
+                  style={{ color: link.color }}
                 >
-                  <Icon className="h-6 w-6" style={{ color: link.color }} />
+                  <Icon className="h-6 w-6" />
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-medium text-gray-medium">{link.name}</p>
@@ -103,8 +107,12 @@ export default function ContactoSection() {
             Horario de Atención
           </h3>
           <p className="text-gray-carbon">
-            Respondo mensajes de lunes a viernes, generalmente dentro de 24-48 horas.
-            Para consultas urgentes, las asesorías son la mejor opción.
+            Respondemos mensajes de lunes a viernes en el rango de 10:00 a.m. –
+            5:00 p.m. Sábados y domingos: respuesta limitada.
+          </p>
+          <p className="mt-2 text-sm italic text-gray-carbon/80">
+            Los mensajes pueden tardar más de lo habitual y se atienden por
+            orden de llegada el lunes.
           </p>
         </motion.div>
       </div>
