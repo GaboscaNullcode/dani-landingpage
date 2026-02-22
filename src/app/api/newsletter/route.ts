@@ -15,6 +15,10 @@ export async function POST(request: Request) {
       );
     }
 
+    // Normalize email
+    body.email = body.email.trim().toLowerCase();
+    body.name = body.name.trim();
+
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(body.email)) {

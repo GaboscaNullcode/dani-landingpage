@@ -28,7 +28,12 @@ export async function POST(request: NextRequest) {
     await changeUserPassword(user.id, user.email, oldPassword, newPassword);
 
     // Re-login to refresh session with new credentials
-    await loginUser(user.email, newPassword);
+    try {
+      await loginUser(user.email, newPassword);
+    } catch {
+      // Password was changed successfully but re-login failed.
+      // User will need to log in manually with new password.
+    }
 
     // Session cookies are managed automatically by @supabase/ssr
     return NextResponse.json({ success: true });

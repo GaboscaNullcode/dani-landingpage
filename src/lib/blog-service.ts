@@ -261,25 +261,16 @@ export const getCategoryBySlug = cache(
   },
 );
 
-// Fetch articles by category slug
+// Fetch articles by category slug (single query via inner join)
 export const getArticlesByCategory = cache(
   async (categorySlug: string): Promise<BlogArticle[]> => {
     try {
       const supabase = createAnonSupabase();
 
-      // First get the category ID
-      const { data: category, error: catError } = await supabase
-        .from('categorias_blog')
-        .select('id')
-        .eq('slug', categorySlug)
-        .single();
-
-      if (catError || !category) throw catError || new Error('Category not found');
-
       const { data, error } = await supabase
         .from('blogs')
-        .select('*, categoria_detail:categorias_blog(*)')
-        .eq('categoria', category.id)
+        .select('*, categoria_detail:categorias_blog!inner(*)')
+        .eq('categoria_detail.slug', categorySlug)
         .order('created_at', { ascending: false });
 
       if (error) throw error;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import CalendarGrid from './CalendarGrid';
 import TimeSlotPicker from './TimeSlotPicker';
@@ -52,8 +52,15 @@ export default function BookingCalendar({
     setStep('summary');
   };
 
+  const abortControllerRef = useRef<AbortController | null>(null);
+
   const handleConfirm = async (notas: string) => {
     if (!selectedDate || !selectedSlot) return;
+
+    // Abort any pending request
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
     setConfirming(true);
     setError('');
@@ -69,6 +76,7 @@ export default function BookingCalendar({
           hora: selectedSlot,
           notasCliente: notas || undefined,
         }),
+        signal: controller.signal,
       });
 
       const data = await res.json();
@@ -80,6 +88,7 @@ export default function BookingCalendar({
       setZoomJoinUrl(data.zoomJoinUrl || '');
       setStep('done');
     } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') return;
       setError(
         err instanceof Error ? err.message : 'Error al crear la reserva',
       );

@@ -17,6 +17,14 @@ interface NewsletterFormCardProps {
   source?: 'home' | 'newsletter_page' | 'blog' | 'quiz';
 }
 
+const cornerAccentTopRight = {
+  background: 'radial-gradient(circle, rgba(255,107,107,0.3) 0%, transparent 70%)',
+} as const;
+
+const cornerAccentBottomLeft = {
+  background: 'radial-gradient(circle, rgba(167,139,250,0.3) 0%, transparent 70%)',
+} as const;
+
 export default function NewsletterFormCard({ source = 'home' }: NewsletterFormCardProps) {
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [accepted, setAccepted] = useState(false);
@@ -33,17 +41,11 @@ export default function NewsletterFormCard({ source = 'home' }: NewsletterFormCa
       {/* Decorative corner accents */}
       <div
         className="absolute right-4 top-4 h-24 w-24 rounded-full opacity-50"
-        style={{
-          background:
-            'radial-gradient(circle, rgba(255,107,107,0.3) 0%, transparent 70%)',
-        }}
+        style={cornerAccentTopRight}
       />
       <div
         className="absolute bottom-4 left-4 h-20 w-20 rounded-full opacity-40"
-        style={{
-          background:
-            'radial-gradient(circle, rgba(167,139,250,0.3) 0%, transparent 70%)',
-        }}
+        style={cornerAccentBottomLeft}
       />
 
       {/* Card header */}

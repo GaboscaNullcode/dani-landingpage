@@ -3,6 +3,25 @@ import { createServerSupabase, getServiceSupabase } from './supabase/server';
 import type { User } from '@/types/auth';
 import crypto from 'crypto';
 
+const PROFILE_SELECT = 'name, stripe_customer_id, program_intensive_paid_full, program_intensive_paid_1, program_intensive_paid_2' as const;
+
+function profileToUser(
+  id: string,
+  email: string,
+  profile: { name?: string; stripe_customer_id?: string; program_intensive_paid_full?: boolean; program_intensive_paid_1?: boolean; program_intensive_paid_2?: boolean } | null,
+  fallbackName = '',
+): User {
+  return {
+    id,
+    email,
+    name: profile?.name || fallbackName,
+    stripeCustomerId: profile?.stripe_customer_id || undefined,
+    programIntensivePaidFull: profile?.program_intensive_paid_full ?? false,
+    programIntensivePaid1: profile?.program_intensive_paid_1 ?? false,
+    programIntensivePaid2: profile?.program_intensive_paid_2 ?? false,
+  };
+}
+
 function generateTempPassword(): string {
   return crypto.randomBytes(4).toString('hex');
 }
@@ -20,22 +39,13 @@ export const getCurrentUser = cache(async (): Promise<User | null> => {
 
     if (!authUser) return null;
 
-    // Fetch profile data (name, stripe_customer_id, program payment flags)
     const { data: profile } = await supabase
       .from('profiles')
-      .select('name, stripe_customer_id, program_intensive_paid_full, program_intensive_paid_1, program_intensive_paid_2')
+      .select(PROFILE_SELECT)
       .eq('id', authUser.id)
       .single();
 
-    return {
-      id: authUser.id,
-      email: authUser.email!,
-      name: profile?.name || '',
-      stripeCustomerId: profile?.stripe_customer_id || undefined,
-      programIntensivePaidFull: profile?.program_intensive_paid_full ?? false,
-      programIntensivePaid1: profile?.program_intensive_paid_1 ?? false,
-      programIntensivePaid2: profile?.program_intensive_paid_2 ?? false,
-    };
+    return profileToUser(authUser.id, authUser.email!, profile);
   } catch {
     return null;
   }
@@ -59,21 +69,11 @@ export async function loginUser(
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('name, stripe_customer_id, program_intensive_paid_full, program_intensive_paid_1, program_intensive_paid_2')
+    .select(PROFILE_SELECT)
     .eq('id', data.user.id)
     .single();
 
-  return {
-    user: {
-      id: data.user.id,
-      email: data.user.email!,
-      name: profile?.name || '',
-      stripeCustomerId: profile?.stripe_customer_id || undefined,
-      programIntensivePaidFull: profile?.program_intensive_paid_full ?? false,
-      programIntensivePaid1: profile?.program_intensive_paid_1 ?? false,
-      programIntensivePaid2: profile?.program_intensive_paid_2 ?? false,
-    },
-  };
+  return { user: profileToUser(data.user.id, data.user.email!, profile) };
 }
 
 /**
@@ -92,23 +92,14 @@ export async function findOrCreateUser(
   const existing = existingUsers?.users?.find((u) => u.email === email);
 
   if (existing) {
-    // Fetch profile
     const { data: profile } = await supabase
       .from('profiles')
-      .select('name, stripe_customer_id, program_intensive_paid_full, program_intensive_paid_1, program_intensive_paid_2')
+      .select(PROFILE_SELECT)
       .eq('id', existing.id)
       .single();
 
     return {
-      user: {
-        id: existing.id,
-        email: existing.email!,
-        name: profile?.name || name,
-        stripeCustomerId: profile?.stripe_customer_id || undefined,
-        programIntensivePaidFull: profile?.program_intensive_paid_full ?? false,
-        programIntensivePaid1: profile?.program_intensive_paid_1 ?? false,
-        programIntensivePaid2: profile?.program_intensive_paid_2 ?? false,
-      },
+      user: profileToUser(existing.id, existing.email!, profile, name),
       isNew: false,
     };
   }

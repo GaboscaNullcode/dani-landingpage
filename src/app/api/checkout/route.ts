@@ -32,18 +32,20 @@ export async function POST(request: NextRequest) {
       cancelUrl = `${domain}/tienda`;
     }
 
+    // Fetch product once if needed (avoid duplicate calls)
+    const producto = isAsesoria && productId ? await getProductById(productId) : null;
+
     if (isCommunity) {
       successUrl = `${domain}/comunidad/gracias?session_id={CHECKOUT_SESSION_ID}`;
-    } else if (isAsesoria && productId) {
-      const producto = await getProductById(productId);
-      if (producto?.producto_padre) {
+    } else if (isAsesoria && producto) {
+      if (producto.producto_padre) {
         // Child product (split payment)
         if (producto.orden === 1) {
           successUrl = `${domain}/asesorias/gracias-pago1`;
         } else {
           successUrl = `${domain}/asesorias/gracias`;
         }
-      } else if (producto) {
+      } else {
         // Parent product — check if Programa Intensivo (has children)
         const childPlans = await getPaymentPlans(productId);
         if (childPlans.length > 0) {
@@ -51,8 +53,6 @@ export async function POST(request: NextRequest) {
         } else {
           successUrl = `${domain}/asesorias/gracias`;
         }
-      } else {
-        successUrl = `${domain}/asesorias/gracias`;
       }
     } else if (isAsesoria) {
       successUrl = `${domain}/asesorias/gracias`;
@@ -62,11 +62,10 @@ export async function POST(request: NextRequest) {
 
     // Derive planId when isAsesoria but planId is missing
     let resolvedPlanId = planId || '';
-    if (isAsesoria && !resolvedPlanId && productId) {
-      const producto = await getProductById(productId);
-      if (producto?.producto_padre) {
+    if (isAsesoria && !resolvedPlanId && producto) {
+      if (producto.producto_padre) {
         resolvedPlanId = producto.producto_padre;
-      } else if (producto) {
+      } else {
         resolvedPlanId = productId;
       }
     }

@@ -192,7 +192,7 @@ export default function TestimonialCarousel({
   const duplicated = [...testimonials, ...testimonials];
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative" role="region" aria-label="Testimonios de estudiantes" aria-roledescription="carousel">
       {/* Gradient fade left */}
       <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-32 bg-gradient-to-r from-white to-transparent md:w-48" />
       {/* Gradient fade right */}
