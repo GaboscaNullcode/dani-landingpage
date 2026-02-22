@@ -121,10 +121,10 @@ function CompactProductCard({ product, index = 0, accentColor = 'coral', purchas
           )}
           {isPurchased ? (
             <Link
-              href={`/tienda/${product.slug}`}
+              href="/mi-cuenta"
               className="inline-flex items-center gap-1 rounded-full bg-mint px-3 py-1.5 text-xs font-semibold text-white transition-all duration-200 hover:bg-teal-dark"
             >
-              Ver producto
+              Ir a mi cuenta
               <ArrowRight className="h-3 w-3" />
             </Link>
           ) : (
@@ -226,10 +226,10 @@ function FeaturedProductCard({ product, purchaseStatus = 'none' }: FeaturedCardP
                   Adquirido
                 </span>
                 <Link
-                  href={`/tienda/${product.slug}`}
+                  href="/mi-cuenta"
                   className="btn-shimmer inline-flex items-center gap-2 rounded-full bg-mint px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-teal-dark"
                 >
-                  Ver producto
+                  Ir a mi cuenta
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </>
@@ -382,10 +382,10 @@ function ServiceCard({ product, purchaseStatus = 'none' }: ServiceCardProps) {
                     Adquirido
                   </span>
                   <Link
-                    href={`/tienda/${product.slug}`}
+                    href="/mi-cuenta"
                     className="btn-shimmer inline-flex items-center gap-2 rounded-full bg-mint px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-teal-dark"
                   >
-                    Ver producto
+                    Ir a mi cuenta
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </>

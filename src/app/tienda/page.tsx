@@ -5,10 +5,12 @@ import {
   TiendaHero,
   SeccionProductos,
   SeccionNiveles,
+  SeccionServicios,
 } from '@/components/tienda';
 import {
   getFeaturedProducts,
   getProductsByLevel,
+  getCommunityProducts,
 } from '@/lib/tienda-service';
 import { getCurrentUser } from '@/lib/auth-service';
 import { getUserPurchasedProductIds } from '@/lib/compras-service';
@@ -52,11 +54,13 @@ async function getUserPurchaseData(): Promise<{
 }
 
 export default async function TiendaPage() {
-  const [featuredProducts, productsByLevel, purchaseData] = await Promise.all([
-    getFeaturedProducts(),
-    getProductsByLevel(),
-    getUserPurchaseData(),
-  ]);
+  const [featuredProducts, productsByLevel, communityProducts, purchaseData] =
+    await Promise.all([
+      getFeaturedProducts(),
+      getProductsByLevel(),
+      getCommunityProducts(),
+      getUserPurchaseData(),
+    ]);
 
   return (
     <>
@@ -70,6 +74,11 @@ export default async function TiendaPage() {
         />
         <SeccionNiveles
           levels={productsByLevel}
+          purchasedProductIds={purchaseData.purchasedProductIds}
+          isLoggedIn={purchaseData.isLoggedIn}
+        />
+        <SeccionServicios
+          communityProducts={communityProducts}
           purchasedProductIds={purchaseData.purchasedProductIds}
           isLoggedIn={purchaseData.isLoggedIn}
         />
