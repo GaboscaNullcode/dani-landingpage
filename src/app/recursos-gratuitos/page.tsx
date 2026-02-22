@@ -56,7 +56,7 @@ export default async function RecursosGratuitosPage() {
           price={community?.price}
           originalPrice={community?.originalPrice}
         />
-        <section className="bg-cream/50 py-16 md:py-20">
+        <section id="newsletter" className="bg-cream/50 py-16 md:py-20">
           <div className="container-custom">
             <div className="mx-auto max-w-md">
               <NewsletterFormCard />

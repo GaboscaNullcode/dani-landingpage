@@ -26,7 +26,7 @@ export default function WhatsAppCommunityCard({
 }: WhatsAppCommunityCardProps) {
   const displayPrice = price != null ? `$${price}/mes` : '$5.99/mes';
   return (
-    <section className="bg-cream py-20">
+    <section id="comunidad" className="bg-cream py-20">
       <div className="container-custom">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

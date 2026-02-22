@@ -20,13 +20,13 @@ const navCards = [
     icon: Users,
     label: 'Comunidad',
     href: '#comunidad',
-    color: 'bg-green-500',
+    color: 'bg-mint',
   },
   {
     icon: Mail,
     label: 'Newsletter',
     href: '#newsletter',
-    color: 'bg-sunshine',
+    color: 'bg-pink',
   },
 ];
 
@@ -41,6 +41,11 @@ export default function QuickNavSection() {
               <motion.a
                 key={card.label}
                 href={card.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const target = document.querySelector(card.href);
+                  target?.scrollIntoView({ behavior: 'smooth' });
+                }}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
