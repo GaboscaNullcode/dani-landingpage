@@ -70,7 +70,7 @@ export default async function CategoryPage({ params }: PageProps) {
         >
           <div className="container-custom relative z-10 text-center">
             <span
-              className="mb-4 inline-block rounded-full px-4 py-1.5 font-[var(--font-dm-sans)] text-xs font-medium uppercase tracking-wider text-white"
+              className="mb-4 inline-block rounded-full px-4 py-1.5 font-[var(--font-inter)] text-xs font-medium uppercase tracking-wider text-white"
               style={{ backgroundColor: category.accentColor }}
             >
               {category.articleCount} artículo{category.articleCount !== 1 ? 's' : ''}

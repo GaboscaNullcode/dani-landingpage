@@ -119,7 +119,7 @@ export default function MasterclassHero() {
             >
               <Play className="h-5 w-5 text-coral" />
             </motion.div>
-            <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
+            <span className="font-[var(--font-inter)] text-sm font-semibold text-gray-dark">
               Masterclass Gratuita
             </span>
             <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-bold text-green-700">

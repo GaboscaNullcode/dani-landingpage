@@ -52,7 +52,7 @@ export default async function TestimonialsSection({
         <div className="container-custom mb-14 text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-pink/10 px-5 py-2">
             <Sparkles className="h-5 w-5 text-pink" />
-            <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-pink">
+            <span className="font-[var(--font-inter)] text-sm font-semibold text-pink">
               {badge}
             </span>
           </div>

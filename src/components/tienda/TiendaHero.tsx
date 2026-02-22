@@ -116,7 +116,7 @@ export default function TiendaHero() {
             >
               <Sparkles className="h-4 w-4 text-coral" />
             </motion.div>
-            <span className="font-[var(--font-dm-sans)] text-sm font-semibold tracking-wider text-gray-carbon">
+            <span className="font-[var(--font-inter)] text-sm font-semibold tracking-wider text-gray-carbon">
               Todo lo que necesitas para empezar
             </span>
           </motion.div>

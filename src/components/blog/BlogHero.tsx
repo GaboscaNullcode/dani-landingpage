@@ -83,7 +83,7 @@ export default function BlogHero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-4 font-[var(--font-dm-sans)] text-sm font-medium uppercase tracking-[0.2em] text-coral"
+            className="mb-4 font-[var(--font-inter)] text-sm font-medium uppercase tracking-[0.2em] text-coral"
           >
             Blog
           </motion.p>

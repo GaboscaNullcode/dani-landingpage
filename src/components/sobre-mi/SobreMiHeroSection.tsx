@@ -91,7 +91,7 @@ export default function SobreMiHeroSection() {
               >
                 <Sparkles className="h-5 w-5 text-coral" />
               </motion.div>
-              <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-coral">
+              <span className="font-[var(--font-inter)] text-sm font-semibold text-coral">
                 +6 años en el mundo virtual
               </span>
             </motion.div>

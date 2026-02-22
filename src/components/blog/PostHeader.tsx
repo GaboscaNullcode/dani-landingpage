@@ -82,7 +82,7 @@ export default function PostHeader({ article }: PostHeaderProps) {
         >
           <Link
             href="/blog"
-            className="font-[var(--font-dm-sans)] text-gray-medium transition-colors hover:text-coral"
+            className="font-[var(--font-inter)] text-gray-medium transition-colors hover:text-coral"
           >
             Blog
           </Link>
@@ -91,14 +91,14 @@ export default function PostHeader({ article }: PostHeaderProps) {
               <ChevronRight className="h-4 w-4 text-gray-300" />
               <Link
                 href={`/blog/categoria/${article.category.slug}`}
-                className="font-[var(--font-dm-sans)] text-gray-medium transition-colors hover:text-coral"
+                className="font-[var(--font-inter)] text-gray-medium transition-colors hover:text-coral"
               >
                 {article.category.name}
               </Link>
             </>
           )}
           <ChevronRight className="h-4 w-4 text-gray-300" />
-          <span className="font-[var(--font-dm-sans)] text-coral">
+          <span className="font-[var(--font-inter)] text-coral">
             Artículo
           </span>
         </motion.nav>
@@ -113,13 +113,13 @@ export default function PostHeader({ article }: PostHeaderProps) {
           {article.category ? (
             <Link
               href={`/blog/categoria/${article.category.slug}`}
-              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-[var(--font-dm-sans)] text-xs font-medium uppercase tracking-wider text-white transition-opacity hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-[var(--font-inter)] text-xs font-medium uppercase tracking-wider text-white transition-opacity hover:opacity-90"
               style={{ backgroundColor: article.category.accentColor }}
             >
               {article.category.name}
             </Link>
           ) : (
-            <span className="inline-flex items-center gap-2 rounded-full bg-coral px-4 py-1.5 font-[var(--font-dm-sans)] text-xs font-medium uppercase tracking-wider text-white">
+            <span className="inline-flex items-center gap-2 rounded-full bg-coral px-4 py-1.5 font-[var(--font-inter)] text-xs font-medium uppercase tracking-wider text-white">
               Blog
             </span>
           )}
@@ -144,12 +144,12 @@ export default function PostHeader({ article }: PostHeaderProps) {
         >
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4" />
-            <span className="font-[var(--font-dm-sans)]">{formatDate(article.publishedAt)}</span>
+            <span className="font-[var(--font-inter)]">{formatDate(article.publishedAt)}</span>
           </div>
           <span className="h-1 w-1 rounded-full bg-gray-300" />
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
-            <span className="font-[var(--font-dm-sans)]">{article.readTime} min de lectura</span>
+            <span className="font-[var(--font-inter)]">{article.readTime} min de lectura</span>
           </div>
         </motion.div>
 

@@ -110,7 +110,7 @@ export default memo(function Navigation({ darkHero = false }: { darkHero?: boole
                 <Link
                   href={item.href}
                   aria-current={pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)) ? 'page' : undefined}
-                  className={`nav-link-underline group relative font-[var(--font-dm-sans)] font-semibold tracking-wide transition-colors duration-500 hover:text-coral ${
+                  className={`nav-link-underline group relative font-[var(--font-inter)] font-semibold tracking-wide transition-colors duration-500 hover:text-coral ${
                     isScrolled ? 'text-xs' : 'text-sm'
                   } ${pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)) ? 'text-coral' : useLightText ? 'text-white/90' : 'text-gray-dark'}`}
                 >

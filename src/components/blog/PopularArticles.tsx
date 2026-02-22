@@ -71,7 +71,7 @@ export default memo(function PopularArticles({ featuredArticle }: PopularArticle
           transition={{ duration: 0.6 }}
           className="mb-12"
         >
-          <p className="mb-2 font-[var(--font-dm-sans)] text-sm font-medium uppercase tracking-[0.15em] text-coral">
+          <p className="mb-2 font-[var(--font-inter)] text-sm font-medium uppercase tracking-[0.15em] text-coral">
             Destacado
           </p>
           <h2 className="font-[var(--font-headline)] text-2xl font-bold text-black-deep md:text-3xl">

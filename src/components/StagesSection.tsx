@@ -167,7 +167,7 @@ export default function StagesSection() {
             className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/80 px-5 py-2 shadow-md backdrop-blur-sm"
           >
             <Sparkles className="h-5 w-5 text-coral" />
-            <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
+            <span className="font-[var(--font-inter)] text-sm font-semibold text-gray-dark">
               Elige tu camino
             </span>
           </motion.div>
@@ -197,10 +197,10 @@ export default function StagesSection() {
               className="group inline-flex items-center gap-3 rounded-full bg-white/90 px-5 py-2.5 shadow-md backdrop-blur-sm transition-shadow duration-300 hover:shadow-lg"
             >
               <CircleHelp className="h-4 w-4 text-pink" />
-              <span className="font-[var(--font-dm-sans)] text-sm text-gray-carbon">
+              <span className="font-[var(--font-inter)] text-sm text-gray-carbon">
                 ¿No sabes qué ruta tomar?
               </span>
-              <span className="inline-flex items-center gap-1 font-[var(--font-dm-sans)] text-sm font-bold text-pink transition-colors duration-300 group-hover:text-coral">
+              <span className="inline-flex items-center gap-1 font-[var(--font-inter)] text-sm font-bold text-pink transition-colors duration-300 group-hover:text-coral">
                 Descúbrelo en 1 minuto
                 <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
               </span>
@@ -212,7 +212,7 @@ export default function StagesSection() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 8 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-1/2 top-full z-30 mt-3 w-72 -translate-x-1/2 rounded-2xl bg-black-deep px-5 py-3.5 text-center font-[var(--font-dm-sans)] text-sm text-white shadow-xl"
+                  className="absolute left-1/2 top-full z-30 mt-3 w-72 -translate-x-1/2 rounded-2xl bg-black-deep px-5 py-3.5 text-center font-[var(--font-inter)] text-sm text-white shadow-xl"
                 >
                   <div className="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 bg-black-deep" />
                   Descubre por dónde empezar tu camino remoto, responde 5 preguntas para obtener tu ruta ideal
@@ -265,7 +265,7 @@ export default function StagesSection() {
                       }}
                       className="absolute -top-0.5 left-1/2 z-20 -translate-x-1/2"
                     >
-                      <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-gradient-to-r from-coral to-pink px-5 py-2 font-[var(--font-dm-sans)] text-xs font-bold tracking-wide text-white shadow-[0_4px_20px_rgba(232,70,106,0.4)]">
+                      <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-gradient-to-r from-coral to-pink px-5 py-2 font-[var(--font-inter)] text-xs font-bold tracking-wide text-white shadow-[0_4px_20px_rgba(232,70,106,0.4)]">
                         <Star className="h-3.5 w-3.5 fill-white" />
                         Recomendada para ti
                         <Star className="h-3.5 w-3.5 fill-white" />
@@ -310,7 +310,7 @@ export default function StagesSection() {
                     {stage.title}
                   </h3>
                   <p
-                    className="mb-4 font-[var(--font-dm-sans)] text-sm font-medium"
+                    className="mb-4 font-[var(--font-inter)] text-sm font-medium"
                     style={{ color: stage.accentColor }}
                   >
                     {stage.subtitle}

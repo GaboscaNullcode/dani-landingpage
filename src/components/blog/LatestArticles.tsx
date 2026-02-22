@@ -109,7 +109,7 @@ export default function LatestArticles({
           className="mb-12 flex items-end justify-between"
         >
           <div>
-            <p className="mb-2 font-[var(--font-dm-sans)] text-sm font-medium uppercase tracking-[0.15em] text-lavender">
+            <p className="mb-2 font-[var(--font-inter)] text-sm font-medium uppercase tracking-[0.15em] text-lavender">
               {subtitle || 'Más artículos'}
             </p>
             <h2 className="font-[var(--font-headline)] text-2xl font-bold text-black-deep md:text-3xl">
@@ -119,7 +119,7 @@ export default function LatestArticles({
 
           <Link
             href="/blog/todos"
-            className="group hidden items-center gap-2 font-[var(--font-dm-sans)] text-sm font-semibold text-gray-carbon transition-colors hover:text-coral sm:inline-flex"
+            className="group hidden items-center gap-2 font-[var(--font-inter)] text-sm font-semibold text-gray-carbon transition-colors hover:text-coral sm:inline-flex"
           >
             <span>Ver todos</span>
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -142,7 +142,7 @@ export default function LatestArticles({
         >
           <Link
             href="/blog/todos"
-            className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-6 py-3 font-[var(--font-dm-sans)] text-sm font-semibold text-gray-carbon transition-all hover:border-coral hover:text-coral"
+            className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-6 py-3 font-[var(--font-inter)] text-sm font-semibold text-gray-carbon transition-all hover:border-coral hover:text-coral"
           >
             <span>Ver todos los artículos</span>
             <ArrowRight className="h-4 w-4" />
@@ -164,7 +164,7 @@ export default function LatestArticles({
           </p>
           <Link
             href="/newsletter"
-            className="inline-flex items-center gap-2 rounded-full bg-coral px-6 py-3 font-[var(--font-dm-sans)] text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-pink hover:shadow-lg"
+            className="inline-flex items-center gap-2 rounded-full bg-coral px-6 py-3 font-[var(--font-inter)] text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-pink hover:shadow-lg"
           >
             <span>Suscribirme al newsletter</span>
             <ArrowRight className="h-4 w-4" />

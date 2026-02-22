@@ -132,7 +132,7 @@ function TestimonialCard({
         </div>
 
         {/* Quote text */}
-        <p className="relative z-10 mb-5 line-clamp-4 font-[var(--font-dm-sans)] text-[15px] leading-relaxed text-gray-carbon">
+        <p className="relative z-10 mb-5 line-clamp-4 font-[var(--font-inter)] text-[15px] leading-relaxed text-gray-carbon">
           &ldquo;{testimonial.text}&rdquo;
         </p>
 

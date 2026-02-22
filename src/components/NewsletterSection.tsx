@@ -90,7 +90,7 @@ export default function NewsletterSection({ source = 'home' }: NewsletterSection
             className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/80 px-5 py-2 shadow-md backdrop-blur-sm"
           >
             <Mail className="h-5 w-5 text-pink" />
-            <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
+            <span className="font-[var(--font-inter)] text-sm font-semibold text-gray-dark">
               Newsletter semanal
             </span>
           </motion.div>

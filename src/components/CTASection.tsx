@@ -114,7 +114,7 @@ export default function CTASection() {
           className="mb-6 inline-flex items-center gap-2 rounded-full bg-coral/10 px-5 py-2"
         >
           <Lightbulb className="h-5 w-5 text-coral" />
-          <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-coral">
+          <span className="font-[var(--font-inter)] text-sm font-semibold text-coral">
             El miedo no va a desaparecer solo
           </span>
         </motion.div>

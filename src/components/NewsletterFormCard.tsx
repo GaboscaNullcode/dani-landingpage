@@ -122,7 +122,7 @@ export default function NewsletterFormCard({ source = 'home' }: NewsletterFormCa
                   onChange={(e) => setName(e.target.value)}
                   onFocus={() => setFocusedField('name')}
                   onBlur={() => setFocusedField(null)}
-                  className="w-full rounded-xl border-2 border-gray-100 bg-white py-3.5 pl-12 pr-5 font-[var(--font-dm-sans)] text-black-deep placeholder-gray-400 transition-colors duration-300 focus:border-coral/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
+                  className="w-full rounded-xl border-2 border-gray-100 bg-white py-3.5 pl-12 pr-5 font-[var(--font-inter)] text-black-deep placeholder-gray-400 transition-colors duration-300 focus:border-coral/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
                   required
                   autoComplete="name"
                   data-lpignore="true"
@@ -168,7 +168,7 @@ export default function NewsletterFormCard({ source = 'home' }: NewsletterFormCa
                   onChange={(e) => setEmail(e.target.value)}
                   onFocus={() => setFocusedField('email')}
                   onBlur={() => setFocusedField(null)}
-                  className="w-full rounded-xl border-2 border-gray-100 bg-white py-3.5 pl-12 pr-5 font-[var(--font-dm-sans)] text-black-deep placeholder-gray-400 transition-colors duration-300 focus:border-coral/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
+                  className="w-full rounded-xl border-2 border-gray-100 bg-white py-3.5 pl-12 pr-5 font-[var(--font-inter)] text-black-deep placeholder-gray-400 transition-colors duration-300 focus:border-coral/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
                   required
                   autoComplete="email"
                   spellCheck={false}

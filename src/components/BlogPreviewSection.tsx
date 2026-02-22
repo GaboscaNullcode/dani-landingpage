@@ -95,7 +95,7 @@ export default function BlogPreviewSection({
             className="mb-4 inline-flex items-center gap-2 rounded-full bg-coral/10 px-5 py-2"
           >
             <BookOpen className="h-5 w-5 text-coral" />
-            <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-coral">
+            <span className="font-[var(--font-inter)] text-sm font-semibold text-coral">
               Artículos recientes
             </span>
           </motion.div>
@@ -143,7 +143,7 @@ export default function BlogPreviewSection({
                   {/* Meta */}
                   <div className="mb-3 flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-coral" />
-                    <span className="font-[var(--font-dm-sans)] text-xs font-semibold uppercase tracking-wide text-coral">
+                    <span className="font-[var(--font-inter)] text-xs font-semibold uppercase tracking-wide text-coral">
                       Blog
                     </span>
                     <span className="text-gray-300">&middot;</span>
@@ -158,12 +158,12 @@ export default function BlogPreviewSection({
                   </h3>
 
                   {/* Description */}
-                  <p className="mb-4 line-clamp-2 font-[var(--font-dm-sans)] text-sm leading-relaxed text-gray-carbon">
+                  <p className="mb-4 line-clamp-2 font-[var(--font-inter)] text-sm leading-relaxed text-gray-carbon">
                     {article.description}
                   </p>
 
                   {/* Read link */}
-                  <span className="inline-flex items-center gap-1.5 font-[var(--font-dm-sans)] text-sm font-semibold text-coral transition-colors duration-300 group-hover:text-pink">
+                  <span className="inline-flex items-center gap-1.5 font-[var(--font-inter)] text-sm font-semibold text-coral transition-colors duration-300 group-hover:text-pink">
                     Leer artículo
                     <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
                   </span>
@@ -182,7 +182,7 @@ export default function BlogPreviewSection({
         >
           <Link
             href="/blog"
-            className="group inline-flex items-center gap-2 rounded-full bg-white/80 px-6 py-3 font-[var(--font-dm-sans)] text-sm font-semibold text-gray-carbon shadow-md backdrop-blur-sm transition-[color,box-shadow] duration-300 hover:text-coral hover:shadow-lg"
+            className="group inline-flex items-center gap-2 rounded-full bg-white/80 px-6 py-3 font-[var(--font-inter)] text-sm font-semibold text-gray-carbon shadow-md backdrop-blur-sm transition-[color,box-shadow] duration-300 hover:text-coral hover:shadow-lg"
           >
             Ver todos los artículos
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

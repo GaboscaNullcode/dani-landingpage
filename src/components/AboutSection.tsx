@@ -153,7 +153,7 @@ export default function AboutSection() {
               >
                 <Hand className="h-5 w-5 text-lavender" />
               </motion.div>
-              <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-lavender">
+              <span className="font-[var(--font-inter)] text-sm font-semibold text-lavender">
                 También tuve miedo al principio
               </span>
             </motion.div>

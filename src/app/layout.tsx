@@ -1,18 +1,18 @@
 import type { Metadata } from 'next';
-import { Fraunces, DM_Sans } from 'next/font/google';
+import { Montserrat, Inter } from 'next/font/google';
 import './globals.css';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import MasterclassPopup from '@/components/MasterclassPopup';
 
-const fraunces = Fraunces({
-  variable: '--font-fraunces',
+const montserrat = Montserrat({
+  variable: '--font-montserrat',
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800', '900'],
   display: 'swap',
 });
 
-const dmSans = DM_Sans({
-  variable: '--font-dm-sans',
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   display: 'swap',
@@ -79,7 +79,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body
-        className={`${fraunces.variable} ${dmSans.variable} antialiased`}
+        className={`${montserrat.variable} ${inter.variable} antialiased`}
       >
         {/* Skip link para accesibilidad */}
         <a

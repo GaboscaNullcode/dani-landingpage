@@ -427,7 +427,7 @@ export default function SobreMiHistorySection() {
             >
               <TrendingUp className="h-5 w-5 text-coral" />
             </motion.div>
-            <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-white/80">
+            <span className="font-[var(--font-inter)] text-sm font-semibold text-white/80">
               Mi Trayectoria
             </span>
           </motion.div>

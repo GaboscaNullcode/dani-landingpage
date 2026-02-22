@@ -319,7 +319,7 @@ function LevelAccordion({
             {stage.title}
           </h3>
           <p
-            className="font-[var(--font-dm-sans)] text-sm font-medium"
+            className="font-[var(--font-inter)] text-sm font-medium"
             style={{ color: stage.accentColor }}
           >
             {level.subtitle}
@@ -347,7 +347,7 @@ function LevelAccordion({
           >
             <div className="border-t border-gray-light/50 px-5 pb-6 pt-5 sm:px-6">
               {/* Description */}
-              <p className="mb-5 font-[var(--font-dm-sans)] text-sm leading-relaxed text-gray-carbon">
+              <p className="mb-5 font-[var(--font-inter)] text-sm leading-relaxed text-gray-carbon">
                 {level.description}
               </p>
 
@@ -642,7 +642,7 @@ export default function QuizSection() {
             >
               <Sparkles className="h-5 w-5 text-coral" />
             </motion.div>
-            <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
+            <span className="font-[var(--font-inter)] text-sm font-semibold text-gray-dark">
               Quiz Remote Con Dani
             </span>
           </motion.div>
@@ -679,7 +679,7 @@ export default function QuizSection() {
               {/* Quiz Tab */}
               <button
                 onClick={() => setViewMode('quiz')}
-                className={`relative z-10 flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 font-[var(--font-dm-sans)] text-sm font-semibold transition-colors ${
+                className={`relative z-10 flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 font-[var(--font-inter)] text-sm font-semibold transition-colors ${
                   viewMode === 'quiz' ? 'text-white' : 'text-gray-carbon hover:text-gray-dark'
                 }`}
               >
@@ -690,7 +690,7 @@ export default function QuizSection() {
               {/* Levels Tab */}
               <button
                 onClick={() => setViewMode('levels')}
-                className={`relative z-10 flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 font-[var(--font-dm-sans)] text-sm font-semibold transition-colors ${
+                className={`relative z-10 flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 font-[var(--font-inter)] text-sm font-semibold transition-colors ${
                   viewMode === 'levels' ? 'text-white' : 'text-gray-carbon hover:text-gray-dark'
                 }`}
               >
@@ -794,11 +794,11 @@ export default function QuizSection() {
                           key={`num-${currentQuestion}`}
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="mb-1 block font-[var(--font-dm-sans)] text-sm font-semibold uppercase tracking-wider text-coral"
+                          className="mb-1 block font-[var(--font-inter)] text-sm font-semibold uppercase tracking-wider text-coral"
                         >
                           Pregunta {currentQuestion + 1} de {questions.length}
                         </motion.span>
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-coral/10 px-3 py-0.5 font-[var(--font-dm-sans)] text-xs font-medium text-coral">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-coral/10 px-3 py-0.5 font-[var(--font-inter)] text-xs font-medium text-coral">
                           <Sparkles className="h-3 w-3" />
                           Sé honesta contigo mism@
                         </span>
@@ -890,7 +890,7 @@ export default function QuizSection() {
                             </span>
 
                             {/* Label */}
-                            <span className="flex-1 font-[var(--font-dm-sans)] text-sm font-medium sm:text-base">
+                            <span className="flex-1 font-[var(--font-inter)] text-sm font-medium sm:text-base">
                               {option.label}
                             </span>
 
@@ -917,7 +917,7 @@ export default function QuizSection() {
                       <motion.button
                         onClick={handlePrev}
                         disabled={currentQuestion === 0}
-                        className={`flex items-center gap-2 rounded-full px-5 py-3 font-[var(--font-dm-sans)] font-semibold transition-all duration-300 ${
+                        className={`flex items-center gap-2 rounded-full px-5 py-3 font-[var(--font-inter)] font-semibold transition-all duration-300 ${
                           currentQuestion === 0
                             ? 'invisible'
                             : 'border-2 border-gray-dark text-gray-dark hover:bg-gray-dark hover:text-white'
@@ -1006,7 +1006,7 @@ export default function QuizSection() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="mb-8 text-center font-[var(--font-dm-sans)] text-gray-carbon"
+                className="mb-8 text-center font-[var(--font-inter)] text-gray-carbon"
               >
                 Explora cada nivel y encuentra el que mejor se adapte a tu situación actual
               </motion.p>
@@ -1032,7 +1032,7 @@ export default function QuizSection() {
                 transition={{ delay: 0.5 }}
                 className="mt-10 text-center"
               >
-                <p className="mb-4 font-[var(--font-dm-sans)] text-gray-carbon">
+                <p className="mb-4 font-[var(--font-inter)] text-gray-carbon">
                   ¿No estás seguro/a de cuál es tu nivel?
                 </p>
                 <button
@@ -1094,7 +1094,7 @@ export default function QuizSection() {
                   }}
                 >
                   <result.icon className="h-5 w-5" />
-                  <span className="font-[var(--font-dm-sans)] text-sm font-bold uppercase tracking-wider">
+                  <span className="font-[var(--font-inter)] text-sm font-bold uppercase tracking-wider">
                     {result.subtitle}
                   </span>
                 </motion.div>
@@ -1214,7 +1214,7 @@ export default function QuizSection() {
                           </div>
                           <Link
                             href={rec.href}
-                            className={`inline-flex items-center gap-2 rounded-full px-6 py-3 font-[var(--font-dm-sans)] font-bold shadow-lg transition-all duration-300 hover:shadow-xl group-hover:translate-x-1 ${
+                            className={`inline-flex items-center gap-2 rounded-full px-6 py-3 font-[var(--font-inter)] font-bold shadow-lg transition-all duration-300 hover:shadow-xl group-hover:translate-x-1 ${
                               isPrimary ? 'bg-white text-gray-dark' : 'text-white'
                             }`}
                             style={!isPrimary ? { background: rec.gradient } : {}}
@@ -1246,7 +1246,7 @@ export default function QuizSection() {
 
                 <button
                   onClick={handleRestart}
-                  className="group mt-2 inline-flex items-center gap-2 font-[var(--font-dm-sans)] text-gray-medium transition-colors hover:text-coral"
+                  className="group mt-2 inline-flex items-center gap-2 font-[var(--font-inter)] text-gray-medium transition-colors hover:text-coral"
                 >
                   <RotateCcw className="h-4 w-4 transition-transform group-hover:-rotate-180" />
                   <span>Volver a hacer el quiz</span>
@@ -1265,7 +1265,7 @@ export default function QuizSection() {
                     <Star key={i} className="h-5 w-5 fill-current" />
                   ))}
                 </div>
-                <p className="mt-3 font-[var(--font-dm-sans)] text-gray-carbon">
+                <p className="mt-3 font-[var(--font-inter)] text-gray-carbon">
                   <span className="font-bold text-black-deep">+500 personas</span> ya descubrieron su camino remoto con Dani
                 </p>
               </motion.div>

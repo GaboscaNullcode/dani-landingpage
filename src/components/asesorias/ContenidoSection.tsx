@@ -147,7 +147,7 @@ export default function ContenidoSection() {
               className="mb-4 inline-flex items-center gap-2 rounded-full bg-lavender/10 px-5 py-2"
             >
               <ScrollText className="h-5 w-5 text-lavender" />
-              <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-lavender">
+              <span className="font-[var(--font-inter)] text-sm font-semibold text-lavender">
                 Antes de agendar
               </span>
             </motion.div>

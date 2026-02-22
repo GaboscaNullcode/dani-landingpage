@@ -243,7 +243,7 @@ function GuideModal({
                       placeholder="Tu nombre"
                       value={newsletterForm.name}
                       onChange={(e) => newsletterForm.setName(e.target.value)}
-                      className="w-full rounded-xl border-2 border-gray-100 bg-white py-3.5 pl-12 pr-5 font-[var(--font-dm-sans)] text-black-deep placeholder-gray-400 transition-colors duration-300 focus:border-lavender/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-lavender/40"
+                      className="w-full rounded-xl border-2 border-gray-100 bg-white py-3.5 pl-12 pr-5 font-[var(--font-inter)] text-black-deep placeholder-gray-400 transition-colors duration-300 focus:border-lavender/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-lavender/40"
                       required
                       autoComplete="name"
                     />
@@ -262,7 +262,7 @@ function GuideModal({
                       placeholder="Tu mejor correo"
                       value={newsletterForm.email}
                       onChange={(e) => newsletterForm.setEmail(e.target.value)}
-                      className="w-full rounded-xl border-2 border-gray-100 bg-white py-3.5 pl-12 pr-5 font-[var(--font-dm-sans)] text-black-deep placeholder-gray-400 transition-colors duration-300 focus:border-lavender/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-lavender/40"
+                      className="w-full rounded-xl border-2 border-gray-100 bg-white py-3.5 pl-12 pr-5 font-[var(--font-inter)] text-black-deep placeholder-gray-400 transition-colors duration-300 focus:border-lavender/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-lavender/40"
                       required
                       autoComplete="email"
                       spellCheck={false}
@@ -422,7 +422,7 @@ export default function FreeResourcesSection({
               className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/80 px-5 py-2 shadow-md backdrop-blur-sm"
             >
               <Sparkles className="h-5 w-5 text-coral" />
-              <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
+              <span className="font-[var(--font-inter)] text-sm font-semibold text-gray-dark">
                 Recursos gratuitos
               </span>
             </motion.div>

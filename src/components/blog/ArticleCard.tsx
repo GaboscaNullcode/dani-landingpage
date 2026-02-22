@@ -61,7 +61,7 @@ function ArticleCard({
               {article.description}
             </p>
 
-            <div className="inline-flex items-center gap-2 font-[var(--font-dm-sans)] text-sm font-semibold text-coral">
+            <div className="inline-flex items-center gap-2 font-[var(--font-inter)] text-sm font-semibold text-coral">
               <span>Leer artículo</span>
               <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </div>

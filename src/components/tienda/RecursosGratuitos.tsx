@@ -164,7 +164,7 @@ export default function RecursosGratuitos() {
 
           <a
             href="/asesoria"
-            className="btn-shimmer inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-coral to-pink px-8 py-4 font-[var(--font-dm-sans)] font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(255,107,107,0.35)]"
+            className="btn-shimmer inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-coral to-pink px-8 py-4 font-[var(--font-inter)] font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(255,107,107,0.35)]"
           >
             <span>Agendar llamada gratuita</span>
             <Sparkles className="h-5 w-5" />

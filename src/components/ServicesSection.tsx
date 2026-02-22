@@ -118,7 +118,7 @@ export default function ServicesSection() {
             className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/80 px-5 py-2 shadow-md backdrop-blur-sm"
           >
             <Sparkles className="h-5 w-5 text-coral" />
-            <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
+            <span className="font-[var(--font-inter)] text-sm font-semibold text-gray-dark">
               Elige tu camino
             </span>
           </motion.div>

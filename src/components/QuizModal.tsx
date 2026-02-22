@@ -299,7 +299,7 @@ export default function QuizModal({ isOpen, onClose, onResult }: QuizModalProps)
             {/* Progress bar */}
             <div className="mb-6">
               <div className="mb-2 flex items-center justify-between">
-                <span className="font-[var(--font-dm-sans)] text-sm font-medium text-gray-500">
+                <span className="font-[var(--font-inter)] text-sm font-medium text-gray-500">
                   Pregunta {currentQ + 1} de {TOTAL}
                 </span>
               </div>
@@ -333,7 +333,7 @@ export default function QuizModal({ isOpen, onClose, onResult }: QuizModalProps)
                   transition={{ duration: 0.3, ease: 'easeInOut' }}
                 >
                   {/* Motivational badge */}
-                  <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-coral/10 px-3.5 py-1 font-[var(--font-dm-sans)] text-xs font-medium text-coral">
+                  <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-coral/10 px-3.5 py-1 font-[var(--font-inter)] text-xs font-medium text-coral">
                     <Sparkles className="h-3 w-3" />
                     Sé honesta contigo mism@
                   </span>
@@ -383,7 +383,7 @@ export default function QuizModal({ isOpen, onClose, onResult }: QuizModalProps)
                           </span>
 
                           {/* Label */}
-                          <span className="flex-1 font-[var(--font-dm-sans)] text-sm font-medium sm:text-base">
+                          <span className="flex-1 font-[var(--font-inter)] text-sm font-medium sm:text-base">
                             {option.label}
                           </span>
 
@@ -418,7 +418,7 @@ export default function QuizModal({ isOpen, onClose, onResult }: QuizModalProps)
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.2 }}
-                      className="mt-5 flex items-center gap-1.5 font-[var(--font-dm-sans)] text-sm font-medium text-gray-400 transition-colors hover:text-gray-600 focus-visible:ring-2 focus-visible:ring-coral focus-visible:outline-none"
+                      className="mt-5 flex items-center gap-1.5 font-[var(--font-inter)] text-sm font-medium text-gray-400 transition-colors hover:text-gray-600 focus-visible:ring-2 focus-visible:ring-coral focus-visible:outline-none"
                     >
                       <ArrowLeft className="h-4 w-4" />
                       Atrás

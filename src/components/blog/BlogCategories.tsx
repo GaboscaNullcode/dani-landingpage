@@ -48,7 +48,7 @@ export default function BlogCategories({
           {/* All Articles Link */}
           <Link
             href="/blog"
-            className={`rounded-full px-5 py-2.5 font-[var(--font-dm-sans)] text-sm font-medium transition-colors duration-300 ${
+            className={`rounded-full px-5 py-2.5 font-[var(--font-inter)] text-sm font-medium transition-colors duration-300 ${
               !activeSlug
                 ? 'bg-black-deep text-white'
                 : 'border border-gray-200 bg-white text-gray-carbon hover:border-coral hover:text-coral'
@@ -69,7 +69,7 @@ export default function BlogCategories({
               >
                 <Link
                   href={`/blog/categoria/${category.slug}`}
-                  className={`group inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-[var(--font-dm-sans)] text-sm font-medium transition-colors duration-300 ${
+                  className={`group inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-[var(--font-inter)] text-sm font-medium transition-colors duration-300 ${
                     isActive
                       ? 'text-white'
                       : 'border border-gray-200 bg-white text-gray-carbon hover:border-coral hover:text-coral'

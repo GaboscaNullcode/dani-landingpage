@@ -38,7 +38,7 @@ export default function MasterclassResources({
       >
         <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-coral/10 px-5 py-2">
           <Sparkles className="h-5 w-5 text-coral" />
-          <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-coral">
+          <span className="font-[var(--font-inter)] text-sm font-semibold text-coral">
             Incluidos con la masterclass
           </span>
         </div>

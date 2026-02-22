@@ -155,7 +155,7 @@ export default function HeroSection() {
               >
                 <Hand className="h-5 w-5 text-coral" />
               </motion.div>
-              <span className="font-[var(--font-dm-sans)] text-sm font-semibold text-gray-dark">
+              <span className="font-[var(--font-inter)] text-sm font-semibold text-gray-dark">
                 Tu guía hacia el trabajo remoto
               </span>
             </div>
