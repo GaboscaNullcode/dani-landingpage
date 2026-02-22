@@ -9,7 +9,13 @@ export async function createOrUpdateSubscriber(
   email: string,
   nombre: string,
   brevoContactId: number,
-  origen: 'home' | 'newsletter_page' | 'blog' | 'quiz',
+  origen:
+    | 'home'
+    | 'newsletter_page'
+    | 'blog'
+    | 'quiz'
+    | 'recursos_gratuitos'
+    | 'guia_gratuita',
 ): Promise<string> {
   const supabase = getServiceSupabase();
 

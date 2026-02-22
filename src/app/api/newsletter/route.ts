@@ -24,7 +24,14 @@ export async function POST(request: Request) {
       );
     }
 
-    const validSources = ['home', 'newsletter_page', 'blog', 'quiz'];
+    const validSources = [
+      'home',
+      'newsletter_page',
+      'blog',
+      'quiz',
+      'recursos_gratuitos',
+      'guia_gratuita',
+    ];
     const source = validSources.includes(body.source) ? body.source : 'home';
 
     // 1. Add contact to Brevo (primary)

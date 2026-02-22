@@ -9,10 +9,13 @@ import {
 import {
   QuickNavSection,
   MasterclassSection,
+  FreeResourcesSection,
 } from '@/components/stages/stage1';
 import BlogPreviewSection from '@/components/BlogPreviewSection';
-import NewsletterFormCard from '@/components/NewsletterFormCard';
-import { getCommunityProducts } from '@/lib/tienda-service';
+import {
+  getCommunityProducts,
+  getFreeResources,
+} from '@/lib/tienda-service';
 import { getLatestArticles } from '@/lib/blog-service';
 
 export const metadata: Metadata = {
@@ -36,11 +39,14 @@ export const metadata: Metadata = {
 };
 
 export default async function RecursosGratuitosPage() {
-  const [communityProducts, articles] = await Promise.all([
+  const [communityProducts, articles, freeResources] = await Promise.all([
     getCommunityProducts(),
     getLatestArticles(3),
+    getFreeResources(),
   ]);
   const community = communityProducts[0];
+  const guideProduct = freeResources.find((p) => p.downloadUrl);
+  const whatsappGroupProduct = freeResources.find((p) => p.whatsappLink);
 
   return (
     <>
@@ -56,19 +62,16 @@ export default async function RecursosGratuitosPage() {
         <div id="blog">
           <BlogPreviewSection articles={articles} />
         </div>
+        <FreeResourcesSection
+          guideProduct={guideProduct}
+          whatsappGroupProduct={whatsappGroupProduct}
+        />
         <WhatsAppCommunityCard
           priceId={community?.stripePriceId}
           productId={community?.id}
           price={community?.price}
           originalPrice={community?.originalPrice}
         />
-        <section id="newsletter" className="bg-cream/50 py-16 md:py-20">
-          <div className="container-custom">
-            <div className="mx-auto max-w-md">
-              <NewsletterFormCard />
-            </div>
-          </div>
-        </section>
         <StageTransitionCTA
           text="¿Ya sientes que esto sí es para ti, pero te abruma la información?"
           description="Descubre el paso a paso para avanzar con claridad."

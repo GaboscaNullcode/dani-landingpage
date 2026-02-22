@@ -15,7 +15,13 @@ interface UseNewsletterFormReturn {
 }
 
 export function useNewsletterForm(
-  source: 'home' | 'newsletter_page' | 'blog' | 'quiz',
+  source:
+    | 'home'
+    | 'newsletter_page'
+    | 'blog'
+    | 'quiz'
+    | 'recursos_gratuitos'
+    | 'guia_gratuita',
 ): UseNewsletterFormReturn {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
