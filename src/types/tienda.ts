@@ -46,6 +46,24 @@ export interface ProductCategory {
   order: number;
 }
 
+// Supabase record structure for 'producto_faqs' table
+export interface ProductoFAQRecord {
+  id: string;
+  created_at: string;
+  producto: string;
+  pregunta: string;
+  respuesta: string;
+  orden: number;
+}
+
+// Frontend FAQ model
+export interface ProductFAQ {
+  id: string;
+  question: string;
+  answer: string;
+  order: number;
+}
+
 // Supabase record structure for 'productos' table
 export interface ProductoRecord {
   id: string;
@@ -79,6 +97,9 @@ export interface ProductoRecord {
   download_url: string | null;
   whatsapp_link: string | null;
   orden: number;
+  // Bonus section columns
+  bonus_titulo: string | null;
+  bonus_subtitulo: string | null;
   // Asesoria-specific columns
   duracion_minutos: number | null;
   subtitulo: string | null;
@@ -123,6 +144,10 @@ export interface Product {
   levelId?: string;
   level?: ProductCategory;
   trustBadges?: TrustBadge[];
+  // Bonus + FAQ fields
+  bonusTitle?: string;
+  bonusSubtitle?: string;
+  faqs?: ProductFAQ[];
   // Asesoria-specific fields
   duracionMinutos?: number;
   subtitle?: string;

@@ -2,7 +2,9 @@ import { cache } from 'react';
 import { createAnonSupabase, getServiceSupabase } from './supabase/server';
 import type {
   ProductoRecord,
+  ProductoFAQRecord,
   Product,
+  ProductFAQ,
   AsesoriaPlan,
   PaymentPlan,
   CategoriaProductoRecord,
@@ -35,6 +37,16 @@ function transformCategoryRecord(
     subtitle: record.subtitulo,
     description: record.descripcion,
     accentColor: record.color_acento,
+    order: record.orden,
+  };
+}
+
+// Transform ProductoFAQRecord to ProductFAQ
+function transformFAQRecord(record: ProductoFAQRecord): ProductFAQ {
+  return {
+    id: record.id,
+    question: record.pregunta,
+    answer: record.respuesta,
     order: record.orden,
   };
 }
@@ -77,6 +89,8 @@ function transformProductRecord(record: ProductoRecord): Product {
     parentProductId: record.producto_padre || undefined,
     levelId: record.nivel || undefined,
     trustBadges: record.trust_badges || undefined,
+    bonusTitle: record.bonus_titulo || undefined,
+    bonusSubtitle: record.bonus_subtitulo || undefined,
     duracionMinutos: record.duracion_minutos || undefined,
     subtitle: record.subtitulo || undefined,
     note: record.nota || undefined,
@@ -214,19 +228,31 @@ export const getCommunityProducts = cache(async (): Promise<Product[]> => {
   }
 });
 
-// Fetch a single product by slug
+// Fetch a single product by slug (includes FAQs)
 export const getProductBySlug = cache(
   async (slug: string): Promise<Product | null> => {
     try {
       const supabase = createAnonSupabase();
       const { data, error } = await supabase
         .from('productos')
-        .select('*')
+        .select('*, producto_faqs(*)')
         .eq('slug', slug)
         .single();
 
       if (error) throw error;
-      return data ? transformProductRecord(data) : null;
+      if (!data) return null;
+
+      const { producto_faqs: faqRecords, ...productRecord } = data as ProductoRecord & {
+        producto_faqs: ProductoFAQRecord[] | null;
+      };
+
+      const product = transformProductRecord(productRecord);
+      if (faqRecords && faqRecords.length > 0) {
+        product.faqs = faqRecords
+          .map(transformFAQRecord)
+          .sort((a, b) => a.order - b.order);
+      }
+      return product;
     } catch (error) {
       console.error('Error fetching product by slug:', error);
       return null;
