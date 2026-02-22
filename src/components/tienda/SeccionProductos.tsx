@@ -3,7 +3,7 @@
 import { memo } from 'react';
 import { BookOpen, PackageCheck } from 'lucide-react';
 import { motion } from 'motion/react';
-import type { Product } from '@/types/tienda';
+import type { Product, ProductType } from '@/types/tienda';
 import { FeaturedProductCard } from './TiendaSections';
 import type { PurchaseStatus } from './TiendaSections';
 
@@ -11,12 +11,14 @@ interface SeccionProductosProps {
   featuredProducts: Product[];
   purchasedProductIds?: string[];
   isLoggedIn?: boolean;
+  productTypes?: Record<string, ProductType>;
 }
 
 export default memo(function SeccionProductos({
   featuredProducts,
   purchasedProductIds = [],
   isLoggedIn = false,
+  productTypes,
 }: SeccionProductosProps) {
   const purchasedSet = new Set(purchasedProductIds);
   const getStatus = (productId: string): PurchaseStatus => {
@@ -67,6 +69,7 @@ export default memo(function SeccionProductos({
         <FeaturedProductCard
           product={cursoDestacado}
           purchaseStatus={getStatus(cursoDestacado.id)}
+          productTypes={productTypes}
         />
       </div>
     </section>

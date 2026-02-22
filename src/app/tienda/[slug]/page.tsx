@@ -4,7 +4,7 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import { ProductDetail } from '@/components/tienda';
-import { getProductBySlug, getAllProductSlugs } from '@/lib/tienda-service';
+import { getProductBySlug, getAllProductSlugs, getProductTypesMap } from '@/lib/tienda-service';
 
 export const revalidate = 60;
 
@@ -49,7 +49,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const product = await getProductBySlug(slug);
+  const [product, productTypes] = await Promise.all([
+    getProductBySlug(slug),
+    getProductTypesMap(),
+  ]);
 
   if (!product) {
     notFound();
@@ -59,7 +62,7 @@ export default async function ProductPage({ params }: Props) {
     <>
       <Navigation />
       <main id="main-content">
-        <ProductDetail product={product} />
+        <ProductDetail product={product} productTypes={productTypes} />
         <TestimonialsSection
           id="testimonios-producto"
           badge="Testimonios"

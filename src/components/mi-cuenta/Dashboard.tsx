@@ -21,7 +21,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import type { User, Compra } from '@/types/auth';
-import type { Product } from '@/types/tienda';
+import type { Product, ProductType } from '@/types/tienda';
 import type { Reserva } from '@/types/reservas';
 import ProductCard from './ProductCard';
 import ChangePasswordModal from './ChangePasswordModal';
@@ -31,6 +31,7 @@ interface MeResponse {
   user: User;
   compras: Compra[];
   allProducts: Product[];
+  productTypes: Record<string, ProductType>;
   pago2Product: { id: string; stripePriceId: string; price: number } | null;
   bookingSessionId: string | null;
   parentProductId: string | null;
@@ -418,6 +419,7 @@ export default function Dashboard() {
                 compra={compra}
                 variant="purchased"
                 index={index}
+                productTypes={data.productTypes}
               />
             ))}
           </div>
@@ -446,6 +448,7 @@ export default function Dashboard() {
                 product={product}
                 variant="locked"
                 index={index}
+                productTypes={data.productTypes}
               />
             ))}
           </div>

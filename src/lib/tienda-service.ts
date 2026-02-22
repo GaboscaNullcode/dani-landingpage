@@ -7,10 +7,22 @@ import type {
   PaymentPlan,
   CategoriaProductoRecord,
   ProductCategory,
+  TipoProductoRecord,
+  ProductType,
 } from '@/types/tienda';
 
 const FALLBACK_IMAGE =
   'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80';
+
+// Transform TipoProductoRecord to ProductType
+function transformProductTypeRecord(record: TipoProductoRecord): ProductType {
+  return {
+    id: record.id,
+    label: record.label,
+    icon: record.icono,
+    color: record.color,
+  };
+}
 
 // Transform CategoriaProductoRecord to ProductCategory
 function transformCategoryRecord(
@@ -64,6 +76,7 @@ function transformProductRecord(record: ProductoRecord): Product {
     order: record.orden || 0,
     parentProductId: record.producto_padre || undefined,
     levelId: record.nivel || undefined,
+    trustBadges: record.trust_badges || undefined,
     duracionMinutos: record.duracion_minutos || undefined,
     subtitle: record.subtitulo || undefined,
     note: record.nota || undefined,
@@ -325,6 +338,32 @@ export async function getProductById(
     return null;
   }
 }
+
+// ── Product types (tipos_producto) ──
+
+// Fetch all product types
+export const getAllProductTypes = cache(async (): Promise<ProductType[]> => {
+  try {
+    const supabase = createAnonSupabase();
+    const { data, error } = await supabase
+      .from('tipos_producto')
+      .select('*');
+
+    if (error) throw error;
+    return (data ?? []).map(transformProductTypeRecord);
+  } catch (error) {
+    console.error('Error fetching product types:', error);
+    return [];
+  }
+});
+
+// Fetch product types as a map keyed by id
+export const getProductTypesMap = cache(
+  async (): Promise<Record<string, ProductType>> => {
+    const types = await getAllProductTypes();
+    return Object.fromEntries(types.map((t) => [t.id, t]));
+  },
+);
 
 // ── Product categories (levels) ──
 

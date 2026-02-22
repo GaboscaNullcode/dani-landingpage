@@ -14,7 +14,7 @@ import {
   Crown,
   CircleCheck,
 } from 'lucide-react';
-import type { Product } from '@/types/tienda';
+import type { Product, ProductType } from '@/types/tienda';
 import { formatPrice } from '@/types/tienda';
 
 // Purchase status: 'purchased' | 'locked' | 'none' (visitor, no login)
@@ -148,9 +148,10 @@ function CompactProductCard({ product, index = 0, accentColor = 'coral', purchas
 interface FeaturedCardProps {
   product: Product;
   purchaseStatus?: PurchaseStatus;
+  productTypes?: Record<string, ProductType>;
 }
 
-function FeaturedProductCard({ product, purchaseStatus = 'none' }: FeaturedCardProps) {
+function FeaturedProductCard({ product, purchaseStatus = 'none', productTypes }: FeaturedCardProps) {
   const isPurchased = purchaseStatus === 'purchased';
 
   return (
@@ -193,7 +194,7 @@ function FeaturedProductCard({ product, purchaseStatus = 'none' }: FeaturedCardP
           <div className="mb-3 flex items-center gap-2">
             <Crown className="h-5 w-5 text-sunshine" fill="currentColor" />
             <span className="text-sm font-semibold uppercase tracking-wider text-coral">
-              {product.category}
+              {productTypes?.[product.category]?.label || product.category}
             </span>
           </div>
 

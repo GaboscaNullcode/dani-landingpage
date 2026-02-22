@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth-service';
 import { getUserCompras } from '@/lib/compras-service';
-import { getAllProducts, getPaymentPlans } from '@/lib/tienda-service';
+import { getAllProducts, getPaymentPlans, getProductTypesMap } from '@/lib/tienda-service';
 
 export async function GET() {
   const user = await getCurrentUser();
@@ -10,9 +10,10 @@ export async function GET() {
     return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
   }
 
-  const [compras, allProducts] = await Promise.all([
+  const [compras, allProducts, productTypes] = await Promise.all([
     getUserCompras(user.id),
     getAllProducts(),
+    getProductTypesMap(),
   ]);
 
   // Only send fields the Dashboard/ProductCard components need
@@ -73,5 +74,5 @@ export async function GET() {
     }
   }
 
-  return NextResponse.json({ user, compras: comprasLite, allProducts, pago2Product, bookingSessionId, parentProductId });
+  return NextResponse.json({ user, compras: comprasLite, allProducts, productTypes, pago2Product, bookingSessionId, parentProductId });
 }

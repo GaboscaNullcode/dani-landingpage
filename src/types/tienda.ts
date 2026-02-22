@@ -1,3 +1,27 @@
+// Supabase record structure for 'tipos_producto' table
+export interface TipoProductoRecord {
+  id: string;
+  label: string;
+  icono: string;
+  color: string;
+  created_at: string;
+}
+
+// Frontend product type model
+export interface ProductType {
+  id: string;
+  label: string;
+  icon: string;
+  color: string;
+}
+
+// Trust badge (stored as JSONB in productos.trust_badges)
+export interface TrustBadge {
+  icono: string;
+  texto: string;
+  color: string;
+}
+
 // Supabase record structure for 'categorias_producto' table
 export interface CategoriaProductoRecord {
   id: string;
@@ -63,6 +87,7 @@ export interface ProductoRecord {
   mostrar_en_planes: boolean;
   producto_padre: string | null;
   nivel: string | null;
+  trust_badges: TrustBadge[] | null;
 }
 
 // Frontend product model
@@ -97,6 +122,7 @@ export interface Product {
   parentProductId?: string;
   levelId?: string;
   level?: ProductCategory;
+  trustBadges?: TrustBadge[];
   // Asesoria-specific fields
   duracionMinutos?: number;
   subtitle?: string;

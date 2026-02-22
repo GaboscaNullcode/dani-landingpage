@@ -6,41 +6,22 @@ import Link from 'next/link';
 import {
   Check,
   Star,
-  Shield,
-  Clock,
   Download,
-  Play,
-  Users,
   ArrowLeft,
-  Gift,
 } from 'lucide-react';
-import type { Product } from '@/types/tienda';
+import type { Product, ProductType } from '@/types/tienda';
 import { formatPrice } from '@/types/tienda';
+import { resolveIcon } from '@/lib/icon-map';
 import CheckoutButton from './CheckoutButton';
 
 interface ProductDetailProps {
   product: Product;
+  productTypes: Record<string, ProductType>;
 }
 
-const categoryIcons: Record<string, React.ElementType> = {
-  curso: Play,
-  ebook: Download,
-  masterclass: Play,
-  comunidad: Users,
-  gratis: Gift,
-};
-
-const categoryLabels: Record<string, string> = {
-  curso: 'Curso Online',
-  ebook: 'eBook Digital',
-  masterclass: 'Masterclass',
-  comunidad: 'Comunidad',
-  gratis: 'Recurso Gratuito',
-};
-
-
-export default function ProductDetail({ product }: ProductDetailProps) {
-  const CategoryIcon = categoryIcons[product.category] || Download;
+export default function ProductDetail({ product, productTypes }: ProductDetailProps) {
+  const productType = productTypes[product.category];
+  const CategoryIcon = productType ? resolveIcon(productType.icon) : Download;
 
   return (
     <>
@@ -113,9 +94,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             >
               {/* Category badge */}
               <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 shadow-sm backdrop-blur-sm">
-                <CategoryIcon className="h-4 w-4 text-coral" />
+                <CategoryIcon className={`h-4 w-4 text-${productType?.color || 'coral'}`} />
                 <span className="text-sm font-semibold text-gray-dark">
-                  {categoryLabels[product.category]}
+                  {productType?.label || product.category}
                 </span>
               </div>
 
@@ -192,20 +173,19 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               )}
 
               {/* Trust badges */}
-              <div className="flex flex-wrap items-center gap-6 text-sm text-gray-medium">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-mint" />
-                  <span>Pago seguro</span>
+              {product.trustBadges && product.trustBadges.length > 0 && (
+                <div className="flex flex-wrap items-center gap-6 text-sm text-gray-medium">
+                  {product.trustBadges.map((badge, i) => {
+                    const BadgeIcon = resolveIcon(badge.icono);
+                    return (
+                      <div key={i} className="flex items-center gap-2">
+                        <BadgeIcon className={`h-5 w-5 text-${badge.color}`} />
+                        <span>{badge.texto}</span>
+                      </div>
+                    );
+                  })}
                 </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-lavender" />
-                  <span>Acceso inmediato</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Download className="h-5 w-5 text-coral" />
-                  <span>Descarga ilimitada</span>
-                </div>
-              </div>
+              )}
             </motion.div>
           </div>
         </div>
