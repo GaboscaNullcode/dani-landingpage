@@ -105,7 +105,7 @@ export default function MasterclassHero() {
       </div>
 
       <div className="container-custom relative z-10">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
@@ -136,10 +136,12 @@ export default function MasterclassHero() {
               delay: 0.2,
               ease: [0.175, 0.885, 0.32, 1.275],
             }}
-            className="text-hero-title font-[var(--font-headline)] font-bold text-black-deep"
+            className="font-[var(--font-headline)] text-[clamp(1.75rem,4vw,2.5rem)] font-bold leading-tight text-black-deep"
           >
-            Vive en{' '}
-            <span className="gradient-text-playful">Modo Remoto</span>
+            Masterclass{' '}
+            <span className="gradient-text-playful">
+              &ldquo;Vive en Modo Remoto&rdquo;
+            </span>
           </motion.h1>
 
           {/* Subtitle */}
@@ -157,13 +159,14 @@ export default function MasterclassHero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-body-large mx-auto mt-6 max-w-2xl text-gray-carbon"
+            className="text-body-large mt-6 text-left text-gray-carbon"
           >
             En esta masterclass gratuita de{' '}
             <span className="font-semibold text-coral">2 horas</span>, Dani te
-            explica como iniciar en el trabajo remoto desde cero: que opciones
-            existen, que busca el mercado, que necesitas para postular y como
-            evitar errores comunes al empezar.
+            explica cómo iniciar en el trabajo remoto desde cero: qué opciones
+            existen, qué busca el mercado, qué necesitas para postular y cómo
+            evitar errores comunes al empezar. Es una sesión clara, práctica y
+            honesta para ayudarte a decidir tu siguiente paso con más criterio.
           </motion.p>
 
           {/* Duration badge */}

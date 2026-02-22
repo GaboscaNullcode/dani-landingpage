@@ -201,13 +201,13 @@ function PurchasedCard({ compra, index }: { compra: Compra; index: number }) {
 
             {(producto.categoria === 'curso' ||
               producto.categoria === 'masterclass') && (
-              <button
-                disabled
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white opacity-75"
+              <Link
+                href={`/tienda/${producto.slug}`}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
               >
                 <ExternalLink className="h-4 w-4" />
-                Acceder (proximamente)
-              </button>
+                Ver Masterclass
+              </Link>
             )}
 
             {producto.categoria === 'comunidad' && producto.whatsapp_link && (

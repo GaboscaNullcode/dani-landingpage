@@ -9,10 +9,11 @@ import {
 import {
   QuickNavSection,
   MasterclassSection,
-  BlogHighlightsSection,
 } from '@/components/stages/stage1';
+import BlogPreviewSection from '@/components/BlogPreviewSection';
 import NewsletterFormCard from '@/components/NewsletterFormCard';
 import { getCommunityProducts } from '@/lib/tienda-service';
+import { getLatestArticles } from '@/lib/blog-service';
 
 export const metadata: Metadata = {
   title: 'Recursos Gratuitos - Stage 1 | Remote con Dani',
@@ -35,7 +36,10 @@ export const metadata: Metadata = {
 };
 
 export default async function RecursosGratuitosPage() {
-  const communityProducts = await getCommunityProducts();
+  const [communityProducts, articles] = await Promise.all([
+    getCommunityProducts(),
+    getLatestArticles(3),
+  ]);
   const community = communityProducts[0];
 
   return (
@@ -49,7 +53,7 @@ export default async function RecursosGratuitosPage() {
         />
         <QuickNavSection />
         <MasterclassSection />
-        <BlogHighlightsSection />
+        <BlogPreviewSection articles={articles} />
         <WhatsAppCommunityCard
           priceId={community?.stripePriceId}
           productId={community?.id}

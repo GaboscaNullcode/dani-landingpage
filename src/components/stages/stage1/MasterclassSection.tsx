@@ -55,11 +55,11 @@ export default function MasterclassSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-section-title text-center font-[var(--font-headline)] font-bold text-gray-dark"
+            className="text-center font-[var(--font-headline)] text-[clamp(1.75rem,3.5vw,2.5rem)] font-bold leading-tight text-gray-dark"
           >
             Masterclass{' '}
             <span className="gradient-text">
-              &quot;Vive en Modo Remoto&quot;
+              &ldquo;Vive en Modo Remoto&rdquo;
             </span>
           </motion.h2>
 
@@ -79,7 +79,7 @@ export default function MasterclassSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="mx-auto mt-6 max-w-2xl text-center text-gray-carbon"
+            className="mt-6 text-left text-gray-carbon"
           >
             En esta masterclass gratuita de 2 horas, Dani te explica cómo iniciar
             en el trabajo remoto desde cero: qué opciones existen, qué busca el

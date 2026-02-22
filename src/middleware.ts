@@ -19,5 +19,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/mi-cuenta/:path*'],
+  matcher: ['/mi-cuenta/:path*', '/masterclass-gratuita'],
 };
