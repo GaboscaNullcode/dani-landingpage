@@ -22,10 +22,12 @@ function TestimonialCard({
   testimonial,
   index,
   isInView,
+  isSectionVisible,
 }: {
   testimonial: TestimonioMasterclass;
   index: number;
   isInView: boolean;
+  isSectionVisible: boolean;
 }) {
   const gradient = cardGradients[index % cardGradients.length];
 
@@ -72,7 +74,7 @@ function TestimonialCard({
               style={{
                 background: `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)`,
               }}
-              animate={{ rotate: [0, 360] }}
+              animate={isSectionVisible ? { rotate: [0, 360] } : false}
               transition={{
                 duration: 20,
                 repeat: Infinity,
@@ -103,7 +105,7 @@ function TestimonialCard({
               style={{
                 background: `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)`,
               }}
-              animate={{ scale: [1, 1.2, 1] }}
+              animate={isSectionVisible ? { scale: [1, 1.2, 1] } : false}
               transition={{ duration: 2, repeat: Infinity }}
             />
           </div>
@@ -184,6 +186,7 @@ export default function TestimonialCarousel({
 }: TestimonialCarouselProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const isSectionVisible = useInView(ref, { margin: '100px' });
 
   // Duplicate for seamless infinite carousel
   const duplicated = [...testimonials, ...testimonials];
@@ -207,6 +210,7 @@ export default function TestimonialCarousel({
               testimonial={testimonial}
               index={index % testimonials.length}
               isInView={isInView}
+              isSectionVisible={isSectionVisible}
             />
           ))}
         </div>

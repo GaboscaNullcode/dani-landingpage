@@ -7,6 +7,16 @@ const BRAND = {
   logo: 'Remote con Dani',
 };
 
+/** Escape HTML special characters to prevent XSS in email templates */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function baseLayout(content: string): string {
   return `<!DOCTYPE html>
 <html lang="es">
@@ -59,11 +69,12 @@ export function getPurchaseEmailHtml(
   accessUrl: string,
   isSubscription: boolean,
 ): string {
+  const safeName = escapeHtml(productName);
   const tipo = isSubscription ? 'suscripcion' : 'compra';
   const content = `
     <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Tu ${tipo === 'suscripcion' ? 'suscripcion' : 'compra'} fue exitosa</h2>
     <p style="margin:0 0 8px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Ya tienes acceso a <strong style="color:${BRAND.dark};">${productName}</strong>.
+      Ya tienes acceso a <strong style="color:${BRAND.dark};">${safeName}</strong>.
     </p>
     <p style="margin:0 0 24px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
       Accede a tu contenido desde tu area de miembros:
@@ -80,8 +91,11 @@ export function getWelcomeEmailHtml(
   email: string,
   tempPassword: string,
 ): string {
+  const safeName = escapeHtml(name);
+  const safeEmail = escapeHtml(email);
+  const safePassword = escapeHtml(tempPassword);
   const content = `
-    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Bienvenida, ${name}!</h2>
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Bienvenida, ${safeName}!</h2>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
       Se ha creado tu cuenta. Aqui tienes tus credenciales de acceso:
     </p>
@@ -89,9 +103,9 @@ export function getWelcomeEmailHtml(
       <tr>
         <td style="padding:16px 20px;">
           <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Email:</p>
-          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${email}</p>
+          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${safeEmail}</p>
           <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Contrasena temporal:</p>
-          <p style="margin:0;font-size:16px;color:${BRAND.dark};font-weight:600;font-family:monospace;">${tempPassword}</p>
+          <p style="margin:0;font-size:16px;color:${BRAND.dark};font-weight:600;font-family:monospace;">${safePassword}</p>
         </td>
       </tr>
     </table>
@@ -106,8 +120,9 @@ export function getNewsletterWelcomeEmailHtml(
   name: string,
   guideUrl: string,
 ): string {
+  const safeName = escapeHtml(name);
   const content = `
-    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Bienvenida, ${name}!</h2>
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Bienvenida, ${safeName}!</h2>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
       Gracias por unirte a la comunidad de <strong style="color:${BRAND.dark};">Remote con Dani</strong>.
       Aqui tienes tu guia gratuita como te prometi:
@@ -128,8 +143,9 @@ export function getCommunityEmailHtml(
   whatsappLink: string,
   accessUrl: string,
 ): string {
+  const safeName = escapeHtml(productName);
   const content = `
-    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Bienvenida a ${productName}!</h2>
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Bienvenida a ${safeName}!</h2>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
       Tu suscripcion esta activa. Unite a la comunidad en WhatsApp:
     </p>
@@ -208,6 +224,11 @@ export function getBookingConfirmationEmailHtml(
   zoomUrl?: string,
   masterclassUrl?: string,
 ): string {
+  const safeName = escapeHtml(name);
+  const safePlan = escapeHtml(planName);
+  const safeFecha = escapeHtml(fecha);
+  const safeHora = escapeHtml(hora);
+  const safeTimezone = escapeHtml(timezone);
   const duracionText =
     duracion >= 60
       ? `${Math.floor(duracion / 60)}h ${duracion % 60 ? `${duracion % 60}min` : ''}`
@@ -225,9 +246,9 @@ export function getBookingConfirmationEmailHtml(
       <tr>
         <td style="padding:20px;">
           <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">📅 Fecha:</p>
-          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${fecha}</p>
+          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${safeFecha}</p>
           <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">🕒 Hora:</p>
-          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${hora} (${timezone})</p>
+          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${safeHora} (${safeTimezone})</p>
           <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">⏱️ Duración:</p>
           <p style="margin:0 0 ${zoomUrl ? '16px' : '0'};font-size:16px;color:${BRAND.dark};font-weight:600;">${duracionText}</p>
           ${zoomUrl ? `<p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">🔗 Enlace de Zoom:</p>
@@ -259,6 +280,12 @@ export function getBookingNotificationEmailHtml(
   zoomStartUrl?: string,
   notas?: string,
 ): string {
+  const safeClient = escapeHtml(clientName);
+  const safeClientEmail = escapeHtml(clientEmail);
+  const safePlan = escapeHtml(planName);
+  const safeFecha = escapeHtml(fecha);
+  const safeHora = escapeHtml(hora);
+  const safeTimezone = escapeHtml(timezone);
   const duracionText =
     duracion >= 60
       ? `${Math.floor(duracion / 60)}h ${duracion % 60 ? `${duracion % 60}min` : ''}`
@@ -270,17 +297,17 @@ export function getBookingNotificationEmailHtml(
       <tr>
         <td style="padding:20px;">
           <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Cliente:</p>
-          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${clientName} (${clientEmail})</p>
+          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${safeClient} (${safeClientEmail})</p>
           <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Plan:</p>
-          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${planName}</p>
+          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${safePlan}</p>
           <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Fecha:</p>
-          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${fecha} a las ${hora} (${timezone})</p>
+          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${safeFecha} a las ${safeHora} (${safeTimezone})</p>
           <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Duracion:</p>
           <p style="margin:0 0 ${notas ? '16px' : '0'};font-size:16px;color:${BRAND.dark};font-weight:600;">${duracionText}</p>
           ${
             notas
               ? `<p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Notas del cliente:</p>
-          <p style="margin:0;font-size:16px;color:${BRAND.dark};font-style:italic;">${notas}</p>`
+          <p style="margin:0;font-size:16px;color:${BRAND.dark};font-style:italic;">${escapeHtml(notas)}</p>`
               : ''
           }
         </td>
@@ -296,10 +323,11 @@ export function getProgramaIntensivoFullPaymentEmailHtml(
   name: string,
   accessUrl: string,
 ): string {
+  const safeName = escapeHtml(name);
   const content = `
     <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Tu Programa Intensivo ya esta activo</h2>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Hola <strong style="color:${BRAND.dark};">${name}</strong>, tu pago ha sido confirmado y ya tienes acceso completo a tu Programa Intensivo.
+      Hola <strong style="color:${BRAND.dark};">${safeName}</strong>, tu pago ha sido confirmado y ya tienes acceso completo a tu Programa Intensivo.
     </p>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
       Dentro de tu area de miembros encontraras:
@@ -323,10 +351,11 @@ export function getProgramaIntensivoPago1EmailHtml(
   name: string,
   accessUrl: string,
 ): string {
+  const safeName = escapeHtml(name);
   const content = `
     <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Ya tienes acceso a tus materiales (Pago 1 recibido)</h2>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Hola <strong style="color:${BRAND.dark};">${name}</strong>, tu primer pago ha sido confirmado y ya puedes acceder a tus materiales del Programa Intensivo.
+      Hola <strong style="color:${BRAND.dark};">${safeName}</strong>, tu primer pago ha sido confirmado y ya puedes acceder a tus materiales del Programa Intensivo.
     </p>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
       Ahora mismo tienes acceso a:
@@ -355,6 +384,11 @@ export function getBookingReminderEmailHtml(
   zoomUrl: string,
   reminderType: '3d' | '24h' | '1h',
 ): string {
+  const safeName = escapeHtml(name);
+  const safePlan = escapeHtml(planName);
+  const safeFecha = escapeHtml(fecha);
+  const safeHora = escapeHtml(hora);
+  const safeTimezone = escapeHtml(timezone);
   const duracionText =
     duracion >= 60
       ? `${Math.floor(duracion / 60)}h ${duracion % 60 ? `${duracion % 60}min` : ''}`
@@ -370,15 +404,15 @@ export function getBookingReminderEmailHtml(
   const content = `
     <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">${reminderText}</h2>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Hola <strong style="color:${BRAND.dark};">${name}</strong>, te recordamos tu sesion de <strong style="color:${BRAND.dark};">${planName}</strong>:
+      Hola <strong style="color:${BRAND.dark};">${safeName}</strong>, te recordamos tu sesion de <strong style="color:${BRAND.dark};">${safePlan}</strong>:
     </p>
     <table role="presentation" cellpadding="0" cellspacing="0" style="background-color:${BRAND.cream};border-radius:8px;width:100%;margin-bottom:24px;">
       <tr>
         <td style="padding:20px;">
           <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Fecha:</p>
-          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${fecha}</p>
+          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${safeFecha}</p>
           <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Hora:</p>
-          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${hora} (${timezone})</p>
+          <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${safeHora} (${safeTimezone})</p>
           <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Duracion:</p>
           <p style="margin:0;font-size:16px;color:${BRAND.dark};font-weight:600;">${duracionText}</p>
         </td>

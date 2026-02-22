@@ -69,15 +69,21 @@ export async function POST(request: NextRequest) {
     console.log(`[reservas/crear] Plan validated: ${plan.name}`);
 
     // Find compra by stripe_session_id (webhook may or may not have created it)
+    // Retry with exponential backoff — webhook may still be processing
     let compra = await getCompraByStripeSessionId(stripeSessionId);
     console.log(`[reservas/crear] Compra lookup (1st):`, compra?.id || 'not found');
 
     if (!compra) {
-      // Retry after a short wait — webhook may still be processing
-      console.log('[reservas/crear] Waiting 2s for webhook...');
-      await new Promise((r) => setTimeout(r, 2000));
-      compra = await getCompraByStripeSessionId(stripeSessionId);
-      console.log(`[reservas/crear] Compra lookup (2nd):`, compra?.id || 'not found');
+      const retryDelays = [1000, 2000, 3000]; // 1s, 2s, 3s backoff
+      for (const delay of retryDelays) {
+        console.log(`[reservas/crear] Waiting ${delay}ms for webhook...`);
+        await new Promise((r) => setTimeout(r, delay));
+        compra = await getCompraByStripeSessionId(stripeSessionId);
+        if (compra) {
+          console.log(`[reservas/crear] Compra found after retry:`, compra.id);
+          break;
+        }
+      }
     }
 
     if (!compra) {

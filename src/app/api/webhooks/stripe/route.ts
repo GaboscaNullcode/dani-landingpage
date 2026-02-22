@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
       }
 
       try {
-        // Check if compra already exists (may have been created by /api/reservas/crear)
+        // Idempotency: check if compra already exists for this session
         const existingCompra = await getCompraByStripeSessionId(session.id);
         console.log(`[webhook] Existing compra for session:`, existingCompra?.id || 'none');
 
@@ -82,22 +82,31 @@ export async function POST(request: NextRequest) {
             console.log('[webhook] Asesoria compra already exists, skipping');
             break;
           }
+          // For non-asesoria, if compra exists the webhook already ran — skip to avoid duplicates
+          console.log('[webhook] Compra already exists, skipping duplicate webhook');
+          break;
         }
 
         console.log(`[webhook] Finding or creating user: ${email}`);
         const { user, isNew, tempPassword } = await findOrCreateUser(email, name);
         console.log(`[webhook] User ${user.id} (isNew: ${isNew})`);
 
+        // Parallelize independent operations: welcome email + Stripe customer ID update
+        const stripeCustomerId = session.customer as string | null;
+        const parallelOps: Promise<unknown>[] = [];
+
         if (isNew && tempPassword) {
           console.log(`[webhook] Sending welcome email to ${email}`);
-          await sendWelcomeEmail(email, name, tempPassword);
+          parallelOps.push(sendWelcomeEmail(email, name, tempPassword));
         }
 
-        // Save Stripe customer ID to profile (needed for Billing Portal)
-        const stripeCustomerId = session.customer as string | null;
         if (stripeCustomerId && !user.stripeCustomerId) {
           console.log(`[webhook] Saving stripe_customer_id: ${stripeCustomerId}`);
-          await updateStripeCustomerId(user.id, stripeCustomerId);
+          parallelOps.push(updateStripeCustomerId(user.id, stripeCustomerId));
+        }
+
+        if (parallelOps.length > 0) {
+          await Promise.all(parallelOps);
         }
 
         const subscriptionId =

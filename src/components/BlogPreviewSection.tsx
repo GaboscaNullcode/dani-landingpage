@@ -16,6 +16,7 @@ export default function BlogPreviewSection({
 }: BlogPreviewSectionProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const isSectionVisible = useInView(ref, { margin: '100px' });
 
   if (articles.length === 0) return null;
 
@@ -37,10 +38,10 @@ export default function BlogPreviewSection({
             background:
               'linear-gradient(135deg, rgba(255, 107, 107, 0.3) 0%, rgba(252, 211, 77, 0.2) 100%)',
           }}
-          animate={{
+          animate={isSectionVisible ? {
             scale: [1, 1.1, 1],
             rotate: [0, 10, 0],
-          }}
+          } : false}
           transition={{
             duration: 14,
             repeat: Infinity,
@@ -53,9 +54,9 @@ export default function BlogPreviewSection({
             background:
               'linear-gradient(135deg, rgba(167, 139, 250, 0.3) 0%, rgba(224, 86, 160, 0.2) 100%)',
           }}
-          animate={{
+          animate={isSectionVisible ? {
             scale: [1, 1.15, 1],
-          }}
+          } : false}
           transition={{
             duration: 12,
             repeat: Infinity,
@@ -66,14 +67,14 @@ export default function BlogPreviewSection({
         {/* Floating icon decorations */}
         <motion.div
           className="absolute left-[8%] top-[20%] flex h-10 w-10 items-center justify-center rounded-full bg-lavender/30 opacity-40"
-          animate={{ y: [-8, 8, -8], rotate: [-5, 5, -5] }}
+          animate={isSectionVisible ? { y: [-8, 8, -8], rotate: [-5, 5, -5] } : false}
           transition={{ duration: 6, repeat: Infinity }}
         >
           <PenTool className="h-5 w-5 text-lavender" />
         </motion.div>
         <motion.div
           className="absolute bottom-[25%] right-[10%] flex h-11 w-11 items-center justify-center rounded-full bg-sunshine/30 opacity-40"
-          animate={{ y: [8, -8, 8], rotate: [5, -5, 5] }}
+          animate={isSectionVisible ? { y: [8, -8, 8], rotate: [5, -5, 5] } : false}
           transition={{ duration: 5, repeat: Infinity }}
         >
           <Lightbulb className="h-5 w-5 text-sunshine" />

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { getCurrentUser } from '@/lib/auth-service';
 import { getCompraForDownload } from '@/lib/compras-service';
-import PDFViewer from '@/components/mi-cuenta/PDFViewer';
+import PDFViewer from '@/components/mi-cuenta/PDFViewerDynamic';
 
 export const metadata: Metadata = {
   title: 'Visor | Remote con Dani',

@@ -9,6 +9,7 @@ import { Hand, Award, ArrowRight } from 'lucide-react';
 export default function AboutSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const isSectionVisible = useInView(ref, { margin: '100px' });
 
   return (
     <section
@@ -25,10 +26,10 @@ export default function AboutSection() {
             background:
               'linear-gradient(135deg, rgba(167, 139, 250, 0.3) 0%, rgba(110, 231, 183, 0.2) 100%)',
           }}
-          animate={{
+          animate={isSectionVisible ? {
             scale: [1, 1.1, 1],
             rotate: [0, 10, 0],
-          }}
+          } : false}
           transition={{
             duration: 15,
             repeat: Infinity,
@@ -41,9 +42,9 @@ export default function AboutSection() {
             background:
               'linear-gradient(135deg, rgba(255, 107, 107, 0.3) 0%, rgba(224, 86, 160, 0.2) 100%)',
           }}
-          animate={{
+          animate={isSectionVisible ? {
             scale: [1, 1.15, 1],
-          }}
+          } : false}
           transition={{
             duration: 12,
             repeat: Infinity,
@@ -72,9 +73,9 @@ export default function AboutSection() {
                 background:
                   'linear-gradient(135deg, rgba(255, 107, 107, 0.25) 0%, rgba(224, 86, 160, 0.2) 50%, rgba(167, 139, 250, 0.25) 100%)',
               }}
-              animate={{
+              animate={isSectionVisible ? {
                 scale: [1, 1.05, 1],
-              }}
+              } : false}
               transition={{
                 duration: 6,
                 repeat: Infinity,
@@ -96,10 +97,10 @@ export default function AboutSection() {
             {/* Floating stat card - hidden on mobile */}
             <motion.div
               className="absolute -right-4 bottom-8 z-20 hidden rounded-2xl bg-white p-5 shadow-xl sm:block"
-              animate={{
+              animate={isSectionVisible ? {
                 y: [-5, 5, -5],
                 rotate: [-2, 2, -2],
-              }}
+              } : false}
               transition={{
                 duration: 4,
                 repeat: Infinity,
@@ -119,10 +120,10 @@ export default function AboutSection() {
             {/* Small decorative element - hidden on mobile */}
             <motion.div
               className="absolute -left-4 top-12 z-20 hidden h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-lavender to-mint shadow-lg sm:flex"
-              animate={{
+              animate={isSectionVisible ? {
                 y: [0, -10, 0],
                 rotate: [0, 10, 0],
-              }}
+              } : false}
               transition={{
                 duration: 3,
                 repeat: Infinity,

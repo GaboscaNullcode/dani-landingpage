@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Navigation from '@/components/Navigation';
@@ -102,6 +103,19 @@ function generateArticleJsonLd(article: NonNullable<Awaited<ReturnType<typeof ge
   };
 }
 
+// Streamed component: fetches related articles independently
+async function RelatedArticlesSection({
+  articleId,
+  categoryId,
+}: {
+  articleId: string;
+  categoryId?: string;
+}) {
+  const relatedArticles = await getRelatedArticles(articleId, 3, categoryId);
+  if (relatedArticles.length === 0) return null;
+  return <RelatedArticles articles={relatedArticles} />;
+}
+
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
@@ -109,12 +123,6 @@ export default async function BlogPostPage({ params }: PageProps) {
   if (!article) {
     notFound();
   }
-
-  const relatedArticles = await getRelatedArticles(
-    article.id,
-    3,
-    article.category?.id,
-  );
 
   // Default content if no content is provided
   const defaultContent = `
@@ -162,9 +170,12 @@ export default async function BlogPostPage({ params }: PageProps) {
             </div>
           </div>
         </section>
-        {relatedArticles.length > 0 && (
-          <RelatedArticles articles={relatedArticles} />
-        )}
+        <Suspense fallback={null}>
+          <RelatedArticlesSection
+            articleId={article.id}
+            categoryId={article.category?.id}
+          />
+        </Suspense>
       </main>
       <Footer />
     </>
