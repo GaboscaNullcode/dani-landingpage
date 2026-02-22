@@ -12,7 +12,6 @@ import {
   BookOpen,
   Play,
   Crown,
-  Lock,
   CircleCheck,
 } from 'lucide-react';
 import type { Product } from '@/types/tienda';
@@ -57,7 +56,6 @@ const accentStyles = {
 
 function CompactProductCard({ product, index = 0, accentColor = 'coral', purchaseStatus = 'none' }: CompactCardProps) {
   const styles = accentStyles[accentColor];
-  const isLocked = purchaseStatus === 'locked';
   const isPurchased = purchaseStatus === 'purchased';
 
   return (
@@ -74,14 +72,9 @@ function CompactProductCard({ product, index = 0, accentColor = 'coral', purchas
           src={product.image}
           alt={product.name}
           fill
-          className={`object-cover transition-transform duration-300 group-hover:scale-105 ${isLocked ? 'grayscale-[80%] opacity-60' : ''}`}
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
           sizes="80px"
         />
-        {isLocked && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <Lock className="h-6 w-6 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]" />
-          </div>
-        )}
         {isPurchased ? (
           <span className="absolute -right-1 -top-1 rounded-full bg-mint px-2 py-0.5 text-[10px] font-bold uppercase text-white">
             Adquirido
@@ -127,14 +120,6 @@ function CompactProductCard({ product, index = 0, accentColor = 'coral', purchas
               Ver producto
               <ArrowRight className="h-3 w-3" />
             </Link>
-          ) : isLocked ? (
-            <Link
-              href={`/tienda/${product.slug}`}
-              className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-coral to-pink px-3 py-1.5 text-xs font-semibold text-white transition-all duration-200 hover:shadow-md"
-            >
-              Obtener acceso
-              <ArrowRight className="h-3 w-3" />
-            </Link>
           ) : (
             <Link
               href={`/tienda/${product.slug}`}
@@ -159,7 +144,6 @@ interface FeaturedCardProps {
 }
 
 function FeaturedProductCard({ product, purchaseStatus = 'none' }: FeaturedCardProps) {
-  const isLocked = purchaseStatus === 'locked';
   const isPurchased = purchaseStatus === 'purchased';
 
   return (
@@ -181,14 +165,9 @@ function FeaturedProductCard({ product, purchaseStatus = 'none' }: FeaturedCardP
             src={product.image}
             alt={product.name}
             fill
-            className={`object-cover transition-transform duration-500 group-hover:scale-105 ${isLocked ? 'grayscale-[80%] opacity-60' : ''}`}
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 144px, 176px"
           />
-          {isLocked && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Lock className="h-10 w-10 text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]" />
-            </div>
-          )}
           {isPurchased ? (
             <span className="absolute left-3 top-3 rounded-full bg-mint px-3 py-1 text-xs font-bold uppercase text-white shadow-md">
               Adquirido
@@ -264,7 +243,7 @@ function FeaturedProductCard({ product, purchaseStatus = 'none' }: FeaturedCardP
                   href={`/tienda/${product.slug}`}
                   className="btn-shimmer inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-coral to-pink px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(255,107,107,0.35)]"
                 >
-                  {isLocked ? 'Obtener acceso' : product.ctaText}
+                  {product.ctaText}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </>
@@ -420,7 +399,7 @@ function ServiceCard({ product, purchaseStatus = 'none' }: ServiceCardProps) {
                     href={`/tienda/${product.slug}`}
                     className="btn-shimmer inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-lavender to-pink px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(167,139,250,0.35)]"
                   >
-                    {purchaseStatus === 'locked' ? 'Obtener acceso' : product.ctaText}
+                    {product.ctaText}
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </>

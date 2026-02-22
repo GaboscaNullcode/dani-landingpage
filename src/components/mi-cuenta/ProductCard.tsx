@@ -7,7 +7,6 @@ import { useState } from 'react';
 import {
   BookOpen,
   ExternalLink,
-  Lock,
   CircleCheck,
   ArrowRight,
   Settings,
@@ -70,11 +69,8 @@ function LockedCard({ product, index }: { product: Product; index: number }) {
           src={product.image}
           alt={product.name}
           fill
-          className="object-cover grayscale-[80%] opacity-60 transition-all duration-300 group-hover:grayscale-[60%] group-hover:opacity-70"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Lock className="h-10 w-10 text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]" />
-        </div>
       </div>
 
       <div className="flex flex-1 flex-col p-5">
@@ -100,7 +96,7 @@ function LockedCard({ product, index }: { product: Product; index: number }) {
           href={`/tienda/${product.slug}`}
           className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
         >
-          Obtener acceso
+          {product.ctaText}
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>

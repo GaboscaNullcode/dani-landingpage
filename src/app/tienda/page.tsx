@@ -3,14 +3,12 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import {
   TiendaHero,
-  SeccionRecursosGratuitos,
   SeccionProductos,
   SeccionServicios,
 } from '@/components/tienda';
 import {
   getFeaturedProducts,
   getAdditionalProducts,
-  getFreeResources,
   getCommunityProducts,
 } from '@/lib/tienda-service';
 import { getCurrentUser } from '@/lib/auth-service';
@@ -55,11 +53,10 @@ async function getUserPurchaseData(): Promise<{
 }
 
 export default async function TiendaPage() {
-  const [featuredProducts, additionalProducts, freeResources, communityProducts, purchaseData] =
+  const [featuredProducts, additionalProducts, communityProducts, purchaseData] =
     await Promise.all([
       getFeaturedProducts(),
       getAdditionalProducts(),
-      getFreeResources(),
       getCommunityProducts(),
       getUserPurchaseData(),
     ]);
@@ -69,11 +66,6 @@ export default async function TiendaPage() {
       <Navigation />
       <main id="main-content">
         <TiendaHero />
-        <SeccionRecursosGratuitos
-          freeResources={freeResources}
-          purchasedProductIds={purchaseData.purchasedProductIds}
-          isLoggedIn={purchaseData.isLoggedIn}
-        />
         <SeccionProductos
           featuredProducts={featuredProducts}
           additionalProducts={additionalProducts}
