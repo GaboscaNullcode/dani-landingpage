@@ -53,7 +53,9 @@ export default async function RecursosGratuitosPage() {
         />
         <QuickNavSection />
         <MasterclassSection />
-        <BlogPreviewSection articles={articles} />
+        <div id="blog">
+          <BlogPreviewSection articles={articles} />
+        </div>
         <WhatsAppCommunityCard
           priceId={community?.stripePriceId}
           productId={community?.id}
