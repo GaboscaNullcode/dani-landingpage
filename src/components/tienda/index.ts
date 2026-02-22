@@ -9,5 +9,6 @@ export { default as ProductDetail } from './ProductDetail';
 export { default as SeccionRecursosGratuitos } from './SeccionRecursosGratuitos';
 export { default as SeccionProductos } from './SeccionProductos';
 export { default as SeccionServicios } from './SeccionServicios';
+export { default as SeccionNiveles } from './SeccionNiveles';
 export * from './TiendaSections';
 export { default as CheckoutButton } from './CheckoutButton';

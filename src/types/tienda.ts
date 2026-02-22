@@ -1,3 +1,27 @@
+// Supabase record structure for 'categorias_producto' table
+export interface CategoriaProductoRecord {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  nombre: string;
+  slug: string;
+  subtitulo: string | null;
+  descripcion: string | null;
+  color_acento: string;
+  orden: number;
+}
+
+// Frontend product category model
+export interface ProductCategory {
+  id: string;
+  name: string;
+  slug: string;
+  subtitle: string | null;
+  description: string | null;
+  accentColor: string;
+  order: number;
+}
+
 // Supabase record structure for 'productos' table
 export interface ProductoRecord {
   id: string;
@@ -38,6 +62,7 @@ export interface ProductoRecord {
   features_title: string | null;
   mostrar_en_planes: boolean;
   producto_padre: string | null;
+  nivel: string | null;
 }
 
 // Frontend product model
@@ -70,6 +95,8 @@ export interface Product {
   whatsappLink?: string;
   order: number;
   parentProductId?: string;
+  levelId?: string;
+  level?: ProductCategory;
   // Asesoria-specific fields
   duracionMinutos?: number;
   subtitle?: string;

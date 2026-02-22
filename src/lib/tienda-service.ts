@@ -5,10 +5,27 @@ import type {
   Product,
   AsesoriaPlan,
   PaymentPlan,
+  CategoriaProductoRecord,
+  ProductCategory,
 } from '@/types/tienda';
 
 const FALLBACK_IMAGE =
   'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80';
+
+// Transform CategoriaProductoRecord to ProductCategory
+function transformCategoryRecord(
+  record: CategoriaProductoRecord,
+): ProductCategory {
+  return {
+    id: record.id,
+    name: record.nombre,
+    slug: record.slug,
+    subtitle: record.subtitulo,
+    description: record.descripcion,
+    accentColor: record.color_acento,
+    order: record.orden,
+  };
+}
 
 // Transform Supabase record to Product
 // When descuento_activo is true, swaps price/stripePriceId with the discount
@@ -46,6 +63,7 @@ function transformProductRecord(record: ProductoRecord): Product {
     whatsappLink: record.whatsapp_link || undefined,
     order: record.orden || 0,
     parentProductId: record.producto_padre || undefined,
+    levelId: record.nivel || undefined,
     duracionMinutos: record.duracion_minutos || undefined,
     subtitle: record.subtitulo || undefined,
     note: record.nota || undefined,
@@ -307,3 +325,72 @@ export async function getProductById(
     return null;
   }
 }
+
+// ── Product categories (levels) ──
+
+// Fetch all product categories ordered by `orden`
+export const getAllProductCategories = cache(
+  async (): Promise<ProductCategory[]> => {
+    try {
+      const supabase = createAnonSupabase();
+      const { data, error } = await supabase
+        .from('categorias_producto')
+        .select('*')
+        .order('orden', { ascending: true });
+
+      if (error) throw error;
+      return (data ?? []).map(transformCategoryRecord);
+    } catch (error) {
+      console.error('Error fetching product categories:', error);
+      return [];
+    }
+  },
+);
+
+// Fetch all products grouped by level (with category join)
+export const getProductsByLevel = cache(
+  async (): Promise<
+    { category: ProductCategory; products: Product[] }[]
+  > => {
+    try {
+      const supabase = createAnonSupabase();
+
+      const [categoriesRes, productsRes] = await Promise.all([
+        supabase
+          .from('categorias_producto')
+          .select('*')
+          .order('orden', { ascending: true }),
+        supabase
+          .from('productos')
+          .select('*, nivel_detail:categorias_producto(*)')
+          .not('nivel', 'is', null)
+          .order('orden', { ascending: true }),
+      ]);
+
+      if (categoriesRes.error) throw categoriesRes.error;
+      if (productsRes.error) throw productsRes.error;
+
+      const categories = (categoriesRes.data ?? []).map(
+        transformCategoryRecord,
+      );
+
+      const products = (productsRes.data ?? []).map(
+        (r: ProductoRecord & { nivel_detail: CategoriaProductoRecord | null }) => {
+          const product = transformProductRecord(r);
+          if (r.nivel_detail) {
+            product.level = transformCategoryRecord(r.nivel_detail);
+          }
+          return product;
+        },
+      );
+
+      return categories.map((category) => ({
+        category,
+        products: products.filter((p) => p.levelId === category.id),
+      }));
+    } catch (error) {
+      console.error('Error fetching products by level:', error);
+      return [];
+    }
+  },
+);

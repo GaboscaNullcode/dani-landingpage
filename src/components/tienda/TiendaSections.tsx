@@ -26,7 +26,7 @@ export type PurchaseStatus = 'purchased' | 'locked' | 'none';
 interface CompactCardProps {
   product: Product;
   index?: number;
-  accentColor?: 'coral' | 'lavender' | 'mint';
+  accentColor?: 'coral' | 'lavender' | 'mint' | 'sky';
   purchaseStatus?: PurchaseStatus;
 }
 
@@ -51,6 +51,13 @@ const accentStyles = {
     price: 'text-mint',
     button: 'bg-mint hover:bg-lavender',
     border: 'hover:border-mint/30',
+  },
+  sky: {
+    badge: 'bg-sky text-white',
+    icon: 'from-sky to-lavender',
+    price: 'text-sky',
+    button: 'bg-sky hover:bg-lavender',
+    border: 'hover:border-sky/30',
   },
 };
 

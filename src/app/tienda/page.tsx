@@ -4,12 +4,11 @@ import Footer from '@/components/Footer';
 import {
   TiendaHero,
   SeccionProductos,
-  SeccionServicios,
+  SeccionNiveles,
 } from '@/components/tienda';
 import {
   getFeaturedProducts,
-  getAdditionalProducts,
-  getCommunityProducts,
+  getProductsByLevel,
 } from '@/lib/tienda-service';
 import { getCurrentUser } from '@/lib/auth-service';
 import { getUserPurchasedProductIds } from '@/lib/compras-service';
@@ -53,13 +52,11 @@ async function getUserPurchaseData(): Promise<{
 }
 
 export default async function TiendaPage() {
-  const [featuredProducts, additionalProducts, communityProducts, purchaseData] =
-    await Promise.all([
-      getFeaturedProducts(),
-      getAdditionalProducts(),
-      getCommunityProducts(),
-      getUserPurchaseData(),
-    ]);
+  const [featuredProducts, productsByLevel, purchaseData] = await Promise.all([
+    getFeaturedProducts(),
+    getProductsByLevel(),
+    getUserPurchaseData(),
+  ]);
 
   return (
     <>
@@ -68,12 +65,11 @@ export default async function TiendaPage() {
         <TiendaHero />
         <SeccionProductos
           featuredProducts={featuredProducts}
-          additionalProducts={additionalProducts}
           purchasedProductIds={purchaseData.purchasedProductIds}
           isLoggedIn={purchaseData.isLoggedIn}
         />
-        <SeccionServicios
-          communityProducts={communityProducts}
+        <SeccionNiveles
+          levels={productsByLevel}
           purchasedProductIds={purchaseData.purchasedProductIds}
           isLoggedIn={purchaseData.isLoggedIn}
         />

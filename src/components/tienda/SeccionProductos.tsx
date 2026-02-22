@@ -1,22 +1,20 @@
 'use client';
 
 import { memo } from 'react';
-import { ShoppingBag, BookOpen } from 'lucide-react';
+import { BookOpen, PackageCheck } from 'lucide-react';
 import { motion } from 'motion/react';
 import type { Product } from '@/types/tienda';
-import { SectionHeader, FeaturedProductCard, CompactProductCard } from './TiendaSections';
+import { FeaturedProductCard } from './TiendaSections';
 import type { PurchaseStatus } from './TiendaSections';
 
 interface SeccionProductosProps {
   featuredProducts: Product[];
-  additionalProducts: Product[];
   purchasedProductIds?: string[];
   isLoggedIn?: boolean;
 }
 
 export default memo(function SeccionProductos({
   featuredProducts,
-  additionalProducts,
   purchasedProductIds = [],
   isLoggedIn = false,
 }: SeccionProductosProps) {
@@ -26,14 +24,9 @@ export default memo(function SeccionProductos({
     return purchasedSet.has(productId) ? 'purchased' : 'locked';
   };
 
-  // El curso principal (más vendido)
   const cursoDestacado = featuredProducts.find((p) => p.category === 'curso');
 
-  // Resto de productos (eBooks y masterclass)
-  const otrosProductos = [
-    ...featuredProducts.filter((p) => p.id !== cursoDestacado?.id),
-    ...additionalProducts,
-  ];
+  if (!cursoDestacado) return null;
 
   return (
     <section className="relative overflow-hidden bg-white py-16 md:py-20">
@@ -59,33 +52,22 @@ export default memo(function SeccionProductos({
       </div>
 
       <div className="container-custom relative">
-        <SectionHeader
-          icon={<ShoppingBag className="h-4 w-4" />}
-          badge="Productos"
-          badgeColor="coral"
-          title="Cursos, eBooks y Masterclasses"
-          description="Recursos completos para acelerar tu camino hacia el trabajo remoto."
-        />
-
-        {/* Producto destacado */}
-        {cursoDestacado && (
-          <div className="mb-12">
-            <FeaturedProductCard product={cursoDestacado} purchaseStatus={getStatus(cursoDestacado.id)} />
-          </div>
-        )}
-
-        {/* Grid de otros productos */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {otrosProductos.map((product, index) => (
-            <CompactProductCard
-              key={product.id}
-              product={product}
-              index={index}
-              accentColor={product.category === 'masterclass' ? 'lavender' : 'coral'}
-              purchaseStatus={getStatus(product.id)}
-            />
-          ))}
+        <div className="mb-8 text-center">
+          <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-coral/10 px-4 py-2 text-sm font-semibold uppercase tracking-wider text-coral">
+            <PackageCheck className="h-4 w-4" />
+            Productos
+          </span>
+          <h2 className="mt-4 font-[var(--font-headline)] text-[clamp(1.5rem,3.5vw,2rem)] font-bold">
+            Más vendido •{' '}
+            <span className="italic text-coral">
+              Recomendado para empezar
+            </span>
+          </h2>
         </div>
+        <FeaturedProductCard
+          product={cursoDestacado}
+          purchaseStatus={getStatus(cursoDestacado.id)}
+        />
       </div>
     </section>
   );

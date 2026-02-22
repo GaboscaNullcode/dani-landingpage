@@ -12,6 +12,7 @@
   --sunshine: #fcd34d;
   --cream: #fef7f0;
   --peach: #ffecd2;
+  --sky: #38bdf8;
 
   /* Neutral Colors */
   --white: #ffffff;
@@ -82,6 +83,7 @@
   --color-sunshine: var(--sunshine);
   --color-cream: var(--cream);
   --color-peach: var(--peach);
+  --color-sky: var(--sky);
   --color-black-deep: var(--black-deep);
   --color-teal-dark: var(--teal-dark);
   --color-gray-dark: var(--gray-dark);
