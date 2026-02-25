@@ -8,6 +8,7 @@ import {
 import { createBooking } from '@/lib/booking-engine';
 import { getAsesoriaPlanById } from '@/lib/tienda-service';
 import { getCalendarConfig } from '@/lib/reservas-service';
+import { getPostHogServer } from '@/lib/posthog-server';
 
 export async function POST(request: NextRequest) {
   try {
@@ -69,15 +70,21 @@ export async function POST(request: NextRequest) {
     console.log(`[reservas/crear] Plan validated: ${plan.name}`);
 
     // Find compra by stripe_session_id (webhook may or may not have created it)
+    // Retry with exponential backoff — webhook may still be processing
     let compra = await getCompraByStripeSessionId(stripeSessionId);
     console.log(`[reservas/crear] Compra lookup (1st):`, compra?.id || 'not found');
 
     if (!compra) {
-      // Retry after a short wait — webhook may still be processing
-      console.log('[reservas/crear] Waiting 2s for webhook...');
-      await new Promise((r) => setTimeout(r, 2000));
-      compra = await getCompraByStripeSessionId(stripeSessionId);
-      console.log(`[reservas/crear] Compra lookup (2nd):`, compra?.id || 'not found');
+      const retryDelays = [1000, 2000, 3000]; // 1s, 2s, 3s backoff
+      for (const delay of retryDelays) {
+        console.log(`[reservas/crear] Waiting ${delay}ms for webhook...`);
+        await new Promise((r) => setTimeout(r, delay));
+        compra = await getCompraByStripeSessionId(stripeSessionId);
+        if (compra) {
+          console.log(`[reservas/crear] Compra found after retry:`, compra.id);
+          break;
+        }
+      }
     }
 
     if (!compra) {
@@ -141,6 +148,28 @@ export async function POST(request: NextRequest) {
     });
 
     console.log('[reservas/crear] Booking created successfully');
+
+    // Track booking completion in PostHog (server-side)
+    try {
+      const ph = getPostHogServer();
+      ph.capture({
+        distinctId: clientEmail,
+        event: 'booking_completed_server',
+        properties: {
+          plan_id: planId,
+          plan_name: plan.name,
+          booking_date: fecha,
+          booking_time: hora,
+          duration_minutes: plan.duracionMinutos,
+          timezone: config.timezone,
+          has_zoom: !!result.zoomJoinUrl,
+          has_notes: !!notasCliente,
+        },
+      });
+      await ph.shutdown();
+    } catch (e) {
+      console.error('[reservas/crear] PostHog error:', e);
+    }
 
     return NextResponse.json({
       reserva: result.reserva,

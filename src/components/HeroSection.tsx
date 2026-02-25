@@ -298,9 +298,9 @@ export default function HeroSection() {
                 background:
                   'linear-gradient(135deg, rgba(255, 107, 107, 0.3) 0%, rgba(224, 86, 160, 0.2) 50%, rgba(167, 139, 250, 0.3) 100%)',
               }}
-              animate={{
+              animate={isHeroInView ? {
                 scale: [1, 1.05, 1],
-              }}
+              } : false}
               transition={{
                 duration: 8,
                 repeat: Infinity,
@@ -324,10 +324,10 @@ export default function HeroSection() {
             {/* Floating card - top right */}
             <motion.div
               className="absolute -right-6 top-8 z-20 rounded-2xl bg-white p-4 shadow-xl"
-              animate={{
+              animate={isHeroInView ? {
                 y: [-5, 5, -5],
                 rotate: [-2, 2, -2],
-              }}
+              } : false}
               transition={{
                 duration: 4,
                 repeat: Infinity,
@@ -350,10 +350,10 @@ export default function HeroSection() {
             {/* Floating card - bottom left */}
             <motion.div
               className="absolute -left-6 bottom-20 z-20 rounded-2xl bg-white p-4 shadow-xl"
-              animate={{
+              animate={isHeroInView ? {
                 y: [5, -5, 5],
                 rotate: [2, -2, 2],
-              }}
+              } : false}
               transition={{
                 duration: 5,
                 repeat: Infinity,

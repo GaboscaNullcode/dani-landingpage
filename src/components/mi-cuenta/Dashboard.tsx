@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import Image from 'next/image';
+import posthog from 'posthog-js';
 import {
   LogOut,
   ShoppingBag,
@@ -86,6 +87,16 @@ export default function Dashboard() {
     fetchData();
   }, [router]);
 
+  // Identify user in PostHog for returning sessions
+  useEffect(() => {
+    if (data?.user) {
+      posthog.identify(data.user.id, {
+        email: data.user.email,
+        name: data.user.name,
+      });
+    }
+  }, [data?.user]);
+
   const handleCancelReserva = async (reservaId: string) => {
     if (!confirm('Estas segura de que quieres cancelar esta reserva?')) return;
     setCancellingId(reservaId);
@@ -113,6 +124,7 @@ export default function Dashboard() {
     setLoggingOut(true);
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
+      posthog.reset(); // Clear PostHog identity on logout
       router.push('/');
     } catch {
       setLoggingOut(false);

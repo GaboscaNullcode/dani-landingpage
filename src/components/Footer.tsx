@@ -1,8 +1,9 @@
 'use client';
 
+import { useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion } from 'motion/react';
+import { motion, useInView } from 'motion/react';
 import { Instagram, Heart } from 'lucide-react';
 
 const footerLinks = [
@@ -39,10 +40,12 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const footerRef = useRef(null);
+  const isSectionVisible = useInView(footerRef, { margin: '100px' });
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden bg-black-deep py-16 text-white">
+    <footer ref={footerRef} className="relative overflow-hidden bg-black-deep py-16 text-white">
       {/* Background decorative elements */}
       <div className="pointer-events-none absolute inset-0">
         <motion.div
@@ -51,10 +54,10 @@ export default function Footer() {
             background:
               'linear-gradient(135deg, rgba(255, 107, 107, 0.5) 0%, rgba(224, 86, 160, 0.3) 100%)',
           }}
-          animate={{
+          animate={isSectionVisible ? {
             scale: [1, 1.1, 1],
             rotate: [0, 10, 0],
-          }}
+          } : false}
           transition={{
             duration: 15,
             repeat: Infinity,
@@ -67,9 +70,9 @@ export default function Footer() {
             background:
               'linear-gradient(135deg, rgba(167, 139, 250, 0.5) 0%, rgba(110, 231, 183, 0.3) 100%)',
           }}
-          animate={{
+          animate={isSectionVisible ? {
             scale: [1, 1.15, 1],
-          }}
+          } : false}
           transition={{
             duration: 12,
             repeat: Infinity,
@@ -196,7 +199,7 @@ export default function Footer() {
           {/* Made with love */}
           <motion.p
             className="flex items-center gap-2 text-sm text-white/40"
-            animate={{ scale: [1, 1.05, 1] }}
+            animate={isSectionVisible ? { scale: [1, 1.05, 1] } : false}
             transition={{ duration: 2, repeat: Infinity }}
           >
             Hecho con{' '}

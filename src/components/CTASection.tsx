@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import Link from 'next/link';
+import posthog from 'posthog-js';
 import { motion, useInView } from 'motion/react';
 import {
   BookOpen,
@@ -46,6 +47,7 @@ const trustBadges = [
 export default function CTASection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const isSectionVisible = useInView(ref, { margin: '100px' });
 
   return (
     <section
@@ -62,10 +64,10 @@ export default function CTASection() {
             background:
               'linear-gradient(135deg, rgba(255, 107, 107, 0.3) 0%, rgba(224, 86, 160, 0.2) 100%)',
           }}
-          animate={{
+          animate={isSectionVisible ? {
             scale: [1, 1.1, 1],
             rotate: [0, -10, 0],
-          }}
+          } : false}
           transition={{
             duration: 15,
             repeat: Infinity,
@@ -78,9 +80,9 @@ export default function CTASection() {
             background:
               'linear-gradient(135deg, rgba(167, 139, 250, 0.3) 0%, rgba(110, 231, 183, 0.2) 100%)',
           }}
-          animate={{
+          animate={isSectionVisible ? {
             scale: [1, 1.15, 1],
-          }}
+          } : false}
           transition={{
             duration: 12,
             repeat: Infinity,
@@ -91,14 +93,14 @@ export default function CTASection() {
         {/* Floating decorations */}
         <motion.div
           className="absolute left-[10%] top-[30%] flex h-12 w-12 items-center justify-center rounded-full bg-coral/20 opacity-30"
-          animate={{ y: [-10, 10, -10], rotate: [-5, 5, -5] }}
+          animate={isSectionVisible ? { y: [-10, 10, -10], rotate: [-5, 5, -5] } : false}
           transition={{ duration: 5, repeat: Infinity }}
         >
           <Rocket className="h-6 w-6 text-coral" />
         </motion.div>
         <motion.div
           className="absolute bottom-[30%] right-[10%] flex h-10 w-10 items-center justify-center rounded-full bg-lavender/20 opacity-30"
-          animate={{ y: [10, -10, 10], rotate: [5, -5, 5] }}
+          animate={isSectionVisible ? { y: [10, -10, 10], rotate: [5, -5, 5] } : false}
           transition={{ duration: 6, repeat: Infinity }}
         >
           <Sparkles className="h-5 w-5 text-lavender" />
@@ -159,6 +161,13 @@ export default function CTASection() {
               >
                 <Link
                   href={button.href}
+                  onClick={() =>
+                    posthog.capture('cta_button_clicked', {
+                      cta_text: button.text,
+                      cta_href: button.href,
+                      section: 'homepage_cta',
+                    })
+                  }
                   className="btn-shimmer group relative inline-flex w-full items-center justify-center gap-3 overflow-hidden rounded-full px-8 py-4 font-[var(--font-headline)] text-sm font-bold text-white transition-all duration-500 hover:-translate-y-1 md:w-auto"
                   style={{
                     background: button.gradient,

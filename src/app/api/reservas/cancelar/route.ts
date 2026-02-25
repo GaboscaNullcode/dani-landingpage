@@ -3,6 +3,7 @@ import { createServerSupabase } from '@/lib/supabase/server';
 import { getReservaById, updateReserva } from '@/lib/reservas-service';
 import { deleteZoomMeeting } from '@/lib/zoom';
 import { deleteCalendarEvent } from '@/lib/google-calendar';
+import { getPostHogServer } from '@/lib/posthog-server';
 
 export async function POST(request: NextRequest) {
   try {
@@ -67,6 +68,24 @@ export async function POST(request: NextRequest) {
       estado: 'cancelada',
       cancelacion_motivo: motivo || 'Cancelada por el usuario',
     });
+
+    // Track cancellation in PostHog (server-side)
+    try {
+      const ph = getPostHogServer();
+      ph.capture({
+        distinctId: user.email || user.id,
+        event: 'booking_cancelled',
+        properties: {
+          reserva_id: reservaId,
+          plan_id: reserva.planId,
+          booking_date: reserva.fechaHora,
+          has_reason: !!motivo,
+        },
+      });
+      await ph.shutdown();
+    } catch (e) {
+      console.error('[reservas/cancelar] PostHog error:', e);
+    }
 
     return NextResponse.json({ reserva: updated });
   } catch (error) {

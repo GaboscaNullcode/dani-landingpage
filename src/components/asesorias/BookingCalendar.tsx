@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import posthog from 'posthog-js';
 import CalendarGrid from './CalendarGrid';
 import TimeSlotPicker from './TimeSlotPicker';
 import BookingSummary from './BookingSummary';
@@ -42,21 +43,47 @@ export default function BookingCalendar({
   }, []);
 
   const handleSelectDate = (date: string) => {
+    posthog.capture('booking_date_selected', {
+      plan_id: planId,
+      plan_name: planName,
+      selected_date: date,
+    });
     setSelectedDate(date);
     setSelectedSlot(null);
     setStep('time');
   };
 
   const handleSelectSlot = (hora: string) => {
+    posthog.capture('booking_time_selected', {
+      plan_id: planId,
+      plan_name: planName,
+      selected_date: selectedDate,
+      selected_time: hora,
+    });
     setSelectedSlot(hora);
     setStep('summary');
   };
 
+  const abortControllerRef = useRef<AbortController | null>(null);
+
   const handleConfirm = async (notas: string) => {
     if (!selectedDate || !selectedSlot) return;
 
+    // Abort any pending request
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     setConfirming(true);
     setError('');
+
+    posthog.capture('booking_submitted', {
+      plan_id: planId,
+      plan_name: planName,
+      selected_date: selectedDate,
+      selected_time: selectedSlot,
+      has_notes: !!notas,
+    });
 
     try {
       const res = await fetch('/api/reservas/crear', {
@@ -69,6 +96,7 @@ export default function BookingCalendar({
           hora: selectedSlot,
           notasCliente: notas || undefined,
         }),
+        signal: controller.signal,
       });
 
       const data = await res.json();
@@ -77,12 +105,25 @@ export default function BookingCalendar({
         throw new Error(data.error || 'Error al crear la reserva');
       }
 
+      posthog.capture('booking_completed', {
+        plan_id: planId,
+        plan_name: planName,
+        selected_date: selectedDate,
+        selected_time: selectedSlot,
+        has_zoom: !!data.zoomJoinUrl,
+      });
       setZoomJoinUrl(data.zoomJoinUrl || '');
       setStep('done');
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : 'Error al crear la reserva',
-      );
+      if (err instanceof DOMException && err.name === 'AbortError') return;
+      const errorMessage =
+        err instanceof Error ? err.message : 'Error al crear la reserva';
+      posthog.capture('booking_error', {
+        plan_id: planId,
+        plan_name: planName,
+        error: errorMessage,
+      });
+      setError(errorMessage);
     } finally {
       setConfirming(false);
     }

@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import Link from 'next/link';
+import posthog from 'posthog-js';
 import { motion, AnimatePresence, useInView } from 'motion/react';
 import {
   Sparkles,
@@ -360,6 +361,13 @@ function LevelAccordion({
                   <Link
                     key={rec.name}
                     href={rec.href}
+                    onClick={() =>
+                      posthog.capture('quiz_recommendation_clicked', {
+                        recommendation_name: rec.name,
+                        recommendation_href: rec.href,
+                        section: 'levels_view',
+                      })
+                    }
                     className="group/card flex items-center gap-3 rounded-2xl bg-cream/60 p-3 transition-colors hover:bg-cream sm:gap-4 sm:p-4"
                   >
                     {/* Icon */}
@@ -424,6 +432,10 @@ export default function QuizSection() {
 
   // Handle option selection
   const handleOptionSelect = (optionId: string) => {
+    // Track quiz start on first interaction
+    if (currentQuestion === 0 && selectedAnswers.every((a) => a === null)) {
+      posthog.capture('quiz_started');
+    }
     const newAnswers = [...selectedAnswers];
     newAnswers[currentQuestion] = optionId;
     setSelectedAnswers(newAnswers);
@@ -445,6 +457,8 @@ export default function QuizSection() {
       setTimeout(() => {
         setShowResult(true);
         setIsTransitioning(false);
+        const quizResult = getResult(selectedAnswers);
+        posthog.capture('quiz_completed', { result: quizResult });
         // Scroll al inicio de la página cuando se muestran los resultados
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 300);
@@ -1214,6 +1228,13 @@ export default function QuizSection() {
                           </div>
                           <Link
                             href={rec.href}
+                            onClick={() =>
+                              posthog.capture('quiz_result_product_clicked', {
+                                result: resultId,
+                                recommendation_name: rec.name,
+                                recommendation_href: rec.href,
+                              })
+                            }
                             className={`inline-flex items-center gap-2 rounded-full px-6 py-3 font-[var(--font-inter)] font-bold shadow-lg transition-all duration-300 hover:shadow-xl group-hover:translate-x-1 ${
                               isPrimary ? 'bg-white text-gray-dark' : 'text-white'
                             }`}

@@ -95,6 +95,7 @@ export { stages };
 export default function StagesSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const isSectionVisible = useInView(ref, { margin: '100px' });
   const [quizOpen, setQuizOpen] = useState(false);
   const [recommendedStage, setRecommendedStage] = useState<number | null>(null);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -138,7 +139,7 @@ export default function StagesSection() {
             background:
               'linear-gradient(135deg, rgba(255, 107, 107, 0.3) 0%, rgba(252, 211, 77, 0.2) 100%)',
           }}
-          animate={{ rotate: [0, 360] }}
+          animate={isSectionVisible ? { rotate: [0, 360] } : false}
           transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
         />
         <motion.div
@@ -147,7 +148,7 @@ export default function StagesSection() {
             background:
               'linear-gradient(135deg, rgba(167, 139, 250, 0.3) 0%, rgba(110, 231, 183, 0.2) 100%)',
           }}
-          animate={{ rotate: [360, 0] }}
+          animate={isSectionVisible ? { rotate: [360, 0] } : false}
           transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
         />
       </div>

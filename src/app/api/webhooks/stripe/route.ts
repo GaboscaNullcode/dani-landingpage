@@ -16,6 +16,7 @@ import {
   sendAsesoriaPostPaymentEmail,
 } from '@/lib/brevo';
 import { getPaymentPlans } from '@/lib/tienda-service';
+import { getPostHogServer } from '@/lib/posthog-server';
 import type Stripe from 'stripe';
 
 export async function POST(request: NextRequest) {
@@ -73,7 +74,7 @@ export async function POST(request: NextRequest) {
       }
 
       try {
-        // Check if compra already exists (may have been created by /api/reservas/crear)
+        // Idempotency: check if compra already exists for this session
         const existingCompra = await getCompraByStripeSessionId(session.id);
         console.log(`[webhook] Existing compra for session:`, existingCompra?.id || 'none');
 
@@ -82,22 +83,31 @@ export async function POST(request: NextRequest) {
             console.log('[webhook] Asesoria compra already exists, skipping');
             break;
           }
+          // For non-asesoria, if compra exists the webhook already ran — skip to avoid duplicates
+          console.log('[webhook] Compra already exists, skipping duplicate webhook');
+          break;
         }
 
         console.log(`[webhook] Finding or creating user: ${email}`);
         const { user, isNew, tempPassword } = await findOrCreateUser(email, name);
         console.log(`[webhook] User ${user.id} (isNew: ${isNew})`);
 
+        // Parallelize independent operations: welcome email + Stripe customer ID update
+        const stripeCustomerId = session.customer as string | null;
+        const parallelOps: Promise<unknown>[] = [];
+
         if (isNew && tempPassword) {
           console.log(`[webhook] Sending welcome email to ${email}`);
-          await sendWelcomeEmail(email, name, tempPassword);
+          parallelOps.push(sendWelcomeEmail(email, name, tempPassword));
         }
 
-        // Save Stripe customer ID to profile (needed for Billing Portal)
-        const stripeCustomerId = session.customer as string | null;
         if (stripeCustomerId && !user.stripeCustomerId) {
           console.log(`[webhook] Saving stripe_customer_id: ${stripeCustomerId}`);
-          await updateStripeCustomerId(user.id, stripeCustomerId);
+          parallelOps.push(updateStripeCustomerId(user.id, stripeCustomerId));
+        }
+
+        if (parallelOps.length > 0) {
+          await Promise.all(parallelOps);
         }
 
         const subscriptionId =
@@ -179,6 +189,28 @@ export async function POST(request: NextRequest) {
           );
         }
 
+        // Track purchase in PostHog
+        try {
+          const ph = getPostHogServer();
+          ph.capture({
+            distinctId: email,
+            event: 'purchase_completed',
+            properties: {
+              product_id: productId,
+              product_name: producto?.nombre,
+              product_category: producto?.categoria,
+              price: session.amount_total ? session.amount_total / 100 : undefined,
+              currency: session.currency,
+              is_subscription: !!subscriptionId,
+              is_asesoria: isAsesoria,
+              is_new_user: isNew,
+            },
+          });
+          await ph.shutdown();
+        } catch (phError) {
+          console.error('[webhook] PostHog tracking error (non-critical):', phError);
+        }
+
         console.log('[webhook] Checkout fulfillment completed successfully');
       } catch (error) {
         console.error('[webhook] Error processing checkout fulfillment:', error);
@@ -194,6 +226,25 @@ export async function POST(request: NextRequest) {
       console.log(`[webhook] Cancelling subscription: ${subscription.id}`);
       try {
         await cancelCompraBySubscription(subscription.id);
+
+        // Track cancellation in PostHog
+        try {
+          const ph = getPostHogServer();
+          const customerEmail = typeof subscription.customer === 'string'
+            ? subscription.customer
+            : 'unknown';
+          ph.capture({
+            distinctId: customerEmail,
+            event: 'subscription_cancelled',
+            properties: {
+              subscription_id: subscription.id,
+            },
+          });
+          await ph.shutdown();
+        } catch (phError) {
+          console.error('[webhook] PostHog tracking error (non-critical):', phError);
+        }
+
         console.log('[webhook] Subscription cancelled successfully');
       } catch (error) {
         console.error('[webhook] Error cancelling subscription:', error);

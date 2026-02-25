@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'motion/react';
+import posthog from 'posthog-js';
 import {
   LogIn,
   Loader2,
@@ -42,6 +43,7 @@ export default function LoginForm() {
           return;
         }
 
+        posthog.capture('auth_forgot_password');
         setForgotSuccess(true);
         return;
       }
@@ -59,6 +61,14 @@ export default function LoginForm() {
           setError(data.error || 'Error al crear la cuenta');
           return;
         }
+
+        posthog.capture('auth_signup');
+
+        // Identify new user in PostHog
+        posthog.identify(data.user.id, {
+          email: data.user.email,
+          name: data.user.name,
+        });
       } else {
         const res = await fetch('/api/auth/login', {
           method: 'POST',
@@ -72,6 +82,14 @@ export default function LoginForm() {
           setError(data.error || 'Error al iniciar sesion');
           return;
         }
+
+        posthog.capture('auth_login');
+
+        // Identify user in PostHog for person tracking
+        posthog.identify(data.user.id, {
+          email: data.user.email,
+          name: data.user.name,
+        });
       }
 
       router.push('/mi-cuenta');
