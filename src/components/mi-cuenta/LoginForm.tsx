@@ -93,6 +93,7 @@ export default function LoginForm() {
       }
 
       router.push('/mi-cuenta');
+      router.refresh();
     } catch {
       setError('Error de conexion. Intenta de nuevo.');
     } finally {
