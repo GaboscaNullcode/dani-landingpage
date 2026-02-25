@@ -16,6 +16,7 @@ import {
   sendAsesoriaPostPaymentEmail,
 } from '@/lib/brevo';
 import { getPaymentPlans } from '@/lib/tienda-service';
+import { getPostHogServer } from '@/lib/posthog-server';
 import type Stripe from 'stripe';
 
 export async function POST(request: NextRequest) {
@@ -188,6 +189,28 @@ export async function POST(request: NextRequest) {
           );
         }
 
+        // Track purchase in PostHog
+        try {
+          const ph = getPostHogServer();
+          ph.capture({
+            distinctId: email,
+            event: 'purchase_completed',
+            properties: {
+              product_id: productId,
+              product_name: producto?.nombre,
+              product_category: producto?.categoria,
+              price: session.amount_total ? session.amount_total / 100 : undefined,
+              currency: session.currency,
+              is_subscription: !!subscriptionId,
+              is_asesoria: isAsesoria,
+              is_new_user: isNew,
+            },
+          });
+          await ph.shutdown();
+        } catch (phError) {
+          console.error('[webhook] PostHog tracking error (non-critical):', phError);
+        }
+
         console.log('[webhook] Checkout fulfillment completed successfully');
       } catch (error) {
         console.error('[webhook] Error processing checkout fulfillment:', error);
@@ -203,6 +226,25 @@ export async function POST(request: NextRequest) {
       console.log(`[webhook] Cancelling subscription: ${subscription.id}`);
       try {
         await cancelCompraBySubscription(subscription.id);
+
+        // Track cancellation in PostHog
+        try {
+          const ph = getPostHogServer();
+          const customerEmail = typeof subscription.customer === 'string'
+            ? subscription.customer
+            : 'unknown';
+          ph.capture({
+            distinctId: customerEmail,
+            event: 'subscription_cancelled',
+            properties: {
+              subscription_id: subscription.id,
+            },
+          });
+          await ph.shutdown();
+        } catch (phError) {
+          console.error('[webhook] PostHog tracking error (non-critical):', phError);
+        }
+
         console.log('[webhook] Subscription cancelled successfully');
       } catch (error) {
         console.error('[webhook] Error cancelling subscription:', error);

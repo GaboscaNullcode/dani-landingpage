@@ -4,6 +4,7 @@ import { useState, useEffect, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Play, Sparkles } from 'lucide-react';
+import posthog from 'posthog-js';
 import { createBrowserSupabase } from '@/lib/supabase/client';
 
 // Hook to detect client-side mounting without setState in useEffect
@@ -33,6 +34,7 @@ export default function MasterclassPopup() {
       // Show popup after a short delay
       const timer = setTimeout(() => {
         setIsVisible(true);
+        posthog.capture('masterclass_popup_displayed');
       }, 3000);
 
       return () => clearTimeout(timer);
@@ -42,6 +44,7 @@ export default function MasterclassPopup() {
   }, [hasMounted]);
 
   const handleDismiss = () => {
+    posthog.capture('masterclass_popup_dismissed');
     setIsVisible(false);
   };
 
@@ -105,7 +108,10 @@ export default function MasterclassPopup() {
 
                 <Link
                   href="/mi-cuenta/login"
-                  onClick={handleDismiss}
+                  onClick={() => {
+                    posthog.capture('masterclass_popup_clicked');
+                    handleDismiss();
+                  }}
                   className="btn-shimmer inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold text-white transition-all hover:-translate-y-0.5"
                   style={{
                     background: 'var(--gradient-coral-pink)',

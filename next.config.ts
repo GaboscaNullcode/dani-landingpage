@@ -28,6 +28,19 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', 'motion/react'],
   },
+  skipTrailingSlashRedirect: true,
+  async rewrites() {
+    return [
+      {
+        source: '/ph/static/:path*',
+        destination: 'https://us-assets.i.posthog.com/static/:path*',
+      },
+      {
+        source: '/ph/:path*',
+        destination: 'https://us.i.posthog.com/:path*',
+      },
+    ];
+  },
 };
 
 export default nextConfig;

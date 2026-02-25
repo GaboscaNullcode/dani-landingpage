@@ -8,6 +8,7 @@ import {
 import { createBooking } from '@/lib/booking-engine';
 import { getAsesoriaPlanById } from '@/lib/tienda-service';
 import { getCalendarConfig } from '@/lib/reservas-service';
+import { getPostHogServer } from '@/lib/posthog-server';
 
 export async function POST(request: NextRequest) {
   try {
@@ -147,6 +148,28 @@ export async function POST(request: NextRequest) {
     });
 
     console.log('[reservas/crear] Booking created successfully');
+
+    // Track booking completion in PostHog (server-side)
+    try {
+      const ph = getPostHogServer();
+      ph.capture({
+        distinctId: clientEmail,
+        event: 'booking_completed_server',
+        properties: {
+          plan_id: planId,
+          plan_name: plan.name,
+          booking_date: fecha,
+          booking_time: hora,
+          duration_minutes: plan.duracionMinutos,
+          timezone: config.timezone,
+          has_zoom: !!result.zoomJoinUrl,
+          has_notes: !!notasCliente,
+        },
+      });
+      await ph.shutdown();
+    } catch (e) {
+      console.error('[reservas/crear] PostHog error:', e);
+    }
 
     return NextResponse.json({
       reserva: result.reserva,

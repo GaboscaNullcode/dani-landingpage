@@ -11,6 +11,7 @@ import {
   ShieldCheck,
   CircleCheck,
 } from 'lucide-react';
+import posthog from 'posthog-js';
 import { useCheckoutAuth } from '@/hooks/useCheckoutAuth';
 
 interface CheckoutButtonProps {
@@ -83,11 +84,19 @@ export default function CheckoutButton({
         window.location.href = data.url;
       } else {
         console.error('Checkout error:', data.error);
+        posthog.capture('checkout_error', {
+          product_id: productId,
+          error: data.error || 'unknown',
+        });
         setError('Error al procesar. Intenta de nuevo.');
         setLoading(false);
       }
     } catch (err) {
       console.error('Checkout error:', err);
+      posthog.capture('checkout_error', {
+        product_id: productId,
+        error: 'connection_error',
+      });
       setError('Error de conexion. Intenta de nuevo.');
       setLoading(false);
     }
@@ -95,8 +104,17 @@ export default function CheckoutButton({
 
   function handleClick() {
     if (user) {
+      posthog.capture('checkout_started', {
+        product_id: productId,
+        price_id: priceId,
+        is_authenticated: true,
+      });
       goToCheckout(user.name, user.email);
     } else {
+      posthog.capture('checkout_modal_opened', {
+        product_id: productId,
+        price_id: priceId,
+      });
       setShowModal(true);
     }
   }
@@ -113,6 +131,11 @@ export default function CheckoutButton({
       return;
     }
 
+    posthog.capture('checkout_started', {
+      product_id: productId,
+      price_id: priceId,
+      is_authenticated: false,
+    });
     goToCheckout(name.trim(), email.trim());
   }
 

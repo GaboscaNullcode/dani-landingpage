@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import Link from 'next/link';
+import posthog from 'posthog-js';
 import { Check, Star, Clock, Sparkles, ChevronDown, CircleCheck } from 'lucide-react';
 import type { AsesoriaPlan, PaymentPlan } from '@/types/tienda';
 import { useCheckoutAuth } from '@/hooks/useCheckoutAuth';
@@ -74,6 +75,12 @@ export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSecti
   function handleShowTerminos(planId: string) {
     const plan = planes.find((p) => p.id === planId);
     if (!plan || !plan.stripePriceId) return;
+    posthog.capture('plan_cta_clicked', {
+      plan_id: plan.id,
+      plan_name: plan.name,
+      plan_price: plan.price,
+      is_popular: plan.isPopular,
+    });
     setTerminosPlan(plan);
     setShowTerminosModal(true);
   }
@@ -248,7 +255,15 @@ export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSecti
                   </Link>
                 ) : plan.id === 'crea-camino' ? (
                   <button
-                    onClick={() => setShowProgramaModal(true)}
+                    onClick={() => {
+                      posthog.capture('plan_cta_clicked', {
+                        plan_id: plan.id,
+                        plan_name: plan.name,
+                        plan_price: plan.price,
+                        is_popular: plan.isPopular,
+                      });
+                      setShowProgramaModal(true);
+                    }}
                     className="btn-shimmer mt-auto block w-full rounded-full bg-white py-4 text-center font-[var(--font-headline)] font-bold text-gray-dark transition-all hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(255,255,255,0.2)]"
                   >
                     {plan.ctaText}

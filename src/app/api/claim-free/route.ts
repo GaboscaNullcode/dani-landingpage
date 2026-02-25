@@ -4,6 +4,7 @@ import { createCompra } from '@/lib/compras-service';
 import { getServiceSupabase } from '@/lib/supabase/server';
 import { addNewsletterContact, sendNewsletterWelcomeEmail } from '@/lib/brevo';
 import { createOrUpdateSubscriber } from '@/lib/newsletter-service';
+import { getPostHogServer } from '@/lib/posthog-server';
 
 export async function POST(request: Request) {
   try {
@@ -61,6 +62,19 @@ export async function POST(request: Request) {
       }
     } catch (newsletterError) {
       console.error('Newsletter subscription failed (non-critical):', newsletterError);
+    }
+
+    // Track in PostHog
+    try {
+      const ph = getPostHogServer();
+      ph.capture({
+        distinctId: user.email,
+        event: 'free_product_claimed',
+        properties: { product_id: productId },
+      });
+      await ph.shutdown();
+    } catch (phError) {
+      console.error('PostHog tracking error (non-critical):', phError);
     }
 
     return NextResponse.json({ success: true, alreadyOwned: false });

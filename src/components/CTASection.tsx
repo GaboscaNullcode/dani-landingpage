@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import Link from 'next/link';
+import posthog from 'posthog-js';
 import { motion, useInView } from 'motion/react';
 import {
   BookOpen,
@@ -160,6 +161,13 @@ export default function CTASection() {
               >
                 <Link
                   href={button.href}
+                  onClick={() =>
+                    posthog.capture('cta_button_clicked', {
+                      cta_text: button.text,
+                      cta_href: button.href,
+                      section: 'homepage_cta',
+                    })
+                  }
                   className="btn-shimmer group relative inline-flex w-full items-center justify-center gap-3 overflow-hidden rounded-full px-8 py-4 font-[var(--font-headline)] text-sm font-bold text-white transition-all duration-500 hover:-translate-y-1 md:w-auto"
                   style={{
                     background: button.gradient,

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import posthog from 'posthog-js';
 import type { NewsletterSubscribeResponse } from '@/types/newsletter';
 
 interface UseNewsletterFormReturn {
@@ -45,9 +46,14 @@ export function useNewsletterForm(
 
       if (!data.success) {
         setError(data.message);
+        posthog.capture('newsletter_signup_error', {
+          source,
+          error: data.message,
+        });
         return;
       }
 
+      posthog.capture('newsletter_signup', { source });
       setIsSuccess(true);
     } catch {
       setError('Hubo un error de conexion. Intentalo de nuevo.');

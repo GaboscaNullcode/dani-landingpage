@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import posthog from 'posthog-js';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -25,6 +26,16 @@ export default function ProductDetail({ product, productTypes }: ProductDetailPr
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
   const productType = productTypes[product.category];
   const CategoryIcon = productType ? resolveIcon(productType.icon) : Download;
+
+  useEffect(() => {
+    posthog.capture('product_viewed', {
+      product_id: product.id,
+      product_name: product.name,
+      product_category: product.category,
+      product_price: product.price,
+      has_stripe_price: !!product.stripePriceId,
+    });
+  }, [product.id, product.name, product.category, product.price, product.stripePriceId]);
 
   return (
     <>
