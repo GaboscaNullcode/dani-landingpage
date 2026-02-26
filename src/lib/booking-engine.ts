@@ -122,7 +122,6 @@ export async function createBooking(
         startDateTime: fechaHora,
         endDateTime: endTime,
         timezone,
-        attendeeEmail: clientEmail,
         zoomJoinUrl: zoomJoinUrl,
       });
     } else {
@@ -150,6 +149,7 @@ export async function createBooking(
     const domain = process.env.NEXT_PUBLIC_DOMAIN || 'https://remotecondani.com';
     const masterclassUrl = `${domain}/tienda/masterclass-gratuita`;
 
+    console.log(`[booking] Sending emails: to=${clientEmail} fecha=${fecha} hora=${hora} formattedDate=${formattedDate}`);
     Promise.allSettled([
       sendBookingConfirmationEmail(
         clientEmail,
@@ -161,6 +161,7 @@ export async function createBooking(
         timezone,
         zoomJoinUrl,
         masterclassUrl,
+        fecha,
       ),
       sendBookingNotificationToDani(
         clientName,
@@ -173,9 +174,15 @@ export async function createBooking(
         zoomStartUrl,
         notasCliente,
       ),
-    ]).catch(() => {
-      // Email failures are logged but don't fail the booking
-      console.error('Error sending booking emails');
+    ]).then((results) => {
+      results.forEach((r, i) => {
+        const label = i === 0 ? 'confirmation' : 'notification-dani';
+        if (r.status === 'fulfilled') {
+          console.log(`[booking] Email ${label} sent successfully`);
+        } else {
+          console.error(`[booking] Email ${label} failed:`, r.reason);
+        }
+      });
     });
 
     return { reserva: updatedReserva, zoomJoinUrl };

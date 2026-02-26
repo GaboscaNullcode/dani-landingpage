@@ -54,15 +54,100 @@ async function sendEmail(
   to: string,
   subject: string,
   htmlContent: string,
+  attachment?: { content: string; name: string },
 ): Promise<void> {
-  const api = getApi();
-  const email = new SendSmtpEmail();
-  email.sender = sender;
-  email.to = [{ email: to }];
-  email.subject = subject;
-  email.htmlContent = htmlContent;
+  console.log(`[brevo] Sending email to=${to} subject="${subject}" hasAttachment=${!!attachment}`);
+  try {
+    const api = getApi();
+    const email = new SendSmtpEmail();
+    email.sender = sender;
+    email.to = [{ email: to }];
+    email.subject = subject;
+    email.htmlContent = htmlContent;
 
-  await api.sendTransacEmail(email);
+    if (attachment) {
+      email.attachment = [
+        { content: attachment.content, name: attachment.name },
+      ];
+    }
+
+    await api.sendTransacEmail(email);
+    console.log(`[brevo] Email sent successfully to=${to}`);
+  } catch (error) {
+    console.error(`[brevo] Failed to send email to=${to}:`, error);
+    throw error;
+  }
+}
+
+function generateIcsContent({
+  summary,
+  description,
+  startDateTime,
+  endDateTime,
+  timezone,
+  organizerEmail,
+  attendeeEmail,
+  location,
+}: {
+  summary: string;
+  description: string;
+  startDateTime: string;
+  endDateTime: string;
+  timezone: string;
+  organizerEmail: string;
+  attendeeEmail: string;
+  location?: string;
+}): string {
+  const uid = `${Date.now()}-${Math.random().toString(36).slice(2)}@remotecondani.com`;
+  const now = new Date()
+    .toISOString()
+    .replace(/[-:]/g, '')
+    .replace(/\.\d{3}/, '');
+
+  const formatDt = (iso: string) =>
+    new Date(iso)
+      .toISOString()
+      .replace(/[-:]/g, '')
+      .replace(/\.\d{3}/, '');
+
+  const lines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Remote con Dani//Booking//ES',
+    'CALSCALE:GREGORIAN',
+    'METHOD:REQUEST',
+    'BEGIN:VEVENT',
+    `UID:${uid}`,
+    `DTSTAMP:${now}`,
+    `DTSTART;TZID=${timezone}:${formatDt(startDateTime)}`,
+    `DTEND;TZID=${timezone}:${formatDt(endDateTime)}`,
+    `SUMMARY:${summary}`,
+    `DESCRIPTION:${description.replace(/\n/g, '\\n')}`,
+    `ORGANIZER;CN=Remote con Dani:mailto:${organizerEmail}`,
+    `ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT:mailto:${attendeeEmail}`,
+    'STATUS:CONFIRMED',
+  ];
+
+  if (location) {
+    lines.push(`LOCATION:${location}`);
+  }
+
+  lines.push(
+    'BEGIN:VALARM',
+    'TRIGGER:-PT60M',
+    'ACTION:DISPLAY',
+    'DESCRIPTION:Recordatorio de sesion',
+    'END:VALARM',
+    'BEGIN:VALARM',
+    'TRIGGER:-PT15M',
+    'ACTION:DISPLAY',
+    'DESCRIPTION:Tu sesion comienza en 15 minutos',
+    'END:VALARM',
+    'END:VEVENT',
+    'END:VCALENDAR',
+  );
+
+  return lines.join('\r\n');
 }
 
 export async function sendPurchaseEmail(
@@ -211,6 +296,7 @@ export async function sendBookingConfirmationEmail(
   timezone: string,
   zoomUrl?: string,
   masterclassUrl?: string,
+  fechaIso?: string,
 ): Promise<void> {
   const subject = 'Tu sesión con Dani está confirmada ✨';
   const html = getBookingConfirmationEmailHtml(
@@ -223,7 +309,43 @@ export async function sendBookingConfirmationEmail(
     zoomUrl,
     masterclassUrl,
   );
-  await sendEmail(to, subject, html);
+
+  // Generate .ics calendar invite attachment if raw date is available
+  let attachment: { content: string; name: string } | undefined;
+  if (fechaIso) {
+    try {
+      const [h, m] = hora.split(':').map(Number);
+      const [year, month, day] = fechaIso.split('-').map(Number);
+      const startDt = new Date(year, month - 1, day, h, m);
+      const endDt = new Date(startDt.getTime() + duracion * 60000);
+
+      console.log(`[brevo] Generating ICS: fechaIso=${fechaIso} hora=${hora} start=${startDt.toISOString()} end=${endDt.toISOString()}`);
+
+      const icsContent = generateIcsContent({
+        summary: `${planName} - Remote con Dani`,
+        description: `Sesion de ${planName} con Dani.${zoomUrl ? `\\nZoom: ${zoomUrl}` : ''}`,
+        startDateTime: startDt.toISOString(),
+        endDateTime: endDt.toISOString(),
+        timezone,
+        organizerEmail: sender.email,
+        attendeeEmail: to,
+        location: zoomUrl,
+      });
+
+      attachment = {
+        content: Buffer.from(icsContent).toString('base64'),
+        name: 'sesion-remote-con-dani.ics',
+      };
+      console.log(`[brevo] ICS generated successfully (${icsContent.length} bytes)`);
+    } catch (icsError) {
+      console.error('[brevo] Failed to generate ICS:', icsError);
+      // Continue without attachment — email is more important
+    }
+  } else {
+    console.log('[brevo] No fechaIso provided, skipping ICS attachment');
+  }
+
+  await sendEmail(to, subject, html, attachment);
 }
 
 export async function sendBookingNotificationToDani(

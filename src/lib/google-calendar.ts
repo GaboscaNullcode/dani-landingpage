@@ -30,7 +30,6 @@ export async function createCalendarEvent({
   startDateTime,
   endDateTime,
   timezone,
-  attendeeEmail,
   zoomJoinUrl,
 }: {
   summary: string;
@@ -38,7 +37,6 @@ export async function createCalendarEvent({
   startDateTime: string;
   endDateTime: string;
   timezone: string;
-  attendeeEmail: string;
   zoomJoinUrl?: string;
 }): Promise<string> {
   const calendar = getCalendarClient();
@@ -55,8 +53,6 @@ export async function createCalendarEvent({
       description: fullDescription,
       start: { dateTime: startDateTime, timeZone: timezone },
       end: { dateTime: endDateTime, timeZone: timezone },
-      attendees: [{ email: attendeeEmail }],
-      conferenceData: undefined,
       reminders: {
         useDefault: false,
         overrides: [
@@ -65,7 +61,6 @@ export async function createCalendarEvent({
         ],
       },
     },
-    sendUpdates: 'all',
   });
 
   return event.data.id!;
@@ -79,7 +74,6 @@ export async function deleteCalendarEvent(eventId: string): Promise<void> {
     await calendar.events.delete({
       calendarId,
       eventId,
-      sendUpdates: 'all',
     });
   } catch (error: unknown) {
     const gError = error as { code?: number };
