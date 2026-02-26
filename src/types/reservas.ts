@@ -42,6 +42,13 @@ export interface Reserva {
   createdAt: string;
 }
 
+// ── Google Calendar FreeBusy ──
+
+export interface BusyPeriod {
+  start: string;
+  end: string;
+}
+
 // ── Calendar / Booking types ──
 
 export interface TimeSlot {

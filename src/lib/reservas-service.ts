@@ -1,9 +1,11 @@
 import { cache } from 'react';
 import { getServiceSupabase, createAnonSupabase } from './supabase/server';
+import { getFreeBusySlots } from './google-calendar';
 import type {
   ReservaRecord,
   Reserva,
   TimeSlot,
+  BusyPeriod,
   DisponibilidadResponse,
   ConfigCalendario,
   DisponibilidadSemanalRecord,
@@ -131,6 +133,14 @@ export async function getAvailableSlots(
     duracion_minutos: number;
   }>;
 
+  // 3b. Fetch Google Calendar FreeBusy (graceful fallback on failure)
+  let gcalBusy: BusyPeriod[] = [];
+  try {
+    gcalBusy = await getFreeBusySlots(dayStart, dayEnd);
+  } catch {
+    // FreeBusy unavailable — continue without it
+  }
+
   // 4. Generate time slots
   const totalSlotMinutos = duracionMinutos + config.duracionBufferMinutos;
   const slots: TimeSlot[] = [];
@@ -172,7 +182,17 @@ export async function getAvailableSlots(
         return slotDateTime < rEnd && slotEndTime > rStart;
       });
 
-      slots.push({ hora, disponible: !isBlocked && !isBooked });
+      // Check if slot overlaps with Google Calendar busy periods
+      const isGcalBusy = gcalBusy.some((b) => {
+        const bStart = new Date(b.start);
+        const bEnd = new Date(b.end);
+        return slotDateTime < bEnd && slotEndTime > bStart;
+      });
+
+      slots.push({
+        hora,
+        disponible: !isBlocked && !isBooked && !isGcalBusy,
+      });
     }
   }
 

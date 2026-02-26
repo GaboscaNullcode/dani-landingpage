@@ -1,10 +1,14 @@
 /**
  * Google Calendar integration via Service Account.
  *
- * Env vars: GOOGLE_SERVICE_ACCOUNT_JSON (base64-encoded), GOOGLE_CALENDAR_ID
+ * Env vars:
+ *  - GOOGLE_SERVICE_ACCOUNT_JSON (base64-encoded)
+ *  - GOOGLE_CALENDAR_ID (calendar for creating events)
+ *  - GOOGLE_CALENDAR_IDS_BUSY (comma-separated calendar IDs for FreeBusy checks)
  */
 
 import { google } from 'googleapis';
+import type { BusyPeriod } from '@/types/reservas';
 
 function getCalendarClient() {
   const serviceAccountJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON!;
@@ -84,4 +88,48 @@ export async function deleteCalendarEvent(eventId: string): Promise<void> {
       throw error;
     }
   }
+}
+
+/**
+ * Query FreeBusy availability across multiple Google Calendars.
+ *
+ * Reads calendar IDs from GOOGLE_CALENDAR_IDS_BUSY env var (comma-separated).
+ * Returns a flat, merged array of busy periods across all calendars.
+ */
+export async function getFreeBusySlots(
+  startDate: string,
+  endDate: string,
+): Promise<BusyPeriod[]> {
+  const rawIds = process.env.GOOGLE_CALENDAR_IDS_BUSY;
+  if (!rawIds) return [];
+
+  const calendarIds = rawIds
+    .split(',')
+    .map((id) => id.trim())
+    .filter(Boolean);
+  if (calendarIds.length === 0) return [];
+
+  const calendar = getCalendarClient();
+
+  const response = await calendar.freebusy.query({
+    requestBody: {
+      timeMin: startDate,
+      timeMax: endDate,
+      items: calendarIds.map((id) => ({ id })),
+    },
+  });
+
+  const calendars = response.data.calendars ?? {};
+  const busyPeriods: BusyPeriod[] = [];
+
+  for (const calId of calendarIds) {
+    const entries = calendars[calId]?.busy ?? [];
+    for (const entry of entries) {
+      if (entry.start && entry.end) {
+        busyPeriods.push({ start: entry.start, end: entry.end });
+      }
+    }
+  }
+
+  return busyPeriods;
 }
