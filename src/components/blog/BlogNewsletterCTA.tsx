@@ -46,7 +46,7 @@ export default function BlogNewsletterCTA() {
                   Listo, {name}!
                 </h3>
                 <p className="mt-2 text-white/80">
-                  Revisa tu inbox. Te enviamos la guia gratuita.
+                  Revisa tu inbox para crear tu cuenta y ver el contenido gratuito.
                 </p>
               </motion.div>
             ) : (
@@ -64,11 +64,11 @@ export default function BlogNewsletterCTA() {
                 </div>
 
                 <h3 className="mb-3 font-[var(--font-headline)] text-2xl font-bold text-white md:text-3xl">
-                  Descarga la guia gratuita
+                  Accede a contenido gratuito
                 </h3>
                 <p className="mb-8 max-w-lg text-white/80">
-                  Recibe la &ldquo;Formula para un Titulo Optimizado&rdquo; + tips
-                  semanales para tu carrera remota.
+                  Suscríbete, crea tu cuenta y accede a guías, recursos
+                  y tips semanales para tu carrera remota.
                 </p>
 
                 <form

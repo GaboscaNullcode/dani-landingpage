@@ -7,8 +7,8 @@ import { useNewsletterForm } from '@/hooks/useNewsletterForm';
 const benefits = [
   {
     icon: BookOpen,
-    title: 'Guía GRATIS',
-    description: 'Fórmula para un Título Optimizado que atraiga clientes',
+    title: 'Guías y recursos',
+    description: 'Accede a todo el contenido gratuito desde tu perfil',
   },
   {
     icon: Video,
@@ -78,18 +78,18 @@ export default function NewsletterHero() {
                 </div>
 
                 <h1 className="text-hero-title mb-6 font-[var(--font-headline)] font-bold text-gray-dark">
-                  Recibe tu <span className="gradient-text">Guía Gratuita</span>
+                  Accede a <span className="gradient-text">Contenido Gratuito</span>
                 </h1>
 
                 <p className="text-body-large mb-8 text-gray-carbon">
-                  Descarga la <strong>Fórmula para un Título Optimizado</strong> que te ayudará
-                  a destacar en plataformas de trabajo remoto y atraer más clientes.
+                  Suscríbete, crea tu cuenta y accede a <strong>guías, recursos y contenido
+                  exclusivo</strong> desde tu perfil para impulsar tu carrera remota.
                 </p>
 
                 {/* What you get */}
                 <div className="mb-8 space-y-4">
                   {[
-                    'Guía descargable en PDF',
+                    'Guías y recursos en tu perfil',
                     'Acceso a la masterclass de 2 horas',
                     'Tips semanales exclusivos',
                     'Comunidad de apoyo',
@@ -179,7 +179,7 @@ export default function NewsletterHero() {
                             <span>Enviando...</span>
                           ) : (
                             <>
-                              <span>Quiero mi guía gratis</span>
+                              <span>Unirme gratis</span>
                               <ArrowRight className="h-5 w-5" />
                             </>
                           )}
@@ -215,8 +215,8 @@ export default function NewsletterHero() {
                         ¡Listo, {name}!
                       </h3>
                       <p className="mb-6 text-gray-carbon">
-                        Revisa tu bandeja de entrada. Te envié la guía y el acceso
-                        a la masterclass gratuita.
+                        Revisa tu bandeja de entrada para crear tu cuenta
+                        y acceder a todo el contenido gratuito desde tu perfil.
                       </p>
                       <p className="text-sm text-gray-medium">
                         ¿No lo ves? Revisa tu carpeta de spam.

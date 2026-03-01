@@ -107,12 +107,12 @@ export default function NewsletterSection({ source = 'home' }: NewsletterSection
             className="mx-auto mt-5 max-w-2xl"
           >
             <p className="text-lg leading-relaxed text-gray-carbon md:text-xl">
-              Regístrate y recibe{' '}
+              Regístrate y accede{' '}
               <span className="font-bold text-coral underline decoration-coral/40 decoration-2 underline-offset-2">
                 GRATIS
               </span>{' '}
-              la guía &ldquo;Fórmula para un Título Optimizado&rdquo;.
-              Ideal para destacar en plataformas freelance y mejorar tu CV.
+              a guías, recursos y contenido exclusivo desde tu perfil.
+              Ideal para comenzar tu camino en el trabajo remoto.
             </p>
           </motion.div>
         </motion.div>

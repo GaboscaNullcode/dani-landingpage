@@ -57,9 +57,9 @@ export default function NewsletterFormCard({ source = 'home' }: NewsletterFormCa
           Contenido exclusivo cada semana
         </h3>
         <p className="mt-1 text-base leading-relaxed text-gray-medium">
-          Recibe{' '}
-          <span className="font-semibold text-coral">GRATIS</span> la guía
-          &ldquo;Fórmula para un Título Optimizado&rdquo;.
+          Suscríbete y accede{' '}
+          <span className="font-semibold text-coral">GRATIS</span> a guías,
+          recursos y contenido exclusivo desde tu perfil.
         </p>
       </div>
 
@@ -83,7 +83,8 @@ export default function NewsletterFormCard({ source = 'home' }: NewsletterFormCa
             Listo, {name}!
           </h3>
           <p className="mt-2 text-sm text-gray-medium">
-            Revisa tu inbox. Te enviamos la guía y contenido exclusivo.
+            Revisa tu inbox para crear tu cuenta y acceder a todo el contenido
+            gratuito desde tu perfil.
           </p>
         </motion.div>
       ) : (

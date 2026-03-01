@@ -152,10 +152,10 @@ function GuideModal({
                     <BookOpen className="h-7 w-7 text-white" />
                   </div>
                   <h3 className="font-[var(--font-headline)] text-xl font-bold text-black-deep">
-                    Recibe tu guía gratuita
+                    Accede al contenido gratuito
                   </h3>
                   <p className="mt-2 text-sm text-gray-carbon">
-                    La guía se enviará a{' '}
+                    Accede con tu cuenta{' '}
                     <span className="font-semibold text-lavender">
                       {authUser.email}
                     </span>
@@ -197,7 +197,7 @@ function GuideModal({
                       </>
                     ) : (
                       <>
-                        Recibir guía
+                        Ver contenido
                         <ArrowRight className="h-5 w-5" />
                       </>
                     )}
@@ -219,10 +219,10 @@ function GuideModal({
                     <BookOpen className="h-7 w-7 text-white" />
                   </div>
                   <h3 className="font-[var(--font-headline)] text-xl font-bold text-black-deep">
-                    Recibe tu guía gratuita
+                    Accede al contenido gratuito
                   </h3>
                   <p className="mt-2 text-sm text-gray-carbon">
-                    Ingresa tus datos y te la enviaremos al instante.
+                    Suscríbete y crea tu cuenta para acceder al contenido.
                   </p>
                 </div>
 

@@ -232,10 +232,11 @@ export async function sendNewsletterWelcomeEmail(
   to: string,
   name: string,
 ): Promise<void> {
-  const guideUrl =
-    process.env.NEWSLETTER_GUIDE_URL || 'https://remotecondani.com/newsletter';
-  const subject = 'Tu guia gratuita esta aqui';
-  const html = getNewsletterWelcomeEmailHtml(name, guideUrl);
+  const domain =
+    process.env.NEXT_PUBLIC_DOMAIN || 'https://remotecondani.com';
+  const accountUrl = `${domain}/mi-cuenta`;
+  const subject = 'Crea tu cuenta y accede a contenido gratuito';
+  const html = getNewsletterWelcomeEmailHtml(name, accountUrl);
   await sendEmail(to, subject, html);
 }
 

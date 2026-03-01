@@ -68,8 +68,8 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       message: alreadySubscribed
-        ? 'Ya estabas suscrita! Revisa tu inbox por la guia.'
-        : 'Suscripcion exitosa! Revisa tu inbox.',
+        ? 'Ya estabas suscrita! Revisa tu inbox para crear tu cuenta.'
+        : 'Suscripcion exitosa! Revisa tu inbox para crear tu cuenta.',
       alreadySubscribed,
     });
   } catch (error: unknown) {

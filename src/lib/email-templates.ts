@@ -118,16 +118,18 @@ export function getWelcomeEmailHtml(
 
 export function getNewsletterWelcomeEmailHtml(
   name: string,
-  guideUrl: string,
+  accountUrl: string,
 ): string {
   const safeName = escapeHtml(name);
   const content = `
     <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Bienvenida, ${safeName}!</h2>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
       Gracias por unirte a la comunidad de <strong style="color:${BRAND.dark};">Remote con Dani</strong>.
-      Aqui tienes tu guia gratuita como te prometi:
     </p>
-    ${button('Descargar mi Guia', guideUrl)}
+    <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
+      Crea tu cuenta para acceder a todas las guias y recursos gratuitos desde tu perfil:
+    </p>
+    ${button('Crear mi cuenta', accountUrl)}
     <p style="margin:24px 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
       Cada semana recibiras en tu inbox tips y estrategias para construir tu carrera remota.
       Desde optimizar tu perfil hasta conseguir clientes internacionales.
