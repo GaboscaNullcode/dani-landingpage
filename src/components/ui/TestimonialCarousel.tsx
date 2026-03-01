@@ -1,9 +1,10 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import { motion, useInView } from 'motion/react';
-import { Star, Instagram, Quote, User } from 'lucide-react';
+import { motion, useInView, AnimatePresence } from 'motion/react';
+import { Star, Instagram, Quote, User, X } from 'lucide-react';
+import { createPortal } from 'react-dom';
 import type { TestimonioMasterclass } from '@/types/masterclass';
 
 interface TestimonialCarouselProps {
@@ -18,18 +19,211 @@ const cardGradients = [
   { from: '#fcd34d', to: '#ff6b6b' },
 ];
 
+/* ─── Modal ─── */
+
+function TestimonialModal({
+  testimonial,
+  gradient,
+  onClose,
+}: {
+  testimonial: TestimonioMasterclass;
+  gradient: { from: string; to: string };
+  onClose: () => void;
+}) {
+  // Lock body scroll while open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
+  // Close on Escape
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [onClose]);
+
+  return createPortal(
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+    >
+      {/* Backdrop */}
+      <motion.div
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      />
+
+      {/* Modal card */}
+      <motion.div
+        className="relative z-10 w-full max-w-lg overflow-hidden rounded-[28px] bg-white p-1"
+        style={{
+          boxShadow: `0 25px 80px rgba(0,0,0,0.18), 0 0 0 1px ${gradient.from}20`,
+        }}
+        initial={{ opacity: 0, scale: 0.9, y: 30 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Testimonio de ${testimonial.name}`}
+      >
+        {/* Gradient border */}
+        <div
+          className="absolute inset-0 rounded-[28px] opacity-60"
+          style={{
+            background: `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)`,
+          }}
+        />
+
+        {/* Inner content */}
+        <div className="relative z-10 rounded-[26px] bg-white p-8">
+          {/* Close button */}
+          <button
+            onClick={onClose}
+            className="absolute right-4 top-4 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-700"
+            aria-label="Cerrar"
+          >
+            <X className="h-4 w-4" />
+          </button>
+
+          {/* Decorative quote */}
+          <div
+            className="absolute -right-4 -top-4 opacity-[0.05]"
+            style={{ color: gradient.from }}
+          >
+            <Quote className="h-32 w-32" strokeWidth={1} />
+          </div>
+
+          {/* Avatar + info header */}
+          <div className="mb-6 flex items-center gap-4">
+            {/* Avatar with gradient ring */}
+            <div className="relative flex-shrink-0">
+              <motion.div
+                className="absolute -inset-1 rounded-full opacity-80"
+                style={{
+                  background: `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)`,
+                }}
+                animate={{ rotate: [0, 360] }}
+                transition={{
+                  duration: 20,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
+              />
+              {testimonial.avatarUrl ? (
+                <div className="relative h-16 w-16 overflow-hidden rounded-full border-[3px] border-white shadow-lg">
+                  <Image
+                    src={testimonial.avatarUrl}
+                    alt={testimonial.name}
+                    fill
+                    className="object-cover"
+                    sizes="64px"
+                  />
+                </div>
+              ) : (
+                <div className="relative flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-white bg-white shadow-lg">
+                  <User
+                    className="h-7 w-7"
+                    style={{ color: gradient.from }}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div>
+              <h3
+                className="font-[var(--font-headline)] text-lg font-bold"
+                style={{
+                  background: `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)`,
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                {testimonial.name}
+              </h3>
+              <p className="text-sm text-gray-medium">{testimonial.role}</p>
+
+              {/* Social badge */}
+              {testimonial.socialNetwork && testimonial.socialUsername && (
+                <div
+                  className="mt-1.5 inline-flex items-center gap-1.5 rounded-full px-3 py-1"
+                  style={{
+                    background: `linear-gradient(135deg, ${gradient.from}12 0%, ${gradient.to}12 100%)`,
+                  }}
+                >
+                  <Instagram
+                    className="h-3.5 w-3.5"
+                    style={{ color: gradient.from }}
+                  />
+                  <span
+                    className="text-xs font-semibold"
+                    style={{ color: gradient.from }}
+                  >
+                    {testimonial.socialNetwork}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Full quote text */}
+          <p className="relative z-10 mb-6 font-[var(--font-inter)] text-base leading-relaxed text-gray-carbon">
+            &ldquo;{testimonial.text}&rdquo;
+          </p>
+
+          {/* Stars */}
+          <div className="flex gap-1">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star
+                key={star}
+                className={`h-5 w-5 text-sunshine ${star <= testimonial.stars ? 'fill-current' : 'text-gray-light'}`}
+              />
+            ))}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>,
+    document.body
+  );
+}
+
+/* ─── Card ─── */
+
 function TestimonialCard({
   testimonial,
   index,
   isInView,
   isSectionVisible,
+  onOpenModal,
 }: {
   testimonial: TestimonioMasterclass;
   index: number;
   isInView: boolean;
   isSectionVisible: boolean;
+  onOpenModal: () => void;
 }) {
   const gradient = cardGradients[index % cardGradients.length];
+  const [isTruncated, setIsTruncated] = useState(false);
+  const textRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    const el = textRef.current;
+    if (el) {
+      setIsTruncated(el.scrollHeight > el.clientHeight);
+    }
+  }, [testimonial.text]);
 
   return (
     <motion.div
@@ -133,10 +327,29 @@ function TestimonialCard({
           )}
         </div>
 
-        {/* Quote text */}
-        <p className="relative z-10 mb-5 line-clamp-4 font-[var(--font-inter)] text-[15px] leading-relaxed text-gray-carbon">
-          &ldquo;{testimonial.text}&rdquo;
-        </p>
+        {/* Quote text (always truncated) */}
+        <div className="relative z-10 mb-5">
+          <p
+            ref={textRef}
+            className="line-clamp-4 font-[var(--font-inter)] text-[15px] leading-relaxed text-gray-carbon"
+          >
+            &ldquo;{testimonial.text}&rdquo;
+          </p>
+
+          {/* Read more → opens modal */}
+          {isTruncated && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenModal();
+              }}
+              className="mt-2 text-xs font-semibold transition-colors duration-200 hover:underline"
+              style={{ color: gradient.from }}
+            >
+              Leer más
+            </button>
+          )}
+        </div>
 
         {/* Footer: Name + Stars */}
         <div className="flex items-center justify-between border-t border-gray-100 pt-4">
@@ -181,12 +394,21 @@ function TestimonialCard({
   );
 }
 
+/* ─── Carousel ─── */
+
 export default function TestimonialCarousel({
   testimonials,
 }: TestimonialCarouselProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const isSectionVisible = useInView(ref, { margin: '100px' });
+
+  const [modalData, setModalData] = useState<{
+    testimonial: TestimonioMasterclass;
+    gradientIndex: number;
+  } | null>(null);
+
+  const closeModal = useCallback(() => setModalData(null), []);
 
   // Duplicate for seamless infinite carousel
   const duplicated = [...testimonials, ...testimonials];
@@ -204,17 +426,39 @@ export default function TestimonialCarousel({
           className="flex gap-6 animate-carousel"
           style={{ width: 'max-content' }}
         >
-          {duplicated.map((testimonial, index) => (
-            <TestimonialCard
-              key={`${testimonial.id}-${index}`}
-              testimonial={testimonial}
-              index={index % testimonials.length}
-              isInView={isInView}
-              isSectionVisible={isSectionVisible}
-            />
-          ))}
+          {duplicated.map((testimonial, index) => {
+            const originalIndex = index % testimonials.length;
+            return (
+              <TestimonialCard
+                key={`${testimonial.id}-${index}`}
+                testimonial={testimonial}
+                index={originalIndex}
+                isInView={isInView}
+                isSectionVisible={isSectionVisible}
+                onOpenModal={() =>
+                  setModalData({
+                    testimonial,
+                    gradientIndex: originalIndex,
+                  })
+                }
+              />
+            );
+          })}
         </div>
       </div>
+
+      {/* Modal (portaled to body) */}
+      <AnimatePresence>
+        {modalData && (
+          <TestimonialModal
+            testimonial={modalData.testimonial}
+            gradient={
+              cardGradients[modalData.gradientIndex % cardGradients.length]
+            }
+            onClose={closeModal}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
