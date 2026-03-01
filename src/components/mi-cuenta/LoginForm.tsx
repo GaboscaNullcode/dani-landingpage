@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'motion/react';
 import posthog from 'posthog-js';
 import {
@@ -17,7 +17,9 @@ type Mode = 'login' | 'signup' | 'forgot';
 
 export default function LoginForm() {
   const router = useRouter();
-  const [mode, setMode] = useState<Mode>('login');
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirectTo');
+  const [mode, setMode] = useState<Mode>(redirectTo ? 'signup' : 'login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -92,7 +94,7 @@ export default function LoginForm() {
         });
       }
 
-      router.push('/mi-cuenta');
+      router.push(redirectTo || '/mi-cuenta');
       router.refresh();
     } catch {
       setError('Error de conexion. Intenta de nuevo.');

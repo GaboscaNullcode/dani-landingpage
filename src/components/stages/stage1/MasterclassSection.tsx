@@ -154,7 +154,7 @@ export default function MasterclassSection() {
             className="mt-10 text-center"
           >
             <a
-              href="/tienda/masterclass-gratuita"
+              href="/masterclass-gratuita"
               className="btn-shimmer inline-flex items-center gap-3 rounded-full px-10 py-5 font-[var(--font-headline)] text-lg font-bold text-white"
               style={{ background: 'var(--gradient-coral-pink)' }}
             >
