@@ -372,7 +372,7 @@ export default function FreeResourcesSection({
   const whatsappLink =
     whatsappGroupProduct?.whatsappLink ||
     whatsappGroupProduct?.ctaLink ||
-    'https://chat.whatsapp.com/HYmBiEU0UXl2VsMMlWatAE';
+    'https://chat.whatsapp.com/Gtc5HZ2mia2KhN1SY2CvRS';
 
   return (
     <>
