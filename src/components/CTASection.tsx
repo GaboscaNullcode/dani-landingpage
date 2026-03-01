@@ -24,9 +24,9 @@ const ctaButtons = [
     shadow: 'rgba(255, 107, 107, 0.3)',
   },
   {
-    text: 'Empieza con la Guía Completa',
+    text: 'Empieza con la Ruta Remota paso a paso',
     icon: BookOpen,
-    href: '/tienda/curso-paso-a-paso',
+    href: '/ruta-recomendada',
     gradient: 'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
     shadow: 'rgba(167, 139, 250, 0.3)',
   },

@@ -1,9 +1,10 @@
 'use client';
 
+import { type ReactNode } from 'react';
 import { motion } from 'motion/react';
 
 interface StageHeroProps {
-  title: string;
+  title: ReactNode;
   subtitle: string;
   variant?: 'dark' | 'light';
 }

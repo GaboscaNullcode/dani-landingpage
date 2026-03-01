@@ -54,7 +54,12 @@ export default async function RecursosGratuitosPage() {
       <main id="main-content">
         <StageHero
           variant="light"
-          title="Descubre si el trabajo remoto es para ti"
+          title={
+            <>
+              Descubre si el trabajo remoto{' '}
+              <span className="gradient-text-playful">es para ti</span>
+            </>
+          }
           subtitle="Si estás empezando y tienes dudas, aquí encontrarás recursos claros y gratuitos para entender si este camino es para ti y avanzar con más tranquilidad."
         />
         <QuickNavSection />
