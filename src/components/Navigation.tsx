@@ -9,6 +9,7 @@ import { Sparkles, User } from 'lucide-react';
 
 const navItems = [
   { text: 'Home', href: '/' },
+  { text: 'Sobre mí', href: '/sobre-mi' },
   { text: 'Empieza Gratis', href: '/empezar' },
   { text: 'Tienda', href: '/tienda' },
   { text: 'Acompañamiento 1:1', href: '/asesorias' },
