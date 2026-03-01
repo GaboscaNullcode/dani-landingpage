@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import { getProductsByIds } from '@/lib/tienda-service';
+import type { Product } from '@/types/tienda';
 
 // Dynamic import para QuizSection - componente pesado (828+ líneas)
 const QuizSection = dynamic(() => import('@/components/QuizSection'), {
@@ -37,12 +39,26 @@ export const metadata: Metadata = {
   },
 };
 
-export default function EmpezarPage() {
+// Product IDs used in the quiz recommendations
+const QUIZ_PRODUCT_IDS = [
+  'define-camino',
+  'guia-practica',
+  'ruta-remota',
+  'crea-camino',
+  'iniciando',
+];
+
+export default async function EmpezarPage() {
+  const products = await getProductsByIds(QUIZ_PRODUCT_IDS);
+  const productsMap: Record<string, Product> = Object.fromEntries(
+    products.map((p) => [p.id, p])
+  );
+
   return (
     <>
       <Navigation />
       <main id="main-content">
-        <QuizSection />
+        <QuizSection products={productsMap} />
       </main>
       <Footer />
     </>

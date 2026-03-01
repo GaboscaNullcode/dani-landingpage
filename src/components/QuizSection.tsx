@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import posthog from 'posthog-js';
 import { motion, AnimatePresence, useInView } from 'motion/react';
@@ -24,8 +24,13 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { stages, type StageData } from './StagesSection';
+import type { Product } from '@/types/tienda';
 
 // Types
+interface QuizSectionProps {
+  products?: Record<string, Product>;
+}
+
 interface QuizOption {
   id: string;
   label: string;
@@ -111,129 +116,216 @@ const questions: QuizQuestion[] = [
   },
 ];
 
-// Results Data — 3 resultados basados en reglas
-const levelResults: Record<string, LevelResult> = {
-  explorando: {
-    id: 'explorando',
-    title: 'Estoy Explorando',
-    subtitle: 'Nivel de Descubrimiento',
-    description:
-      'Si te llama la atención el trabajo remoto pero todavía no sabes por dónde empezar, aquí tienes recursos gratuitos y claros para informarte sin presión.',
-    icon: Compass,
+// Quiz product metadata (visual properties not stored in Supabase)
+const QUIZ_PRODUCT_META: Record<
+  string,
+  { icon: LucideIcon; gradient: string; tag?: string; priority: 'primary' | 'secondary' }
+> = {
+  'define-camino': {
+    icon: BookOpen,
     gradient: 'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
-    shadowColor: 'rgba(167, 139, 250, 0.3)',
-    accentColor: '#a78bfa',
-    recommendations: [
-      {
-        name: 'Newsletter Semanal',
-        price: 'Gratis',
-        description: 'Recibe tips y recursos cada semana directo en tu correo',
-        href: '/newsletter',
-        priority: 'secondary',
-        icon: Mail,
-        gradient: 'var(--gradient-coral-pink)',
-      },
-      {
-        name: 'Guía de Inicio',
-        price: 'Gratis',
-        description: 'Tu primer mapa mental del trabajo remoto',
-        href: '/recursos-gratuitos',
-        priority: 'primary',
-        icon: Gift,
-        gradient: 'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
-        tag: 'Recomendado',
-      },
-      {
-        name: 'Masterclass Gratuita',
-        price: 'Gratis',
-        description: 'Descubre si el mundo remoto es para ti',
-        href: '/recursos-gratuitos',
-        priority: 'secondary',
-        icon: GraduationCap,
-        gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
-      },
-    ],
+    tag: 'Para Iniciar',
+    priority: 'secondary',
   },
-  confundido: {
-    id: 'confundido',
-    title: 'Estoy confundid@',
-    subtitle: 'Nivel de Preparación',
-    description:
-      'Tienes la intención, pero la información suelta abruma. Aquí encuentras una ruta clara para empezar con orden y avanzar sin adivinar.',
-    icon: HelpCircle,
+  'guia-practica': {
+    icon: BookOpen,
     gradient: 'var(--gradient-coral-pink)',
-    shadowColor: 'rgba(255, 107, 107, 0.3)',
-    accentColor: '#e056a0',
-    recommendations: [
-      {
-        name: 'eBook: Define tu Camino Remoto',
-        price: '$7 USD',
-        description: 'Clarifica tus objetivos y define tu ruta ideal',
-        href: '/tienda',
-        priority: 'secondary',
-        icon: BookOpen,
-        gradient: 'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
-        tag: 'Para Iniciar',
-      },
-      {
-        name: 'eBook: Guía Práctica para Iniciar',
-        price: '$27 USD',
-        description:
-          'Todo lo esencial para dar tus primeros pasos con confianza',
-        href: '/tienda',
-        priority: 'primary',
-        icon: BookOpen,
-        gradient: 'var(--gradient-coral-pink)',
-        tag: 'Más vendido',
-      },
-      {
-        name: 'Curso Completo: Paso a Paso + 6 Bonos',
-        price: '$47 USD',
-        description:
-          'La guía definitiva con todo incluido para lanzar tu carrera remota',
-        href: '/tienda',
-        priority: 'secondary',
-        icon: Layers,
-        gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
-        tag: 'Mejor opción',
-      },
-    ],
+    tag: 'Más vendido',
+    priority: 'primary',
   },
-  accion: {
-    id: 'accion',
-    title: 'Estoy list@ para la acción',
-    subtitle: 'Nivel Personalizado',
-    description:
-      'Tienes la decisión tomada y quieres postular con estrategia profesional YA. Buscas claridad total, feedback directo y un plan adaptado a tu caso.',
-    icon: Rocket,
+  'ruta-remota': {
+    icon: Layers,
     gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
-    shadowColor: 'rgba(224, 86, 160, 0.3)',
-    accentColor: '#e056a0',
-    recommendations: [
-      {
-        name: 'Programa Intensivo 1:1',
-        price: '$155 USD',
-        description:
-          '4 horas donde construimos juntas tu estrategia completa para conseguir tu primer trabajo remoto',
-        href: '/asesorias',
-        priority: 'primary',
-        icon: MessageCircle,
-        gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
-        tag: 'Mejor inversión',
-      },
-      {
-        name: 'Sesión de Claridad',
-        price: '$66 USD',
-        description:
-          '1.5 horas para salir de la confusión con un plan claro y respuestas concretas',
-        href: '/asesorias',
-        priority: 'secondary',
-        icon: MessageCircle,
-        gradient: 'linear-gradient(135deg, #374c4f 0%, #4a5c5f 100%)',
-      },
-    ],
+    tag: 'Mejor opción',
+    priority: 'secondary',
+  },
+  'crea-camino': {
+    icon: MessageCircle,
+    gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
+    tag: 'Mejor inversión',
+    priority: 'primary',
+  },
+  iniciando: {
+    icon: MessageCircle,
+    gradient: 'linear-gradient(135deg, #374c4f 0%, #4a5c5f 100%)',
+    priority: 'secondary',
   },
 };
+
+// Build a recommendation from a Supabase product + quiz metadata
+function buildRecommendation(
+  productId: string,
+  products: Record<string, Product>,
+): ProductRecommendation | null {
+  const product = products[productId];
+  const meta = QUIZ_PRODUCT_META[productId];
+  if (!product || !meta) return null;
+
+  return {
+    name: product.name,
+    price: product.isFree ? 'Gratis' : `$${product.price} USD`,
+    description: product.description,
+    href: `/tienda/${product.slug}`,
+    priority: meta.priority,
+    icon: meta.icon,
+    gradient: meta.gradient,
+    tag: meta.tag,
+  };
+}
+
+// Hardcoded fallbacks for when Supabase products are unavailable
+const FALLBACK_CONFUNDIDO: ProductRecommendation[] = [
+  {
+    name: 'Define tu Camino Remoto',
+    price: '$7.99 USD',
+    description: 'Clarifica tus objetivos y define tu ruta ideal',
+    href: '/tienda/define-tu-camino-remoto',
+    priority: 'secondary',
+    icon: BookOpen,
+    gradient: 'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
+    tag: 'Para Iniciar',
+  },
+  {
+    name: 'Guía Práctica para Conseguir tu Primer Trabajo Remoto',
+    price: '$27 USD',
+    description: 'Todo lo esencial para dar tus primeros pasos con confianza',
+    href: '/tienda/guia-practica-para-conseguir-tu-primer-trabajo-remoto',
+    priority: 'primary',
+    icon: BookOpen,
+    gradient: 'var(--gradient-coral-pink)',
+    tag: 'Más vendido',
+  },
+  {
+    name: 'Ruta Remota: Paso a Paso',
+    price: '$77 USD',
+    description: 'La guía definitiva con todo incluido para lanzar tu carrera remota',
+    href: '/tienda/ruta-remota-paso-a-paso',
+    priority: 'secondary',
+    icon: Layers,
+    gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
+    tag: 'Mejor opción',
+  },
+];
+
+const FALLBACK_ACCION: ProductRecommendation[] = [
+  {
+    name: 'Programa Intensivo (2 horas)',
+    price: '$169 USD',
+    description:
+      'Construimos juntas tu estrategia completa para conseguir tu primer trabajo remoto',
+    href: '/tienda/programa-intensivo',
+    priority: 'primary',
+    icon: MessageCircle,
+    gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
+    tag: 'Mejor inversión',
+  },
+  {
+    name: 'Asesoría 1:1 (90 min)',
+    price: '$66 USD',
+    description:
+      'Sal de la confusión con un plan claro y respuestas concretas',
+    href: '/tienda/asesoria-1-1',
+    priority: 'secondary',
+    icon: MessageCircle,
+    gradient: 'linear-gradient(135deg, #374c4f 0%, #4a5c5f 100%)',
+  },
+];
+
+// Results Data — builds recommendations dynamically from Supabase products
+function buildLevelResults(
+  products: Record<string, Product>,
+): Record<string, LevelResult> {
+  const hasProducts = Object.keys(products).length > 0;
+
+  // Build confundido recommendations from products or use fallback
+  const confundidoRecs = hasProducts
+    ? (
+        ['define-camino', 'guia-practica', 'ruta-remota'] as const
+      )
+        .map((id) => buildRecommendation(id, products))
+        .filter((r): r is ProductRecommendation => r !== null)
+    : FALLBACK_CONFUNDIDO;
+
+  // Build accion recommendations from products or use fallback
+  const accionRecs = hasProducts
+    ? (
+        ['crea-camino', 'iniciando'] as const
+      )
+        .map((id) => buildRecommendation(id, products))
+        .filter((r): r is ProductRecommendation => r !== null)
+    : FALLBACK_ACCION;
+
+  return {
+    explorando: {
+      id: 'explorando',
+      title: 'Estoy Explorando',
+      subtitle: 'Nivel de Descubrimiento',
+      description:
+        'Si te llama la atención el trabajo remoto pero todavía no sabes por dónde empezar, aquí tienes recursos gratuitos y claros para informarte sin presión.',
+      icon: Compass,
+      gradient: 'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
+      shadowColor: 'rgba(167, 139, 250, 0.3)',
+      accentColor: '#a78bfa',
+      recommendations: [
+        {
+          name: 'Newsletter Semanal',
+          price: 'Gratis',
+          description:
+            'Recibe tips y recursos cada semana directo en tu correo',
+          href: '/newsletter',
+          priority: 'secondary',
+          icon: Mail,
+          gradient: 'var(--gradient-coral-pink)',
+        },
+        {
+          name: 'Guía de Inicio',
+          price: 'Gratis',
+          description: 'Tu primer mapa mental del trabajo remoto',
+          href: '/recursos-gratuitos',
+          priority: 'primary',
+          icon: Gift,
+          gradient: 'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
+          tag: 'Recomendado',
+        },
+        {
+          name: 'Masterclass Gratuita',
+          price: 'Gratis',
+          description: 'Descubre si el mundo remoto es para ti',
+          href: '/recursos-gratuitos',
+          priority: 'secondary',
+          icon: GraduationCap,
+          gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
+        },
+      ],
+    },
+    confundido: {
+      id: 'confundido',
+      title: 'Estoy confundid@',
+      subtitle: 'Nivel de Preparación',
+      description:
+        'Tienes la intención, pero la información suelta abruma. Aquí encuentras una ruta clara para empezar con orden y avanzar sin adivinar.',
+      icon: HelpCircle,
+      gradient: 'var(--gradient-coral-pink)',
+      shadowColor: 'rgba(255, 107, 107, 0.3)',
+      accentColor: '#e056a0',
+      recommendations:
+        confundidoRecs.length > 0 ? confundidoRecs : FALLBACK_CONFUNDIDO,
+    },
+    accion: {
+      id: 'accion',
+      title: 'Estoy list@ para la acción',
+      subtitle: 'Nivel Personalizado',
+      description:
+        'Tienes la decisión tomada y quieres postular con estrategia profesional YA. Buscas claridad total, feedback directo y un plan adaptado a tu caso.',
+      icon: Rocket,
+      gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
+      shadowColor: 'rgba(224, 86, 160, 0.3)',
+      accentColor: '#e056a0',
+      recommendations:
+        accionRecs.length > 0 ? accionRecs : FALLBACK_ACCION,
+    },
+  };
+}
 
 // Orden de resultados para la vista por niveles
 const levelOrder = ['explorando', 'confundido', 'accion'];
@@ -413,9 +505,12 @@ function LevelAccordion({
   );
 }
 
-export default function QuizSection() {
+export default function QuizSection({ products = {} }: QuizSectionProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
+
+  // Build level results from Supabase products (with fallback)
+  const levelResults = useMemo(() => buildLevelResults(products), [products]);
 
   // View mode state
   const [viewMode, setViewMode] = useState<'quiz' | 'levels'>('quiz');

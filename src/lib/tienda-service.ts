@@ -128,6 +128,25 @@ function transformToAsesoriaPlan(record: ProductoRecord): AsesoriaPlan {
   };
 }
 
+// Fetch multiple products by their IDs (returns transformed Product[])
+export const getProductsByIds = cache(
+  async (ids: string[]): Promise<Product[]> => {
+    try {
+      const supabase = createAnonSupabase();
+      const { data, error } = await supabase
+        .from('productos')
+        .select('*')
+        .in('id', ids);
+
+      if (error) throw error;
+      return (data ?? []).map(transformProductRecord);
+    } catch (error) {
+      console.error('Error fetching products by IDs:', error);
+      return [];
+    }
+  },
+);
+
 // Fetch all products (excludes asesorias)
 export const getAllProducts = cache(async (): Promise<Product[]> => {
   try {
