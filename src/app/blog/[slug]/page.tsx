@@ -165,7 +165,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         <PostContent content={article.content || defaultContent} />
         <section className="bg-cream/50 py-16 md:py-20">
           <div className="container-custom">
-            <div className="mx-auto max-w-md">
+            <div className="mx-auto max-w-xl">
               <NewsletterFormCard source="blog" />
             </div>
           </div>
