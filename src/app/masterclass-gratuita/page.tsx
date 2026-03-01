@@ -1,6 +1,4 @@
 import { Metadata } from 'next';
-import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import {
   MasterclassHero,
@@ -35,69 +33,65 @@ export default async function MasterclassGratuitaPage() {
 
   return (
     <>
-      <Navigation />
-      <main id="main-content">
-        {/* Hero */}
-        <MasterclassHero />
+      {/* Hero */}
+      <MasterclassHero />
 
-        {/* Video Player - Main element */}
+      {/* Video Player - Main element */}
+      <section
+        className="relative overflow-hidden"
+        style={{
+          background:
+            'linear-gradient(180deg, #fce7f3 0%, #fef7f0 30%, #fef7f0 100%)',
+          padding: '0 0 var(--section-padding) 0',
+        }}
+      >
+        <div className="container-custom">
+          <div className="mx-auto max-w-4xl">
+            {content.video && (
+              <div className="overflow-hidden rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
+                <VideoPlayer
+                  embedUrl={content.video.embedUrl}
+                  title={content.video.title}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Resources */}
+      {content.resources.length > 0 && (
         <section
           className="relative overflow-hidden"
           style={{
             background:
-              'linear-gradient(180deg, #fce7f3 0%, #fef7f0 30%, #fef7f0 100%)',
-            padding: '0 0 var(--section-padding) 0',
+              'linear-gradient(135deg, #fef7f0 0%, #ffecd2 50%, #fce7f3 100%)',
+            padding: 'var(--section-padding) 0',
           }}
         >
           <div className="container-custom">
             <div className="mx-auto max-w-4xl">
-              {content.video && (
-                <div className="overflow-hidden rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
-                  <VideoPlayer
-                    embedUrl={content.video.embedUrl}
-                    title={content.video.title}
-                  />
-                </div>
-              )}
+              <MasterclassResources resources={content.resources} />
             </div>
           </div>
         </section>
+      )}
 
-        {/* Resources */}
-        {content.resources.length > 0 && (
-          <section
-            className="relative overflow-hidden"
-            style={{
-              background:
-                'linear-gradient(135deg, #fef7f0 0%, #ffecd2 50%, #fce7f3 100%)',
-              padding: 'var(--section-padding) 0',
-            }}
-          >
-            <div className="container-custom">
-              <div className="mx-auto max-w-4xl">
-                <MasterclassResources resources={content.resources} />
-              </div>
-            </div>
-          </section>
-        )}
+      {/* Testimonials */}
+      <TestimonialsSection
+        id="testimonios-masterclass"
+        badge="Testimonios reales"
+        title={
+          <>
+            Lo que dicen quienes{' '}
+            <span className="gradient-text-playful">ya la vieron.</span>
+          </>
+        }
+        subtitle="Historias de personas que dieron el primer paso con esta masterclass"
+      />
 
-        {/* Testimonials */}
-        <TestimonialsSection
-          id="testimonios-masterclass"
-          badge="Testimonios reales"
-          title={
-            <>
-              Lo que dicen quienes{' '}
-              <span className="gradient-text-playful">ya la vieron.</span>
-            </>
-          }
-          subtitle="Historias de personas que dieron el primer paso con esta masterclass"
-        />
-
-        {/* CTA */}
-        <MasterclassCTA />
-      </main>
-      <Footer />
+      {/* CTA */}
+      <MasterclassCTA />
     </>
   );
 }

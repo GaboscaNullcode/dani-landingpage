@@ -43,6 +43,39 @@ export const getTestimoniosMasterclass = cache(
   },
 );
 
+// Fetch a single masterclass resource by ID
+export const getMasterclassResource = cache(
+  async (
+    resourceId: string,
+  ): Promise<{
+    id: string;
+    title: string;
+    downloadUrl: string;
+  } | null> => {
+    try {
+      const supabase = createAnonSupabase();
+      const { data, error } = await supabase
+        .from('programa_contenido')
+        .select('id, titulo, download_url')
+        .eq('id', resourceId)
+        .eq('producto_id', 'masterclass-gratuita')
+        .eq('tipo', 'descarga')
+        .single();
+
+      if (error || !data) return null;
+
+      return {
+        id: data.id,
+        title: data.titulo,
+        downloadUrl: data.download_url,
+      };
+    } catch {
+      console.error('Error fetching masterclass resource:', resourceId);
+      return null;
+    }
+  },
+);
+
 // Fetch masterclass content (video + downloadable resources)
 export const getMasterclassContent = cache(
   async (): Promise<MasterclassContent> => {

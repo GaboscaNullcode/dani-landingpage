@@ -1,7 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import { motion } from 'motion/react';
-import { FileText, ClipboardCheck, Download, Sparkles } from 'lucide-react';
+import { FileText, ClipboardCheck, Eye, Sparkles } from 'lucide-react';
 import type { MasterclassContent } from '@/types/masterclass';
 
 interface MasterclassResourcesProps {
@@ -44,7 +45,7 @@ export default function MasterclassResources({
         </div>
         <h2 className="font-[var(--font-headline)] text-2xl font-bold text-black-deep md:text-3xl">
           Recursos{' '}
-          <span className="gradient-text-playful">descargables</span>
+          <span className="gradient-text-playful">incluidos</span>
         </h2>
       </motion.div>
 
@@ -69,7 +70,7 @@ export default function MasterclassResources({
                 y: -8,
                 transition: { duration: 0.3 },
               }}
-              className="group relative overflow-hidden rounded-[28px] bg-white p-8 shadow-[0_10px_50px_rgba(0,0,0,0.08)] transition-shadow duration-500 hover:shadow-[0_25px_80px_rgba(0,0,0,0.12)]"
+              className="group relative flex flex-col overflow-hidden rounded-[28px] bg-white p-8 shadow-[0_10px_50px_rgba(0,0,0,0.08)] transition-shadow duration-500 hover:shadow-[0_25px_80px_rgba(0,0,0,0.12)]"
             >
               {/* Background gradient accent */}
               <div
@@ -106,23 +107,22 @@ export default function MasterclassResources({
               </div>
 
               {/* Description */}
-              <p className="relative mb-8 text-gray-carbon">
+              <p className="relative mb-auto text-gray-carbon">
                 {item.description}
               </p>
 
-              {/* Download button */}
-              <a
-                href={item.downloadUrl}
-                download
-                className="btn-shimmer relative inline-flex items-center gap-2 rounded-full px-8 py-3 font-[var(--font-headline)] text-sm font-bold text-white transition-all duration-500 hover:-translate-y-0.5"
+              {/* View button */}
+              <Link
+                href={`/masterclass-gratuita/recurso/${item.id}`}
+                className="btn-shimmer relative mt-6 inline-flex items-center gap-2 self-start rounded-full px-8 py-3 font-[var(--font-headline)] text-sm font-bold text-white transition-all duration-500 hover:-translate-y-0.5"
                 style={{
                   background: config.gradient,
                   boxShadow: `0 10px 30px ${config.shadowColor}`,
                 }}
               >
-                <Download className="h-4 w-4" />
-                Descargar recurso
-              </a>
+                <Eye className="h-4 w-4" />
+                Ver recurso
+              </Link>
             </motion.div>
           );
         })}
