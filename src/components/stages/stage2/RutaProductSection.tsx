@@ -97,16 +97,17 @@ export default function RutaProductSection() {
           className="text-center"
         >
           <span className="rounded-full bg-peach px-4 py-1.5 text-sm font-bold text-coral">
-            PRODUCTO ESTRELLA
+            Producto Estrella
           </span>
           <h2 className="text-section-title mt-4 font-[var(--font-headline)] font-bold text-gray-dark">
             Ruta Paso a Paso{' '}
             <span className="gradient-text">Remota</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-gray-carbon">
-            Un programa completo con 3 etapas que te lleva de la curiosidad al
-            trabajo remoto real. Sin saltos, sin confusión, todo en un solo
-            sistema.
+            Un programa completo con 4 pasos que te lleva de la curiosidad al
+            trabajo remoto real.
+            <br />
+            Sin saltos, sin confusión, todo en un solo sistema.
           </p>
         </motion.div>
 
@@ -221,7 +222,7 @@ export default function RutaProductSection() {
           className="mt-10 text-center"
         >
           <a
-            href="/tienda/curso-paso-a-paso"
+            href="/tienda/ruta-remota-paso-a-paso"
             className="btn-shimmer inline-flex items-center gap-3 rounded-full px-10 py-5 font-[var(--font-headline)] text-lg font-bold text-white"
             style={{ background: 'var(--gradient-coral-pink)' }}
           >
