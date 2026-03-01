@@ -28,11 +28,21 @@ export default function WhatsAppCommunityCard({
   return (
     <section id="comunidad" className="bg-cream py-20">
       <div className="container-custom">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-10 text-center font-[var(--font-headline)] text-2xl font-bold text-gray-dark md:text-3xl"
+        >
+          Acompañamiento Continuo
+        </motion.h2>
+
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
           className="mx-auto max-w-4xl overflow-hidden rounded-3xl bg-gradient-to-br from-lavender/10 via-pink/5 to-coral/10 p-1"
         >
           <div className="rounded-[22px] bg-white p-8 md:p-12">
