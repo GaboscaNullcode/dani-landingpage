@@ -76,7 +76,7 @@ export const getProgramaContenido = cache(
     const records = await getContenidoByProducto(productoId);
 
     const videoRecords = records.filter((r) => r.tipo === 'video');
-    const downloadRecords = records.filter((r) => r.tipo === 'descarga');
+    const downloadRecords = records.filter((r) => r.tipo === 'pdf');
 
     const introRecord = videoRecords.find((r) => r.es_intro);
     const regularVideos = videoRecords.filter((r) => !r.es_intro);

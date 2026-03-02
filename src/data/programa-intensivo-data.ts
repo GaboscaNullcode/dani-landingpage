@@ -4,7 +4,7 @@ export interface ProgramaContenidoRecord {
   created_at: string;
   updated_at: string;
   producto_id: string;
-  tipo: 'video' | 'descarga';
+  tipo: 'video' | 'pdf';
   titulo: string;
   descripcion: string;
   embed_url: string | null;
