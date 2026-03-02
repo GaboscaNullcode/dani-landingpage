@@ -150,10 +150,10 @@ export default function TiendaHero() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mx-auto max-w-2xl text-lg leading-relaxed text-gray-carbon md:text-xl"
           >
-            Guías, cursos y herramientas diseñadas para darte claridad y
+            Ebooks, rutas y herramientas diseñadas para darte claridad y
             ahorrarte meses de prueba y error. Aquí encontrarás recursos
-            prácticos para avanzar con seguridad — sin sentirte perdida ni
-            saturada.
+            prácticos para avanzar con seguridad — sin sentirte perdid@ ni
+            saturad@.
           </motion.p>
 
         </div>

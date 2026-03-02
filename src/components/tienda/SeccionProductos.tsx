@@ -55,7 +55,7 @@ export default memo(function SeccionProductos({
 
       <div className="container-custom relative">
         <div className="mb-8 text-center">
-          <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-coral/10 px-4 py-2 text-sm font-semibold uppercase tracking-wider text-coral">
+          <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-coral/10 px-4 py-2 text-sm font-semibold tracking-wider text-coral">
             <PackageCheck className="h-4 w-4" />
             Productos
           </span>
