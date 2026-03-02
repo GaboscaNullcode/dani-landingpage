@@ -2,8 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import TestimonialsSection from '@/components/TestimonialsSection';
-import { ProductDetail } from '@/components/tienda';
+import { ProductDetail, ProductCta } from '@/components/tienda';
 import { getProductBySlug, getAllProductSlugs, getProductTypesMap } from '@/lib/tienda-service';
 
 export const revalidate = 60;
@@ -63,17 +62,7 @@ export default async function ProductPage({ params }: Props) {
       <Navigation />
       <main id="main-content">
         <ProductDetail product={product} productTypes={productTypes} />
-        <TestimonialsSection
-          id="testimonios-producto"
-          badge="Testimonios"
-          title={
-            <>
-              Lo que dicen quienes{' '}
-              <span className="gradient-text-playful">lo han probado</span>
-            </>
-          }
-          subtitle="Experiencias reales de personas que ya dieron el salto"
-        />
+        <ProductCta product={product} />
       </main>
       <Footer />
     </>

@@ -4,6 +4,7 @@ export { default as ProductosDestacados } from './ProductosDestacados';
 export { default as ProductosAdicionales } from './ProductosAdicionales';
 export { default as RecursosGratuitos } from './RecursosGratuitos';
 export { default as ProductDetail } from './ProductDetail';
+export { default as ProductCta } from './ProductCta';
 
 // New structured sections
 export { default as SeccionRecursosGratuitos } from './SeccionRecursosGratuitos';
