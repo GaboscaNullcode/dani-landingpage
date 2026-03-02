@@ -15,9 +15,10 @@ const VISIBLE_FEATURES = 4;
 interface PlanesSectionProps {
   planes: AsesoriaPlan[];
   paymentPlans?: PaymentPlan[];
+  terminosUrl?: string | null;
 }
 
-export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSectionProps) {
+export default function PlanesSection({ planes, paymentPlans = [], terminosUrl }: PlanesSectionProps) {
   const { user, compras } = useCheckoutAuth();
   const [expandedPlans, setExpandedPlans] = useState<Set<string>>(new Set());
   const [baseHeight, setBaseHeight] = useState(0);
@@ -310,6 +311,7 @@ export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSecti
             plan={planes.find((p) => p.id === 'crea-camino')!}
             paymentPlans={paymentPlans}
             user={user}
+            terminosUrl={terminosUrl}
           />
         )}
 
@@ -320,6 +322,7 @@ export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSecti
             onClose={() => setShowTerminosModal(false)}
             plan={terminosPlan}
             user={user}
+            terminosUrl={terminosUrl}
           />
         )}
       </div>

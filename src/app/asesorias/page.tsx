@@ -3,6 +3,7 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { AsesoriaHero, PlanesSection, ContenidoSection } from '@/components/asesorias';
 import { getAsesoriaPlanes, getPaymentPlans } from '@/lib/tienda-service';
+import { getDocUrl } from '@/lib/docs-service';
 
 export const metadata: Metadata = {
   title: 'Asesorías 1:1 - Deja de dar vueltas | Remote con Dani',
@@ -25,9 +26,10 @@ export const metadata: Metadata = {
 };
 
 export default async function AsesoriasPage() {
-  const [planes, paymentPlans] = await Promise.all([
+  const [planes, paymentPlans, terminosUrl] = await Promise.all([
     getAsesoriaPlanes(),
     getPaymentPlans('crea-camino'),
+    getDocUrl('terminos_condiciones'),
   ]);
 
   return (
@@ -35,7 +37,7 @@ export default async function AsesoriasPage() {
       <Navigation />
       <main id="main-content">
         <AsesoriaHero />
-        <PlanesSection planes={planes} paymentPlans={paymentPlans} />
+        <PlanesSection planes={planes} paymentPlans={paymentPlans} terminosUrl={terminosUrl} />
         <ContenidoSection />
       </main>
       <Footer />

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { X, Loader2, CreditCard, CalendarRange, ArrowLeft } from 'lucide-react';
+import { X, Loader2, CreditCard, CalendarRange, ArrowLeft, ExternalLink } from 'lucide-react';
 import type { AsesoriaPlan, PaymentPlan } from '@/types/tienda';
 import type { User } from '@/types/auth';
 
@@ -13,6 +13,7 @@ interface ProgramaIntensivoModalProps {
   plan: AsesoriaPlan;
   paymentPlans?: PaymentPlan[];
   user?: User | null;
+  terminosUrl?: string | null;
 }
 
 export default function ProgramaIntensivoModal({
@@ -21,6 +22,7 @@ export default function ProgramaIntensivoModal({
   plan: programaPlan,
   paymentPlans = [],
   user,
+  terminosUrl,
 }: ProgramaIntensivoModalProps) {
   const [accepted, setAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -196,9 +198,22 @@ export default function ProgramaIntensivoModal({
                 />
                 <span className="text-sm leading-relaxed text-gray-carbon">
                   He leído y acepto los{' '}
-                  <span className="font-semibold text-gray-dark">
-                    términos y condiciones
-                  </span>
+                  {terminosUrl ? (
+                    <a
+                      href={terminosUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 font-semibold text-coral underline underline-offset-2 transition-colors hover:text-pink"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      términos y condiciones
+                      <ExternalLink className="inline h-3.5 w-3.5" />
+                    </a>
+                  ) : (
+                    <span className="font-semibold text-gray-dark">
+                      términos y condiciones
+                    </span>
+                  )}
                   .
                 </span>
               </label>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { X, Loader2 } from 'lucide-react';
+import { X, Loader2, ExternalLink } from 'lucide-react';
 import type { AsesoriaPlan } from '@/types/tienda';
 import type { User } from '@/types/auth';
 
@@ -10,6 +10,7 @@ interface TerminosModalProps {
   onClose: () => void;
   plan: AsesoriaPlan;
   user?: User | null;
+  terminosUrl?: string | null;
 }
 
 export default function TerminosModal({
@@ -17,6 +18,7 @@ export default function TerminosModal({
   onClose,
   plan,
   user,
+  terminosUrl,
 }: TerminosModalProps) {
   const [accepted, setAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -146,9 +148,22 @@ export default function TerminosModal({
             />
             <span className="text-sm leading-relaxed text-gray-carbon">
               He leído y acepto los{' '}
-              <span className="font-semibold text-gray-dark">
-                términos y condiciones del acompañamiento
-              </span>
+              {terminosUrl ? (
+                <a
+                  href={terminosUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 font-semibold text-coral underline underline-offset-2 transition-colors hover:text-pink"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  términos y condiciones del acompañamiento
+                  <ExternalLink className="inline h-3.5 w-3.5" />
+                </a>
+              ) : (
+                <span className="font-semibold text-gray-dark">
+                  términos y condiciones del acompañamiento
+                </span>
+              )}
               .
             </span>
           </label>
