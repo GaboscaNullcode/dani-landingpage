@@ -71,6 +71,8 @@ function transformProductRecord(record: ProductoRecord): Product {
       : record.precio_original || undefined,
     currency: 'USD',
     image: record.imagen_url || FALLBACK_IMAGE,
+    imageHero: record.imagen_hero_url || undefined,
+    imageBanner: record.imagen_banner_url || undefined,
     category: record.categoria,
     badge: record.badge || undefined,
     features: record.features || undefined,

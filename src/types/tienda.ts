@@ -75,6 +75,8 @@ export interface ProductoRecord {
   precio: number;
   precio_original: number | null;
   imagen_url: string | null;
+  imagen_hero_url: string | null;
+  imagen_banner_url: string | null;
   categoria:
     | 'curso'
     | 'ebook'
@@ -121,6 +123,8 @@ export interface Product {
   originalPrice?: number;
   currency: 'USD';
   image: string;
+  imageHero?: string;
+  imageBanner?: string;
   category:
     | 'curso'
     | 'ebook'

@@ -85,7 +85,7 @@ export default function ProductDetail({ product, productTypes }: ProductDetailPr
             >
               <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-white shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
                 <Image
-                  src={product.image}
+                  src={product.imageHero || product.image}
                   alt={product.name}
                   fill
                   className="object-cover"

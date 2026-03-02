@@ -71,7 +71,7 @@ function LockedCard({ product, index, productTypes }: { product: Product; index:
     >
       <div className="relative aspect-video w-full overflow-hidden">
         <Image
-          src={product.image}
+          src={product.imageBanner || product.image}
           alt={product.name}
           fill
           className="object-cover grayscale transition-transform duration-300 group-hover:scale-105"
@@ -157,7 +157,7 @@ function PurchasedCard({ compra, index, productTypes, productIdsWithContent }: {
       {producto.imagen_url && (
         <div className="relative aspect-video w-full overflow-hidden">
           <Image
-            src={producto.imagen_url}
+            src={producto.imagen_banner_url || producto.imagen_url}
             alt={producto.nombre}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"

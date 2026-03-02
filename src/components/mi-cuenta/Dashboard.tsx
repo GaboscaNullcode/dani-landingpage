@@ -376,7 +376,7 @@ export default function Dashboard() {
                 {product.image && (
                   <div className="relative aspect-video w-full overflow-hidden">
                     <Image
-                      src={product.image}
+                      src={product.imageBanner || product.image}
                       alt={product.name}
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
