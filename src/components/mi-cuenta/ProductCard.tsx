@@ -12,6 +12,7 @@ import {
   Settings,
   Loader2,
   Lock,
+  PlayCircle,
 } from 'lucide-react';
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon';
 import type { Compra } from '@/types/auth';
@@ -22,6 +23,7 @@ interface PurchasedProductCardProps {
   variant: 'purchased';
   index?: number;
   productTypes?: Record<string, ProductType>;
+  productIdsWithContent?: Set<string>;
 }
 
 interface LockedProductCardProps {
@@ -53,7 +55,7 @@ export default function ProductCard(props: ProductCardProps) {
   if (props.variant === 'locked') {
     return <LockedCard product={props.product} index={index} productTypes={props.productTypes} />;
   }
-  return <PurchasedCard compra={props.compra} index={index} productTypes={props.productTypes} />;
+  return <PurchasedCard compra={props.compra} index={index} productTypes={props.productTypes} productIdsWithContent={props.productIdsWithContent} />;
 }
 
 function LockedCard({ product, index, productTypes }: { product: Product; index: number; productTypes?: Record<string, ProductType> }) {
@@ -110,7 +112,7 @@ function LockedCard({ product, index, productTypes }: { product: Product; index:
   );
 }
 
-function PurchasedCard({ compra, index, productTypes }: { compra: Compra; index: number; productTypes?: Record<string, ProductType> }) {
+function PurchasedCard({ compra, index, productTypes, productIdsWithContent }: { compra: Compra; index: number; productTypes?: Record<string, ProductType>; productIdsWithContent?: Set<string> }) {
   const [portalLoading, setPortalLoading] = useState(false);
   const producto = compra.productoDetail;
   if (!producto) return null;
@@ -204,16 +206,29 @@ function PurchasedCard({ compra, index, productTypes }: { compra: Compra; index:
               </Link>
             )}
 
-            {(producto.categoria === 'curso' ||
-              producto.categoria === 'masterclass') && (
-              <Link
-                href={`/tienda/${producto.slug}`}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
-              >
-                <ExternalLink className="h-4 w-4" />
-                Ver Masterclass
-              </Link>
-            )}
+            {producto.categoria !== 'ebook' &&
+              productIdsWithContent?.has(compra.producto) && (
+                <Link
+                  href={`/mi-cuenta/contenido/${producto.slug}`}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                >
+                  <PlayCircle className="h-4 w-4" />
+                  Ver contenido
+                </Link>
+              )}
+
+            {producto.categoria !== 'ebook' &&
+              !productIdsWithContent?.has(compra.producto) &&
+              (producto.categoria === 'curso' ||
+                producto.categoria === 'masterclass') && (
+                <Link
+                  href={`/tienda/${producto.slug}`}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  Ver Masterclass
+                </Link>
+              )}
 
             {producto.categoria === 'comunidad' && producto.whatsapp_link && (
               <Link

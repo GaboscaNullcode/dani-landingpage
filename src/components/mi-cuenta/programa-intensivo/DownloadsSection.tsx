@@ -1,7 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import { motion } from 'motion/react';
-import { BookOpen, PenLine, Download } from 'lucide-react';
+import { BookOpen, PenLine, Eye } from 'lucide-react';
 import type { ProgramaDownload } from '@/data/programa-intensivo-data';
 
 interface DownloadsSectionProps {
@@ -27,6 +28,7 @@ export default function DownloadsSection({ downloads }: DownloadsSectionProps) {
       {downloads.map((item, index) => {
         const config = fileTypeConfig[item.fileType];
         const Icon = config.icon;
+        const hasUrl = item.downloadUrl && item.downloadUrl !== '#';
 
         return (
           <motion.div
@@ -45,14 +47,19 @@ export default function DownloadsSection({ downloads }: DownloadsSectionProps) {
               <h3 className="font-semibold text-gray-dark">{item.title}</h3>
             </div>
             <p className="mb-4 text-sm text-gray-medium">{item.description}</p>
-            <a
-              href={item.downloadUrl}
-              download
-              className="inline-flex items-center gap-1.5 rounded-lg bg-white/80 px-4 py-2 text-sm font-semibold text-gray-dark transition-colors hover:bg-white hover:shadow-sm"
-            >
-              <Download className="h-4 w-4" />
-              Ver contenido
-            </a>
+            {hasUrl ? (
+              <Link
+                href={`/mi-cuenta/contenido/recurso/${item.id}`}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-white/80 px-4 py-2 text-sm font-semibold text-gray-dark transition-colors hover:bg-white hover:shadow-sm"
+              >
+                <Eye className="h-4 w-4" />
+                Ver material
+              </Link>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 rounded-lg bg-white/40 px-4 py-2 text-sm font-semibold text-gray-medium">
+                Proximamente
+              </span>
+            )}
           </motion.div>
         );
       })}

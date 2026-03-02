@@ -36,6 +36,7 @@ interface MeResponse {
   pago2Product: { id: string; stripePriceId: string; price: number } | null;
   bookingSessionId: string | null;
   parentProductId: string | null;
+  productIdsWithContent: string[];
 }
 
 interface ReservasResponse {
@@ -432,6 +433,7 @@ export default function Dashboard() {
                 variant="purchased"
                 index={index}
                 productTypes={data.productTypes}
+                productIdsWithContent={new Set(data.productIdsWithContent)}
               />
             ))}
           </div>

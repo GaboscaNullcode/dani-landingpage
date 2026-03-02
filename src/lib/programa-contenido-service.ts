@@ -34,6 +34,43 @@ export interface ProgramaContenido {
   downloads: ProgramaDownload[];
 }
 
+// Fetch a single content record by ID
+export const getContenidoById = cache(
+  async (
+    contenidoId: string,
+  ): Promise<ProgramaContenidoRecord | null> => {
+    try {
+      const supabase = createAnonSupabase();
+      const { data, error } = await supabase
+        .from('programa_contenido')
+        .select('*')
+        .eq('id', contenidoId)
+        .single();
+
+      if (error) return null;
+      return data as ProgramaContenidoRecord;
+    } catch {
+      return null;
+    }
+  },
+);
+
+export const getProductIdsWithContent = cache(
+  async (): Promise<Set<string>> => {
+    try {
+      const supabase = createAnonSupabase();
+      const { data, error } = await supabase
+        .from('programa_contenido')
+        .select('producto_id');
+      if (error) throw error;
+      return new Set((data ?? []).map((r) => r.producto_id));
+    } catch (error) {
+      console.error('Error fetching product IDs with content:', error);
+      return new Set();
+    }
+  },
+);
+
 export const getProgramaContenido = cache(
   async (productoId: string): Promise<ProgramaContenido> => {
     const records = await getContenidoByProducto(productoId);

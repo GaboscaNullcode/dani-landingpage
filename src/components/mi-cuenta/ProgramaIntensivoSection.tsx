@@ -96,7 +96,7 @@ export default function ProgramaIntensivoSection({
               ejercicios.
             </p>
             <Link
-              href="/mi-cuenta/programa-intensivo"
+              href="/mi-cuenta/contenido/programa-intensivo"
               className="inline-flex items-center gap-1.5 rounded-lg bg-coral/10 px-4 py-2 text-sm font-semibold text-coral transition-colors hover:bg-coral hover:text-white"
             >
               <PlayCircle className="h-4 w-4" />
