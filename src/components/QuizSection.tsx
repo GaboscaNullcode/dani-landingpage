@@ -291,7 +291,7 @@ function buildLevelResults(
           name: 'Masterclass Gratuita',
           price: 'Gratis',
           description: 'Descubre si el mundo remoto es para ti',
-          href: '/recursos-gratuitos',
+          href: '/masterclass-gratuita',
           priority: 'secondary',
           icon: GraduationCap,
           gradient: 'linear-gradient(135deg, #e056a0 0%, #a78bfa 100%)',
