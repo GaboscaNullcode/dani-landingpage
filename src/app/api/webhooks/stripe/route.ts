@@ -127,7 +127,11 @@ export async function POST(request: NextRequest) {
         if (isAsesoria) {
           if (producto?.producto_padre) {
             // Child product = partial payment (Pago 1 or Pago 2)
-            if (producto.orden === 1) {
+            // Use getPaymentPlans to reliably identify which payment this is
+            const plans = await getPaymentPlans(producto.producto_padre);
+            const isFirstPayment = plans.length > 0 && productId === plans[0].id;
+
+            if (isFirstPayment) {
               await updateProgramIntensivePaymentState(user.id, { paid1: true });
               const accessUrl = `${domain}/mi-cuenta`;
               console.log(`[webhook] Programa Intensivo Pago 1 — sending materials email to ${email}`);

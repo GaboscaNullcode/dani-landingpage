@@ -45,16 +45,25 @@ export async function GET() {
       parentProductId = fullCompra.producto;
     }
   } else if (user.programIntensivePaid2) {
-    // Paid pago 2: find the active compra for the pago 2 child product (orden=2)
-    const pago2Compra = compras.find(
+    // Paid pago 2: find the active compra for the pago 2 child product
+    // Use getPaymentPlans to reliably identify pago 2 by position, not orden value
+    const childCompra = compras.find(
       (c) =>
         c.estado === 'activa' &&
-        c.productoDetail?.producto_padre &&
-        c.productoDetail?.orden === 2,
+        c.productoDetail?.producto_padre,
     );
-    if (pago2Compra) {
-      bookingSessionId = pago2Compra.stripeSessionId;
-      parentProductId = pago2Compra.productoDetail!.producto_padre;
+    if (childCompra?.productoDetail?.producto_padre) {
+      parentProductId = childCompra.productoDetail.producto_padre;
+      const plans = await getPaymentPlans(parentProductId);
+      const pago2PlanId = plans.length >= 2 ? plans[1].id : null;
+      if (pago2PlanId) {
+        const pago2Compra = compras.find(
+          (c) => c.estado === 'activa' && c.producto === pago2PlanId,
+        );
+        if (pago2Compra) {
+          bookingSessionId = pago2Compra.stripeSessionId;
+        }
+      }
     }
   }
 
