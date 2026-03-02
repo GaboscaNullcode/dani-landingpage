@@ -128,7 +128,7 @@ export default function CTASection() {
           transition={{ duration: 0.8 }}
           className="mb-6 font-[var(--font-headline)] text-3xl font-bold text-black-deep md:text-4xl lg:text-5xl"
         >
-          ¿Estas list@ para vivir en{' '}
+          ¿Estás list@ para vivir en{' '}
           <span className="gradient-text-playful">modo remoto</span>?
         </motion.h2>
 

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
-import { findOrCreateUser } from '@/lib/auth-service';
+import { findOrCreateUser, getCurrentUser } from '@/lib/auth-service';
 import {
   createCompra,
   getCompraByStripeSessionId,
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     } catch (err) {
       console.error('[reservas/crear] Failed to retrieve Stripe session:', err);
       return NextResponse.json(
-        { error: 'Sesion de pago no valida' },
+        { error: 'Sesión de pago no válida' },
         { status: 403 },
       );
     }
@@ -56,16 +56,34 @@ export async function POST(request: NextRequest) {
         isAsesoria: session.metadata?.isAsesoria,
       });
       return NextResponse.json(
-        { error: 'Sesion de pago no valida' },
+        { error: 'Sesión de pago no válida' },
         { status: 403 },
       );
+    }
+
+    // Auth check: if user is authenticated, verify their email matches the Stripe session
+    // This prevents someone with a stolen session_id from creating reservations
+    // Note: user may NOT be authenticated (post-checkout redirect before login), so this is best-effort
+    const currentUser = await getCurrentUser();
+    if (currentUser) {
+      const sessionEmail = session.customer_details?.email?.toLowerCase();
+      if (sessionEmail && currentUser.email.toLowerCase() !== sessionEmail) {
+        console.error(`[reservas/crear] Auth mismatch: logged in as ${currentUser.email} but session belongs to ${sessionEmail}`);
+        return NextResponse.json(
+          { error: 'Esta sesión de pago no corresponde a tu cuenta' },
+          { status: 403 },
+        );
+      }
+      console.log(`[reservas/crear] Auth verified: ${currentUser.email} matches session`);
+    } else {
+      console.log('[reservas/crear] No authenticated user — proceeding with Stripe session validation only');
     }
 
     // Validate plan
     const plan = await getAsesoriaPlanById(planId);
     if (!plan) {
       console.error(`[reservas/crear] Plan not found: ${planId}`);
-      return NextResponse.json({ error: 'Plan no valido' }, { status: 400 });
+      return NextResponse.json({ error: 'Plan no válido' }, { status: 400 });
     }
     console.log(`[reservas/crear] Plan validated: ${plan.name}`);
 
@@ -117,7 +135,7 @@ export async function POST(request: NextRequest) {
     if (compra.estado !== 'activa') {
       console.error(`[reservas/crear] Compra not active: ${compra.estado}`);
       return NextResponse.json(
-        { error: 'Esta compra no esta activa' },
+        { error: 'Esta compra no está activa' },
         { status: 400 },
       );
     }
@@ -177,8 +195,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('[reservas/crear] Unhandled error:', error);
-    const message =
-      error instanceof Error ? error.message : 'Error al crear la reserva';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Error al crear la reserva' },
+      { status: 500 },
+    );
   }
 }

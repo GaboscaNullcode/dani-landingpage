@@ -70,14 +70,14 @@ export function getPurchaseEmailHtml(
   isSubscription: boolean,
 ): string {
   const safeName = escapeHtml(productName);
-  const tipo = isSubscription ? 'suscripcion' : 'compra';
+  const tipo = isSubscription ? 'suscripción' : 'compra';
   const content = `
-    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Tu ${tipo === 'suscripcion' ? 'suscripcion' : 'compra'} fue exitosa</h2>
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Tu ${tipo === 'suscripción' ? 'suscripción' : 'compra'} fue exitosa</h2>
     <p style="margin:0 0 8px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
       Ya tienes acceso a <strong style="color:${BRAND.dark};">${safeName}</strong>.
     </p>
     <p style="margin:0 0 24px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Accede a tu contenido desde tu area de miembros:
+      Accede a tu contenido desde tu área de miembros:
     </p>
     ${button('Ir a Mi Cuenta', accessUrl)}
     <p style="margin:24px 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
@@ -95,24 +95,24 @@ export function getWelcomeEmailHtml(
   const safeEmail = escapeHtml(email);
   const safePassword = escapeHtml(tempPassword);
   const content = `
-    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Bienvenida, ${safeName}!</h2>
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">¡Bienvenida, ${safeName}!</h2>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Se ha creado tu cuenta. Aqui tienes tus credenciales de acceso:
+      Se ha creado tu cuenta. Aquí tienes tus credenciales de acceso:
     </p>
     <table role="presentation" cellpadding="0" cellspacing="0" style="background-color:${BRAND.cream};border-radius:8px;padding:20px;width:100%;margin-bottom:24px;">
       <tr>
         <td style="padding:16px 20px;">
           <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Email:</p>
           <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${safeEmail}</p>
-          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Contrasena temporal:</p>
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Contraseña temporal:</p>
           <p style="margin:0;font-size:16px;color:${BRAND.dark};font-weight:600;font-family:monospace;">${safePassword}</p>
         </td>
       </tr>
     </table>
     <p style="margin:0 0 24px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Te recomendamos cambiar tu contrasena al iniciar sesion por primera vez.
+      Te recomendamos cambiar tu contraseña al iniciar sesión por primera vez.
     </p>
-    ${button('Iniciar Sesion', `${process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost:3000'}/mi-cuenta`)}`;
+    ${button('Iniciar Sesión', `${process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost:3000'}/mi-cuenta`)}`;
   return baseLayout(content);
 }
 
@@ -122,16 +122,16 @@ export function getNewsletterWelcomeEmailHtml(
 ): string {
   const safeName = escapeHtml(name);
   const content = `
-    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Bienvenida, ${safeName}!</h2>
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">¡Bienvenida, ${safeName}!</h2>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
       Gracias por unirte a la comunidad de <strong style="color:${BRAND.dark};">Remote con Dani</strong>.
     </p>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Crea tu cuenta para acceder a todas las guias y recursos gratuitos desde tu perfil:
+      Crea tu cuenta para acceder a todas las guías y recursos gratuitos desde tu perfil:
     </p>
     ${button('Crear mi cuenta', accountUrl)}
     <p style="margin:24px 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Cada semana recibiras en tu inbox tips y estrategias para construir tu carrera remota.
+      Cada semana recibirás en tu inbox tips y estrategias para construir tu carrera remota.
       Desde optimizar tu perfil hasta conseguir clientes internacionales.
     </p>
     <p style="margin:0 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
@@ -147,13 +147,13 @@ export function getCommunityEmailHtml(
 ): string {
   const safeName = escapeHtml(productName);
   const content = `
-    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Bienvenida a ${safeName}!</h2>
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">¡Bienvenida a ${safeName}!</h2>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Tu suscripcion esta activa. Unite a la comunidad en WhatsApp:
+      Tu suscripción está activa. Únete a la comunidad en WhatsApp:
     </p>
     ${button('Unirme al Grupo de WhatsApp', whatsappLink)}
     <p style="margin:24px 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Tambien puedes acceder a tu area de miembros para ver todos tus recursos:
+      También puedes acceder a tu área de miembros para ver todos tus recursos:
     </p>
     ${button('Ir a Mi Cuenta', accessUrl)}
     <p style="margin:24px 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
@@ -200,13 +200,13 @@ export function getAsesoriaPostPaymentEmailHtml(
 
 export function getPasswordResetEmailHtml(resetUrl: string): string {
   const content = `
-    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Restablece tu contrasena</h2>
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Restablece tu contraseña</h2>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Recibimos una solicitud para restablecer tu contrasena. Haz clic en el boton para crear una nueva:
+      Recibimos una solicitud para restablecer tu contraseña. Haz clic en el botón para crear una nueva:
     </p>
-    ${button('Restablecer Contrasena', resetUrl)}
+    ${button('Restablecer Contraseña', resetUrl)}
     <p style="margin:24px 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
-      Si no solicitaste esto, puedes ignorar este email. Tu contrasena no cambiara.
+      Si no solicitaste esto, puedes ignorar este email. Tu contraseña no cambiará.
     </p>
     <p style="margin:8px 0 0;color:${BRAND.gray};font-size:13px;line-height:1.6;">
       Este enlace expira en 1 hora.
@@ -294,7 +294,7 @@ export function getBookingNotificationEmailHtml(
       : `${duracion} minutos`;
 
   const content = `
-    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Nueva reserva de asesoria</h2>
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Nueva reserva de asesoría</h2>
     <table role="presentation" cellpadding="0" cellspacing="0" style="background-color:${BRAND.cream};border-radius:8px;width:100%;margin-bottom:24px;">
       <tr>
         <td style="padding:20px;">
@@ -304,7 +304,7 @@ export function getBookingNotificationEmailHtml(
           <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${safePlan}</p>
           <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Fecha:</p>
           <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${safeFecha} a las ${safeHora} (${safeTimezone})</p>
-          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Duracion:</p>
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Duración:</p>
           <p style="margin:0 0 ${notas ? '16px' : '0'};font-size:16px;color:${BRAND.dark};font-weight:600;">${duracionText}</p>
           ${
             notas
@@ -315,7 +315,7 @@ export function getBookingNotificationEmailHtml(
         </td>
       </tr>
     </table>
-    ${zoomStartUrl ? button('Iniciar reunion (Host Zoom)', zoomStartUrl) : ''}`;
+    ${zoomStartUrl ? button('Iniciar reunión (Host Zoom)', zoomStartUrl) : ''}`;
   return baseLayout(content);
 }
 
@@ -327,24 +327,24 @@ export function getProgramaIntensivoFullPaymentEmailHtml(
 ): string {
   const safeName = escapeHtml(name);
   const content = `
-    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Tu Programa Intensivo ya esta activo</h2>
+    <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">Tu Programa Intensivo ya está activo</h2>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
       Hola <strong style="color:${BRAND.dark};">${safeName}</strong>, tu pago ha sido confirmado y ya tienes acceso completo a tu Programa Intensivo.
     </p>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Dentro de tu area de miembros encontraras:
+      Dentro de tu área de miembros encontrarás:
     </p>
     <ul style="margin:0 0 16px;padding-left:20px;color:${BRAND.gray};font-size:16px;line-height:1.8;">
-      <li>10 videos estrategicos paso a paso</li>
+      <li>10 videos estratégicos paso a paso</li>
       <li>Ebooks y workbooks incluidos</li>
-      <li>Acceso para agendar tu sesion 1:1 con Dani</li>
+      <li>Acceso para agendar tu sesión 1:1 con Dani</li>
     </ul>
     <p style="margin:0 0 24px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Te recomiendo avanzar con los videos y el workbook antes de agendar tu sesion, asi aprovechas al maximo tu tiempo conmigo.
+      Te recomiendo avanzar con los videos y el workbook antes de agendar tu sesión, así aprovechas al máximo tu tiempo conmigo.
     </p>
     ${button('Acceder a mi Programa', accessUrl)}
     <p style="margin:24px 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
-      Si tienes alguna pregunta, responde a este email y te ayudare.
+      Si tienes alguna pregunta, responde a este email y te ayudaré.
     </p>`;
   return baseLayout(content);
 }
@@ -363,15 +363,15 @@ export function getProgramaIntensivoPago1EmailHtml(
       Ahora mismo tienes acceso a:
     </p>
     <ul style="margin:0 0 16px;padding-left:20px;color:${BRAND.gray};font-size:16px;line-height:1.8;">
-      <li>10 videos estrategicos paso a paso</li>
+      <li>10 videos estratégicos paso a paso</li>
       <li>Ebooks y workbooks incluidos</li>
     </ul>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Una vez realices tu segundo pago, podras agendar tu sesion 1:1 con Dani. Te recomiendo tomarte unas 2 semanas para avanzar con los materiales antes de agendar.
+      Una vez realices tu segundo pago, podrás agendar tu sesión 1:1 con Dani. Te recomiendo tomarte unas 2 semanas para avanzar con los materiales antes de agendar.
     </p>
     ${button('Acceder a mis materiales', accessUrl)}
     <p style="margin:24px 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
-      Si tienes alguna pregunta, responde a este email y te ayudare.
+      Si tienes alguna pregunta, responde a este email y te ayudaré.
     </p>`;
   return baseLayout(content);
 }
@@ -398,15 +398,15 @@ export function getBookingReminderEmailHtml(
 
   const reminderText =
     reminderType === '3d'
-      ? 'Tu sesion es en 3 dias'
+      ? 'Tu sesión es en 3 días'
       : reminderType === '24h'
-        ? 'Tu sesion es manana'
-        : 'Tu sesion empieza en 1 hora';
+        ? 'Tu sesión es mañana'
+        : 'Tu sesión empieza en 1 hora';
 
   const content = `
     <h2 style="margin:0 0 16px;color:${BRAND.dark};font-size:22px;">${reminderText}</h2>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Hola <strong style="color:${BRAND.dark};">${safeName}</strong>, te recordamos tu sesion de <strong style="color:${BRAND.dark};">${safePlan}</strong>:
+      Hola <strong style="color:${BRAND.dark};">${safeName}</strong>, te recordamos tu sesión de <strong style="color:${BRAND.dark};">${safePlan}</strong>:
     </p>
     <table role="presentation" cellpadding="0" cellspacing="0" style="background-color:${BRAND.cream};border-radius:8px;width:100%;margin-bottom:24px;">
       <tr>
@@ -415,12 +415,12 @@ export function getBookingReminderEmailHtml(
           <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${safeFecha}</p>
           <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Hora:</p>
           <p style="margin:0 0 16px;font-size:16px;color:${BRAND.dark};font-weight:600;">${safeHora} (${safeTimezone})</p>
-          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Duracion:</p>
+          <p style="margin:0 0 8px;font-size:14px;color:${BRAND.gray};">Duración:</p>
           <p style="margin:0;font-size:16px;color:${BRAND.dark};font-weight:600;">${duracionText}</p>
         </td>
       </tr>
     </table>
-    ${button('Unirme a la sesion (Zoom)', zoomUrl)}
+    ${button('Unirme a la sesión (Zoom)', zoomUrl)}
     <p style="margin:24px 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
       Recuerda estar lista unos minutos antes. Si necesitas reprogramar, responde a este email.
     </p>`;

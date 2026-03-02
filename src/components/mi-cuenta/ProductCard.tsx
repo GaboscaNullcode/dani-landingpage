@@ -185,7 +185,7 @@ function PurchasedCard({ compra, index, productTypes, productIdsWithContent }: {
           )}
           {compra.stripeSubscriptionId && compra.estado === 'activa' && (
             <span className="rounded-full bg-mint/15 px-3 py-1 text-xs font-semibold text-teal-dark">
-              Suscripcion activa
+              Suscripción activa
             </span>
           )}
         </div>
@@ -253,7 +253,7 @@ function PurchasedCard({ compra, index, productTypes, productIdsWithContent }: {
                 ) : (
                   <Settings className="h-4 w-4" />
                 )}
-                Gestionar suscripcion
+                Gestionar suscripción
               </button>
             )}
           </div>

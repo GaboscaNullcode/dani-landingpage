@@ -56,7 +56,7 @@ export function useNewsletterForm(
       posthog.capture('newsletter_signup', { source });
       setIsSuccess(true);
     } catch {
-      setError('Hubo un error de conexion. Intentalo de nuevo.');
+      setError('Hubo un error de conexión. Inténtalo de nuevo.');
     } finally {
       setIsSubmitting(false);
     }

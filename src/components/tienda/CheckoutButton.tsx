@@ -97,12 +97,13 @@ export default function CheckoutButton({
         product_id: productId,
         error: 'connection_error',
       });
-      setError('Error de conexion. Intenta de nuevo.');
+      setError('Error de conexión. Intenta de nuevo.');
       setLoading(false);
     }
   }
 
   function handleClick() {
+    if (loading) return; // Prevent double-click race condition
     if (user) {
       posthog.capture('checkout_started', {
         product_id: productId,
@@ -127,7 +128,7 @@ export default function CheckoutButton({
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setError('Por favor ingresa un email valido');
+      setError('Por favor ingresa un email válido');
       return;
     }
 
@@ -192,7 +193,7 @@ export default function CheckoutButton({
 
             <div className="bg-gradient-to-r from-coral to-pink px-6 pb-5 pt-6">
               <h2 className="font-[var(--font-headline)] text-xl font-bold text-white">
-                Un paso mas
+                Un paso más
               </h2>
               <p className="mt-1 text-sm text-white/85">
                 Necesitamos tus datos para crear tu cuenta y enviarte el acceso
@@ -217,7 +218,7 @@ export default function CheckoutButton({
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Ej: Maria Garcia"
+                    placeholder="Ej: María García"
                     className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors placeholder:text-gray-medium/50 focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
                     autoComplete="name"
                     onKeyDown={(e) => {
@@ -266,7 +267,7 @@ export default function CheckoutButton({
                   <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-mint" />
                   <p className="text-xs leading-relaxed text-gray-carbon">
                     Usaremos tu email para enviarte las credenciales de acceso a
-                    tu area de miembros. No compartimos tu informacion con
+                    tu área de miembros. No compartimos tu información con
                     terceros.
                   </p>
                 </div>

@@ -113,7 +113,7 @@ export default function TestimonialModal({
     }
 
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-      setError('Solo se permiten imagenes JPG, PNG o WebP');
+      setError('Solo se permiten imágenes JPG, PNG o WebP');
       return;
     }
 
@@ -160,7 +160,7 @@ export default function TestimonialModal({
     }
 
     if (!rol.trim()) {
-      setError('Indica tu rol o profesion');
+      setError('Indica tu rol o profesión');
       return;
     }
 
@@ -197,7 +197,7 @@ export default function TestimonialModal({
         handleClose();
       }, 3000);
     } catch {
-      setError('Error de conexion. Intenta de nuevo.');
+      setError('Error de conexión. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }
@@ -260,7 +260,7 @@ export default function TestimonialModal({
                     : 'Testimonio enviado correctamente'}
                 </p>
                 <p className="text-xs text-green-600">
-                  Sera revisado y publicado pronto. Gracias!
+                  Será revisado y publicado pronto. ¡Gracias!
                 </p>
               </motion.div>
             ) : (
@@ -309,7 +309,7 @@ export default function TestimonialModal({
                   {/* Stars */}
                   <div className="flex-1">
                     <label className="mb-1.5 block text-sm font-semibold text-gray-dark">
-                      Tu calificacion
+                      Tu calificación
                     </label>
                     <div className="flex gap-0.5">
                       {[1, 2, 3, 4, 5].map((star) => (
@@ -347,7 +347,7 @@ export default function TestimonialModal({
                     required
                     value={texto}
                     onChange={(e) => setTexto(e.target.value)}
-                    placeholder="Cuenta como ha sido tu experiencia..."
+                    placeholder="Cuenta cómo ha sido tu experiencia..."
                     maxLength={1000}
                     rows={3}
                     className="w-full resize-none rounded-xl border-2 border-gray-light px-3 py-2.5 text-sm text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
@@ -363,7 +363,7 @@ export default function TestimonialModal({
                     htmlFor="testimonio-rol"
                     className="mb-1 block text-sm font-semibold text-gray-dark"
                   >
-                    Tu rol o profesion
+                    Tu rol o profesión
                   </label>
                   <input
                     id="testimonio-rol"
@@ -371,7 +371,7 @@ export default function TestimonialModal({
                     required
                     value={rol}
                     onChange={(e) => setRol(e.target.value)}
-                    placeholder="Ej: Disenadora Grafica, Marketing Digital..."
+                    placeholder="Ej: Diseñadora Gráfica, Marketing Digital..."
                     maxLength={100}
                     className="w-full rounded-xl border-2 border-gray-light px-3 py-2.5 text-sm text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
                   />
@@ -418,7 +418,7 @@ export default function TestimonialModal({
                     />
                     <span className="text-xs leading-relaxed text-gray-carbon">
                       Doy mi consentimiento para que mi testimonio, nombre y
-                      foto sean publicados en la pagina web de Remote con Dani.
+                      foto sean publicados en la página web de Remote con Dani.
                     </span>
                   </label>
                 </div>
@@ -437,7 +437,7 @@ export default function TestimonialModal({
                 {/* Info + Submit */}
                 <div className="space-y-3">
                   <p className="text-[10px] text-gray-medium">
-                    Tu testimonio sera revisado antes de ser publicado.
+                    Tu testimonio será revisado antes de ser publicado.
                   </p>
                   <button
                     type="submit"

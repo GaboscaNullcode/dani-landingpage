@@ -82,7 +82,7 @@ export default function Dashboard() {
           setPlanNames(reservasJson.planNames || {});
         }
       } catch {
-        setError('Error de conexion');
+        setError('Error de conexión');
       } finally {
         setLoading(false);
       }
@@ -102,7 +102,7 @@ export default function Dashboard() {
   }, [data?.user]);
 
   const handleCancelReserva = async (reservaId: string) => {
-    if (!confirm('Estas segura de que quieres cancelar esta reserva?')) return;
+    if (!confirm('¿Estás segura de que quieres cancelar esta reserva?')) return;
     setCancellingId(reservaId);
     try {
       const res = await fetch('/api/reservas/cancelar', {
@@ -242,7 +242,7 @@ export default function Dashboard() {
               className="inline-flex items-center gap-2 rounded-xl border-2 border-gray-light px-5 py-2.5 font-semibold text-gray-carbon transition-colors duration-200 hover:border-coral hover:text-coral"
             >
               <KeyRound className="h-4 w-4" />
-              <span className="hidden sm:inline">Cambiar Contrasena</span>
+              <span className="hidden sm:inline">Cambiar Contraseña</span>
             </button>
             <button
               onClick={handleLogout}
@@ -254,7 +254,7 @@ export default function Dashboard() {
               ) : (
                 <LogOut className="h-4 w-4" />
               )}
-              Cerrar Sesion
+              Cerrar Sesión
             </button>
           </div>
         </div>
@@ -272,7 +272,7 @@ export default function Dashboard() {
               <CalendarDays className="h-4 w-4 text-coral" />
             </div>
             <h2 className="font-[var(--font-headline)] text-xl font-bold text-black-deep">
-              Mis Asesorias
+              Mis Asesorías
             </h2>
           </div>
           <div className="space-y-4">
@@ -498,7 +498,7 @@ export default function Dashboard() {
               <ShoppingBag className="mx-auto mb-4 h-12 w-12 text-gray-light" />
             </motion.div>
             <h2 className="mb-2 font-[var(--font-headline)] text-xl font-bold text-gray-dark">
-              Aun no tienes productos
+              Aún no tienes productos
             </h2>
             <p className="mb-6 text-gray-medium">
               Explora nuestra tienda y encuentra recursos para tu crecimiento.

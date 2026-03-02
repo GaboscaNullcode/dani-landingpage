@@ -5,7 +5,7 @@ import { motion, useInView } from 'motion/react';
 import { Play, Clock, Sparkles } from 'lucide-react';
 
 const tags = [
-  { label: '100% Practico', bg: 'bg-coral/10 text-coral' },
+  { label: '100% Práctico', bg: 'bg-coral/10 text-coral' },
   { label: 'Paso a Paso', bg: 'bg-pink/10 text-pink' },
   { label: 'Para LATAM y Global', bg: 'bg-lavender/10 text-lavender' },
 ];
@@ -151,7 +151,7 @@ export default function MasterclassHero() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="mt-4 font-[var(--font-headline)] text-xl font-semibold text-gray-dark md:text-2xl"
           >
-            Empieza tu camino remoto hoy!
+            ¡Empieza tu camino remoto hoy!
           </motion.p>
 
           {/* Description */}
@@ -177,7 +177,7 @@ export default function MasterclassHero() {
             className="mt-6 flex items-center justify-center gap-2 text-gray-carbon"
           >
             <Clock className="h-5 w-5 text-coral" />
-            <span className="font-medium">2 horas de contenido practico</span>
+            <span className="font-medium">2 horas de contenido práctico</span>
           </motion.div>
 
           {/* Tags */}

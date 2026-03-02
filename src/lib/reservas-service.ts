@@ -107,6 +107,9 @@ export async function getAvailableSlots(
       slotDateTime.getTime() + totalSlotMinutos * 60000,
     );
 
+    // Mark past slots as unavailable
+    const isPast = slotDateTime.getTime() <= Date.now();
+
     // Check Google Calendar busy periods (primary)
     const isGcalBusy = gcalBusy.some((b) => {
       const bStart = new Date(b.start);
@@ -126,7 +129,7 @@ export async function getAvailableSlots(
 
     slots.push({
       hora,
-      disponible: !isGcalBusy && !isBooked,
+      disponible: !isPast && !isGcalBusy && !isBooked,
     });
   }
 
@@ -145,6 +148,8 @@ export async function createReserva(data: {
   notasCliente?: string;
 }): Promise<Reserva> {
   const supabase = getServiceSupabase();
+  const config = getCalendarConfig();
+
   const { data: record, error } = await supabase
     .from('reservas')
     .insert({
@@ -161,6 +166,57 @@ export async function createReserva(data: {
     .single();
 
   if (error) throw error;
+
+  // Post-insert conflict check: detect TOCTOU race condition where two
+  // concurrent requests both passed the availability check and inserted.
+  // Query for any OTHER active reservation that overlaps this time slot.
+  const totalMinutos = data.duracionMinutos + config.duracionBufferMinutos;
+  const slotStart = new Date(data.fechaHora);
+  const slotEnd = new Date(slotStart.getTime() + totalMinutos * 60000);
+
+  // Find all active reservations on the same day (excluding our own)
+  const dayStart = data.fechaHora.split('T')[0] + 'T00:00:00';
+  const dayEnd = data.fechaHora.split('T')[0] + 'T23:59:59';
+
+  const { data: overlapping, error: overlapError } = await supabase
+    .from('reservas')
+    .select('id, fecha_hora, duracion_minutos')
+    .neq('id', record.id)
+    .gte('fecha_hora', dayStart)
+    .lte('fecha_hora', dayEnd)
+    .in('estado', ['pendiente', 'confirmada']);
+
+  // If the conflict check query itself fails, cancel the reservation to be safe.
+  // A false negative here would cause a double-booking.
+  if (overlapError) {
+    console.error('[reservas] Post-insert conflict check query failed:', overlapError);
+    await supabase
+      .from('reservas')
+      .update({ estado: 'cancelada', cancelacion_motivo: 'Error en verificación de conflictos - cancelada por seguridad' })
+      .eq('id', record.id);
+
+    throw new Error('No se pudo verificar la disponibilidad del horario. Por favor, intenta de nuevo.');
+  }
+
+  const hasConflict = (overlapping ?? []).some((r) => {
+    const rStart = new Date(r.fecha_hora);
+    const rEnd = new Date(
+      rStart.getTime() +
+        (r.duracion_minutos + config.duracionBufferMinutos) * 60000,
+    );
+    return slotStart < rEnd && slotEnd > rStart;
+  });
+
+  if (hasConflict) {
+    // Cancel our reservation — the other one got in first
+    await supabase
+      .from('reservas')
+      .update({ estado: 'cancelada', cancelacion_motivo: 'Conflicto de horario detectado - reserva concurrente' })
+      .eq('id', record.id);
+
+    throw new Error('El horario seleccionado ya no está disponible. Otro usuario reservó este horario.');
+  }
+
   return mapReserva(record as ReservaRecord);
 }
 

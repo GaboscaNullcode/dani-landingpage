@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
 
     if (!email || !password) {
       return NextResponse.json(
-        { error: 'Email y contrasena son requeridos' },
+        { error: 'Email y contraseña son requeridos' },
         { status: 400 },
       );
     }
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ user });
   } catch {
     return NextResponse.json(
-      { error: 'Credenciales invalidas' },
+      { error: 'Credenciales inválidas' },
       { status: 401 },
     );
   }

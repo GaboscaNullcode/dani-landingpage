@@ -18,7 +18,18 @@ export async function GET(request: NextRequest) {
     // Validate date format
     if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
       return NextResponse.json(
-        { error: 'Formato de fecha invalido (YYYY-MM-DD)' },
+        { error: 'Formato de fecha inválido (YYYY-MM-DD)' },
+        { status: 400 },
+      );
+    }
+
+    // Validate date is not in the past
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const requestedDate = new Date(fecha + 'T00:00:00');
+    if (requestedDate < today) {
+      return NextResponse.json(
+        { error: 'No se puede consultar disponibilidad para fechas pasadas' },
         { status: 400 },
       );
     }
@@ -26,7 +37,7 @@ export async function GET(request: NextRequest) {
     const plan = await getAsesoriaPlanById(planId);
     if (!plan) {
       return NextResponse.json(
-        { error: 'Plan no valido' },
+        { error: 'Plan no válido' },
         { status: 400 },
       );
     }

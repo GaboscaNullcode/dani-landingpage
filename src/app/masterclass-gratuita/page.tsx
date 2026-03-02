@@ -11,7 +11,7 @@ import { getMasterclassContent } from '@/lib/masterclass-service';
 export const metadata: Metadata = {
   title: 'Masterclass Gratuita: Vive en Modo Remoto | Remote con Dani',
   description:
-    'Masterclass gratuita de 2 horas donde aprendes como iniciar en el trabajo remoto desde cero. Contenido practico, paso a paso, para LATAM y el mundo.',
+    'Masterclass gratuita de 2 horas donde aprendes cómo iniciar en el trabajo remoto desde cero. Contenido práctico, paso a paso, para LATAM y el mundo.',
   keywords: [
     'masterclass trabajo remoto gratis',
     'trabajo remoto desde cero',
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Masterclass Gratuita: Vive en Modo Remoto | Remote con Dani',
     description:
-      'Masterclass gratuita de 2 horas donde aprendes como iniciar en el trabajo remoto desde cero.',
+      'Masterclass gratuita de 2 horas donde aprendes cómo iniciar en el trabajo remoto desde cero.',
     type: 'website',
     locale: 'es_ES',
   },

@@ -81,7 +81,7 @@ export default function LoginForm() {
         const data = await res.json();
 
         if (!res.ok) {
-          setError(data.error || 'Error al iniciar sesion');
+          setError(data.error || 'Error al iniciar sesión');
           return;
         }
 
@@ -97,7 +97,7 @@ export default function LoginForm() {
       router.push(redirectTo || '/mi-cuenta');
       router.refresh();
     } catch {
-      setError('Error de conexion. Intenta de nuevo.');
+      setError('Error de conexión. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }
@@ -116,7 +116,7 @@ export default function LoginForm() {
     ? 'Recuperar acceso'
     : isLogin
       ? 'Bienvenido/a de vuelta'
-      : 'Unete a la comunidad';
+      : 'Únete a la comunidad';
 
   const BadgeIcon = isForgot ? Mail : isLogin ? LogIn : UserPlus;
 
@@ -215,7 +215,7 @@ export default function LoginForm() {
                     : 'text-gray-medium hover:text-gray-dark'
                 }`}
               >
-                Iniciar sesion
+                Iniciar sesión
               </button>
             </div>
           )}
@@ -241,8 +241,8 @@ export default function LoginForm() {
             className="space-y-4"
           >
             <div className="rounded-xl bg-green-50 px-4 py-3 text-center text-sm text-green-700">
-              Si el email existe en nuestro sistema, recibiras un enlace para
-              restablecer tu contrasena. Revisa tu bandeja de entrada.
+              Si el email existe en nuestro sistema, recibirás un enlace para
+              restablecer tu contraseña. Revisa tu bandeja de entrada.
             </div>
             <button
               type="button"
@@ -250,7 +250,7 @@ export default function LoginForm() {
               className="mx-auto flex items-center gap-2 text-sm text-gray-medium transition-colors hover:text-coral"
             >
               <ArrowLeft className="h-4 w-4" />
-              Volver al inicio de sesion
+              Volver al inicio de sesión
             </button>
           </motion.div>
         ) : (
@@ -314,7 +314,7 @@ export default function LoginForm() {
                   htmlFor="password"
                   className="mb-1 block text-sm font-semibold text-gray-dark"
                 >
-                  Contrasena
+                  Contraseña
                 </label>
                 <input
                   id="password"
@@ -324,7 +324,7 @@ export default function LoginForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder={
-                    isLogin ? 'Tu contrasena' : 'Minimo 6 caracteres'
+                    isLogin ? 'Tu contraseña' : 'Mínimo 6 caracteres'
                   }
                   className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
                   autoComplete={isLogin ? 'current-password' : 'new-password'}
@@ -364,7 +364,7 @@ export default function LoginForm() {
                 ) : isForgot ? (
                   'Enviar enlace'
                 ) : isLogin ? (
-                  'Iniciar Sesion'
+                  'Iniciar Sesión'
                 ) : (
                   'Crear Cuenta'
                 )}
@@ -385,7 +385,7 @@ export default function LoginForm() {
               onClick={() => switchMode('forgot')}
               className="text-sm text-gray-medium transition-colors hover:text-coral"
             >
-              ¿Olvidaste tu contrasena?
+              ¿Olvidaste tu contraseña?
             </button>
           </motion.div>
         )}
@@ -403,7 +403,7 @@ export default function LoginForm() {
               className="inline-flex items-center gap-2 text-sm text-gray-medium transition-colors hover:text-coral"
             >
               <ArrowLeft className="h-4 w-4" />
-              Volver al inicio de sesion
+              Volver al inicio de sesión
             </button>
           </motion.div>
         )}

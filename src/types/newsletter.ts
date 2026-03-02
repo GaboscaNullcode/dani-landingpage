@@ -1,7 +1,16 @@
+// All valid newsletter subscription origins
+export type NewsletterSource =
+  | 'home'
+  | 'newsletter_page'
+  | 'blog'
+  | 'quiz'
+  | 'recursos_gratuitos'
+  | 'guia_gratuita';
+
 export interface NewsletterSubscribeRequest {
   email: string;
   name: string;
-  source: 'home' | 'newsletter_page' | 'blog' | 'quiz';
+  source: NewsletterSource;
 }
 
 export interface NewsletterSubscribeResponse {
@@ -16,7 +25,7 @@ export interface SuscriptorRecord {
   email: string;
   nombre: string;
   brevo_contact_id: number;
-  origen: 'home' | 'newsletter_page' | 'blog' | 'quiz';
+  origen: NewsletterSource;
   activo: boolean;
   created: string;
   updated: string;

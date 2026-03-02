@@ -88,12 +88,13 @@ export default function CommunityCheckoutButton({
       }
     } catch (err) {
       console.error('Checkout error:', err);
-      setError('Error de conexion. Intenta de nuevo.');
+      setError('Error de conexión. Intenta de nuevo.');
       setLoading(false);
     }
   }
 
   function handleClick() {
+    if (loading) return; // Prevent double-click race condition
     if (user) {
       goToCheckout(user.name, user.email);
     } else {
@@ -109,7 +110,7 @@ export default function CommunityCheckoutButton({
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setError('Por favor ingresa un email valido');
+      setError('Por favor ingresa un email válido');
       return;
     }
 
@@ -208,7 +209,7 @@ export default function CommunityCheckoutButton({
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Ej: Maria Garcia"
+                    placeholder="Ej: María García"
                     className="w-full rounded-xl border-2 border-gray-light px-4 py-3 text-gray-dark transition-colors placeholder:text-gray-medium/50 focus:border-lavender focus:outline-none focus-visible:ring-2 focus-visible:ring-lavender/40"
                     autoComplete="name"
                     onKeyDown={(e) => {
@@ -256,8 +257,8 @@ export default function CommunityCheckoutButton({
                 <div className="flex items-start gap-2 rounded-xl bg-lavender/10 px-4 py-3">
                   <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-lavender" />
                   <p className="text-xs leading-relaxed text-gray-carbon">
-                    Despues del pago recibiras el enlace para unirte al grupo de
-                    WhatsApp. Puedes cancelar tu suscripcion en cualquier
+                    Después del pago recibirás el enlace para unirte al grupo de
+                    WhatsApp. Puedes cancelar tu suscripción en cualquier
                     momento.
                   </p>
                 </div>

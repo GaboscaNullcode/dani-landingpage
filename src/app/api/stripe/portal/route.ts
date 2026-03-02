@@ -33,7 +33,7 @@ export async function POST() {
 
     if (!customerId) {
       return NextResponse.json(
-        { error: 'No se encontro un cliente de Stripe asociado a tu cuenta' },
+        { error: 'No se encontró un cliente de Stripe asociado a tu cuenta' },
         { status: 400 },
       );
     }
@@ -48,8 +48,9 @@ export async function POST() {
     return NextResponse.json({ url: session.url });
   } catch (error) {
     console.error('Error creating portal session:', error);
-    const message =
-      error instanceof Error ? error.message : 'Error interno del servidor';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Error interno del servidor' },
+      { status: 500 },
+    );
   }
 }

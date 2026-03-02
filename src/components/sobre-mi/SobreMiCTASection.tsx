@@ -113,9 +113,9 @@ export default function SobreMiCTASection() {
         >
           <p className="font-[var(--font-headline)] text-xl font-semibold leading-relaxed text-white md:text-2xl">
             &ldquo;Espero que mi historia te inspire a dar ese salto y que
-            pronto tu tambien digas:{' '}
+            pronto tú también digas:{' '}
             <span className="text-coral">
-              Fue la mejor decision que tome
+              Fue la mejor decisión que tomé
             </span>
             .&rdquo;
           </p>

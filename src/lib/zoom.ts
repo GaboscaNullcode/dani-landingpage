@@ -18,6 +18,7 @@ interface ZoomMeetingResult {
 }
 
 let cachedToken: { token: string; expiresAt: number } | null = null;
+let pendingTokenRequest: Promise<string> | null = null;
 
 async function getZoomAccessToken(): Promise<string> {
   // Return cached token if still valid (with 5-min margin)
@@ -25,39 +26,52 @@ async function getZoomAccessToken(): Promise<string> {
     return cachedToken.token;
   }
 
-  const accountId = process.env.ZOOM_ACCOUNT_ID!;
-  const clientId = process.env.ZOOM_CLIENT_ID!;
-  const clientSecret = process.env.ZOOM_CLIENT_SECRET!;
-
-  const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString(
-    'base64',
-  );
-
-  const response = await fetch(
-    `https://zoom.us/oauth/token?grant_type=account_credentials&account_id=${accountId}`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Basic ${credentials}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    },
-  );
-
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Zoom OAuth failed: ${error}`);
+  // Deduplicate concurrent token requests to avoid multiple Zoom OAuth calls
+  if (pendingTokenRequest) {
+    return pendingTokenRequest;
   }
 
-  const data: ZoomTokenResponse = await response.json();
+  pendingTokenRequest = (async () => {
+    try {
+      const accountId = process.env.ZOOM_ACCOUNT_ID!;
+      const clientId = process.env.ZOOM_CLIENT_ID!;
+      const clientSecret = process.env.ZOOM_CLIENT_SECRET!;
 
-  cachedToken = {
-    token: data.access_token,
-    // Zoom tokens last 1 hour; cache for 55 minutes
-    expiresAt: Date.now() + 55 * 60 * 1000,
-  };
+      const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString(
+        'base64',
+      );
 
-  return data.access_token;
+      const response = await fetch(
+        `https://zoom.us/oauth/token?grant_type=account_credentials&account_id=${accountId}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Basic ${credentials}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      );
+
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(`Zoom OAuth failed: ${error}`);
+      }
+
+      const data: ZoomTokenResponse = await response.json();
+
+      cachedToken = {
+        token: data.access_token,
+        // Zoom tokens last 1 hour; cache for 55 minutes
+        expiresAt: Date.now() + 55 * 60 * 1000,
+      };
+
+      return data.access_token;
+    } finally {
+      pendingTokenRequest = null;
+    }
+  })();
+
+  return pendingTokenRequest;
 }
 
 export async function createZoomMeeting({

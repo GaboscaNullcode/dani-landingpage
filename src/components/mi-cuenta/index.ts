@@ -1,0 +1,9 @@
+export { default as Dashboard } from './Dashboard';
+export { default as LoginForm } from './LoginForm';
+export { default as ResetPasswordForm } from './ResetPasswordForm';
+export { default as ProductCard } from './ProductCard';
+export { default as ChangePasswordModal } from './ChangePasswordModal';
+export { default as TestimonialModal } from './TestimonialModal';
+export { default as PDFViewer } from './PDFViewer';
+export { default as PDFViewerDynamic } from './PDFViewerDynamic';
+export { default as ProgramaIntensivoSection } from './ProgramaIntensivoSection';

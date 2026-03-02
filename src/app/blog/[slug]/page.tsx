@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import DOMPurify from 'isomorphic-dompurify';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import PostHeader from '@/components/blog/PostHeader';
@@ -162,7 +163,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       <Navigation />
       <main id="main-content">
         <PostHeader article={article} />
-        <PostContent content={article.content || defaultContent} />
+        <PostContent content={DOMPurify.sanitize(article.content || defaultContent)} />
         <section className="bg-cream/50 py-16 md:py-20">
           <div className="container-custom">
             <div className="mx-auto max-w-xl">

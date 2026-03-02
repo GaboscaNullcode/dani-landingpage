@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import type { NewsletterSubscribeRequest } from '@/types/newsletter';
+import type { NewsletterSubscribeRequest, NewsletterSource } from '@/types/newsletter';
 import { addNewsletterContact, sendNewsletterWelcomeEmail } from '@/lib/brevo';
 import { createOrUpdateSubscriber } from '@/lib/newsletter-service';
 
@@ -23,12 +23,12 @@ export async function POST(request: Request) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(body.email)) {
       return NextResponse.json(
-        { success: false, message: 'Email no valido' },
+        { success: false, message: 'Email no válido' },
         { status: 400 },
       );
     }
 
-    const validSources = [
+    const validSources: NewsletterSource[] = [
       'home',
       'newsletter_page',
       'blog',
@@ -36,7 +36,9 @@ export async function POST(request: Request) {
       'recursos_gratuitos',
       'guia_gratuita',
     ];
-    const source = validSources.includes(body.source) ? body.source : 'home';
+    const source: NewsletterSource = validSources.includes(body.source)
+      ? body.source
+      : 'home';
 
     // 1. Add contact to Brevo (primary)
     const { contactId, alreadySubscribed } = await addNewsletterContact(
@@ -50,7 +52,7 @@ export async function POST(request: Request) {
         body.email,
         body.name,
         contactId,
-        source as 'home' | 'newsletter_page' | 'blog' | 'quiz',
+        source,
       );
     } catch (dbError) {
       console.error('Newsletter DB save failed (non-critical):', dbError);
@@ -68,14 +70,14 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       message: alreadySubscribed
-        ? 'Ya estabas suscrita! Revisa tu inbox para crear tu cuenta.'
-        : 'Suscripcion exitosa! Revisa tu inbox para crear tu cuenta.',
+        ? '¡Ya estabas suscrita! Revisa tu inbox para crear tu cuenta.'
+        : '¡Suscripción exitosa! Revisa tu inbox para crear tu cuenta.',
       alreadySubscribed,
     });
   } catch (error: unknown) {
     console.error('Newsletter subscription error:', error);
     return NextResponse.json(
-      { success: false, message: 'Hubo un error. Intentalo de nuevo.' },
+      { success: false, message: 'Hubo un error. Inténtalo de nuevo.' },
       { status: 500 },
     );
   }

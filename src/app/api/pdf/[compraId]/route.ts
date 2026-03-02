@@ -29,6 +29,27 @@ export async function GET(
     );
   }
 
+  // Validate URL to prevent SSRF — only allow known CDN hosts
+  const ALLOWED_HOSTS = [
+    'securenlandco.b-cdn.net',
+    'remotecondani.b-cdn.net',
+  ];
+  try {
+    const parsed = new URL(compra.productoDetail.download_url);
+    if (parsed.protocol !== 'https:' || !ALLOWED_HOSTS.includes(parsed.hostname)) {
+      console.error(`[pdf] Blocked fetch from untrusted host: ${parsed.hostname}`);
+      return NextResponse.json(
+        { error: 'Producto sin archivo disponible' },
+        { status: 404 },
+      );
+    }
+  } catch {
+    return NextResponse.json(
+      { error: 'URL de descarga inválida' },
+      { status: 400 },
+    );
+  }
+
   const pdfResponse = await fetch(compra.productoDetail.download_url);
   if (!pdfResponse.ok) {
     return NextResponse.json(

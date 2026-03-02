@@ -61,7 +61,7 @@ export default function ProgramaCTA({
       {canBook && (
         <>
           <h3 className="mb-2 font-[var(--font-headline)] text-lg font-bold text-gray-dark">
-            Ya estoy list@ para agendar mi sesion con Dani
+            Ya estoy list@ para agendar mi sesión con Dani
           </h3>
           {bookingSessionId ? (
             <Link
@@ -69,12 +69,12 @@ export default function ProgramaCTA({
               className="mt-4 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-6 py-3 font-bold text-white shadow-lg transition-transform hover:-translate-y-0.5 hover:shadow-xl"
             >
               <CalendarDays className="h-5 w-5" />
-              Agendar mi sesion
+              Agendar mi sesión
             </Link>
           ) : (
             <div className="mt-4 inline-flex items-center gap-2 rounded-xl bg-white/60 px-5 py-3 text-sm text-gray-medium">
               <MessageCircle className="h-4 w-4" />
-              No pudimos encontrar tu sesion de pago. Contacta a Dani para
+              No pudimos encontrar tu sesión de pago. Contacta a Dani para
               recibir ayuda.
             </div>
           )}
@@ -84,7 +84,7 @@ export default function ProgramaCTA({
       {needsPago2 && (
         <>
           <h3 className="mb-2 font-[var(--font-headline)] text-lg font-bold text-gray-dark">
-            Ya estoy list@ para hacer el 2do pago y agendar mi sesion
+            Ya estoy list@ para hacer el 2do pago y agendar mi sesión
           </h3>
           <button
             onClick={handlePago2Checkout}

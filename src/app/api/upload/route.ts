@@ -19,11 +19,13 @@ export async function POST(request: Request) {
     // Parse form data
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
-    const folder = (formData.get('folder') as string) || 'uploads';
+    const rawFolder = (formData.get('folder') as string) || 'uploads';
+    // Sanitize folder to prevent path traversal
+    const folder = rawFolder.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 50);
 
     if (!file) {
       return NextResponse.json(
-        { error: 'No se envio ningun archivo' },
+        { error: 'No se envió ningún archivo' },
         { status: 400 }
       );
     }
@@ -37,7 +39,7 @@ export async function POST(request: Request) {
 
     if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { error: 'Solo se permiten imagenes JPG, PNG o WebP' },
+        { error: 'Solo se permiten imágenes JPG, PNG o WebP' },
         { status: 400 }
       );
     }
@@ -50,7 +52,7 @@ export async function POST(request: Request) {
 
     if (!storageApiKey || !storageZone || !storageBaseUrl || !cdnBaseUrl) {
       return NextResponse.json(
-        { error: 'Configuracion de storage no disponible' },
+        { error: 'Configuración de storage no disponible' },
         { status: 500 }
       );
     }

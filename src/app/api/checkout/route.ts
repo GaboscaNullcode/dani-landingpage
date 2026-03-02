@@ -9,9 +9,45 @@ export async function POST(request: NextRequest) {
 
     if (!priceId || typeof priceId !== 'string') {
       return NextResponse.json(
-        { error: 'Se requiere un priceId valido' },
+        { error: 'Se requiere un priceId válido' },
         { status: 400 },
       );
+    }
+
+    // Validate customerEmail format if provided
+    if (customerEmail && typeof customerEmail === 'string') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(customerEmail)) {
+        return NextResponse.json(
+          { error: 'Formato de email inválido' },
+          { status: 400 },
+        );
+      }
+    }
+
+    // Validate productId when provided — ensure the priceId belongs to this product
+    if (productId && typeof productId === 'string') {
+      const product = await getProductById(productId);
+      if (product) {
+        // Collect all valid price IDs for this product
+        const validPrices: string[] = [];
+        if (product.stripe_price_id) validPrices.push(product.stripe_price_id);
+        if (product.stripe_price_id_descuento) validPrices.push(product.stripe_price_id_descuento);
+
+        // Also check child payment plans (split payments)
+        const plans = await getPaymentPlans(productId);
+        for (const p of plans) {
+          if (p.stripePriceId) validPrices.push(p.stripePriceId);
+        }
+
+        // If the product has known prices, the submitted priceId must be one of them
+        if (validPrices.length > 0 && !validPrices.includes(priceId)) {
+          return NextResponse.json(
+            { error: 'El precio no corresponde al producto' },
+            { status: 400 },
+          );
+        }
+      }
     }
 
     const stripeClient = getStripe();
@@ -87,8 +123,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ url: session.url });
   } catch (error) {
     console.error('Error creating checkout session:', error);
-    const message =
-      error instanceof Error ? error.message : 'Error interno del servidor';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Error interno del servidor' },
+      { status: 500 },
+    );
   }
 }

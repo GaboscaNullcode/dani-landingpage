@@ -37,7 +37,15 @@ export async function POST(request: NextRequest) {
 
     if (reserva.estado === 'cancelada') {
       return NextResponse.json(
-        { error: 'La reserva ya esta cancelada' },
+        { error: 'La reserva ya está cancelada' },
+        { status: 400 },
+      );
+    }
+
+    // Prevent cancelling past reservations
+    if (new Date(reserva.fechaHora) < new Date()) {
+      return NextResponse.json(
+        { error: 'No se puede cancelar una reserva pasada' },
         { status: 400 },
       );
     }

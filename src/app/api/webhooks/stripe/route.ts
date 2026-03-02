@@ -5,6 +5,8 @@ import {
   createCompra,
   cancelCompraBySubscription,
   getCompraByStripeSessionId,
+  refundCompraByStripeSessionId,
+  getActiveCompraByUserAndProduct,
 } from '@/lib/compras-service';
 import { getProductById } from '@/lib/tienda-service';
 import {
@@ -116,9 +118,15 @@ export async function POST(request: NextRequest) {
             : undefined;
 
         if (!existingCompra) {
-          console.log(`[webhook] Creating compra: user=${user.id}, product=${productId}`);
-          await createCompra(user.id, productId, session.id, subscriptionId);
-          console.log('[webhook] Compra created successfully');
+          // Prevent duplicate purchases: check if user already has an active compra for this product
+          const existingActiveCompra = await getActiveCompraByUserAndProduct(user.id, productId);
+          if (existingActiveCompra) {
+            console.log(`[webhook] User ${user.id} already has active compra ${existingActiveCompra.id} for product ${productId}, skipping duplicate`);
+          } else {
+            console.log(`[webhook] Creating compra: user=${user.id}, product=${productId}`);
+            await createCompra(user.id, productId, session.id, subscriptionId);
+            console.log('[webhook] Compra created successfully');
+          }
         }
 
         const producto = await getProductById(productId);
@@ -218,10 +226,10 @@ export async function POST(request: NextRequest) {
         console.log('[webhook] Checkout fulfillment completed successfully');
       } catch (error) {
         console.error('[webhook] Error processing checkout fulfillment:', error);
-        return NextResponse.json(
-          { error: 'Error processing checkout fulfillment' },
-          { status: 500 },
-        );
+        // Return 200 to prevent Stripe from retrying for logical errors.
+        // The compra may already exist; retrying would not fix the issue
+        // and could cause duplicate side effects (emails, etc).
+        return NextResponse.json({ received: true, error: 'fulfillment_error' });
       }
       break;
     }
@@ -231,17 +239,30 @@ export async function POST(request: NextRequest) {
       try {
         await cancelCompraBySubscription(subscription.id);
 
-        // Track cancellation in PostHog
+        // Track cancellation in PostHog — resolve customer email for consistent distinctId
         try {
           const ph = getPostHogServer();
-          const customerEmail = typeof subscription.customer === 'string'
+          let customerEmail = 'unknown';
+          const customerId = typeof subscription.customer === 'string'
             ? subscription.customer
-            : 'unknown';
+            : undefined;
+          if (customerId) {
+            try {
+              const customer = await getStripe().customers.retrieve(customerId);
+              if (!customer.deleted && customer.email) {
+                customerEmail = customer.email;
+              }
+            } catch {
+              // Fall back to customer ID if retrieval fails
+              customerEmail = customerId;
+            }
+          }
           ph.capture({
             distinctId: customerEmail,
             event: 'subscription_cancelled',
             properties: {
               subscription_id: subscription.id,
+              stripe_customer_id: customerId,
             },
           });
           await ph.shutdown();
@@ -256,6 +277,78 @@ export async function POST(request: NextRequest) {
           { error: 'Error cancelling subscription' },
           { status: 500 },
         );
+      }
+      break;
+    }
+    case 'charge.refunded': {
+      const charge = event.data.object as Stripe.Charge;
+      console.log(`[webhook] Processing refund for charge: ${charge.id}`);
+      try {
+        // Stripe links charge to payment_intent, which links to checkout session
+        const paymentIntentId = typeof charge.payment_intent === 'string'
+          ? charge.payment_intent
+          : charge.payment_intent?.id;
+
+        if (!paymentIntentId) {
+          console.error('[webhook] No payment_intent on refunded charge');
+          break;
+        }
+
+        // Find the checkout session(s) associated with this payment_intent
+        const sessions = await getStripe().checkout.sessions.list({
+          payment_intent: paymentIntentId,
+          limit: 1,
+        });
+
+        const session = sessions.data[0];
+        if (!session) {
+          console.error(`[webhook] No checkout session found for payment_intent: ${paymentIntentId}`);
+          break;
+        }
+
+        // Determine if full or partial refund
+        const isFullRefund = charge.amount_refunded >= charge.amount;
+
+        if (isFullRefund) {
+          await refundCompraByStripeSessionId(session.id);
+          console.log(`[webhook] Full refund processed for session: ${session.id}`);
+        } else {
+          console.log(`[webhook] Partial refund (${charge.amount_refunded}/${charge.amount}) — compra kept active for session: ${session.id}`);
+        }
+
+        // Track refund in PostHog
+        try {
+          const ph = getPostHogServer();
+          let customerEmail = 'unknown';
+          if (charge.billing_details?.email) {
+            customerEmail = charge.billing_details.email;
+          } else if (typeof charge.customer === 'string') {
+            try {
+              const customer = await getStripe().customers.retrieve(charge.customer);
+              if (!customer.deleted && customer.email) {
+                customerEmail = customer.email;
+              }
+            } catch { /* fallback to unknown */ }
+          }
+          ph.capture({
+            distinctId: customerEmail,
+            event: 'purchase_refunded',
+            properties: {
+              charge_id: charge.id,
+              amount_refunded: charge.amount_refunded / 100,
+              amount_total: charge.amount / 100,
+              currency: charge.currency,
+              is_full_refund: isFullRefund,
+              session_id: session.id,
+            },
+          });
+          await ph.shutdown();
+        } catch (phError) {
+          console.error('[webhook] PostHog tracking error (non-critical):', phError);
+        }
+      } catch (error) {
+        console.error('[webhook] Error processing refund:', error);
+        // Return 200 for refund errors — retrying won't help for logic errors
       }
       break;
     }

@@ -164,6 +164,7 @@ export default function PostHeader({ article }: PostHeaderProps) {
             src={article.thumbnail}
             alt={article.title}
             fill
+            sizes="100vw"
             priority
             className="object-cover"
           />

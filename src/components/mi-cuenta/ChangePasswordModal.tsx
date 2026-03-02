@@ -49,12 +49,12 @@ export default function ChangePasswordModal({
     }
 
     if (newPassword.length < 8) {
-      setError('La nueva contrasena debe tener al menos 8 caracteres');
+      setError('La nueva contraseña debe tener al menos 8 caracteres');
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError('Las contrasenas no coinciden');
+      setError('Las contraseñas no coinciden');
       return;
     }
 
@@ -70,7 +70,7 @@ export default function ChangePasswordModal({
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || 'Error al cambiar la contrasena');
+        setError(data.error || 'Error al cambiar la contraseña');
         return;
       }
 
@@ -79,7 +79,7 @@ export default function ChangePasswordModal({
         handleClose();
       }, 2000);
     } catch {
-      setError('Error de conexion. Intenta de nuevo.');
+      setError('Error de conexión. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }
@@ -118,11 +118,11 @@ export default function ChangePasswordModal({
               </div>
               <h2 className="font-[var(--font-headline)] text-2xl font-bold text-black-deep">
                 <span className="gradient-text-playful">
-                  Cambiar Contrasena
+                  Cambiar Contraseña
                 </span>
               </h2>
               <p className="mt-2 text-sm text-gray-medium">
-                Ingresa tu contrasena actual y elige una nueva
+                Ingresa tu contraseña actual y elige una nueva
               </p>
             </div>
 
@@ -132,7 +132,7 @@ export default function ChangePasswordModal({
                 animate={{ opacity: 1, y: 0 }}
                 className="rounded-xl bg-green-50 px-4 py-3 text-center text-sm text-green-700"
               >
-                Contrasena actualizada correctamente
+                Contraseña actualizada correctamente
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -142,7 +142,7 @@ export default function ChangePasswordModal({
                     htmlFor="old-password"
                     className="mb-1 block text-sm font-semibold text-gray-dark"
                   >
-                    Contrasena actual
+                    Contraseña actual
                   </label>
                   <div className="relative">
                     <input
@@ -151,7 +151,7 @@ export default function ChangePasswordModal({
                       required
                       value={oldPassword}
                       onChange={(e) => setOldPassword(e.target.value)}
-                      placeholder="Tu contrasena actual"
+                      placeholder="Tu contraseña actual"
                       className="w-full rounded-xl border-2 border-gray-light px-4 py-3 pr-11 text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
                       autoComplete="current-password"
                     />
@@ -175,7 +175,7 @@ export default function ChangePasswordModal({
                     htmlFor="new-password"
                     className="mb-1 block text-sm font-semibold text-gray-dark"
                   >
-                    Nueva contrasena
+                    Nueva contraseña
                   </label>
                   <div className="relative">
                     <input
@@ -184,7 +184,7 @@ export default function ChangePasswordModal({
                       required
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="Minimo 8 caracteres"
+                      placeholder="Mínimo 8 caracteres"
                       className="w-full rounded-xl border-2 border-gray-light px-4 py-3 pr-11 text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
                       autoComplete="new-password"
                     />
@@ -208,7 +208,7 @@ export default function ChangePasswordModal({
                     htmlFor="confirm-password"
                     className="mb-1 block text-sm font-semibold text-gray-dark"
                   >
-                    Confirmar nueva contrasena
+                    Confirmar nueva contraseña
                   </label>
                   <div className="relative">
                     <input
@@ -217,7 +217,7 @@ export default function ChangePasswordModal({
                       required
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="Repite la nueva contrasena"
+                      placeholder="Repite la nueva contraseña"
                       className="w-full rounded-xl border-2 border-gray-light px-4 py-3 pr-11 text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
                       autoComplete="new-password"
                     />
@@ -258,7 +258,7 @@ export default function ChangePasswordModal({
                       Actualizando…
                     </span>
                   ) : (
-                    'Cambiar Contrasena'
+                    'Cambiar Contraseña'
                   )}
                 </button>
               </form>

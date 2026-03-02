@@ -7,32 +7,23 @@ export async function POST(request: NextRequest) {
 
     if (!email || !password || !name) {
       return NextResponse.json(
-        { error: 'Email, contrasena y nombre son requeridos' },
+        { error: 'Email, contraseña y nombre son requeridos' },
         { status: 400 },
       );
     }
 
-    if (password.length < 6) {
+    if (password.length < 8) {
       return NextResponse.json(
-        { error: 'La contrasena debe tener al menos 6 caracteres' },
+        { error: 'La contraseña debe tener al menos 8 caracteres' },
         { status: 400 },
       );
     }
 
     const adminSupabase = getServiceSupabase();
 
-    // Check if user already exists
-    const { data: existingUsers } = await adminSupabase.auth.admin.listUsers();
-    const existing = existingUsers?.users?.find((u) => u.email === email);
-
-    if (existing) {
-      return NextResponse.json(
-        { error: 'Ya existe una cuenta con este email' },
-        { status: 409 },
-      );
-    }
-
     // Create user via admin API (email_confirm: true to skip verification)
+    // Supabase will return an error if the email already exists,
+    // so we don't need to list all users (which has pagination limits).
     const { data: newUser, error: createError } =
       await adminSupabase.auth.admin.createUser({
         email,
@@ -41,7 +32,16 @@ export async function POST(request: NextRequest) {
         user_metadata: { name },
       });
 
-    if (createError) throw createError;
+    if (createError) {
+      // Supabase returns "A user with this email address has already been registered"
+      if (createError.message?.toLowerCase().includes('already')) {
+        return NextResponse.json(
+          { error: 'Ya existe una cuenta con este email' },
+          { status: 409 },
+        );
+      }
+      throw createError;
+    }
 
     // Sign in to set session cookies
     const supabase = await createServerSupabase();
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       user: {
         id: newUser.user.id,
-        email: newUser.user.email!,
+        email: newUser.user.email || email,
         name,
       },
     });

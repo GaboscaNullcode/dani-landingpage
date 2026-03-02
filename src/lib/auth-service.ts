@@ -37,7 +37,7 @@ export const getCurrentUser = cache(async (): Promise<User | null> => {
       data: { user: authUser },
     } = await supabase.auth.getUser();
 
-    if (!authUser) return null;
+    if (!authUser || !authUser.email) return null;
 
     const { data: profile } = await supabase
       .from('profiles')
@@ -45,7 +45,7 @@ export const getCurrentUser = cache(async (): Promise<User | null> => {
       .eq('id', authUser.id)
       .single();
 
-    return profileToUser(authUser.id, authUser.email!, profile);
+    return profileToUser(authUser.id, authUser.email, profile);
   } catch {
     return null;
   }
@@ -73,7 +73,7 @@ export async function loginUser(
     .eq('id', data.user.id)
     .single();
 
-  return { user: profileToUser(data.user.id, data.user.email!, profile) };
+  return { user: profileToUser(data.user.id, data.user.email || email, profile) };
 }
 
 /**
@@ -87,9 +87,24 @@ export async function findOrCreateUser(
 ): Promise<{ user: User; isNew: boolean; tempPassword?: string }> {
   const supabase = getServiceSupabase();
 
-  // Try to find existing user by email
-  const { data: existingUsers } = await supabase.auth.admin.listUsers();
-  const existing = existingUsers?.users?.find((u) => u.email === email);
+  // Try to find existing user by email using listUsers
+  // Note: listUsers doesn't support server-side filtering, so we paginate
+  // through all users. For small user bases this is acceptable.
+  let existing: { id: string; email?: string } | undefined;
+  let page = 1;
+  const perPage = 1000;
+  while (!existing) {
+    const { data: pageData } = await supabase.auth.admin.listUsers({
+      page,
+      perPage,
+    });
+    const users = pageData?.users ?? [];
+    existing = users.find(
+      (u) => u.email?.toLowerCase() === email.toLowerCase(),
+    );
+    if (users.length < perPage) break;
+    page++;
+  }
 
   if (existing) {
     const { data: profile } = await supabase
@@ -99,12 +114,13 @@ export async function findOrCreateUser(
       .single();
 
     return {
-      user: profileToUser(existing.id, existing.email!, profile, name),
+      user: profileToUser(existing.id, existing.email || email, profile, name),
       isNew: false,
     };
   }
 
-  // Create new user
+  // Create new user — handle race condition where another webhook
+  // may have created the same user between our check and this call
   const tempPassword = generateTempPassword();
   const { data: newUser, error } = await supabase.auth.admin.createUser({
     email,
@@ -113,7 +129,43 @@ export async function findOrCreateUser(
     user_metadata: { name },
   });
 
-  if (error) throw error;
+  if (error) {
+    // If user was created by a concurrent request, look them up instead
+    if (
+      error.message?.includes('already been registered') ||
+      error.message?.includes('already exists') ||
+      error.status === 422
+    ) {
+      // Retry: paginate to find the user created by a concurrent request
+      let raceUser: { id: string; email?: string } | undefined;
+      let retryPage = 1;
+      while (!raceUser) {
+        const { data: retryData } = await supabase.auth.admin.listUsers({
+          page: retryPage,
+          perPage: 1000,
+        });
+        const retryList = retryData?.users ?? [];
+        raceUser = retryList.find(
+          (u) => u.email?.toLowerCase() === email.toLowerCase(),
+        );
+        if (retryList.length < 1000) break;
+        retryPage++;
+      }
+      if (raceUser) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select(PROFILE_SELECT)
+          .eq('id', raceUser.id)
+          .single();
+
+        return {
+          user: profileToUser(raceUser.id, raceUser.email || email, profile, name),
+          isNew: false,
+        };
+      }
+    }
+    throw error;
+  }
 
   // Update profile with stripe_customer_id if provided
   if (stripeCustomerId) {
@@ -126,7 +178,7 @@ export async function findOrCreateUser(
   return {
     user: {
       id: newUser.user.id,
-      email: newUser.user.email!,
+      email: newUser.user.email || email,
       name,
       stripeCustomerId: stripeCustomerId || undefined,
       programIntensivePaidFull: false,

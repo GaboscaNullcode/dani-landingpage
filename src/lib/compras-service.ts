@@ -97,7 +97,7 @@ export async function cancelCompraBySubscription(
   try {
     const { data, error: findError } = await supabase
       .from('compras')
-      .select('id')
+      .select('id, estado')
       .eq('stripe_subscription_id', stripeSubscriptionId)
       .single();
 
@@ -105,6 +105,13 @@ export async function cancelCompraBySubscription(
       console.error(
         'Compra not found for subscription:',
         stripeSubscriptionId,
+      );
+      return;
+    }
+
+    if (data.estado !== 'activa') {
+      console.log(
+        `Compra ${data.id} already ${data.estado}, skipping cancellation`,
       );
       return;
     }
@@ -120,6 +127,65 @@ export async function cancelCompraBySubscription(
       'Compra not found for subscription:',
       stripeSubscriptionId,
     );
+  }
+}
+
+export async function refundCompraByStripeSessionId(
+  stripeSessionId: string,
+): Promise<void> {
+  const supabase = getServiceSupabase();
+  try {
+    const { data, error: findError } = await supabase
+      .from('compras')
+      .select('id, estado')
+      .eq('stripe_session_id', stripeSessionId)
+      .single();
+
+    if (findError || !data) {
+      console.error(
+        '[compras] Compra not found for session:',
+        stripeSessionId,
+      );
+      return;
+    }
+
+    if (data.estado !== 'activa') {
+      console.log(
+        `[compras] Compra ${data.id} already ${data.estado}, skipping refund`,
+      );
+      return;
+    }
+
+    const { error: updateError } = await supabase
+      .from('compras')
+      .update({ estado: 'reembolsada' })
+      .eq('id', data.id);
+
+    if (updateError) throw updateError;
+    console.log(`[compras] Compra ${data.id} marked as reembolsada`);
+  } catch (error) {
+    console.error('[compras] Error refunding compra:', error);
+  }
+}
+
+export async function getActiveCompraByUserAndProduct(
+  userId: string,
+  productoId: string,
+): Promise<Compra | null> {
+  try {
+    const supabase = getServiceSupabase();
+    const { data, error } = await supabase
+      .from('compras')
+      .select('*, productoDetail:productos(*)')
+      .eq('usuario', userId)
+      .eq('producto', productoId)
+      .eq('estado', 'activa')
+      .maybeSingle();
+
+    if (error) throw error;
+    return data ? mapCompra(data) : null;
+  } catch {
+    return null;
   }
 }
 

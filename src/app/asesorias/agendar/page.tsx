@@ -94,10 +94,10 @@ export default async function AgendarPage({ searchParams }: AgendarPageProps) {
                 Paso 2 de 2
               </span>
               <h1 className="mb-3 font-[var(--font-headline)] text-3xl font-bold text-gray-dark md:text-4xl">
-                Agenda tu sesion
+                Agenda tu sesión
               </h1>
               <p className="mx-auto max-w-md text-gray-medium">
-                Selecciona la fecha y hora que mejor te convenga para tu sesion.
+                Selecciona la fecha y hora que mejor te convenga para tu sesión.
               </p>
             </div>
 

@@ -135,7 +135,7 @@ export default function ProductDetail({ product, productTypes }: ProductDetailPr
                     {formatPrice(product.originalPrice)}
                   </span>
                 )}
-                {product.originalPrice && (
+                {product.originalPrice && product.originalPrice > 0 && (
                   <span className="rounded-full bg-mint/20 px-3 py-1 text-sm font-semibold text-green-700">
                     {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
                   </span>

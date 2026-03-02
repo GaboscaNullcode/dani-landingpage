@@ -11,9 +11,9 @@ import {
 } from '@/components/sobre-mi';
 
 export const metadata: Metadata = {
-  title: 'Sobre Mi - Dani Zilbert | Coach de Trabajo Remoto',
+  title: 'Sobre Mí - Dani Zilbert | Coach de Trabajo Remoto',
   description:
-    'Conoce mi historia: de $3.25/hora como interprete a coach de trabajo remoto. Te ayudo a encontrar trabajo remoto y construir tu carrera digital con libertad.',
+    'Conoce mi historia: de $3.25/hora como intérprete a coach de trabajo remoto. Te ayudo a encontrar trabajo remoto y construir tu carrera digital con libertad.',
   keywords: [
     'Dani Zilbert',
     'coach trabajo remoto',
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
     'carrera digital',
   ],
   openGraph: {
-    title: 'Sobre Mi - Dani Zilbert | Coach de Trabajo Remoto',
+    title: 'Sobre Mí - Dani Zilbert | Coach de Trabajo Remoto',
     description:
-      'Conoce mi historia: de $3.25/hora como interprete a coach de trabajo remoto.',
+      'Conoce mi historia: de $3.25/hora como intérprete a coach de trabajo remoto.',
     type: 'profile',
   },
 };

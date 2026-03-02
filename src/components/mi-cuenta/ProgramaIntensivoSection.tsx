@@ -92,7 +92,7 @@ export default function ProgramaIntensivoSection({
               </h3>
             </div>
             <p className="mb-4 text-sm text-gray-medium">
-              Accede a todo el contenido del programa: videos, guias y
+              Accede a todo el contenido del programa: videos, guías y
               ejercicios.
             </p>
             <Link
@@ -109,14 +109,14 @@ export default function ProgramaIntensivoSection({
             <div className="mb-3 flex items-center gap-2">
               <CalendarDays className="h-5 w-5 text-coral" />
               <h3 className="font-semibold text-gray-dark">
-                Sesion 1:1
+                Sesión 1:1
               </h3>
             </div>
 
             {canBook && (
               <>
                 <p className="mb-4 text-sm text-gray-medium">
-                  Agenda tu sesion personalizada de 90 minutos con Dani.
+                  Agenda tu sesión personalizada de 90 minutos con Dani.
                 </p>
                 {bookingSessionId ? (
                   <Link
@@ -124,11 +124,11 @@ export default function ProgramaIntensivoSection({
                     className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-coral to-pink px-4 py-2 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 hover:shadow-md"
                   >
                     <CalendarDays className="h-4 w-4" />
-                    Agendar sesion
+                    Agendar sesión
                   </Link>
                 ) : (
                   <p className="text-sm text-gray-medium">
-                    No pudimos encontrar tu sesion de pago. Contacta a Dani para
+                    No pudimos encontrar tu sesión de pago. Contacta a Dani para
                     recibir ayuda.
                   </p>
                 )}
@@ -138,7 +138,7 @@ export default function ProgramaIntensivoSection({
             {needsPago2 && (
               <>
                 <p className="mb-4 text-sm text-gray-medium">
-                  Completa tu segundo pago para desbloquear la sesion 1:1.
+                  Completa tu segundo pago para desbloquear la sesión 1:1.
                 </p>
                 <button
                   onClick={handlePago2Checkout}

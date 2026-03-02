@@ -65,7 +65,7 @@ function GuideModal({
 
       setClaimSuccess(true);
     } catch {
-      setClaimError('Error de conexion. Intenta de nuevo.');
+      setClaimError('Error de conexión. Intenta de nuevo.');
     } finally {
       setClaimLoading(false);
     }

@@ -28,6 +28,27 @@ export async function GET(
     );
   }
 
+  // Validate URL to prevent SSRF — only allow known CDN hosts
+  const ALLOWED_HOSTS = [
+    'securenlandco.b-cdn.net',
+    'remotecondani.b-cdn.net',
+  ];
+  try {
+    const parsed = new URL(resource.downloadUrl);
+    if (parsed.protocol !== 'https:' || !ALLOWED_HOSTS.includes(parsed.hostname)) {
+      console.error(`[masterclass/recurso] Blocked fetch from untrusted host: ${parsed.hostname}`);
+      return NextResponse.json(
+        { error: 'Recurso sin archivo disponible' },
+        { status: 404 },
+      );
+    }
+  } catch {
+    return NextResponse.json(
+      { error: 'URL de recurso inválida' },
+      { status: 400 },
+    );
+  }
+
   const pdfResponse = await fetch(resource.downloadUrl);
   if (!pdfResponse.ok) {
     return NextResponse.json(

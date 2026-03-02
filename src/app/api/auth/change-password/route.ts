@@ -13,14 +13,14 @@ export async function POST(request: NextRequest) {
 
     if (!oldPassword || !newPassword) {
       return NextResponse.json(
-        { error: 'Ambas contrasenas son requeridas' },
+        { error: 'Ambas contraseñas son requeridas' },
         { status: 400 },
       );
     }
 
     if (newPassword.length < 8) {
       return NextResponse.json(
-        { error: 'La nueva contrasena debe tener al menos 8 caracteres' },
+        { error: 'La nueva contraseña debe tener al menos 8 caracteres' },
         { status: 400 },
       );
     }
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json(
-      { error: 'Contrasena actual incorrecta' },
+      { error: 'Contraseña actual incorrecta' },
       { status: 400 },
     );
   }

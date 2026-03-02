@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 
@@ -28,49 +28,55 @@ export default function CalendarGrid({
   const [availableDates, setAvailableDates] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
 
-  const fetchMonthAvailability = useCallback(async () => {
-    setLoading(true);
-    const { year, month } = currentMonth;
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const dates: string[] = [];
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      const date = new Date(year, month, day);
-      if (date >= minDate && date <= maxDate) {
-        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        dates.push(dateStr);
-      }
-    }
-
-    // Check availability for each valid date
-    const available = new Set<string>();
-    const results = await Promise.allSettled(
-      dates.map(async (fecha) => {
-        const res = await fetch(
-          `/api/reservas/disponibilidad?fecha=${fecha}&planId=${planId}`,
-        );
-        if (!res.ok) return null;
-        const data = await res.json();
-        if (data.slots?.some((s: { disponible: boolean }) => s.disponible)) {
-          return fecha;
-        }
-        return null;
-      }),
-    );
-
-    for (const result of results) {
-      if (result.status === 'fulfilled' && result.value) {
-        available.add(result.value);
-      }
-    }
-
-    setAvailableDates(available);
-    setLoading(false);
-  }, [currentMonth, planId, minDate, maxDate]);
-
   useEffect(() => {
+    let cancelled = false;
+
+    async function fetchMonthAvailability() {
+      setLoading(true);
+      const { year, month } = currentMonth;
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const dates: string[] = [];
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
+        if (date >= minDate && date <= maxDate) {
+          const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          dates.push(dateStr);
+        }
+      }
+
+      // Check availability for each valid date
+      const available = new Set<string>();
+      const results = await Promise.allSettled(
+        dates.map(async (fecha) => {
+          const res = await fetch(
+            `/api/reservas/disponibilidad?fecha=${fecha}&planId=${planId}`,
+          );
+          if (cancelled) return null;
+          if (!res.ok) return null;
+          const data = await res.json();
+          if (data.slots?.some((s: { disponible: boolean }) => s.disponible)) {
+            return fecha;
+          }
+          return null;
+        }),
+      );
+
+      if (cancelled) return;
+
+      for (const result of results) {
+        if (result.status === 'fulfilled' && result.value) {
+          available.add(result.value);
+        }
+      }
+
+      setAvailableDates(available);
+      setLoading(false);
+    }
+
     fetchMonthAvailability();
-  }, [fetchMonthAvailability]);
+    return () => { cancelled = true; };
+  }, [currentMonth, planId, minDate, maxDate]);
 
   const { year, month } = currentMonth;
   const firstDay = new Date(year, month, 1).getDay();

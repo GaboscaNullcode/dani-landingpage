@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   try {
     const { productId } = await request.json();
 
-    if (!productId) {
+    if (!productId || typeof productId !== 'string') {
       return NextResponse.json(
         { error: 'productId requerido' },
         { status: 400 },
@@ -26,8 +26,22 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if already claimed
+    // Verify the product is actually free before allowing claim
     const supabase = getServiceSupabase();
+    const { data: producto } = await supabase
+      .from('productos')
+      .select('es_gratis')
+      .eq('id', productId)
+      .single();
+
+    if (!producto?.es_gratis) {
+      return NextResponse.json(
+        { error: 'Este producto no es gratuito' },
+        { status: 403 },
+      );
+    }
+
+    // Check if already claimed
     const { data: existing } = await supabase
       .from('compras')
       .select('id')

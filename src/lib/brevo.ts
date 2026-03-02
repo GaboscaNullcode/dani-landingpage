@@ -136,12 +136,12 @@ function generateIcsContent({
     'BEGIN:VALARM',
     'TRIGGER:-PT60M',
     'ACTION:DISPLAY',
-    'DESCRIPTION:Recordatorio de sesion',
+    'DESCRIPTION:Recordatorio de sesión',
     'END:VALARM',
     'BEGIN:VALARM',
     'TRIGGER:-PT15M',
     'ACTION:DISPLAY',
-    'DESCRIPTION:Tu sesion comienza en 15 minutos',
+    'DESCRIPTION:Tu sesión comienza en 15 minutos',
     'END:VALARM',
     'END:VEVENT',
     'END:VCALENDAR',
@@ -157,7 +157,7 @@ export async function sendPurchaseEmail(
   accessUrl: string,
   isSubscription: boolean,
 ): Promise<void> {
-  const subject = `Tu acceso a ${productName} esta listo`;
+  const subject = `Tu acceso a ${productName} está listo`;
   const html = getPurchaseEmailHtml(productName, accessUrl, isSubscription);
   await sendEmail(to, subject, html);
 }
@@ -195,7 +195,7 @@ export async function addNewsletterContact(
   const api = getContactsApi();
   const listId = parseInt(process.env.BREVO_NEWSLETTER_LIST_ID || '0', 10);
   if (!listId) {
-    throw new Error('BREVO_NEWSLETTER_LIST_ID no esta configurado o es invalido');
+    throw new Error('BREVO_NEWSLETTER_LIST_ID no está configurado o es inválido');
   }
 
   const contact = new CreateContact();
@@ -246,7 +246,7 @@ export async function sendPasswordResetEmail(
   to: string,
   resetUrl: string,
 ): Promise<void> {
-  const subject = 'Restablece tu contrasena';
+  const subject = 'Restablece tu contraseña';
   const html = getPasswordResetEmailHtml(resetUrl);
   await sendEmail(to, subject, html);
 }
@@ -258,7 +258,7 @@ export async function sendProgramaIntensivoFullPaymentEmail(
   name: string,
   accessUrl: string,
 ): Promise<void> {
-  const subject = 'Tu Programa Intensivo ya esta activo';
+  const subject = 'Tu Programa Intensivo ya está activo';
   const html = getProgramaIntensivoFullPaymentEmailHtml(name, accessUrl);
   await sendEmail(to, subject, html);
 }
@@ -324,7 +324,7 @@ export async function sendBookingConfirmationEmail(
 
       const icsContent = generateIcsContent({
         summary: `${planName} - Remote con Dani`,
-        description: `Sesion de ${planName} con Dani.${zoomUrl ? `\\nZoom: ${zoomUrl}` : ''}`,
+        description: `Sesión de ${planName} con Dani.${zoomUrl ? `\\nZoom: ${zoomUrl}` : ''}`,
         startDateTime: startDt.toISOString(),
         endDateTime: endDt.toISOString(),
         timezone,

@@ -62,10 +62,16 @@ export async function createBooking(
     clientName,
   } = input;
 
+  // 0. Reject bookings in the past
+  const bookingDate = new Date(`${fecha}T${hora}:00`);
+  if (bookingDate.getTime() <= Date.now()) {
+    throw new Error('No se puede reservar en una fecha u hora pasada');
+  }
+
   // 1. Verify slot is still available
   const available = await isSlotAvailable(fecha, hora, duracionMinutos);
   if (!available) {
-    throw new Error('El horario seleccionado ya no esta disponible');
+    throw new Error('El horario seleccionado ya no está disponible');
   }
 
   // 2. Verify compra doesn't have an active reservation
@@ -201,7 +207,7 @@ export async function createBooking(
     // Cancel the reservation
     await updateReserva(reserva.id, {
       estado: 'cancelada',
-      cancelacion_motivo: 'Error durante creacion - rollback automatico',
+      cancelacion_motivo: 'Error durante creación - rollback automático',
     }).catch(() => {});
 
     throw error;

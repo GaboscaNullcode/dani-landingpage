@@ -184,7 +184,7 @@ export default function BookingCalendar({
             })}
           </div>
           <p className="text-sm text-gray-medium">
-            Agenda tu sesion de <strong className="text-gray-dark">{planName}</strong>
+            Agenda tu sesión de <strong className="text-gray-dark">{planName}</strong>
           </p>
         </div>
       )}

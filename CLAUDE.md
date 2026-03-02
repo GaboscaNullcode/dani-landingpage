@@ -25,7 +25,7 @@ Next.js 16 (App Router) + React 19 + Tailwind CSS 4 + TypeScript strict + Supaba
 The project has **two data sources** that coexist:
 
 1. **Supabase (primary, dynamic)** — Services in `src/lib/*-service.ts` fetch from Supabase tables using `React.cache()` for request deduplication. Used in Server Components.
-2. **Static data (fallback)** — `src/data/*.ts` files contain hardcoded data. Some pages still reference these directly. When modifying product logic, check both `src/data/tienda-data.ts` and `src/lib/tienda-service.ts`. Note: `faq-data.tsx` exports JSX components.
+2. **Static data (supplementary)** — `src/data/*.ts` files contain hardcoded UI data not stored in Supabase (e.g., FAQ items in `faq-data.tsx`, asesoria content in `asesorias-data.ts`, programa intensivo types in `programa-intensivo-data.ts`). Product and blog data are exclusively from Supabase.
 
 ### Type system: dual model pattern
 
@@ -62,7 +62,7 @@ Stripe client is lazy-initialized (`getStripe()`) to prevent build-time crashes 
 
 - Supabase Auth handles user authentication (cookies `sb-*` via `@supabase/ssr`)
 - Middleware (`src/middleware.ts`) protects `/mi-cuenta/*` (except `/mi-cuenta/login` and `/mi-cuenta/reset-password`) and `/masterclass-gratuita`
-- API routes: `POST /api/auth/login`, `POST /api/auth/logout`, `POST /api/auth/me`, `POST /api/auth/change-password`
+- API routes: `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me`, `POST /api/auth/change-password`, `POST /api/auth/signup`, `POST /api/auth/forgot-password`, `GET /api/auth/callback`
 - `auth-service.ts` uses `getServiceSupabase()` (service_role key) for server-side user operations
 
 ### Email (Brevo)
@@ -105,7 +105,22 @@ Stripe client is lazy-initialized (`getStripe()`) to prevent build-time crashes 
 | `/mi-cuenta` | Protected dashboard (login + purchases) |
 | `/mi-cuenta/viewer/[compraId]` | Purchase viewer |
 
-Additional API routes: `GET /api/descargas/[compraId]`, `GET /api/pdf/[compraId]`
+Additional API routes:
+- `POST /api/checkout` — Create Stripe checkout session
+- `POST /api/webhooks/stripe` — Stripe webhook handler
+- `POST /api/claim-free` — Claim free product (auth required)
+- `GET /api/descargas/[compraId]` — Download purchased content
+- `GET /api/pdf/[compraId]` — PDF viewer for purchased content
+- `POST /api/stripe/portal` — Stripe billing portal (auth required)
+- `GET|POST /api/testimonios` — User testimonial CRUD (auth required)
+- `POST /api/upload` — Image upload to BunnyCDN (auth required)
+- `GET /api/reservas/disponibilidad` — Booking availability
+- `POST /api/reservas/crear` — Create booking
+- `POST /api/reservas/cancelar` — Cancel booking
+- `GET /api/reservas/mis-reservas` — User's bookings
+- `GET /api/masterclass/recurso/[recursoId]` — Masterclass resource download
+- `GET /api/programa-contenido/[contenidoId]` — Program content access
+- `GET /api/cron/recordatorios` — Cron job for booking reminders
 
 ### Component organization
 
@@ -144,3 +159,5 @@ Required in `.env.local`:
 - `GOOGLE_SERVICE_ACCOUNT_JSON` (base64-encoded service account credentials)
 - `GOOGLE_CALENDAR_ID` (calendar ID for creating events)
 - `GOOGLE_CALENDAR_IDS_BUSY` (comma-separated calendar IDs for FreeBusy availability checks)
+- `ZOOM_ACCOUNT_ID`, `ZOOM_CLIENT_ID`, `ZOOM_CLIENT_SECRET` (Zoom meeting creation for bookings)
+- `BUNNY_STORAGE_API_KEY`, `BUNNY_STORAGE_ZONE_NAME`, `BUNNY_STORAGE_BASE_URL`, `BUNNY_CDN_BASE_URL` (BunnyCDN image upload)

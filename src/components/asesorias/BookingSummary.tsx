@@ -85,7 +85,7 @@ export default function BookingSummary({
             <Clock className="h-5 w-5 text-coral" />
           </div>
           <div>
-            <p className="text-xs text-gray-medium">Hora y duracion</p>
+            <p className="text-xs text-gray-medium">Hora y duración</p>
             <p className="font-semibold text-gray-dark">
               {hora} ({duracionText})
             </p>
@@ -109,13 +109,13 @@ export default function BookingSummary({
           htmlFor="booking-notes"
           className="mb-2 block text-sm font-medium text-gray-dark"
         >
-          Notas o preguntas para la sesion (opcional)
+          Notas o preguntas para la sesión (opcional)
         </label>
         <textarea
           id="booking-notes"
           value={notas}
           onChange={(e) => setNotas(e.target.value)}
-          placeholder="Cuentame brevemente que esperas de esta sesion o si hay algo especifico que quieras trabajar..."
+          placeholder="Cuéntame brevemente qué esperas de esta sesión o si hay algo específico que quieras trabajar..."
           rows={3}
           maxLength={500}
           className="w-full rounded-xl border border-gray-light px-4 py-3 text-sm text-gray-dark placeholder:text-gray-light focus:border-coral focus:outline-none focus:ring-2 focus:ring-coral/20"

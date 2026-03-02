@@ -114,7 +114,7 @@ export default function SobreMiHeroSection() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="mb-8 font-[var(--font-headline)] text-2xl font-bold text-pink md:text-3xl"
             >
-              Tu Coach de Trabajo Remoto!
+              ¡Tu Coach de Trabajo Remoto!
             </motion.p>
 
             {/* Description */}

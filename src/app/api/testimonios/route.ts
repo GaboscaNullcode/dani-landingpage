@@ -63,7 +63,7 @@ export async function POST(request: Request) {
 
     if (texto.length > 1000) {
       return NextResponse.json(
-        { error: 'El testimonio no puede tener mas de 1000 caracteres' },
+        { error: 'El testimonio no puede tener más de 1000 caracteres' },
         { status: 400 }
       );
     }

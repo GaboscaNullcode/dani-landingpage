@@ -53,12 +53,12 @@ export default function ResetPasswordForm() {
     setError('');
 
     if (password.length < 8) {
-      setError('La contrasena debe tener al menos 8 caracteres');
+      setError('La contraseña debe tener al menos 8 caracteres');
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('Las contrasenas no coinciden');
+      setError('Las contraseñas no coinciden');
       return;
     }
 
@@ -80,7 +80,7 @@ export default function ResetPasswordForm() {
         router.push('/mi-cuenta');
       }, 2000);
     } catch {
-      setError('Error de conexion. Intenta de nuevo.');
+      setError('Error de conexión. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }
@@ -144,7 +144,7 @@ export default function ResetPasswordForm() {
               <Sparkles className="h-4 w-4 text-coral" />
             </motion.div>
             <span className="text-xs font-semibold text-coral">
-              Nueva contrasena
+              Nueva contraseña
             </span>
           </motion.div>
 
@@ -158,17 +158,17 @@ export default function ResetPasswordForm() {
           </motion.div>
 
           <h1 className="text-xl font-bold text-gray-dark">
-            Restablecer Contrasena
+            Restablecer Contraseña
           </h1>
           <p className="mt-2 text-sm text-gray-medium">
-            Ingresa tu nueva contrasena
+            Ingresa tu nueva contraseña
           </p>
         </div>
 
         {sessionError ? (
           <div className="rounded-xl bg-red-50 px-4 py-3 text-center text-sm text-red-600">
-            El enlace es invalido o ha expirado. Solicita uno nuevo desde el
-            inicio de sesion.
+            El enlace es inválido o ha expirado. Solicita uno nuevo desde el
+            inicio de sesión.
           </div>
         ) : !sessionReady ? (
           <div className="flex items-center justify-center py-8">
@@ -183,7 +183,7 @@ export default function ResetPasswordForm() {
             animate={{ opacity: 1, y: 0 }}
             className="rounded-xl bg-green-50 px-4 py-3 text-center text-sm text-green-700"
           >
-            Contrasena actualizada correctamente. Redirigiendo...
+            Contraseña actualizada correctamente. Redirigiendo...
           </motion.div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -196,7 +196,7 @@ export default function ResetPasswordForm() {
                 htmlFor="new-password"
                 className="mb-1 block text-sm font-semibold text-gray-dark"
               >
-                Nueva contrasena
+                Nueva contraseña
               </label>
               <div className="relative">
                 <input
@@ -205,7 +205,7 @@ export default function ResetPasswordForm() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Minimo 8 caracteres"
+                  placeholder="Mínimo 8 caracteres"
                   className="w-full rounded-xl border-2 border-gray-light px-4 py-3 pr-11 text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
                   autoComplete="new-password"
                 />
@@ -232,7 +232,7 @@ export default function ResetPasswordForm() {
                 htmlFor="confirm-password"
                 className="mb-1 block text-sm font-semibold text-gray-dark"
               >
-                Confirmar contrasena
+                Confirmar contraseña
               </label>
               <div className="relative">
                 <input
@@ -241,7 +241,7 @@ export default function ResetPasswordForm() {
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Repite la nueva contrasena"
+                  placeholder="Repite la nueva contraseña"
                   className="w-full rounded-xl border-2 border-gray-light px-4 py-3 pr-11 text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
                   autoComplete="new-password"
                 />
@@ -285,7 +285,7 @@ export default function ResetPasswordForm() {
                     Actualizando...
                   </span>
                 ) : (
-                  'Cambiar Contrasena'
+                  'Cambiar Contraseña'
                 )}
               </button>
             </motion.div>

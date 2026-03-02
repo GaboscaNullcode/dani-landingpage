@@ -1,4 +1,5 @@
 import { getServiceSupabase } from './supabase/server';
+import type { NewsletterSource } from '@/types/newsletter';
 
 /**
  * Creates or updates a newsletter subscriber in Supabase.
@@ -9,50 +10,25 @@ export async function createOrUpdateSubscriber(
   email: string,
   nombre: string,
   brevoContactId: number,
-  origen:
-    | 'home'
-    | 'newsletter_page'
-    | 'blog'
-    | 'quiz'
-    | 'recursos_gratuitos'
-    | 'guia_gratuita',
+  origen: NewsletterSource,
 ): Promise<string> {
   const supabase = getServiceSupabase();
 
-  // Try to find existing subscriber first
-  const { data: existing } = await supabase
-    .from('suscriptores_newsletter')
-    .select('id')
-    .eq('email', email)
-    .single();
-
-  if (existing) {
-    // Update existing — preserve original 'origen'
-    const { data, error } = await supabase
-      .from('suscriptores_newsletter')
-      .update({
-        nombre,
-        brevo_contact_id: brevoContactId,
-        activo: true,
-      })
-      .eq('id', existing.id)
-      .select('id')
-      .single();
-
-    if (error) throw error;
-    return data!.id;
-  }
-
-  // Create new subscriber
+  // Use upsert to avoid TOCTOU race condition between SELECT and INSERT
+  // when two concurrent requests try to create the same subscriber.
+  // onConflict on email ensures atomicity.
   const { data, error } = await supabase
     .from('suscriptores_newsletter')
-    .insert({
-      email,
-      nombre,
-      brevo_contact_id: brevoContactId,
-      origen,
-      activo: true,
-    })
+    .upsert(
+      {
+        email,
+        nombre,
+        brevo_contact_id: brevoContactId,
+        origen,
+        activo: true,
+      },
+      { onConflict: 'email', ignoreDuplicates: false },
+    )
     .select('id')
     .single();
 

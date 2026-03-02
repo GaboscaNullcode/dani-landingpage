@@ -192,7 +192,7 @@ export function formatPrice(
   currency: string = 'USD',
   interval?: string,
 ): string {
-  if (price === 0) return 'Gratis';
+  if (price <= 0) return 'Gratis';
   const formatted = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,

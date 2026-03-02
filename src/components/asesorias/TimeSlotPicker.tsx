@@ -23,24 +23,29 @@ export default function TimeSlotPicker({
   const [timezone, setTimezone] = useState('');
 
   useEffect(() => {
+    let cancelled = false;
+
     async function fetchSlots() {
       setLoading(true);
       try {
         const res = await fetch(
           `/api/reservas/disponibilidad?fecha=${fecha}&planId=${planId}`,
         );
+        if (cancelled) return;
         if (!res.ok) throw new Error('Failed to fetch');
         const data = await res.json();
+        if (cancelled) return;
         setSlots(data.slots || []);
         setTimezone(data.timezone || '');
       } catch {
-        setSlots([]);
+        if (!cancelled) setSlots([]);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     }
 
     fetchSlots();
+    return () => { cancelled = true; };
   }, [fecha, planId]);
 
   const availableSlots = slots.filter((s) => s.disponible);
@@ -62,7 +67,7 @@ export default function TimeSlotPicker({
           No hay horarios disponibles para esta fecha.
         </p>
         <p className="mt-1 text-sm text-gray-light">
-          Intenta seleccionar otro dia.
+          Intenta seleccionar otro día.
         </p>
       </div>
     );

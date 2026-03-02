@@ -120,7 +120,7 @@ export default function IntroSection() {
 
             {/* Title */}
             <h2 className="text-section-title mb-6 font-[var(--font-headline)] font-bold text-black-deep">
-              Hola! Soy <span className="gradient-text-playful">Dani</span>
+              ¡Hola! Soy <span className="gradient-text-playful">Dani</span>
             </h2>
 
             {/* Story paragraphs */}

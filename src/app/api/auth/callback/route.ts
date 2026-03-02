@@ -6,12 +6,15 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get('code');
   const next = searchParams.get('next') || '/mi-cuenta';
 
+  // Prevent open redirect: only allow relative paths starting with /
+  const safeNext = next.startsWith('/') && !next.startsWith('//') ? next : '/mi-cuenta';
+
   if (code) {
     const supabase = await createServerSupabase();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      return NextResponse.redirect(new URL(next, origin));
+      return NextResponse.redirect(new URL(safeNext, origin));
     }
   }
 

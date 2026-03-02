@@ -38,6 +38,27 @@ export async function GET(
     );
   }
 
+  // Validate URL to prevent SSRF — only allow known CDN hosts
+  const ALLOWED_HOSTS = [
+    'securenlandco.b-cdn.net',
+    'remotecondani.b-cdn.net',
+  ];
+  try {
+    const parsed = new URL(downloadUrl);
+    if (parsed.protocol !== 'https:' || !ALLOWED_HOSTS.includes(parsed.hostname)) {
+      console.error(`[descargas] Blocked download from untrusted host: ${parsed.hostname}`);
+      return NextResponse.json(
+        { error: 'Archivo no disponible' },
+        { status: 404 },
+      );
+    }
+  } catch {
+    return NextResponse.json(
+      { error: 'URL de descarga inválida' },
+      { status: 400 },
+    );
+  }
+
   const fileResponse = await fetch(downloadUrl);
 
   if (!fileResponse.ok) {
