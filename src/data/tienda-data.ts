@@ -57,13 +57,13 @@ export const featuredProducts: Product[] = [
     badge: 'Popular',
     features: [
       '120+ páginas de contenido',
-      'Plantillas descargables',
+      'Plantillas incluidas',
       'Checklist de inicio',
       'Recursos adicionales',
     ],
     isFeatured: true,
     isFree: false,
-    ctaText: 'Descargar eBook',
+    ctaText: 'Obtener acceso',
     ctaLink: '/tienda/ebook-guia-practica',
   },
   {
@@ -80,7 +80,7 @@ export const featuredProducts: Product[] = [
     features: [
       '3 horas de contenido',
       'Ejercicios prácticos',
-      'Material descargable',
+      'Material incluido',
       'Acceso inmediato',
     ],
     isFeatured: true,
@@ -106,7 +106,7 @@ export const featuredProducts: Product[] = [
     ],
     isFeatured: true,
     isFree: false,
-    ctaText: 'Descargar eBook',
+    ctaText: 'Obtener acceso',
     ctaLink: '/tienda/ebook-optimizacion',
   },
 ];
@@ -161,13 +161,13 @@ export const freeResources: Product[] = [
     category: 'gratis',
     badge: 'Gratis',
     features: [
-      'PDF descargable',
+      'PDF incluido',
       'Mapa mental interactivo',
       'Recursos adicionales',
     ],
     isFeatured: false,
     isFree: true,
-    ctaText: 'Descargar Gratis',
+    ctaText: 'Obtener acceso gratis',
     ctaLink: '/recursos/guia-gratuita',
   },
   {

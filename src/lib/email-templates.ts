@@ -336,7 +336,7 @@ export function getProgramaIntensivoFullPaymentEmailHtml(
     </p>
     <ul style="margin:0 0 16px;padding-left:20px;color:${BRAND.gray};font-size:16px;line-height:1.8;">
       <li>10 videos estrategicos paso a paso</li>
-      <li>Ebooks y workbooks descargables</li>
+      <li>Ebooks y workbooks incluidos</li>
       <li>Acceso para agendar tu sesion 1:1 con Dani</li>
     </ul>
     <p style="margin:0 0 24px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
@@ -364,7 +364,7 @@ export function getProgramaIntensivoPago1EmailHtml(
     </p>
     <ul style="margin:0 0 16px;padding-left:20px;color:${BRAND.gray};font-size:16px;line-height:1.8;">
       <li>10 videos estrategicos paso a paso</li>
-      <li>Ebooks y workbooks descargables</li>
+      <li>Ebooks y workbooks incluidos</li>
     </ul>
     <p style="margin:0 0 16px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
       Una vez realices tu segundo pago, podras agendar tu sesion 1:1 con Dani. Te recomiendo tomarte unas 2 semanas para avanzar con los materiales antes de agendar.

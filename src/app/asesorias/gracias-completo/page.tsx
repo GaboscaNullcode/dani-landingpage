@@ -67,7 +67,7 @@ export default function GraciasCompletoPage() {
                 <span className="font-semibold text-black-deep">
                   10 videos teóricos
                 </span>
-                , descargar tus materiales y avanzar a tu ritmo.
+                , acceder a tus materiales y avanzar a tu ritmo.
               </p>
 
               <div className="flex items-start gap-3 rounded-xl bg-cream/50 p-4">

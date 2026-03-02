@@ -133,7 +133,7 @@ function GuideModal({
                     className="mt-4 inline-flex items-center gap-2 rounded-full bg-lavender/10 px-5 py-2.5 text-sm font-semibold text-lavender transition-colors hover:bg-lavender/20"
                   >
                     <Download className="h-4 w-4" />
-                    Descargar guía ahora
+                    Obtener guía ahora
                   </a>
                 )}
               </motion.div>

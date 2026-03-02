@@ -121,7 +121,7 @@ export default function ProgramaIntensivoContent({
         <div className="mb-4 flex items-center gap-2">
           <FileDown className="h-5 w-5 text-coral" />
           <h2 className="font-[var(--font-headline)] text-lg font-bold text-black-deep">
-            Materiales descargables
+            Materiales incluidos
           </h2>
         </div>
         <DownloadsSection downloads={downloads} />

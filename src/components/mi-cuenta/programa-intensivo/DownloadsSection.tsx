@@ -51,7 +51,7 @@ export default function DownloadsSection({ downloads }: DownloadsSectionProps) {
               className="inline-flex items-center gap-1.5 rounded-lg bg-white/80 px-4 py-2 text-sm font-semibold text-gray-dark transition-colors hover:bg-white hover:shadow-sm"
             >
               <Download className="h-4 w-4" />
-              Descargar
+              Ver contenido
             </a>
           </motion.div>
         );

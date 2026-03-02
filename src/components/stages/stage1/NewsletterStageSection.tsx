@@ -107,7 +107,7 @@ export default function NewsletterStageSection() {
                   className="btn-shimmer flex w-full items-center justify-center gap-2 rounded-full px-6 py-3 font-[var(--font-headline)] text-sm font-bold text-white"
                   style={{ background: 'var(--gradient-coral-pink)' }}
                 >
-                  Descargar Guía
+                  Obtener guía
                   <ArrowRight className="h-4 w-4" />
                 </button>
               </form>
