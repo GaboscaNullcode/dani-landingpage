@@ -410,8 +410,8 @@ export default function Dashboard() {
         </motion.div>
       )}
 
-      {/* Purchased products */}
-      {data.compras.length > 0 && (
+      {/* Purchased products (exclude payment installments — handled by ProgramaIntensivoSection) */}
+      {data.compras.filter((c) => !c.productoDetail?.producto_padre).length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -426,7 +426,9 @@ export default function Dashboard() {
             </h2>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {data.compras.map((compra, index) => (
+            {data.compras
+              .filter((c) => !c.productoDetail?.producto_padre)
+              .map((compra, index) => (
               <ProductCard
                 key={compra.id}
                 compra={compra}
