@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import Link from 'next/link';
 import posthog from 'posthog-js';
-import { Check, Star, Clock, Sparkles, ChevronDown, CircleCheck } from 'lucide-react';
+import { Check, Clock, Sparkles, ChevronDown, CircleCheck } from 'lucide-react';
 import type { AsesoriaPlan, PaymentPlan } from '@/types/tienda';
 import { useCheckoutAuth } from '@/hooks/useCheckoutAuth';
 import ProgramaIntensivoModal from './ProgramaIntensivoModal';
@@ -132,11 +132,13 @@ export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSecti
                     : 'bg-white shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-gray-light'
                 }`}
               >
-                {/* Popular badge */}
+                {/* Popular ribbon badge */}
                 {plan.isPopular && (
-                  <div className="absolute right-6 top-6 flex items-center gap-1.5 rounded-full bg-coral px-3 py-1">
-                    <Star className="h-3.5 w-3.5 fill-white text-white" />
-                    <span className="text-xs font-bold uppercase tracking-wide">Más Popular</span>
+                  <div
+                    className="absolute -right-10 top-7 rotate-45 px-12 py-1.5 text-center text-xs font-bold uppercase tracking-wider text-white"
+                    style={{ background: 'var(--gradient-coral-pink)' }}
+                  >
+                    Más Popular
                   </div>
                 )}
 
