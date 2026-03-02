@@ -1,5 +1,8 @@
 import { Sparkles } from 'lucide-react';
-import { getTestimoniosMasterclass } from '@/lib/masterclass-service';
+import {
+  getTestimoniosMasterclass,
+  getTestimoniosMasterclassPage,
+} from '@/lib/masterclass-service';
 import TestimonialCarousel from '@/components/ui/TestimonialCarousel';
 
 interface TestimonialsSectionProps {
@@ -7,6 +10,7 @@ interface TestimonialsSectionProps {
   badge?: string;
   title?: React.ReactNode;
   subtitle?: string;
+  masterclassOnly?: boolean;
 }
 
 export default async function TestimonialsSection({
@@ -18,8 +22,11 @@ export default async function TestimonialsSection({
     </>
   ),
   subtitle = 'Conoce las experiencias de quienes ya dieron el salto al trabajo remoto',
+  masterclassOnly = false,
 }: TestimonialsSectionProps) {
-  const testimonials = await getTestimoniosMasterclass();
+  const testimonials = masterclassOnly
+    ? await getTestimoniosMasterclassPage()
+    : await getTestimoniosMasterclass();
 
   if (testimonials.length === 0) return null;
 

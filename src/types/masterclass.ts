@@ -12,6 +12,7 @@ export interface TestimonioMasterclassRecord {
   activo: boolean;
   orden: number;
   avatar_url: string | null;
+  mostrar_en_masterclass: boolean;
 }
 
 // Frontend model

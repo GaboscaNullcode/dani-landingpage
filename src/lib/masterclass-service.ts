@@ -43,6 +43,30 @@ export const getTestimoniosMasterclass = cache(
   },
 );
 
+// Fetch testimonials marked for the masterclass page
+export const getTestimoniosMasterclassPage = cache(
+  async (): Promise<TestimonioMasterclass[]> => {
+    try {
+      const supabase = createAnonSupabase();
+      const { data, error } = await supabase
+        .from('testimonios_masterclass')
+        .select('*')
+        .eq('activo', true)
+        .eq('mostrar_en_masterclass', true)
+        .order('orden', { ascending: true });
+
+      if (error) throw error;
+      return (data ?? []).map(transformTestimonioRecord);
+    } catch (error) {
+      console.error(
+        'Error fetching masterclass page testimonials:',
+        error,
+      );
+      return [];
+    }
+  },
+);
+
 // Fetch a single masterclass resource by ID
 export const getMasterclassResource = cache(
   async (
