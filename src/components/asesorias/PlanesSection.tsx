@@ -113,7 +113,7 @@ export default function PlanesSection({ planes, paymentPlans = [] }: PlanesSecti
           {planes.map((plan, index) => {
             const isExpanded = expandedPlans.has(plan.id);
             const hasHiddenFeatures = plan.features.length > VISIBLE_FEATURES;
-            const visibleFeatures = hasHiddenFeatures && !isExpanded
+            const visibleFeatures = hasHiddenFeatures
               ? plan.features.slice(0, VISIBLE_FEATURES)
               : plan.features;
             const hiddenCount = plan.features.length - VISIBLE_FEATURES;
