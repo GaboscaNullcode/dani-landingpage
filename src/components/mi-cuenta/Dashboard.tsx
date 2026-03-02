@@ -20,12 +20,14 @@ import {
   XCircle,
   Gift,
   ArrowRight,
+  MessageSquareHeart,
 } from 'lucide-react';
 import type { User, Compra } from '@/types/auth';
 import type { Product, ProductType } from '@/types/tienda';
 import type { Reserva } from '@/types/reservas';
 import ProductCard from './ProductCard';
 import ChangePasswordModal from './ChangePasswordModal';
+import TestimonialModal from './TestimonialModal';
 import ProgramaIntensivoSection from './ProgramaIntensivoSection';
 
 interface MeResponse {
@@ -53,6 +55,7 @@ export default function Dashboard() {
   const [error, setError] = useState('');
   const [loggingOut, setLoggingOut] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [showTestimonial, setShowTestimonial] = useState(false);
   const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -226,7 +229,14 @@ export default function Dashboard() {
             <p className="mt-1 text-gray-medium">{data.user.email}</p>
           </div>
 
-          <div className="flex items-center gap-2 self-start">
+          <div className="flex flex-wrap items-center gap-2 self-start">
+            <button
+              onClick={() => setShowTestimonial(true)}
+              className="inline-flex items-center gap-2 rounded-xl border-2 border-coral/30 bg-coral/5 px-5 py-2.5 font-semibold text-coral transition-colors duration-200 hover:border-coral hover:bg-coral/10"
+            >
+              <MessageSquareHeart className="h-4 w-4" />
+              <span className="hidden sm:inline">Dejar Testimonio</span>
+            </button>
             <button
               onClick={() => setShowChangePassword(true)}
               className="inline-flex items-center gap-2 rounded-xl border-2 border-gray-light px-5 py-2.5 font-semibold text-gray-carbon transition-colors duration-200 hover:border-coral hover:text-coral"
@@ -505,6 +515,10 @@ export default function Dashboard() {
       <ChangePasswordModal
         isOpen={showChangePassword}
         onClose={() => setShowChangePassword(false)}
+      />
+      <TestimonialModal
+        isOpen={showTestimonial}
+        onClose={() => setShowTestimonial(false)}
       />
     </div>
   );
