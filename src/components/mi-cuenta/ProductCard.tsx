@@ -11,6 +11,7 @@ import {
   ArrowRight,
   Settings,
   Loader2,
+  Lock,
 } from 'lucide-react';
 import WhatsAppIcon from '@/components/ui/WhatsAppIcon';
 import type { Compra } from '@/types/auth';
@@ -71,8 +72,13 @@ function LockedCard({ product, index, productTypes }: { product: Product; index:
           src={product.image}
           alt={product.name}
           fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className="object-cover grayscale transition-transform duration-300 group-hover:scale-105"
         />
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+          <div className="rounded-full bg-white/20 p-3 backdrop-blur-sm">
+            <Lock className="h-6 w-6 text-white" />
+          </div>
+        </div>
       </div>
 
       <div className="flex flex-1 flex-col p-5">
