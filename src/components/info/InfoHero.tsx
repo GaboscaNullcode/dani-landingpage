@@ -53,18 +53,9 @@ export default function InfoHero() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="text-hero-title mb-6 font-[var(--font-headline)] font-bold text-gray-dark"
           >
-            Centro de <span className="gradient-text">Información</span>
+            ¿Tienes dudas antes de{' '}
+            <span className="gradient-text">empezar</span>?
           </motion.h1>
-
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="mb-4 text-xl font-medium text-gray-dark md:text-2xl"
-          >
-            ¿Tienes dudas antes de empezar?
-          </motion.p>
 
           {/* Description */}
           <motion.p
