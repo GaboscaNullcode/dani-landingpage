@@ -215,6 +215,6 @@ export const contactInfo = {
   email: 'info@remotecondani.com',
   instagram: '@remote.con.dani',
   instagramUrl: 'https://instagram.com/remote.con.dani',
-  tiktok: '@donizilbert',
-  tiktokUrl: 'https://tiktok.com/@donizilbert',
+  tiktok: '@danizilbert',
+  tiktokUrl: 'https://tiktok.com/@danizilbert',
 };
