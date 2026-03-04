@@ -20,30 +20,60 @@ export default function ResetPasswordForm() {
 
   useEffect(() => {
     const supabase = createBrowserSupabase();
+    let cancelled = false;
 
-    // Listen for the PASSWORD_RECOVERY event fired when Supabase
-    // detects recovery tokens in the URL hash fragment
     const {
       data: { subscription },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } = (supabase.auth as any).onAuthStateChange((event: string) => {
+    } = supabase.auth.onAuthStateChange((event) => {
+      if (cancelled) return;
       if (event === 'PASSWORD_RECOVERY') {
         setSessionReady(true);
       }
     });
 
-    // Also check if there's already a session (user navigated directly)
-    const checkSession = async () => {
+    const initSession = async () => {
+      const hash = window.location.hash;
+
+      // Explicitly parse tokens from the URL hash fragment —
+      // the singleton browser client may not auto-detect them reliably
+      if (hash && hash.includes('access_token')) {
+        const params = new URLSearchParams(hash.substring(1));
+        const accessToken = params.get('access_token');
+        const refreshToken = params.get('refresh_token');
+
+        if (accessToken && refreshToken) {
+          const { error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+          if (!cancelled) {
+            if (error) {
+              setSessionError(true);
+            } else {
+              setSessionReady(true);
+            }
+          }
+        } else if (!cancelled) {
+          setSessionError(true);
+        }
+        return;
+      }
+
+      // No hash — check for an existing session (e.g. user navigated directly)
       const { data } = await supabase.auth.getSession();
-      if (data.session) {
-        setSessionReady(true);
-      } else if (!window.location.hash) {
-        setSessionError(true);
+      if (!cancelled) {
+        if (data.session) {
+          setSessionReady(true);
+        } else {
+          setSessionError(true);
+        }
       }
     };
-    checkSession();
+
+    initSession();
 
     return () => {
+      cancelled = true;
       subscription.unsubscribe();
     };
   }, []);
