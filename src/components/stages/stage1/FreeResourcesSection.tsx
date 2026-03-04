@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion, useInView, AnimatePresence } from 'motion/react';
 import {
   Mail,
@@ -36,6 +37,8 @@ function GuideModal({
   authUser: { name: string; email: string } | null;
   productId?: string;
 }) {
+  const router = useRouter();
+
   // Form for unauthenticated users
   const newsletterForm = useNewsletterForm('guia_gratuita');
 
@@ -63,7 +66,8 @@ function GuideModal({
         return;
       }
 
-      setClaimSuccess(true);
+      // Redirect to mi-cuenta after successful claim
+      router.push('/mi-cuenta');
     } catch {
       setClaimError('Error de conexión. Intenta de nuevo.');
     } finally {
