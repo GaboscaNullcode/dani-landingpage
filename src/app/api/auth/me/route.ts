@@ -8,7 +8,7 @@ export async function GET() {
   const user = await getCurrentUser();
 
   if (!user) {
-    return NextResponse.json({ user: null });
+    return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
   }
 
   const [compras, allProducts, productTypes, productIdsWithContent] =

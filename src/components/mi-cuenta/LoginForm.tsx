@@ -94,8 +94,8 @@ export default function LoginForm() {
         });
       }
 
-      router.push(redirectTo || '/mi-cuenta');
-      router.refresh();
+      // Hard navigation ensures fresh cookies are sent to the middleware
+      window.location.href = redirectTo || '/mi-cuenta';
     } catch {
       setError('Error de conexión. Intenta de nuevo.');
     } finally {

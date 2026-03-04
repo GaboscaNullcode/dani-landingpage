@@ -183,8 +183,9 @@ export default function Dashboard() {
 
   if (!data) return null;
 
+  const compras = data.compras || [];
   const purchasedProductIds = new Set(
-    data.compras
+    compras
       .filter((c) => c.estado === 'activa')
       .map((c) => c.producto),
   );
@@ -421,7 +422,7 @@ export default function Dashboard() {
       )}
 
       {/* Purchased products (exclude payment installments — handled by ProgramaIntensivoSection) */}
-      {data.compras.filter((c) => !c.productoDetail?.producto_padre).length > 0 && (
+      {compras.filter((c) => !c.productoDetail?.producto_padre).length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -436,7 +437,7 @@ export default function Dashboard() {
             </h2>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {data.compras
+            {compras
               .filter((c) => !c.productoDetail?.producto_padre)
               .map((compra, index) => (
               <ProductCard
@@ -482,7 +483,7 @@ export default function Dashboard() {
       )}
 
       {/* Empty state */}
-      {data.compras.length === 0 &&
+      {compras.length === 0 &&
         (!data.allProducts || data.allProducts.length === 0) && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
