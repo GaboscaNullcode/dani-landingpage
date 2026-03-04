@@ -45,7 +45,9 @@ export default async function RecursosGratuitosPage() {
     getFreeResources(),
   ]);
   const community = communityProducts[0];
-  const guideProduct = freeResources.find((p) => p.downloadUrl);
+  const guideProduct = freeResources.find(
+    (p) => p.id === 'guia-habilidades'
+  );
   const whatsappGroupProduct = freeResources.find((p) => p.whatsappLink);
 
   return (
