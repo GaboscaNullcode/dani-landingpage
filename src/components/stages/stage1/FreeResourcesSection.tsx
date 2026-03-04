@@ -29,54 +29,19 @@ function GuideModal({
   onClose,
   downloadUrl,
   authUser,
-  productId,
 }: {
   isOpen: boolean;
   onClose: () => void;
   downloadUrl?: string;
   authUser: { name: string; email: string } | null;
-  productId?: string;
 }) {
   const router = useRouter();
 
   // Form for unauthenticated users
   const newsletterForm = useNewsletterForm('guia_gratuita');
 
-  // State for authenticated user claim flow
-  const [claimLoading, setClaimLoading] = useState(false);
-  const [claimSuccess, setClaimSuccess] = useState(false);
-  const [claimError, setClaimError] = useState<string | null>(null);
-
-  async function handleAuthClaim() {
-    if (!productId) return;
-    setClaimLoading(true);
-    setClaimError(null);
-
-    try {
-      const res = await fetch('/api/claim-free', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setClaimError(data.error || 'Error al procesar. Intenta de nuevo.');
-        return;
-      }
-
-      // Redirect to mi-cuenta after successful claim
-      router.push('/mi-cuenta');
-    } catch {
-      setClaimError('Error de conexión. Intenta de nuevo.');
-    } finally {
-      setClaimLoading(false);
-    }
-  }
-
-  const isSuccess = authUser ? claimSuccess : newsletterForm.isSuccess;
-  const displayName = authUser ? authUser.name : newsletterForm.name;
+  const isSuccess = newsletterForm.isSuccess;
+  const displayName = newsletterForm.name;
 
   return (
     <AnimatePresence>
@@ -142,7 +107,7 @@ function GuideModal({
                 )}
               </motion.div>
             ) : authUser ? (
-              /* ── Authenticated user: simple confirmation ── */
+              /* ── Authenticated user: just redirect to dashboard ── */
               <>
                 <div className="mb-6 text-center">
                   <div
@@ -166,16 +131,9 @@ function GuideModal({
                   </p>
                 </div>
 
-                {claimError && (
-                  <p className="mb-4 text-center text-sm font-medium text-red-500">
-                    {claimError}
-                  </p>
-                )}
-
                 <motion.button
-                  onClick={handleAuthClaim}
-                  disabled={claimLoading}
-                  className="btn-shimmer w-full rounded-full py-4 font-[var(--font-headline)] text-base font-bold text-white disabled:cursor-not-allowed disabled:opacity-70"
+                  onClick={() => router.push('/mi-cuenta')}
+                  className="btn-shimmer w-full rounded-full py-4 font-[var(--font-headline)] text-base font-bold text-white"
                   style={{
                     background:
                       'linear-gradient(135deg, #a78bfa 0%, #6ee7b7 100%)',
@@ -185,26 +143,8 @@ function GuideModal({
                   whileTap={{ scale: 0.98 }}
                 >
                   <span className="flex items-center justify-center gap-2">
-                    {claimLoading ? (
-                      <>
-                        <motion.span
-                          animate={{ rotate: 360 }}
-                          transition={{
-                            duration: 1,
-                            repeat: Infinity,
-                            ease: 'linear',
-                          }}
-                        >
-                          <Sparkles className="h-5 w-5" />
-                        </motion.span>
-                        Enviando&hellip;
-                      </>
-                    ) : (
-                      <>
-                        Ver contenido
-                        <ArrowRight className="h-5 w-5" />
-                      </>
-                    )}
+                    Ver contenido
+                    <ArrowRight className="h-5 w-5" />
                   </span>
                 </motion.button>
               </>
@@ -757,7 +697,6 @@ export default function FreeResourcesSection({
         onClose={() => setGuideModalOpen(false)}
         downloadUrl={guideProduct?.downloadUrl}
         authUser={user ? { name: user.name, email: user.email } : null}
-        productId={guideProduct?.id}
       />
     </>
   );
