@@ -17,18 +17,21 @@ import {
   MessageCircle,
   Gift,
   Check,
-  Star,
   ChevronDown,
   HelpCircle,
   Layers,
   type LucideIcon,
 } from 'lucide-react';
 import { stages, type StageData } from './StagesSection';
+import TestimonialCarousel from '@/components/ui/TestimonialCarousel';
 import type { Product } from '@/types/tienda';
+import type { TestimonioMasterclass } from '@/types/masterclass';
 
 // Types
 interface QuizSectionProps {
   products?: Record<string, Product>;
+  allTestimonials?: TestimonioMasterclass[];
+  masterclassTestimonials?: TestimonioMasterclass[];
 }
 
 interface QuizOption {
@@ -505,7 +508,11 @@ function LevelAccordion({
   );
 }
 
-export default function QuizSection({ products = {} }: QuizSectionProps) {
+export default function QuizSection({
+  products = {},
+  allTestimonials = [],
+  masterclassTestimonials = [],
+}: QuizSectionProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
 
@@ -1369,22 +1376,29 @@ export default function QuizSection({ products = {} }: QuizSectionProps) {
                 </button>
               </motion.div>
 
-              {/* Social proof */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.4 }}
-                className="mt-12 rounded-2xl bg-white/60 p-6 text-center backdrop-blur-sm"
-              >
-                <div className="flex items-center justify-center gap-1 text-sunshine">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 fill-current" />
-                  ))}
-                </div>
-                <p className="mt-3 font-[var(--font-inter)] text-gray-carbon">
-                  <span className="font-bold text-black-deep">+500 personas</span> ya descubrieron su camino remoto con Dani
-                </p>
-              </motion.div>
+              {/* Testimonials */}
+              {(() => {
+                const testimonials =
+                  resultId === 'explorando'
+                    ? masterclassTestimonials
+                    : allTestimonials;
+                if (testimonials.length === 0) return null;
+                return (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.4 }}
+                    className="mt-12 w-screen -translate-x-1/2 relative left-1/2"
+                  >
+                    <h3 className="mb-6 text-center font-[var(--font-headline)] text-2xl font-bold text-black-deep">
+                      {resultId === 'explorando'
+                        ? 'Lo que dicen de la Masterclass Gratuita'
+                        : 'Historias de quienes ya dieron el salto'}
+                    </h3>
+                    <TestimonialCarousel testimonials={testimonials} fadeColor="#fce7f3" />
+                  </motion.div>
+                );
+              })()}
             </motion.div>
           )}
         </AnimatePresence>

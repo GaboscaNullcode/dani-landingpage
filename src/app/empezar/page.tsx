@@ -3,6 +3,10 @@ import dynamic from 'next/dynamic';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { getProductsByIds } from '@/lib/tienda-service';
+import {
+  getTestimoniosMasterclass,
+  getTestimoniosMasterclassPage,
+} from '@/lib/masterclass-service';
 import type { Product } from '@/types/tienda';
 
 // Dynamic import para QuizSection - componente pesado (828+ líneas)
@@ -49,7 +53,12 @@ const QUIZ_PRODUCT_IDS = [
 ];
 
 export default async function EmpezarPage() {
-  const products = await getProductsByIds(QUIZ_PRODUCT_IDS);
+  const [products, allTestimonials, masterclassTestimonials] =
+    await Promise.all([
+      getProductsByIds(QUIZ_PRODUCT_IDS),
+      getTestimoniosMasterclass(),
+      getTestimoniosMasterclassPage(),
+    ]);
   const productsMap: Record<string, Product> = Object.fromEntries(
     products.map((p) => [p.id, p])
   );
@@ -58,7 +67,11 @@ export default async function EmpezarPage() {
     <>
       <Navigation />
       <main id="main-content">
-        <QuizSection products={productsMap} />
+        <QuizSection
+          products={productsMap}
+          allTestimonials={allTestimonials}
+          masterclassTestimonials={masterclassTestimonials}
+        />
       </main>
       <Footer />
     </>

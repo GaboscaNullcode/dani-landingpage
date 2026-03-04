@@ -9,6 +9,7 @@ import type { TestimonioMasterclass } from '@/types/masterclass';
 
 interface TestimonialCarouselProps {
   testimonials: TestimonioMasterclass[];
+  fadeColor?: string;
 }
 
 const cardGradients = [
@@ -398,6 +399,7 @@ function TestimonialCard({
 
 export default function TestimonialCarousel({
   testimonials,
+  fadeColor,
 }: TestimonialCarouselProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
@@ -416,9 +418,19 @@ export default function TestimonialCarousel({
   return (
     <div ref={ref} className="relative" role="region" aria-label="Testimonios de estudiantes" aria-roledescription="carousel">
       {/* Gradient fade left */}
-      <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-32 bg-gradient-to-r from-white to-transparent md:w-48" />
+      <div
+        className="pointer-events-none absolute left-0 top-0 z-10 h-full w-32 md:w-48"
+        style={{
+          background: `linear-gradient(to right, ${fadeColor ?? 'white'}, transparent)`,
+        }}
+      />
       {/* Gradient fade right */}
-      <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-32 bg-gradient-to-l from-white to-transparent md:w-48" />
+      <div
+        className="pointer-events-none absolute right-0 top-0 z-10 h-full w-32 md:w-48"
+        style={{
+          background: `linear-gradient(to left, ${fadeColor ?? 'white'}, transparent)`,
+        }}
+      />
 
       {/* Carousel track */}
       <div className="overflow-hidden py-4">
