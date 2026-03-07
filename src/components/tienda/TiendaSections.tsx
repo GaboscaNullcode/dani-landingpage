@@ -71,8 +71,27 @@ function CompactProductCard({ product, index = 0, accentColor = 'coral', purchas
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-30px' }}
       transition={{ duration: 0.4, delay: index * 0.08 }}
-      className={`group relative flex gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${styles.border}`}
+      className={`group relative flex gap-4 overflow-hidden rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${styles.border}`}
     >
+      {/* Ribbon badge */}
+      {isPurchased ? (
+        <div
+          className="absolute -right-8 top-4 rotate-45 px-8 py-0.5 text-center text-[10px] font-bold uppercase tracking-wider text-white"
+          style={{ background: 'var(--color-mint)' }}
+        >
+          Adquirido
+        </div>
+      ) : (
+        product.badge && (
+          <div
+            className="absolute -right-8 top-4 rotate-45 px-8 py-0.5 text-center text-[10px] font-bold uppercase tracking-wider text-white"
+            style={{ background: 'var(--gradient-coral-pink)' }}
+          >
+            {product.badge}
+          </div>
+        )
+      )}
+
       {/* Thumbnail */}
       <div className="relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-cream">
         <Image
@@ -82,19 +101,6 @@ function CompactProductCard({ product, index = 0, accentColor = 'coral', purchas
           className="object-cover transition-transform duration-300 group-hover:scale-105"
           sizes="80px"
         />
-        {isPurchased ? (
-          <span className="absolute -right-1 -top-1 rounded-full bg-mint px-2 py-0.5 text-[10px] font-bold uppercase text-white">
-            Adquirido
-          </span>
-        ) : (
-          product.badge && (
-            <span
-              className={`absolute -right-1 -top-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${styles.badge}`}
-            >
-              {product.badge}
-            </span>
-          )
-        )}
       </div>
 
       {/* Content */}
@@ -166,6 +172,25 @@ function FeaturedProductCard({ product, purchaseStatus = 'none', productTypes }:
       <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br from-coral/20 to-pink/10" />
       <div className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-gradient-to-tr from-lavender/15 to-mint/10" />
 
+      {/* Ribbon badge */}
+      {isPurchased ? (
+        <div
+          className="absolute -right-10 top-7 z-20 rotate-45 px-12 py-1.5 text-center text-xs font-bold uppercase tracking-wider text-white"
+          style={{ background: 'var(--color-mint)' }}
+        >
+          Adquirido
+        </div>
+      ) : (
+        product.badge && (
+          <div
+            className="absolute -right-10 top-7 z-20 rotate-45 px-12 py-1.5 text-center text-xs font-bold uppercase tracking-wider text-white"
+            style={{ background: 'var(--gradient-coral-pink)' }}
+          >
+            {product.badge}
+          </div>
+        )
+      )}
+
       <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:gap-8">
         {/* Image */}
         <div className="relative mx-auto h-48 w-36 flex-shrink-0 overflow-hidden rounded-2xl bg-white shadow-md md:h-56 md:w-44">
@@ -176,17 +201,6 @@ function FeaturedProductCard({ product, purchaseStatus = 'none', productTypes }:
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 144px, 176px"
           />
-          {isPurchased ? (
-            <span className="absolute left-3 top-3 rounded-full bg-mint px-3 py-1 text-xs font-bold uppercase text-white shadow-md">
-              Adquirido
-            </span>
-          ) : (
-            product.badge && (
-              <span className="absolute left-3 top-3 rounded-full bg-gradient-to-r from-coral to-pink px-3 py-1 text-xs font-bold uppercase text-white shadow-md">
-                {product.badge}
-              </span>
-            )
-          )}
         </div>
 
         {/* Content */}
