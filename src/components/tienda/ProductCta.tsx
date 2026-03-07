@@ -24,7 +24,7 @@ export default function ProductCta({ product }: ProductCtaProps) {
           transition={{ duration: 0.6 }}
         >
           <h2 className="mb-4 font-[var(--font-headline)] text-3xl font-bold text-white md:text-4xl">
-            ¿Lista para empezar?
+            ¿List@ para empezar?
           </h2>
           <p className="mx-auto mb-8 max-w-xl text-lg text-white/90">
             Da el primer paso hacia tu carrera remota hoy.
