@@ -47,6 +47,7 @@ export const getAllArticles = cache(async (): Promise<BlogArticle[]> => {
     const { data, error } = await supabase
       .from('blogs')
       .select('*, categoria_detail:categorias_blog(*)')
+      .eq('estado', 'publicado')
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -65,6 +66,7 @@ export const getLatestArticles = cache(
       const { data, error } = await supabase
         .from('blogs')
         .select('*, categoria_detail:categorias_blog(*)')
+        .eq('estado', 'publicado')
         .order('created_at', { ascending: false })
         .limit(limit || 50);
 
@@ -86,6 +88,7 @@ export const getArticleBySlug = cache(
         .from('blogs')
         .select('*, categoria_detail:categorias_blog(*)')
         .eq('slug', slug)
+        .eq('estado', 'publicado')
         .single();
 
       if (error) throw error;
@@ -106,6 +109,7 @@ export const getArticleById = cache(
         .from('blogs')
         .select('*, categoria_detail:categorias_blog(*)')
         .eq('id', id)
+        .eq('estado', 'publicado')
         .single();
 
       if (error) throw error;
@@ -121,7 +125,10 @@ export const getArticleById = cache(
 export const getAllSlugs = cache(async (): Promise<string[]> => {
   try {
     const supabase = createAnonSupabase();
-    const { data, error } = await supabase.from('blogs').select('slug');
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('slug')
+      .eq('estado', 'publicado');
 
     if (error) throw error;
     return (data ?? []).map((r) => r.slug);
@@ -152,6 +159,7 @@ export const getRelatedArticles = cache(
         const { data: sameCategoryData, error: sameCatError } = await supabase
           .from('blogs')
           .select('*, categoria_detail:categorias_blog(*)')
+          .eq('estado', 'publicado')
           .eq('categoria', categoryId)
           .neq('id', currentId)
           .order('created_at', { ascending: false })
@@ -176,6 +184,7 @@ export const getRelatedArticles = cache(
         const { data: otherData, error: otherError } = await supabase
           .from('blogs')
           .select('*, categoria_detail:categorias_blog(*)')
+          .eq('estado', 'publicado')
           .not('id', 'in', `(${excludeIds.join(',')})`)
           .order('created_at', { ascending: false })
           .limit(remaining);
@@ -192,6 +201,7 @@ export const getRelatedArticles = cache(
       const { data, error } = await supabase
         .from('blogs')
         .select('*, categoria_detail:categorias_blog(*)')
+        .eq('estado', 'publicado')
         .neq('id', currentId)
         .order('created_at', { ascending: false })
         .limit(limit);
@@ -214,6 +224,7 @@ export const getAllCategories = cache(async (): Promise<BlogCategory[]> => {
     const { data, error } = await supabase
       .from('categorias_blog')
       .select('*, blogs(count)')
+      .eq('blogs.estado', 'publicado')
       .order('nombre');
 
     if (error) throw error;
@@ -239,6 +250,7 @@ export const getCategoryBySlug = cache(
       const { data, error } = await supabase
         .from('categorias_blog')
         .select('*, blogs(count)')
+        .eq('blogs.estado', 'publicado')
         .eq('slug', slug)
         .single();
 
@@ -270,6 +282,7 @@ export const getArticlesByCategory = cache(
       const { data, error } = await supabase
         .from('blogs')
         .select('*, categoria_detail:categorias_blog!inner(*)')
+        .eq('estado', 'publicado')
         .eq('categoria_detail.slug', categorySlug)
         .order('created_at', { ascending: false });
 

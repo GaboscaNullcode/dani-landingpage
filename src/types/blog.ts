@@ -19,6 +19,8 @@ export interface BlogRecord {
   portada_url: string | null;
   categoria: string | null;
   preview_text: string | null;
+  estado: 'borrador' | 'publicado' | 'programado';
+  fecha_publicacion: string | null;
   // Joined via `.select('*, categoria_detail:categorias_blog(*)')`
   categoria_detail?: CategoriaBlogRecord | null;
 }
