@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, memo } from 'react';
+import { useState, useEffect, memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -20,31 +20,16 @@ export default memo(function Navigation({ darkHero = false }: { darkHero?: boole
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isHidden, setIsHidden] = useState(false);
-  const lastScrollY = useRef(0);
-
-  const isViewerPage = pathname.startsWith('/mi-cuenta/viewer/');
   const useLightText = darkHero && !isScrolled;
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentY = window.scrollY;
-      setIsScrolled(currentY > 50);
-
-      if (isViewerPage) {
-        if (currentY > lastScrollY.current && currentY > 80) {
-          setIsHidden(true);
-        } else {
-          setIsHidden(false);
-        }
-      }
-
-      lastScrollY.current = currentY;
+      setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isViewerPage]);
+  }, []);
 
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -70,7 +55,7 @@ export default memo(function Navigation({ darkHero = false }: { darkHero?: boole
         transition={{ duration: 0.6, ease: [0.175, 0.885, 0.32, 1.275] }}
         className={`fixed left-0 right-0 top-0 z-[1000] px-4 transition-[padding,transform] duration-500 ${
           isScrolled ? 'py-3' : 'py-5'
-        } ${isHidden ? '-translate-y-full' : 'translate-y-0'}`}
+        } translate-y-0`}
       >
         <motion.nav
           className={`mx-auto flex items-center justify-between transition-[max-width,background-color,padding,box-shadow,backdrop-filter] duration-500 ${
@@ -166,7 +151,7 @@ export default memo(function Navigation({ darkHero = false }: { darkHero?: boole
       <button
         className={`fixed right-4 z-[1002] flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-xl shadow-md md:hidden ${
           isScrolled || !useLightText ? 'bg-white' : 'bg-white/20 backdrop-blur-sm'
-        } ${isScrolled ? 'top-3' : 'top-5'} ${isHidden ? '-translate-y-[200%]' : 'translate-y-0'} transition-[top,transform,background-color] duration-500`}
+        } ${isScrolled ? 'top-3' : 'top-5'} translate-y-0 transition-[top,transform,background-color] duration-500`}
         onClick={toggleMobileMenu}
         aria-label="Toggle menu"
         aria-expanded={isMobileMenuOpen}

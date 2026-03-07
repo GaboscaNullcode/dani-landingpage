@@ -85,7 +85,6 @@ function transformProductRecord(record: ProductoRecord): Product {
     stripePriceId: hasActiveDiscount
       ? record.stripe_price_id_descuento!
       : record.stripe_price_id || undefined,
-    downloadUrl: record.download_url || undefined,
     whatsappLink: record.whatsapp_link || undefined,
     order: record.orden || 0,
     parentProductId: record.producto_padre || undefined,

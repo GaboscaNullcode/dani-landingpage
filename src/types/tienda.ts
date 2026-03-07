@@ -96,7 +96,6 @@ export interface ProductoRecord {
   precio_descuento: number | null;
   stripe_price_id_descuento: string | null;
   descuento_activo: boolean;
-  download_url: string | null;
   whatsapp_link: string | null;
   orden: number;
   // Bonus section columns
@@ -141,7 +140,6 @@ export interface Product {
   ctaText: string;
   ctaLink: string;
   stripePriceId?: string;
-  downloadUrl?: string;
   whatsappLink?: string;
   order: number;
   parentProductId?: string;

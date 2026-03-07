@@ -198,22 +198,3 @@ export async function getUserPurchasedProductIds(
   );
 }
 
-export async function getCompraForDownload(
-  compraId: string,
-  userId: string,
-): Promise<Compra | null> {
-  try {
-    const supabase = getServiceSupabase();
-    const { data, error } = await supabase
-      .from('compras')
-      .select('*, productoDetail:productos(*)')
-      .eq('id', compraId)
-      .eq('usuario', userId)
-      .single();
-
-    if (error) throw error;
-    return data ? mapCompra(data) : null;
-  } catch {
-    return null;
-  }
-}

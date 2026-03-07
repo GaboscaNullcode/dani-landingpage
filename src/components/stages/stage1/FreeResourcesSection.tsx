@@ -13,7 +13,6 @@ import {
   Check,
   User,
   X,
-  Download,
   CircleCheck,
 } from 'lucide-react';
 import { useNewsletterForm } from '@/hooks/useNewsletterForm';
@@ -27,12 +26,10 @@ import type { Product } from '@/types/tienda';
 function GuideModal({
   isOpen,
   onClose,
-  downloadUrl,
   authUser,
 }: {
   isOpen: boolean;
   onClose: () => void;
-  downloadUrl?: string;
   authUser: { name: string; email: string } | null;
 }) {
   const router = useRouter();
@@ -94,17 +91,6 @@ function GuideModal({
                 <p className="mt-2 text-sm text-gray-medium">
                   Revisa tu inbox. Te enviamos la guía.
                 </p>
-                {downloadUrl && (
-                  <a
-                    href={downloadUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 inline-flex items-center gap-2 rounded-full bg-lavender/10 px-5 py-2.5 text-sm font-semibold text-lavender transition-colors hover:bg-lavender/20"
-                  >
-                    <Download className="h-4 w-4" />
-                    Obtener guía ahora
-                  </a>
-                )}
               </motion.div>
             ) : authUser ? (
               /* ── Authenticated user: just redirect to dashboard ── */
@@ -695,7 +681,6 @@ export default function FreeResourcesSection({
       <GuideModal
         isOpen={guideModalOpen}
         onClose={() => setGuideModalOpen(false)}
-        downloadUrl={guideProduct?.downloadUrl}
         authUser={user ? { name: user.name, email: user.email } : null}
       />
     </>

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { motion } from 'motion/react';
 import { useState } from 'react';
 import {
-  BookOpen,
   ExternalLink,
   CircleCheck,
   ArrowRight,
@@ -196,37 +195,26 @@ function PurchasedCard({ compra, index, productTypes, productIdsWithContent }: {
 
         {!isCancelled && (
           <div className="mt-auto">
-            {producto.categoria === 'ebook' && (
+            {productIdsWithContent?.has(compra.producto) && (
               <Link
-                href={`/mi-cuenta/viewer/${compra.id}`}
+                href={`/mi-cuenta/contenido/${producto.slug}`}
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
               >
-                <BookOpen className="h-4 w-4" />
+                <PlayCircle className="h-4 w-4" />
                 Ver contenido
               </Link>
             )}
 
-            {producto.categoria !== 'ebook' &&
-              productIdsWithContent?.has(compra.producto) && (
-                <Link
-                  href={`/mi-cuenta/contenido/${producto.slug}`}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
-                >
-                  <PlayCircle className="h-4 w-4" />
-                  Ver contenido
-                </Link>
-              )}
-
-            {producto.categoria !== 'ebook' &&
-              !productIdsWithContent?.has(compra.producto) &&
+            {!productIdsWithContent?.has(compra.producto) &&
               (producto.categoria === 'curso' ||
-                producto.categoria === 'masterclass') && (
+                producto.categoria === 'masterclass' ||
+                producto.categoria === 'ebook') && (
                 <Link
                   href={`/tienda/${producto.slug}`}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-coral to-pink px-4 py-2.5 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
                 >
                   <ExternalLink className="h-4 w-4" />
-                  Ver Masterclass
+                  Ver producto
                 </Link>
               )}
 
