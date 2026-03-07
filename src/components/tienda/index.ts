@@ -6,5 +6,7 @@ export { default as SeccionProductos } from './SeccionProductos';
 export { default as SeccionServicios } from './SeccionServicios';
 export { default as SeccionNiveles } from './SeccionNiveles';
 export { default as SeccionWhatsApp } from './SeccionWhatsApp';
+export { default as SeccionBonos } from './SeccionBonos';
+export { default as SeccionFAQs } from './SeccionFAQs';
 export * from './TiendaSections';
 export { default as CheckoutButton } from './CheckoutButton';

@@ -3,8 +3,10 @@ import { createAnonSupabase, getServiceSupabase } from './supabase/server';
 import type {
   ProductoRecord,
   ProductoFAQRecord,
+  ProductoBonoRecord,
   Product,
   ProductFAQ,
+  ProductBono,
   AsesoriaPlan,
   PaymentPlan,
   CategoriaProductoRecord,
@@ -37,6 +39,18 @@ function transformCategoryRecord(
     subtitle: record.subtitulo,
     description: record.descripcion,
     accentColor: record.color_acento,
+    order: record.orden,
+  };
+}
+
+// Transform ProductoBonoRecord to ProductBono
+function transformBonoRecord(record: ProductoBonoRecord): ProductBono {
+  return {
+    id: record.id,
+    title: record.titulo,
+    description: record.descripcion,
+    imageUrl: record.imagen_url,
+    icon: record.icono,
     order: record.orden,
   };
 }
@@ -247,28 +261,34 @@ export const getCommunityProducts = cache(async (): Promise<Product[]> => {
   }
 });
 
-// Fetch a single product by slug (includes FAQs)
+// Fetch a single product by slug (includes FAQs and Bonos)
 export const getProductBySlug = cache(
   async (slug: string): Promise<Product | null> => {
     try {
       const supabase = createAnonSupabase();
       const { data, error } = await supabase
         .from('productos')
-        .select('*, producto_faqs(*)')
+        .select('*, producto_faqs(*), producto_bonos(*)')
         .eq('slug', slug)
         .single();
 
       if (error) throw error;
       if (!data) return null;
 
-      const { producto_faqs: faqRecords, ...productRecord } = data as ProductoRecord & {
+      const { producto_faqs: faqRecords, producto_bonos: bonoRecords, ...productRecord } = data as ProductoRecord & {
         producto_faqs: ProductoFAQRecord[] | null;
+        producto_bonos: ProductoBonoRecord[] | null;
       };
 
       const product = transformProductRecord(productRecord);
       if (faqRecords && faqRecords.length > 0) {
         product.faqs = faqRecords
           .map(transformFAQRecord)
+          .sort((a, b) => a.order - b.order);
+      }
+      if (bonoRecords && bonoRecords.length > 0) {
+        product.bonos = bonoRecords
+          .map(transformBonoRecord)
           .sort((a, b) => a.order - b.order);
       }
       return product;

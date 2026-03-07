@@ -52,6 +52,28 @@ export interface ProductCategory {
   order: number;
 }
 
+// Supabase record structure for 'producto_bonos' table
+export interface ProductoBonoRecord {
+  id: string;
+  created_at: string;
+  producto: string;
+  titulo: string;
+  descripcion: string;
+  imagen_url: string | null;
+  icono: string | null;
+  orden: number;
+}
+
+// Frontend bono model
+export interface ProductBono {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string | null;
+  icon: string | null;
+  order: number;
+}
+
 // Supabase record structure for 'producto_faqs' table
 export interface ProductoFAQRecord {
   id: string;
@@ -151,9 +173,10 @@ export interface Product {
   levelId?: string;
   level?: ProductCategory;
   trustBadges?: TrustBadge[];
-  // Mensajes clave + FAQ fields
+  // Mensajes clave + FAQ + Bonos fields
   mensajesClave?: MensajeClave[];
   faqs?: ProductFAQ[];
+  bonos?: ProductBono[];
   // Asesoria-specific fields
   duracionMinutos?: number;
   subtitle?: string;

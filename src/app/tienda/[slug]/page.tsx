@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { ProductDetail, ProductCta } from '@/components/tienda';
+import { ProductDetail, SeccionBonos, SeccionFAQs, ProductCta } from '@/components/tienda';
 import { getProductBySlug, getAllProductSlugs, getProductTypesMap } from '@/lib/tienda-service';
 
 export const revalidate = 60;
@@ -62,6 +62,12 @@ export default async function ProductPage({ params }: Props) {
       <Navigation />
       <main id="main-content">
         <ProductDetail product={product} productTypes={productTypes} />
+        {product.bonos && product.bonos.length > 0 && (
+          <SeccionBonos bonos={product.bonos} />
+        )}
+        {product.faqs && product.faqs.length > 0 && (
+          <SeccionFAQs faqs={product.faqs} />
+        )}
         <ProductCta product={product} />
       </main>
       <Footer />

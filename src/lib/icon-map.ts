@@ -7,6 +7,17 @@ import {
   Shield,
   Clock,
   CalendarDays,
+  BookOpen,
+  Ticket,
+  Crown,
+  Star,
+  Zap,
+  Heart,
+  Headphones,
+  Globe,
+  Award,
+  Sparkles,
+  Rocket,
 } from 'lucide-react';
 
 const iconMap: Record<string, LucideIcon> = {
@@ -17,6 +28,17 @@ const iconMap: Record<string, LucideIcon> = {
   Shield,
   Clock,
   CalendarDays,
+  BookOpen,
+  Ticket,
+  Crown,
+  Star,
+  Zap,
+  Heart,
+  Headphones,
+  Globe,
+  Award,
+  Sparkles,
+  Rocket,
 };
 
 export function resolveIcon(
