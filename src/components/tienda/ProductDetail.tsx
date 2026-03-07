@@ -234,27 +234,31 @@ export default function ProductDetail({ product, productTypes }: ProductDetailPr
         </div>
       </section>
 
-      {/* Bonus + FAQ Section (conditional) */}
-      {(product.bonusTitle || (product.faqs && product.faqs.length > 0)) && (
+      {/* Mensajes clave + FAQ Section (conditional) */}
+      {((product.mensajesClave && product.mensajesClave.length > 0) || (product.faqs && product.faqs.length > 0)) && (
         <section className="bg-white py-20">
           <div className="container-custom mx-auto max-w-3xl">
-            {/* Bonus block */}
-            {product.bonusTitle && (
+            {/* Mensajes clave block */}
+            {product.mensajesClave && product.mensajesClave.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="mb-16 text-center"
+                className="mb-16 space-y-8 text-center"
               >
-                <p className="font-[var(--font-headline)] text-2xl italic text-coral md:text-3xl">
-                  {product.bonusTitle}
-                </p>
-                {product.bonusSubtitle && (
-                  <p className="mt-4 text-lg text-gray-carbon">
-                    <span className="font-bold text-coral">Bono:</span> {product.bonusSubtitle}
-                  </p>
-                )}
+                {product.mensajesClave.map((msg, i) => (
+                  <div key={i}>
+                    <p className="font-[var(--font-headline)] text-2xl italic text-coral md:text-3xl">
+                      {msg.titulo}
+                    </p>
+                    {msg.subtitulo && (
+                      <p className="mt-4 text-lg text-gray-carbon">
+                        {msg.subtitulo}
+                      </p>
+                    )}
+                  </div>
+                ))}
               </motion.div>
             )}
 

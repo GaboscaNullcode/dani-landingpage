@@ -15,6 +15,12 @@ export interface ProductType {
   color: string;
 }
 
+// Mensaje clave (stored as JSONB array in productos.mensajes_clave)
+export interface MensajeClave {
+  titulo: string;
+  subtitulo: string;
+}
+
 // Trust badge (stored as JSONB in productos.trust_badges)
 export interface TrustBadge {
   icono: string;
@@ -98,9 +104,8 @@ export interface ProductoRecord {
   descuento_activo: boolean;
   whatsapp_link: string | null;
   orden: number;
-  // Bonus section columns
-  bonus_titulo: string | null;
-  bonus_subtitulo: string | null;
+  // Mensajes clave (replaces old bonus columns)
+  mensajes_clave: MensajeClave[] | null;
   // Asesoria-specific columns
   duracion_minutos: number | null;
   subtitulo: string | null;
@@ -146,9 +151,8 @@ export interface Product {
   levelId?: string;
   level?: ProductCategory;
   trustBadges?: TrustBadge[];
-  // Bonus + FAQ fields
-  bonusTitle?: string;
-  bonusSubtitle?: string;
+  // Mensajes clave + FAQ fields
+  mensajesClave?: MensajeClave[];
   faqs?: ProductFAQ[];
   // Asesoria-specific fields
   duracionMinutos?: number;
