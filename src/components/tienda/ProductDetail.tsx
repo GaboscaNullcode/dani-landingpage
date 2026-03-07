@@ -11,6 +11,7 @@ import {
   Download,
   ArrowLeft,
   ChevronDown,
+  Clock,
 } from 'lucide-react';
 import type { Product, ProductType } from '@/types/tienda';
 import { formatPrice } from '@/types/tienda';
@@ -125,10 +126,20 @@ export default function ProductDetail({ product, productTypes }: ProductDetailPr
                 {product.description}
               </p>
 
+              {/* Duration */}
+              {product.duracionMinutos && product.duracionMinutos > 0 && (
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-lavender/10 px-4 py-2 text-sm font-medium text-lavender">
+                  <Clock className="h-4 w-4" />
+                  {product.duracionMinutos >= 60
+                    ? `${Math.floor(product.duracionMinutos / 60)}h${product.duracionMinutos % 60 > 0 ? ` ${product.duracionMinutos % 60}min` : ''} de contenido`
+                    : `${product.duracionMinutos} min de contenido`}
+                </div>
+              )}
+
               {/* Price */}
               <div className="mb-8 flex items-baseline gap-3">
                 <span className="font-[var(--font-headline)] text-4xl font-bold text-gray-dark">
-                  {formatPrice(product.price)}
+                  {formatPrice(product.price, 'USD', product.isSubscription ? product.interval : undefined)}
                 </span>
                 {product.originalPrice && (
                   <span className="text-xl text-gray-medium line-through">
@@ -146,7 +157,7 @@ export default function ProductDetail({ product, productTypes }: ProductDetailPr
               {product.features && product.features.length > 0 && (
                 <div className="mb-8">
                   <h3 className="mb-4 font-[var(--font-headline)] font-bold text-gray-dark">
-                    Lo que incluye:
+                    {product.featuresTitle || 'Lo que incluye:'}
                   </h3>
                   <ul className="space-y-3">
                     {product.features.map((feature, index) => (
@@ -158,6 +169,13 @@ export default function ProductDetail({ product, productTypes }: ProductDetailPr
                       </li>
                     ))}
                   </ul>
+                </div>
+              )}
+
+              {/* Note */}
+              {product.note && (
+                <div className="mb-6 rounded-xl border border-sunshine/30 bg-sunshine/10 px-5 py-3 text-sm text-gray-dark">
+                  {product.note}
                 </div>
               )}
 

@@ -116,7 +116,7 @@ function CompactProductCard({ product, index = 0, accentColor = 'coral', purchas
             </span>
           ) : (
             <span className={`font-[var(--font-headline)] text-lg font-bold ${styles.price}`}>
-              {formatPrice(product.price)}
+              {formatPrice(product.price, 'USD', product.isSubscription ? product.interval : undefined)}
             </span>
           )}
           {isPurchased ? (
