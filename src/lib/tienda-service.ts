@@ -268,7 +268,7 @@ export const getProductBySlug = cache(
       const supabase = createAnonSupabase();
       const { data, error } = await supabase
         .from('productos')
-        .select('*, producto_faqs(*), producto_bonos(*)')
+        .select('*, producto_faqs(*), producto_bonos!producto(*)')
         .eq('slug', slug)
         .single();
 

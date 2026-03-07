@@ -1,5 +1,5 @@
-// Supabase record (matches testimonios_masterclass table)
-export interface TestimonioMasterclassRecord {
+// Supabase record (matches testimonios table)
+export interface TestimonioRecord {
   id: string;
   created_at: string;
   nombre: string;
@@ -12,13 +12,12 @@ export interface TestimonioMasterclassRecord {
   activo: boolean;
   orden: number;
   avatar_url: string | null;
-  mostrar_en_masterclass: boolean;
   usuario_id: string | null;
   consentimiento: boolean;
 }
 
 // Frontend model
-export interface TestimonioMasterclass {
+export interface Testimonio {
   id: string;
   name: string;
   role: string;

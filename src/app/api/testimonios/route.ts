@@ -13,12 +13,23 @@ export async function GET() {
     }
 
     const { data: testimonio } = await supabase
-      .from('testimonios_masterclass')
+      .from('testimonios')
       .select('id, texto, rol, estrellas, red_social, usuario_red_social, avatar_url')
       .eq('usuario_id', user.id)
       .maybeSingle();
 
-    return NextResponse.json({ testimonio });
+    // Fetch associated product ID if testimonial exists
+    let productoId: string | null = null;
+    if (testimonio) {
+      const { data: link } = await supabase
+        .from('producto_testimonios')
+        .select('producto_id')
+        .eq('testimonio_id', testimonio.id)
+        .maybeSingle();
+      productoId = link?.producto_id ?? null;
+    }
+
+    return NextResponse.json({ testimonio, productoId });
   } catch {
     return NextResponse.json(
       { error: 'Error al obtener testimonio' },
@@ -39,13 +50,20 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { texto, rol, estrellas, redSocial, usuarioRedSocial, consentimiento, avatarUrl } =
+    const { texto, rol, estrellas, redSocial, usuarioRedSocial, consentimiento, avatarUrl, productoId } =
       body;
 
     // Validations
     if (!texto || !rol || !consentimiento) {
       return NextResponse.json(
         { error: 'Texto, rol y consentimiento son requeridos' },
+        { status: 400 }
+      );
+    }
+
+    if (!productoId) {
+      return NextResponse.json(
+        { error: 'Debes seleccionar un producto' },
         { status: 400 }
       );
     }
@@ -79,15 +97,17 @@ export async function POST(request: Request) {
 
     // Check if user already has a testimonial
     const { data: existing } = await supabase
-      .from('testimonios_masterclass')
+      .from('testimonios')
       .select('id')
       .eq('usuario_id', user.id)
       .maybeSingle();
 
+    let testimonioId: string;
+
     if (existing) {
       // Update existing testimonial
       const { error } = await supabase
-        .from('testimonios_masterclass')
+        .from('testimonios')
         .update({
           nombre,
           rol,
@@ -102,40 +122,61 @@ export async function POST(request: Request) {
         .eq('usuario_id', user.id);
 
       if (error) throw error;
+      testimonioId = existing.id;
+    } else {
+      // Insert new testimonial
+      const { data: inserted, error } = await supabase
+        .from('testimonios')
+        .insert({
+          usuario_id: user.id,
+          nombre,
+          rol,
+          texto,
+          estrellas,
+          red_social: redSocial || null,
+          usuario_red_social: usuarioRedSocial || null,
+          avatar_url: avatarUrl || null,
+          consentimiento: true,
+          activo: false, // Admin must activate
+          orden: 999, // Low priority, admin can reorder
+        })
+        .select('id')
+        .single();
 
-      return NextResponse.json({ message: 'Testimonio actualizado' });
+      if (error) {
+        if (error.code === '23505') {
+          return NextResponse.json(
+            { error: 'Ya tienes un testimonio registrado' },
+            { status: 409 }
+          );
+        }
+        throw error;
+      }
+
+      testimonioId = inserted.id;
     }
 
-    // Insert new testimonial
-    const { error } = await supabase
-      .from('testimonios_masterclass')
+    // Upsert product link: remove old link, insert new one
+    await supabase
+      .from('producto_testimonios')
+      .delete()
+      .eq('testimonio_id', testimonioId);
+
+    const { error: linkError } = await supabase
+      .from('producto_testimonios')
       .insert({
-        usuario_id: user.id,
-        nombre,
-        rol,
-        texto,
-        estrellas,
-        red_social: redSocial || null,
-        usuario_red_social: usuarioRedSocial || null,
-        avatar_url: avatarUrl || null,
-        consentimiento: true,
-        activo: false, // Admin must activate
-        orden: 999, // Low priority, admin can reorder
+        producto_id: productoId,
+        testimonio_id: testimonioId,
+        orden: 999,
       });
 
-    if (error) {
-      if (error.code === '23505') {
-        return NextResponse.json(
-          { error: 'Ya tienes un testimonio registrado' },
-          { status: 409 }
-        );
-      }
-      throw error;
+    if (linkError) {
+      console.error('Error linking testimonial to product:', linkError);
     }
 
     return NextResponse.json(
-      { message: 'Testimonio enviado correctamente' },
-      { status: 201 }
+      { message: existing ? 'Testimonio actualizado' : 'Testimonio enviado correctamente' },
+      { status: existing ? 200 : 201 }
     );
   } catch {
     return NextResponse.json(

@@ -1,15 +1,13 @@
 import { cache } from 'react';
 import { createAnonSupabase } from './supabase/server';
 import type {
-  TestimonioMasterclassRecord,
-  TestimonioMasterclass,
+  TestimonioRecord,
+  Testimonio,
   MasterclassContent,
 } from '@/types/masterclass';
 
 // Transform Supabase record to frontend model
-function transformTestimonioRecord(
-  record: TestimonioMasterclassRecord,
-): TestimonioMasterclass {
+function transformTestimonioRecord(record: TestimonioRecord): Testimonio {
   return {
     id: record.id,
     name: record.nombre,
@@ -23,13 +21,13 @@ function transformTestimonioRecord(
   };
 }
 
-// Fetch active testimonials ordered by position
-export const getTestimoniosMasterclass = cache(
-  async (): Promise<TestimonioMasterclass[]> => {
+// Fetch all active testimonials ordered by position
+export const getAllTestimonios = cache(
+  async (): Promise<Testimonio[]> => {
     try {
       const supabase = createAnonSupabase();
       const { data, error } = await supabase
-        .from('testimonios_masterclass')
+        .from('testimonios')
         .select('*')
         .eq('activo', true)
         .order('orden', { ascending: true });
@@ -37,29 +35,37 @@ export const getTestimoniosMasterclass = cache(
       if (error) throw error;
       return (data ?? []).map(transformTestimonioRecord);
     } catch (error) {
-      console.error('Error fetching masterclass testimonials:', error);
+      console.error('Error fetching testimonials:', error);
       return [];
     }
   },
 );
 
-// Fetch testimonials marked for the masterclass page
-export const getTestimoniosMasterclassPage = cache(
-  async (): Promise<TestimonioMasterclass[]> => {
+// Fetch testimonials assigned to a specific product via producto_testimonios
+export const getTestimoniosByProducto = cache(
+  async (productoId: string): Promise<Testimonio[]> => {
     try {
       const supabase = createAnonSupabase();
       const { data, error } = await supabase
-        .from('testimonios_masterclass')
-        .select('*')
-        .eq('activo', true)
-        .eq('mostrar_en_masterclass', true)
+        .from('producto_testimonios')
+        .select('orden, testimonios(*)')
+        .eq('producto_id', productoId)
         .order('orden', { ascending: true });
 
       if (error) throw error;
-      return (data ?? []).map(transformTestimonioRecord);
+
+      return (data ?? [])
+        .filter((row) => {
+          const t = row.testimonios as unknown as TestimonioRecord | null;
+          return t && t.activo;
+        })
+        .map((row) => {
+          const t = row.testimonios as unknown as TestimonioRecord;
+          return transformTestimonioRecord(t);
+        });
     } catch (error) {
       console.error(
-        'Error fetching masterclass page testimonials:',
+        `Error fetching testimonials for product ${productoId}:`,
         error,
       );
       return [];

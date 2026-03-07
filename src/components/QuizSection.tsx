@@ -25,13 +25,13 @@ import {
 import { stages, type StageData } from './StagesSection';
 import TestimonialCarousel from '@/components/ui/TestimonialCarousel';
 import type { Product } from '@/types/tienda';
-import type { TestimonioMasterclass } from '@/types/masterclass';
+import type { Testimonio } from '@/types/masterclass';
 
 // Types
 interface QuizSectionProps {
   products?: Record<string, Product>;
-  allTestimonials?: TestimonioMasterclass[];
-  masterclassTestimonials?: TestimonioMasterclass[];
+  allTestimonials?: Testimonio[];
+  masterclassTestimonials?: Testimonio[];
 }
 
 interface QuizOption {

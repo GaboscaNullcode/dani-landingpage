@@ -12,9 +12,15 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 
+interface PurchasedProduct {
+  id: string;
+  name: string;
+}
+
 interface TestimonialModalProps {
   isOpen: boolean;
   onClose: () => void;
+  purchasedProducts: PurchasedProduct[];
 }
 
 interface ExistingTestimonial {
@@ -30,7 +36,9 @@ interface ExistingTestimonial {
 export default function TestimonialModal({
   isOpen,
   onClose,
+  purchasedProducts,
 }: TestimonialModalProps) {
+  const [productoId, setProductoId] = useState('');
   const [texto, setTexto] = useState('');
   const [rol, setRol] = useState('');
   const [estrellas, setEstrellas] = useState(5);
@@ -57,9 +65,10 @@ export default function TestimonialModal({
       try {
         const res = await fetch('/api/testimonios');
         if (res.ok) {
-          const { testimonio }: { testimonio: ExistingTestimonial | null } =
+          const { testimonio, productoId: existingProductoId }: { testimonio: ExistingTestimonial | null; productoId: string | null } =
             await res.json();
           if (testimonio) {
+            setProductoId(existingProductoId || '');
             setTexto(testimonio.texto);
             setRol(testimonio.rol);
             setEstrellas(testimonio.estrellas);
@@ -82,6 +91,7 @@ export default function TestimonialModal({
   }, [isOpen]);
 
   const resetForm = () => {
+    setProductoId('');
     setTexto('');
     setRol('');
     setEstrellas(5);
@@ -154,6 +164,11 @@ export default function TestimonialModal({
     e.preventDefault();
     setError('');
 
+    if (!productoId) {
+      setError('Selecciona el producto sobre el que quieres opinar');
+      return;
+    }
+
     if (!texto.trim()) {
       setError('Escribe tu experiencia');
       return;
@@ -176,6 +191,7 @@ export default function TestimonialModal({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          productoId,
           texto: texto.trim(),
           rol: rol.trim(),
           estrellas,
@@ -265,6 +281,29 @@ export default function TestimonialModal({
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Product selector */}
+                <div>
+                  <label
+                    htmlFor="testimonio-producto"
+                    className="mb-1 block text-sm font-semibold text-gray-dark"
+                  >
+                    ¿Sobre qué producto?
+                  </label>
+                  <select
+                    id="testimonio-producto"
+                    value={productoId}
+                    onChange={(e) => setProductoId(e.target.value)}
+                    className="w-full rounded-xl border-2 border-gray-light px-3 py-2.5 text-sm text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
+                  >
+                    <option value="">Selecciona un producto...</option>
+                    {purchasedProducts.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 {/* Avatar + Stars row */}
                 <div className="flex items-start gap-4">
                   {/* Avatar upload */}

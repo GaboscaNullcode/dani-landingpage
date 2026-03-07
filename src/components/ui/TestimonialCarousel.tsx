@@ -5,10 +5,10 @@ import Image from 'next/image';
 import { motion, useInView, AnimatePresence } from 'motion/react';
 import { Star, Instagram, Quote, User, X } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import type { TestimonioMasterclass } from '@/types/masterclass';
+import type { Testimonio } from '@/types/masterclass';
 
 interface TestimonialCarouselProps {
-  testimonials: TestimonioMasterclass[];
+  testimonials: Testimonio[];
   fadeColor?: string;
 }
 
@@ -27,7 +27,7 @@ function TestimonialModal({
   gradient,
   onClose,
 }: {
-  testimonial: TestimonioMasterclass;
+  testimonial: Testimonio;
   gradient: { from: string; to: string };
   onClose: () => void;
 }) {
@@ -209,7 +209,7 @@ function TestimonialCard({
   isSectionVisible,
   onOpenModal,
 }: {
-  testimonial: TestimonioMasterclass;
+  testimonial: Testimonio;
   index: number;
   isInView: boolean;
   isSectionVisible: boolean;
@@ -406,58 +406,83 @@ export default function TestimonialCarousel({
   const isSectionVisible = useInView(ref, { margin: '100px' });
 
   const [modalData, setModalData] = useState<{
-    testimonial: TestimonioMasterclass;
+    testimonial: Testimonio;
     gradientIndex: number;
   } | null>(null);
 
   const closeModal = useCallback(() => setModalData(null), []);
 
-  // Duplicate for seamless infinite carousel
-  const duplicated = [...testimonials, ...testimonials];
+  const useStaticLayout = testimonials.length <= 4;
 
   return (
-    <div ref={ref} className="relative" role="region" aria-label="Testimonios de estudiantes" aria-roledescription="carousel">
-      {/* Gradient fade left */}
-      <div
-        className="pointer-events-none absolute left-0 top-0 z-10 h-full w-32 md:w-48"
-        style={{
-          background: `linear-gradient(to right, ${fadeColor ?? 'white'}, transparent)`,
-        }}
-      />
-      {/* Gradient fade right */}
-      <div
-        className="pointer-events-none absolute right-0 top-0 z-10 h-full w-32 md:w-48"
-        style={{
-          background: `linear-gradient(to left, ${fadeColor ?? 'white'}, transparent)`,
-        }}
-      />
-
-      {/* Carousel track */}
-      <div className="overflow-hidden py-4">
-        <div
-          className="flex gap-6 animate-carousel"
-          style={{ width: 'max-content' }}
-        >
-          {duplicated.map((testimonial, index) => {
-            const originalIndex = index % testimonials.length;
-            return (
+    <div ref={ref} className="relative" role="region" aria-label="Testimonios de estudiantes" aria-roledescription={useStaticLayout ? undefined : 'carousel'}>
+      {useStaticLayout ? (
+        /* ─── Static centered layout for few testimonials ─── */
+        <div className="container-custom pb-4">
+          <div className="flex flex-wrap justify-center gap-6 pt-4">
+            {testimonials.map((testimonial, index) => (
               <TestimonialCard
-                key={`${testimonial.id}-${index}`}
+                key={testimonial.id}
                 testimonial={testimonial}
-                index={originalIndex}
+                index={index}
                 isInView={isInView}
                 isSectionVisible={isSectionVisible}
                 onOpenModal={() =>
                   setModalData({
                     testimonial,
-                    gradientIndex: originalIndex,
+                    gradientIndex: index,
                   })
                 }
               />
-            );
-          })}
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        /* ─── Infinite carousel for many testimonials ─── */
+        <>
+          {/* Gradient fade left */}
+          <div
+            className="pointer-events-none absolute left-0 top-0 z-10 h-full w-32 md:w-48"
+            style={{
+              background: `linear-gradient(to right, ${fadeColor ?? 'white'}, transparent)`,
+            }}
+          />
+          {/* Gradient fade right */}
+          <div
+            className="pointer-events-none absolute right-0 top-0 z-10 h-full w-32 md:w-48"
+            style={{
+              background: `linear-gradient(to left, ${fadeColor ?? 'white'}, transparent)`,
+            }}
+          />
+
+          {/* Carousel track */}
+          <div className="overflow-hidden py-4">
+            <div
+              className="flex gap-6 animate-carousel"
+              style={{ width: 'max-content' }}
+            >
+              {[...testimonials, ...testimonials].map((testimonial, index) => {
+                const originalIndex = index % testimonials.length;
+                return (
+                  <TestimonialCard
+                    key={`${testimonial.id}-${index}`}
+                    testimonial={testimonial}
+                    index={originalIndex}
+                    isInView={isInView}
+                    isSectionVisible={isSectionVisible}
+                    onOpenModal={() =>
+                      setModalData({
+                        testimonial,
+                        gradientIndex: originalIndex,
+                      })
+                    }
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Modal (portaled to body) */}
       <AnimatePresence>

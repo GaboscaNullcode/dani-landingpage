@@ -4,8 +4,8 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { getProductsByIds } from '@/lib/tienda-service';
 import {
-  getTestimoniosMasterclass,
-  getTestimoniosMasterclassPage,
+  getAllTestimonios,
+  getTestimoniosByProducto,
 } from '@/lib/masterclass-service';
 import type { Product } from '@/types/tienda';
 
@@ -56,8 +56,8 @@ export default async function EmpezarPage() {
   const [products, allTestimonials, masterclassTestimonials] =
     await Promise.all([
       getProductsByIds(QUIZ_PRODUCT_IDS),
-      getTestimoniosMasterclass(),
-      getTestimoniosMasterclassPage(),
+      getAllTestimonios(),
+      getTestimoniosByProducto('masterclass-av'),
     ]);
   const productsMap: Record<string, Product> = Object.fromEntries(
     products.map((p) => [p.id, p])

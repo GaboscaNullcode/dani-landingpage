@@ -520,6 +520,12 @@ export default function Dashboard() {
       <TestimonialModal
         isOpen={showTestimonial}
         onClose={() => setShowTestimonial(false)}
+        purchasedProducts={compras
+          .filter((c) => c.estado === 'activa' && c.productoDetail)
+          .map((c) => ({
+            id: c.producto,
+            name: c.productoDetail!.nombre,
+          }))}
       />
     </div>
   );

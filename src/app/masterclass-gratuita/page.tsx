@@ -88,7 +88,7 @@ export default async function MasterclassGratuitaPage() {
           </>
         }
         subtitle="Historias de personas que dieron el primer paso con esta masterclass"
-        masterclassOnly
+        productoId="masterclass-av"
       />
 
       {/* CTA */}

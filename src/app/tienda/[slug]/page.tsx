@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { ProductDetail, SeccionBonos, SeccionFAQs, ProductCta } from '@/components/tienda';
+import TestimonialsSection from '@/components/TestimonialsSection';
 import { getProductBySlug, getAllProductSlugs, getProductTypesMap } from '@/lib/tienda-service';
 
 export const revalidate = 60;
@@ -65,6 +66,18 @@ export default async function ProductPage({ params }: Props) {
         {product.bonos && product.bonos.length > 0 && (
           <SeccionBonos bonos={product.bonos} />
         )}
+        <TestimonialsSection
+          id="testimonios-producto"
+          productoId={product.id}
+          badge="Lo que dicen"
+          title={
+            <>
+              Quienes ya lo{' '}
+              <span className="gradient-text-playful">probaron</span>
+            </>
+          }
+          subtitle="Experiencias reales de personas que adquirieron este producto"
+        />
         {product.faqs && product.faqs.length > 0 && (
           <SeccionFAQs faqs={product.faqs} />
         )}
