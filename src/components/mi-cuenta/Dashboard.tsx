@@ -116,9 +116,12 @@ export default function Dashboard() {
             r.id === reservaId ? { ...r, estado: 'cancelada' } : r,
           ),
         );
+      } else {
+        const body = await res.json().catch(() => null);
+        alert(body?.error || 'No se pudo cancelar la reserva');
       }
     } catch {
-      // silently fail
+      alert('Error de conexión al cancelar la reserva');
     } finally {
       setCancellingId(null);
     }
@@ -262,7 +265,7 @@ export default function Dashboard() {
       </motion.div>
 
       {/* Upcoming bookings */}
-      {reservas.filter((r) => r.estado === 'confirmada' || r.estado === 'pendiente').length > 0 && (
+      {reservas.filter((r) => (r.estado === 'confirmada' || r.estado === 'pendiente') && new Date(r.fechaHora) > new Date()).length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -278,7 +281,7 @@ export default function Dashboard() {
           </div>
           <div className="space-y-4">
             {reservas
-              .filter((r) => r.estado === 'confirmada' || r.estado === 'pendiente')
+              .filter((r) => (r.estado === 'confirmada' || r.estado === 'pendiente') && new Date(r.fechaHora) > new Date())
               .map((reserva) => {
                 const fechaObj = new Date(reserva.fechaHora);
                 const fechaStr = fechaObj.toLocaleDateString('es-PE', {
