@@ -9,6 +9,7 @@ import {
   MessageSquareHeart,
   Camera,
   User,
+  EyeOff,
 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -31,6 +32,7 @@ interface ExistingTestimonial {
   red_social: string | null;
   usuario_red_social: string | null;
   avatar_url: string | null;
+  es_anonimo: boolean;
 }
 
 export default function TestimonialModal({
@@ -48,6 +50,7 @@ export default function TestimonialModal({
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [esAnonimo, setEsAnonimo] = useState(false);
   const [consentimiento, setConsentimiento] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingExisting, setLoadingExisting] = useState(false);
@@ -76,6 +79,7 @@ export default function TestimonialModal({
             setUsuarioRedSocial(testimonio.usuario_red_social || '');
             setAvatarUrl(testimonio.avatar_url);
             setAvatarPreview(testimonio.avatar_url);
+            setEsAnonimo(testimonio.es_anonimo || false);
             setConsentimiento(true);
             setIsEditing(true);
           }
@@ -101,6 +105,7 @@ export default function TestimonialModal({
     setAvatarUrl(null);
     setAvatarPreview(null);
     setUploadingAvatar(false);
+    setEsAnonimo(false);
     setConsentimiento(false);
     setError('');
     setSuccess(false);
@@ -195,10 +200,11 @@ export default function TestimonialModal({
           texto: texto.trim(),
           rol: rol.trim(),
           estrellas,
-          redSocial: usuarioRedSocial.trim() ? redSocial : null,
-          usuarioRedSocial: usuarioRedSocial.trim() || null,
-          avatarUrl,
+          redSocial: esAnonimo ? null : (usuarioRedSocial.trim() ? redSocial : null),
+          usuarioRedSocial: esAnonimo ? null : (usuarioRedSocial.trim() || null),
+          avatarUrl: esAnonimo ? null : avatarUrl,
           consentimiento,
+          esAnonimo,
         }),
       });
 
@@ -304,46 +310,67 @@ export default function TestimonialModal({
                   </select>
                 </div>
 
+                {/* Anonymous toggle */}
+                <div className="rounded-xl bg-lavender/30 px-3 py-3">
+                  <label className="flex cursor-pointer items-center gap-2.5">
+                    <input
+                      type="checkbox"
+                      checked={esAnonimo}
+                      onChange={(e) => setEsAnonimo(e.target.checked)}
+                      className="h-4 w-4 shrink-0 accent-coral"
+                    />
+                    <EyeOff className="h-4 w-4 shrink-0 text-gray-medium" />
+                    <span className="text-xs leading-relaxed text-gray-carbon">
+                      Publicar como anónimo{' '}
+                      <span className="text-gray-medium">
+                        (se oculta tu nombre, foto y red social)
+                      </span>
+                    </span>
+                  </label>
+                </div>
+
                 {/* Avatar + Stars row */}
                 <div className="flex items-start gap-4">
-                  {/* Avatar upload */}
-                  <div className="shrink-0">
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/jpeg,image/png,image/webp"
-                      onChange={handleAvatarChange}
-                      className="hidden"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      disabled={uploadingAvatar}
-                      className="group relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-gray-light transition-colors hover:border-coral"
-                    >
-                      {avatarPreview ? (
-                        <Image
-                          src={avatarPreview}
-                          alt="Avatar"
-                          fill
-                          className="object-cover"
-                        />
-                      ) : (
-                        <User className="h-6 w-6 text-gray-light" />
-                      )}
-                      {/* Overlay */}
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/30">
-                        {uploadingAvatar ? (
-                          <Loader2 className="h-5 w-5 animate-spin text-white" />
+                  {/* Avatar upload — hidden when anonymous */}
+                  {!esAnonimo && (
+                    <div className="shrink-0">
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={handleAvatarChange}
+                        className="hidden"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploadingAvatar}
+                        className="group relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-gray-light transition-colors hover:border-coral"
+                      >
+                        {avatarPreview ? (
+                          <Image
+                            src={avatarPreview}
+                            alt="Avatar"
+                            fill
+                            className="object-cover"
+                          />
                         ) : (
-                          <Camera className="h-4 w-4 text-white opacity-0 transition-opacity group-hover:opacity-100" />
+                          <User className="h-6 w-6 text-gray-light" />
                         )}
-                      </div>
-                    </button>
-                    <p className="mt-1 text-center text-[10px] text-gray-medium">
-                      Tu foto
-                    </p>
-                  </div>
+                        {/* Overlay */}
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/30">
+                          {uploadingAvatar ? (
+                            <Loader2 className="h-5 w-5 animate-spin text-white" />
+                          ) : (
+                            <Camera className="h-4 w-4 text-white opacity-0 transition-opacity group-hover:opacity-100" />
+                          )}
+                        </div>
+                      </button>
+                      <p className="mt-1 text-center text-[10px] text-gray-medium">
+                        Tu foto
+                      </p>
+                    </div>
+                  )}
 
                   {/* Stars */}
                   <div className="flex-1">
@@ -416,35 +443,37 @@ export default function TestimonialModal({
                   />
                 </div>
 
-                {/* Social media (optional) */}
-                <div>
-                  <label className="mb-1 block text-sm font-semibold text-gray-dark">
-                    Red social{' '}
-                    <span className="font-normal text-gray-medium">
-                      (opcional)
-                    </span>
-                  </label>
-                  <div className="flex gap-2">
-                    <select
-                      value={redSocial}
-                      onChange={(e) => setRedSocial(e.target.value)}
-                      className="rounded-xl border-2 border-gray-light px-2.5 py-2.5 text-sm text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
-                    >
-                      <option value="instagram">Instagram</option>
-                      <option value="tiktok">TikTok</option>
-                      <option value="linkedin">LinkedIn</option>
-                      <option value="twitter">X / Twitter</option>
-                    </select>
-                    <input
-                      type="text"
-                      value={usuarioRedSocial}
-                      onChange={(e) => setUsuarioRedSocial(e.target.value)}
-                      placeholder="@tuusuario"
-                      maxLength={100}
-                      className="flex-1 rounded-xl border-2 border-gray-light px-3 py-2.5 text-sm text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
-                    />
+                {/* Social media (optional) — hidden when anonymous */}
+                {!esAnonimo && (
+                  <div>
+                    <label className="mb-1 block text-sm font-semibold text-gray-dark">
+                      Red social{' '}
+                      <span className="font-normal text-gray-medium">
+                        (opcional)
+                      </span>
+                    </label>
+                    <div className="flex gap-2">
+                      <select
+                        value={redSocial}
+                        onChange={(e) => setRedSocial(e.target.value)}
+                        className="rounded-xl border-2 border-gray-light px-2.5 py-2.5 text-sm text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
+                      >
+                        <option value="instagram">Instagram</option>
+                        <option value="tiktok">TikTok</option>
+                        <option value="linkedin">LinkedIn</option>
+                        <option value="twitter">X / Twitter</option>
+                      </select>
+                      <input
+                        type="text"
+                        value={usuarioRedSocial}
+                        onChange={(e) => setUsuarioRedSocial(e.target.value)}
+                        placeholder="@tuusuario"
+                        maxLength={100}
+                        className="flex-1 rounded-xl border-2 border-gray-light px-3 py-2.5 text-sm text-gray-dark transition-colors focus:border-coral focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/40"
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Consent checkbox */}
                 <div className="rounded-xl bg-cream/50 px-3 py-3">
@@ -456,8 +485,9 @@ export default function TestimonialModal({
                       className="mt-0.5 h-4 w-4 shrink-0 accent-coral"
                     />
                     <span className="text-xs leading-relaxed text-gray-carbon">
-                      Doy mi consentimiento para que mi testimonio, nombre y
-                      foto sean publicados en la página web de Remote con Dani.
+                      {esAnonimo
+                        ? 'Doy mi consentimiento para que mi testimonio sea publicado de forma anónima en la página web de Remote con Dani.'
+                        : 'Doy mi consentimiento para que mi testimonio, nombre y foto sean publicados en la página web de Remote con Dani.'}
                     </span>
                   </label>
                 </div>

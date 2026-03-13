@@ -14,7 +14,7 @@ export async function GET() {
 
     const { data: testimonio } = await supabase
       .from('testimonios')
-      .select('id, texto, rol, estrellas, red_social, usuario_red_social, avatar_url')
+      .select('id, texto, rol, estrellas, red_social, usuario_red_social, avatar_url, es_anonimo')
       .eq('usuario_id', user.id)
       .maybeSingle();
 
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { texto, rol, estrellas, redSocial, usuarioRedSocial, consentimiento, avatarUrl, productoId } =
+    const { texto, rol, estrellas, redSocial, usuarioRedSocial, consentimiento, avatarUrl, productoId, esAnonimo } =
       body;
 
     // Validations
@@ -93,7 +93,10 @@ export async function POST(request: Request) {
       .eq('id', user.id)
       .single();
 
-    const nombre = profile?.name || user.email?.split('@')[0] || 'Usuaria';
+    const isAnonymous = Boolean(esAnonimo);
+    const nombre = isAnonymous
+      ? 'Anónimo'
+      : profile?.name || user.email?.split('@')[0] || 'Usuaria';
 
     // Check if user already has a testimonial
     const { data: existing } = await supabase
@@ -113,10 +116,11 @@ export async function POST(request: Request) {
           rol,
           texto,
           estrellas,
-          red_social: redSocial || null,
-          usuario_red_social: usuarioRedSocial || null,
-          avatar_url: avatarUrl || null,
+          red_social: isAnonymous ? null : redSocial || null,
+          usuario_red_social: isAnonymous ? null : usuarioRedSocial || null,
+          avatar_url: isAnonymous ? null : avatarUrl || null,
           consentimiento: true,
+          es_anonimo: isAnonymous,
           activo: false, // Reset to inactive so admin can re-approve
         })
         .eq('usuario_id', user.id);
@@ -133,10 +137,11 @@ export async function POST(request: Request) {
           rol,
           texto,
           estrellas,
-          red_social: redSocial || null,
-          usuario_red_social: usuarioRedSocial || null,
-          avatar_url: avatarUrl || null,
+          red_social: isAnonymous ? null : redSocial || null,
+          usuario_red_social: isAnonymous ? null : usuarioRedSocial || null,
+          avatar_url: isAnonymous ? null : avatarUrl || null,
           consentimiento: true,
+          es_anonimo: isAnonymous,
           activo: false, // Admin must activate
           orden: 999, // Low priority, admin can reorder
         })
