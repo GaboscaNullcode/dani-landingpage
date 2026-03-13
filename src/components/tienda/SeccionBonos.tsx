@@ -28,19 +28,11 @@ export default function SeccionBonos({ bonos }: SeccionBonosProps) {
             Bonos incluidos
           </div>
           <h2 className="font-[var(--font-headline)] text-2xl font-bold text-gray-dark md:text-3xl">
-            Además, te llevas estos extras
+            Además, recibirás estos beneficios
           </h2>
         </motion.div>
 
-        <div
-          className={`mx-auto grid max-w-4xl gap-6 ${
-            bonos.length === 1
-              ? 'grid-cols-1 max-w-md'
-              : bonos.length === 2
-                ? 'grid-cols-1 sm:grid-cols-2'
-                : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-          }`}
-        >
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-5 md:grid-cols-2">
           {bonos.map((bono, index) => {
             const Icon = bono.icon ? resolveIcon(bono.icon, Gift) : Gift;
 
@@ -51,32 +43,34 @@ export default function SeccionBonos({ bonos }: SeccionBonosProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative overflow-hidden rounded-2xl border border-white/60 bg-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)]"
+                className="group overflow-hidden rounded-2xl border border-white/60 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)]"
               >
                 {/* Image or icon */}
                 {bono.imageUrl ? (
-                  <div className="relative mb-4 aspect-[16/10] overflow-hidden rounded-xl">
+                  <div className="relative aspect-[16/10] w-full overflow-hidden">
                     <Image
                       src={bono.imageUrl}
                       alt={bono.title}
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   </div>
                 ) : (
-                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-coral/10">
-                    <Icon className="h-6 w-6 text-coral" />
+                  <div className="flex aspect-[16/10] w-full items-center justify-center bg-coral/10">
+                    <Icon className="h-10 w-10 text-coral" />
                   </div>
                 )}
 
                 {/* Content */}
-                <h3 className="mb-2 font-[var(--font-headline)] text-lg font-bold text-gray-dark">
-                  {bono.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-gray-carbon">
-                  {bono.description}
-                </p>
+                <div className="p-5">
+                  <h3 className="mb-1 font-[var(--font-headline)] text-base font-bold text-gray-dark">
+                    {bono.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-gray-carbon">
+                    {bono.description}
+                  </p>
+                </div>
               </motion.div>
             );
           })}
