@@ -2,7 +2,7 @@
 
 import { motion } from 'motion/react';
 import Image from 'next/image';
-import { Gift } from 'lucide-react';
+import { Gift, ExternalLink } from 'lucide-react';
 import type { ProductBono } from '@/types/tienda';
 import { resolveIcon } from '@/lib/icon-map';
 
@@ -43,7 +43,7 @@ export default function SeccionBonos({ bonos }: SeccionBonosProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group overflow-hidden rounded-2xl border border-white/60 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)]"
+                className="group flex flex-col overflow-hidden rounded-2xl border border-white/60 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)]"
               >
                 {/* Image or icon */}
                 {bono.imageUrl ? (
@@ -63,13 +63,24 @@ export default function SeccionBonos({ bonos }: SeccionBonosProps) {
                 )}
 
                 {/* Content */}
-                <div className="p-5">
+                <div className="flex flex-1 flex-col p-5">
                   <h3 className="mb-1 font-[var(--font-headline)] text-base font-bold text-gray-dark">
                     {bono.title}
                   </h3>
                   <p className="text-sm leading-relaxed text-gray-carbon">
                     {bono.description}
                   </p>
+                  {bono.cta && bono.ctaTitle && bono.ctaAction && (
+                    <a
+                      href={bono.ctaAction}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 inline-flex items-center justify-center gap-2 self-start rounded-full bg-coral px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-coral/90"
+                    >
+                      {bono.ctaTitle}
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </a>
+                  )}
                 </div>
               </motion.div>
             );

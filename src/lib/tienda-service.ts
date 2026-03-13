@@ -52,6 +52,10 @@ function transformBonoRecord(record: ProductoBonoRecord): ProductBono {
     imageUrl: record.imagen_url,
     icon: record.icono,
     order: record.orden,
+    linkedProductId: record.producto_bono_id,
+    cta: record.cta ?? false,
+    ctaTitle: record.titulo_boton,
+    ctaAction: record.accion_boton,
   };
 }
 

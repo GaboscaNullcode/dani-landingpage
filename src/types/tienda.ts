@@ -62,6 +62,10 @@ export interface ProductoBonoRecord {
   imagen_url: string | null;
   icono: string | null;
   orden: number;
+  producto_bono_id: string | null;
+  cta: boolean | null;
+  titulo_boton: string | null;
+  accion_boton: string | null;
 }
 
 // Frontend bono model
@@ -72,6 +76,10 @@ export interface ProductBono {
   imageUrl: string | null;
   icon: string | null;
   order: number;
+  linkedProductId: string | null;
+  cta: boolean;
+  ctaTitle: string | null;
+  ctaAction: string | null;
 }
 
 // Supabase record structure for 'producto_faqs' table
