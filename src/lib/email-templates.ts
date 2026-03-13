@@ -77,7 +77,7 @@ export function getPurchaseEmailHtml(
       Ya tienes acceso a <strong style="color:${BRAND.dark};">${safeName}</strong>.
     </p>
     <p style="margin:0 0 24px;color:${BRAND.gray};font-size:16px;line-height:1.6;">
-      Accede a tu contenido desde tu área de miembros:
+      Accede a tu contenido desde el panel de tu perfil
     </p>
     ${button('Ir a Mi Cuenta', accessUrl)}
     <p style="margin:24px 0 0;color:${BRAND.gray};font-size:14px;line-height:1.6;">
